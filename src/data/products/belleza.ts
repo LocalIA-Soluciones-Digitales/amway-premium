@@ -11,6 +11,7 @@ export const bellezaProducts: Product[] = [
     description:
       "El gel refrescante limpia la piel de suciedad, impurezas y exceso de grasa, y revela un acabado fresco y sin brillo.",
     variants: [{ sku: "23792", size: "125 g", price: 31.5 }],
+    image: "p110_0_322x261.webp",
     page: 116,
   },
   {
@@ -119,6 +120,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Elimina rápida y eficazmente suciedad, impurezas, maquillaje residual y exceso de grasa.",
     variants: [{ sku: "23781", size: "125 g", price: 38.25 }],
+    image: "p112_2_322x262.webp",
     page: 120,
   },
   {
@@ -234,6 +236,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Ligero y de rápida absorción, reduce clínicamente los primeros signos del envejecimiento: líneas finas y poros dilatados.",
     variants: [{ sku: "27019", size: "30 ml", price: 99.0 }],
+    image: "p126_0_429x743.webp",
     page: 126,
   },
   {
@@ -245,6 +248,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Revela una piel visiblemente más joven en solo 7 días, con colágeno vegano y biopéptido de arándano rojo.",
     variants: [{ sku: "27020", size: "30 ml", price: 116.0 }],
+    image: "p127_0_428x743.webp",
     page: 127,
   },
   {
@@ -280,6 +284,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Refuerza la barrera de hidratación con omegas 3, 6, 7 y 9: hidratación de 24 horas tras un solo uso.",
     variants: [{ sku: "28275", size: "5 mascarillas", price: 35.0 }],
+    image: "p131_1_500x474.webp",
     badge: "¡Nuevo!",
     page: 131,
   },
@@ -372,6 +377,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Maquillaje",
     description: "Fórmula hidratante de alto brillo para un efecto de volumen perfecto en los labios.",
     variants: [{ sku: "127484", size: "5 g", price: 28.25 }],
+    image: "p171_2_215x252.webp",
     page: 171,
   },
   {
@@ -402,6 +408,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Maquillaje",
     description: "Estuche portátil con brochas para base, polvo, iluminador, corrector, sombra y delineador.",
     variants: [{ sku: "10858", size: "1 juego", price: 90.0 }],
+    image: "p173_1_423x264.webp",
     page: 172,
   },
   {
@@ -530,6 +537,7 @@ export const bellezaProducts: Product[] = [
       { sku: "25915", size: "1 L", price: 33.75 },
       { sku: "25892", size: "400 ml", price: 17.25 },
     ],
+    image: "p180_0_174x269.webp",
     page: 180,
   },
   {
@@ -543,6 +551,7 @@ export const bellezaProducts: Product[] = [
       { sku: "25914", size: "1 L", price: 33.75 },
       { sku: "25890", size: "400 ml", price: 17.25 },
     ],
+    image: "p178_1_416x634.webp",
     page: 180,
   },
   {
@@ -613,6 +622,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Elimina el 99.9 % de los gérmenes más comunes.",
     variants: [{ sku: "26855", size: "400 ml", price: 15.5 }],
+    image: "p181_5_182x312.webp",
     page: 181,
   },
   {
@@ -623,6 +633,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Protección SPF 50 UVA/UVB de amplio espectro para toda la familia.",
     variants: [{ sku: "25901", size: "100 ml", price: 32.5 }],
+    image: "p179_0_416x634.webp",
     page: 181,
   },
 
@@ -636,6 +647,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Cinco modos de cepillado, desinfectante UV que elimina el 99.9 % de los gérmenes y tres tipos de cerdas en forma de diamante.",
     variants: [{ sku: "127705", size: "1 unidad", price: 197.0 }],
+    image: "p183_6_287x467.webp",
     page: 182,
   },
   {

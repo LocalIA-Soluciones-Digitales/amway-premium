@@ -15,6 +15,7 @@ export const nutricionProducts: Product[] = [
       { sku: "A0244", size: "Reemplazo 31 días · 186 tabletas", price: 74.25 },
       { sku: "23364", size: "Suministro 10 días · 20 paquetes", price: 28.25 },
     ],
+    image: "p021_0_697x457.webp",
     flagship: "nutrilite",
     page: 20,
   },
@@ -27,6 +28,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Apoyo para salud inmunológica, energía, músculos y salud del corazón en una tableta al día. Incluye 22 vitaminas y minerales esenciales, además de 200 mg de nutrientes de plantas.",
     variants: [{ sku: "125557", size: "90 tabletas", price: 40.5 }],
+    image: "p022_0_162x326.webp",
     page: 22,
   },
   {
@@ -38,6 +40,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Apoyo para salud inmunológica, energía, músculos y salud del corazón en deliciosas gomitas USDA Organic. Incluye 13 vitaminas y minerales, además de 75 mg de nutrientes orgánicos de plantas.",
     variants: [{ sku: "125561", size: "120 gomitas", price: 41.5 }],
+    image: "p022_1_207x254.webp",
     page: 22,
   },
   {
@@ -49,6 +52,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Apoyo para salud inmunológica, energía, huesos y salud de los ojos en una tableta al día. Incluye 23 vitaminas y minerales esenciales, además de 200 mg de nutrientes de plantas.",
     variants: [{ sku: "125559", size: "90 tabletas", price: 40.5 }],
+    image: "p022_4_190x349.webp",
     page: 22,
   },
   {
@@ -60,6 +64,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Nutrientes que ayudan a satisfacer las principales necesidades de las mujeres: salud inmunológica, metabolismo energético, salud ósea y de ojos, en deliciosas gomitas USDA Organic.",
     variants: [{ sku: "125562", size: "120 gomitas", price: 41.5 }],
+    image: "p022_5_190x232.webp",
     page: 22,
   },
   {
@@ -93,6 +98,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Contiene los 9 aminoácidos esenciales y 21 g de proteína de plantas de arroz integral, guisantes y chía, cultivados en granjas orgánicas certificadas. Chocolate · Vainilla · Sin sabor.",
     variants: [{ size: "5 porciones", price: 49.5 }],
+    image: "p025_0_324x369.webp",
     page: 25,
   },
   {
@@ -140,6 +146,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Apoyo integral seis en uno para una digestión saludable, salud inmunológica, salud del hígado y la piel, energía y metabolismo.",
     variants: [{ sku: "27725", size: "30 porciones", price: 91.0 }],
+    image: "p030_2_293x263.webp",
     page: 30,
   },
   {

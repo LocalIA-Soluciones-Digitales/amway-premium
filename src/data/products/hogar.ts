@@ -45,6 +45,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Grifo de diseño en níquel, negro o cromo para dar estilo moderno a tu cocina.",
     variants: [{ sku: "28212UC", size: "Níquel / Negro / Cromo", price: 1620.0 }],
+    image: "p191_10_248x342.webp",
     page: 189,
   },
   {
@@ -211,6 +212,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Hojas de acero inoxidable forjadas y mangos de polipropileno para cortes cómodos.",
     variants: [{ sku: "02715", size: "1 unidad", price: 84.5 }],
+    image: "p197_1_258x258.webp",
     page: 197,
   },
 
@@ -294,6 +296,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Desodorante desinfectante en formato aerosol.",
     variants: [{ sku: "E0023", size: "470 g", price: 15.75 }],
+    image: "p199_7_234x234.webp",
     page: 198,
   },
   {
@@ -346,6 +349,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Detergente de disolución rápida que deja la ropa más blanca y brillante, sin residuos irritantes.",
     variants: [{ sku: "10478", size: "4 L", price: 63.25 }],
+    image: "p200_4_183x225.webp",
     page: 200,
   },
   {

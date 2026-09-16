@@ -79,6 +79,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "101593", size: "60 tabletas", price: 48.25 },
       { sku: "107846", size: "30 tabletas", price: 36.0 },
     ],
+    image: "p091_2_229x326.webp",
     page: 91,
   },
   {
@@ -113,6 +114,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "30 g de aislado de proteína de suero de leche premium de ganado alimentado con pasto y 6.9 g de aminoácidos de cadena ramificada.",
     variants: [{ size: "1 sobre · 20 porciones", price: 74.25 }],
+    image: "p098_1_262x190.webp",
     page: 94,
   },
   {
@@ -124,6 +126,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "25 g de proteínas de suero de leche y caseína. Chocolate intenso · Crema de vainilla.",
     variants: [{ size: "2 batidos de 325 ml", price: 60.75 }],
+    image: "p099_1_226x209.webp",
     page: 94,
   },
   {
@@ -201,6 +204,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "12 % de agua de coco, 64 mg de magnesio y 600 mg de potasio, más vitaminas A, B, C y E. Fresa y sandía · Piña y coco.",
     variants: [{ size: "12 paquetes", price: 33.75 }],
+    image: "p096_0_429x535.webp",
     page: 96,
   },
   {
