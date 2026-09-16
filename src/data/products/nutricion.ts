@@ -76,6 +76,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Fitonutrientes equivalentes a más de 5 porciones de frutas y verduras en una tableta conveniente. Contiene 13 extractos ricos en antioxidantes para apoyar la salud de ojos, corazón y circulación.",
     variants: [{ sku: "00648", size: "60 tabletas", price: 54.0 }],
+    image: "p023_4_160x192.webp",
     page: 23,
   },
   {
@@ -87,6 +88,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Creado para desarrollar una base nutricional sólida. Cada porción diaria contiene Multivitamina Double X, Concentrado de frutas y verduras, Omega avanzado y Vitamina D (30 de mañana y 30 de noche).",
     variants: [{ sku: "23377", size: "60 paquetes", price: 195.0 }],
+    image: "p023_1_123x176.webp",
     page: 23,
   },
   {
@@ -172,6 +174,7 @@ export const nutricionProducts: Product[] = [
       "Fibra soluble basada en plantas para apoyar digestión, regularidad, microbioma intestinal y niveles de azúcar en sangre ya saludables. Con dextrina resistente de tapioca y fibra de acacia.",
     variants: [{ sku: "127444", size: "30 sobres individuales", price: 49.5 }],
     badge: "¡Nuevo!",
+    image: "p032_2_92x172.webp",
     page: 32,
   },
   {
@@ -182,6 +185,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description: "Apoya la digestión de carbohidratos, proteína, grasa y lácteos.",
     variants: [{ sku: "A8903", size: "90 cápsulas", price: 45.0 }],
+    image: "p032_4_118x170.webp",
     page: 32,
   },
   {
@@ -192,6 +196,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description: "Apoya la digestión con menta y jengibre certificados USDA Organic.",
     variants: [{ sku: "308635", size: "20 bolsitas de té", price: 20.25 }],
+    image: "p032_3_132x160.webp",
     page: 32,
   },
   {
