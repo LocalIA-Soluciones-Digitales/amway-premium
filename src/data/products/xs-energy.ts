@@ -37,6 +37,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Toda la energía con 25 % de jugo de fruta real, 250 % de vitamina C y sin colorantes artificiales. Mango-piña-guayaba · Toronja rosada.",
     variants: [{ size: "Doce latas de 355 ml", price: 44.0 }],
+    image: "p089_7_280x386.webp",
     page: 89,
   },
   {
@@ -51,6 +52,7 @@ export const xsEnergyProducts: Product[] = [
       { size: "Doce latas de 355 ml", price: 48.25 },
       { sku: "27071", size: "Caja surtida Juiced and Burn", price: 47.25 },
     ],
+    image: "p089_2_116x220.webp",
     page: 89,
   },
   {
@@ -103,6 +105,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Los nueve EAA en proporción de BCAA optimizada 5:1:1, clínicamente probada para impulsar fuerza y rendimiento. Mora · Sandía.",
     variants: [{ size: "1 sobre · 30 porciones", price: 56.25 }],
+    image: "p093_1_213x264.webp",
     page: 93,
   },
   {
@@ -138,6 +141,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "20 g de proteína de suero y caseína, sin gluten, colorantes ni conservantes artificiales.",
     variants: [{ size: "12 barras", price: 48.25 }],
+    image: "p095_2_129x167.webp",
     page: 94,
   },
   {
@@ -149,6 +153,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Proteína de guisante de alta calidad para un snack sin azúcar agregada ni colorantes artificiales. Barbacoa · Lima y sriracha.",
     variants: [{ size: "12 porciones", price: 47.25 }],
+    image: "p095_1_92x168.webp",
     page: 95,
   },
   {
@@ -160,6 +165,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Dosis clínicamente estudiada de extracto de naranja sanguina Moro Morosil™ para apoyar metabolismo y control de peso.",
     variants: [{ sku: "127811", size: "30 sobres individuales", price: 51.75 }],
+    image: "p096_1_192x189.webp",
     page: 96,
   },
   {
@@ -171,6 +177,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Suplemento de hidratación con vitaminas B, selenio y 5 g de azúcar para añadir a cualquier botella de agua.",
     variants: [{ size: "20 tubos", price: 27.0 }],
+    image: "p097_6_166x173.webp",
     page: 96,
   },
   {
@@ -182,6 +189,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "400 mg de CBD de extracto de cáñamo de alto espectro para la recuperación activa, con sensación de alivio hasta 2 horas.",
     variants: [{ sku: "00323", size: "56.69 g", price: 80.0 }],
+    image: "p097_3_191x140.webp",
     page: 96,
   },
   {
@@ -193,6 +201,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "300 mg de CBD con árnica montana, aloe vera y mentol para calmar y nutrir la piel cansada.",
     variants: [{ sku: "296753", size: "56.69 g", price: 68.75 }],
+    image: "p097_2_164x130.webp",
     page: 96,
   },
   {
@@ -219,6 +228,7 @@ export const xsEnergyProducts: Product[] = [
       { size: "1 sobre · 30 porciones", price: 65.25 },
       { size: "2 sobres individuales", price: 40.5 },
     ],
+    image: "p097_0_176x197.webp",
     page: 96,
   },
   {
@@ -230,6 +240,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Apoyo fundacional para el rendimiento muscular, energía y nutrición diaria antes, durante y después del entrenamiento.",
     variants: [{ size: "Stack completo", price: null }],
+    image: "p098_0_247x195.webp",
     page: 98,
   },
   {
@@ -241,6 +252,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Aumenta tu energía, apoya un metabolismo saludable, ayuda a reducir la grasa corporal y desarrolla masa muscular.",
     variants: [{ size: "Stack completo", price: null }],
+    image: "p099_1_226x209.webp",
     page: 98,
   },
   {
@@ -251,6 +263,7 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Stacks XS",
     description: "Creado para usuarios comprometidos de nutrición deportiva con la meta de obtener masa muscular.",
     variants: [{ size: "Stack completo", price: null }],
+    image: "p099_2_207x207.webp",
     page: 99,
   },
   {

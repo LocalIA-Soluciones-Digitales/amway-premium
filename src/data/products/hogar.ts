@@ -25,6 +25,7 @@ export const hogarProducts: Product[] = [
       "Instalación bajo el mesón para disfrutar de agua más limpia, saludable y sabrosa sin tubos visibles.",
     variants: [{ sku: "22941", size: "1 purificador de agua", price: 1508.0 }],
     flagship: "espring",
+    image: "p189_2_422x540.webp",
     page: 188,
   },
   {
@@ -35,6 +36,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Conéctalo directamente al grifo o a la máquina de hielo para instalaciones personalizadas.",
     variants: [{ sku: "22942", size: "1 purificador de agua", price: 1508.0 }],
+    image: "p191_3_96x131.webp",
     page: 188,
   },
   {
@@ -56,6 +58,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Filtro de reemplazo para el purificador de agua eSpring.",
     variants: [{ sku: "22943", size: "1 filtro", price: 293.0 }],
+    image: "p191_2_103x133.webp",
     page: 189,
   },
   {
@@ -202,6 +205,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Diseñado por el experto Ken Onion, acero inoxidable forjado de primer nivel.",
     variants: [{ sku: "02709", size: "5 piezas", price: 619.0 }],
+    image: "p197_2_164x164.webp",
     page: 197,
   },
   {
@@ -236,6 +240,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Cuatro paquetes de 24 toallitas para limpiar salpicaduras sobre la marcha.",
     variants: [{ sku: "110485", size: "96 toallitas", price: 18.25 }],
+    image: "p199_5_202x164.webp",
     page: 198,
   },
   {
@@ -246,6 +251,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Reemplazo de líquido concentrado para la cocina.",
     variants: [{ sku: "12536", size: "1 L", price: 20.5 }],
+    image: "p199_3_101x208.webp",
     page: 198,
   },
   {
@@ -256,6 +262,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Reemplazo de líquido concentrado para el baño.",
     variants: [{ sku: "12546", size: "1 L", price: 20.5 }],
+    image: "p199_0_101x208.webp",
     page: 198,
   },
   {
@@ -266,6 +273,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Botella rociadora vacía de 500 ml para usar con los concentrados Amway Home.",
     variants: [{ sku: "16798", size: "500 ml", price: 8.25 }],
+    image: "p199_4_120x205.webp",
     page: 198,
   },
   {
@@ -276,6 +284,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Reemplazo de líquido concentrado para vidrios.",
     variants: [{ sku: "12537", size: "1 L", price: 20.5 }],
+    image: "p199_1_93x208.webp",
     page: 198,
   },
   {
@@ -286,6 +295,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Desinfectante concentrado de uso multiusos.",
     variants: [{ sku: "E3878", size: "1 L", price: 21.75 }],
+    image: "p199_6_142x212.webp",
     page: 198,
   },
   {
@@ -307,6 +317,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Tabletas concentradas para el lavavajillas automático.",
     variants: [{ sku: "09867", size: "60 tabletas", price: 31.25 }],
+    image: "p199_8_177x174.webp",
     page: 198,
   },
   {
@@ -317,6 +328,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Almohadillas para una limpieza fácil de sartenes y utensilios.",
     variants: [{ sku: "10490", size: "4 almohadillas", price: 9.75 }],
+    image: "p199_2_128x140.webp",
     page: 198,
   },
   {
@@ -327,6 +339,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Botella dispensadora vacía de 500 ml para el líquido para vajilla concentrado.",
     variants: [{ sku: "07890", size: "500 ml", price: 9.25 }],
+    image: "p199_10_114x137.webp",
     page: 198,
   },
   {
@@ -337,6 +350,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Líquido concentrado para vajilla.",
     variants: [{ sku: "10488", size: "1 L", price: 19.0 }],
+    image: "p199_9_98x205.webp",
     page: 198,
   },
 
@@ -360,6 +374,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Triple concentración para eliminar manchas y reavivar blancos y colores.",
     variants: [{ sku: "09849", size: "3 kg", price: 63.25 }],
+    image: "p200_2_109x110.webp",
     page: 200,
   },
   {
@@ -370,6 +385,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Blanqueador activo de oxígeno que elimina las peores manchas a cualquier temperatura.",
     variants: [{ sku: "24485", size: "1 kg", price: 21.0 }],
+    image: "p201_3_146x164.webp",
     page: 201,
   },
   {
@@ -380,6 +396,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Restituye naturalmente la sensación suave y esponjosa de prendas y ropa de cama.",
     variants: [{ sku: "10403", size: "350 g", price: 22.25 }],
+    image: "p201_2_130x227.webp",
     page: 201,
   },
   {
@@ -390,6 +407,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Un solo rociado ayuda a eliminar las manchas más difíciles sin frotar ni remojar.",
     variants: [{ sku: "10480", size: "1 L", price: 17.0 }],
+    image: "p201_1_109x219.webp",
     page: 201,
   },
 ];
