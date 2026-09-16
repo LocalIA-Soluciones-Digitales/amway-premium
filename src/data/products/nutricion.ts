@@ -1,0 +1,774 @@
+import type { Product } from "../types";
+
+export const nutricionProducts: Product[] = [
+  // ---- Nutrición diaria ----
+  {
+    id: "double-x",
+    name: "Multivitamina Double X™ de Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Nuestro multivitamínico basado en plantas más poderoso, elaborado con 22 vitaminas, minerales y nutrientes de 22 frutas, verduras y hierbas para apoyar 10 beneficios saludables. Con antioxidantes que ayudan a combatir el estrés oxidativo y proteger contra los radicales libres.",
+    variants: [
+      { sku: "A4300", size: "Suministro 31 días · bandeja/186 tabletas", price: 77.75 },
+      { sku: "A0244", size: "Reemplazo 31 días · 186 tabletas", price: 74.25 },
+      { sku: "23364", size: "Suministro 10 días · 20 paquetes", price: 28.25 },
+    ],
+    flagship: "nutrilite",
+    page: 20,
+  },
+  {
+    id: "multivitaminico-hombres",
+    name: "Multivitamínico diario para hombres Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Apoyo para salud inmunológica, energía, músculos y salud del corazón en una tableta al día. Incluye 22 vitaminas y minerales esenciales, además de 200 mg de nutrientes de plantas.",
+    variants: [{ sku: "125557", size: "90 tabletas", price: 40.5 }],
+    page: 22,
+  },
+  {
+    id: "multigomitas-hombres",
+    name: "Multigomitas diarias para hombres Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Apoyo para salud inmunológica, energía, músculos y salud del corazón en deliciosas gomitas USDA Organic. Incluye 13 vitaminas y minerales, además de 75 mg de nutrientes orgánicos de plantas.",
+    variants: [{ sku: "125561", size: "120 gomitas", price: 41.5 }],
+    page: 22,
+  },
+  {
+    id: "multivitaminico-mujeres",
+    name: "Multivitamínico diario para mujeres Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Apoyo para salud inmunológica, energía, huesos y salud de los ojos en una tableta al día. Incluye 23 vitaminas y minerales esenciales, además de 200 mg de nutrientes de plantas.",
+    variants: [{ sku: "125559", size: "90 tabletas", price: 40.5 }],
+    page: 22,
+  },
+  {
+    id: "multigomitas-mujeres",
+    name: "Multigomitas diarias para mujeres Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Nutrientes que ayudan a satisfacer las principales necesidades de las mujeres: salud inmunológica, metabolismo energético, salud ósea y de ojos, en deliciosas gomitas USDA Organic.",
+    variants: [{ sku: "125562", size: "120 gomitas", price: 41.5 }],
+    page: 22,
+  },
+  {
+    id: "concentrado-frutas-verduras",
+    name: "Concentrado de frutas y verduras Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Fitonutrientes equivalentes a más de 5 porciones de frutas y verduras en una tableta conveniente. Contiene 13 extractos ricos en antioxidantes para apoyar la salud de ojos, corazón y circulación.",
+    variants: [{ sku: "00648", size: "60 tabletas", price: 54.0 }],
+    page: 23,
+  },
+  {
+    id: "paquete-perfecto",
+    name: "Paquete perfecto Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Creado para desarrollar una base nutricional sólida. Cada porción diaria contiene Multivitamina Double X, Concentrado de frutas y verduras, Omega avanzado y Vitamina D (30 de mañana y 30 de noche).",
+    variants: [{ sku: "23377", size: "60 paquetes", price: 195.0 }],
+    page: 23,
+  },
+  {
+    id: "proteina-vegetal-polvo",
+    name: "Proteína vegetal en polvo Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Contiene los 9 aminoácidos esenciales y 21 g de proteína de plantas de arroz integral, guisantes y chía, cultivados en granjas orgánicas certificadas. Chocolate · Vainilla · Sin sabor.",
+    variants: [{ size: "5 porciones", price: 49.5 }],
+    page: 25,
+  },
+  {
+    id: "batidos-todo-en-uno",
+    name: "Batidos todo en uno Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Batidos listos para beber con 20 g de proteína basada en plantas, 25 vitaminas y minerales, 5 g de fibra y frutas y verduras enteras. Chocolate · Vainilla.",
+    variants: [{ size: "2 batidos", price: 83.25 }],
+    page: 25,
+  },
+  {
+    id: "omega-avanzado",
+    name: "Omega avanzado Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Brinda más de 1,000 mg de ácidos grasos omega 3 esenciales. Clínicamente probado con tres veces mayor absorción de los omega 3 EPA, DHA y ALA que el aceite de pescado normal.",
+    variants: [{ sku: "26136", size: "60 cápsulas blandas", price: 47.25 }],
+    image: "p027_0_1047x1242.webp",
+    flagship: "nutrilite",
+    page: 26,
+  },
+  {
+    id: "omega-nutrilite",
+    name: "Omega Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Proporciona más de 500 mg de ácidos grasos omega 3 en un conveniente formato de una cápsula blanda al día, con regusto reducido a pescado.",
+    variants: [{ sku: "26132", size: "30 cápsulas blandas", price: 28.25 }],
+    image: "p027_0_1047x1242.webp",
+    page: 26,
+  },
+  {
+    id: "begin",
+    name: "Preparación intestinal diaria Nutrilite Begin™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Apoyo integral seis en uno para una digestión saludable, salud inmunológica, salud del hígado y la piel, energía y metabolismo.",
+    variants: [{ sku: "27725", size: "30 porciones", price: 91.0 }],
+    page: 30,
+  },
+  {
+    id: "balance-within",
+    name: "Probiótico Balance Within™ de Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Contiene 6.3 mil millones de UFC de bacterias buenas clínicamente respaldadas para ayudar a mantener una digestión saludable.",
+    variants: [{ sku: "20571", size: "30 sobres individuales", price: 50.75 }],
+    page: 30,
+  },
+  {
+    id: "fibra-prebiotica",
+    name: "Fibra prebiótica Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Fibra soluble basada en plantas para apoyar digestión, regularidad, microbioma intestinal y niveles de azúcar en sangre ya saludables. Con dextrina resistente de tapioca y fibra de acacia.",
+    variants: [{ sku: "127444", size: "30 sobres individuales", price: 49.5 }],
+    badge: "¡Nuevo!",
+    page: 32,
+  },
+  {
+    id: "enzimas-digestivas",
+    name: "Enzimas digestivas Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description: "Apoya la digestión de carbohidratos, proteína, grasa y lácteos.",
+    variants: [{ sku: "A8903", size: "90 cápsulas", price: 45.0 }],
+    page: 32,
+  },
+  {
+    id: "te-menta-jengibre",
+    name: "Té de menta y jengibre Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description: "Apoya la digestión con menta y jengibre certificados USDA Organic.",
+    variants: [{ sku: "308635", size: "20 bolsitas de té", price: 20.25 }],
+    page: 32,
+  },
+  {
+    id: "magnesio",
+    name: "Magnesio Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Mezcla triple de magnesio de origen marino para ayudar a apoyar sueño, estrés, corazón, nervios, músculos, energía y salud cerebral. Absorbe el doble con dos formas protegidas de magnesio.",
+    variants: [{ sku: "28032", size: "60 cápsulas", price: 39.5 }],
+    page: 35,
+  },
+
+  // ---- Necesidades específicas: salud celular ----
+  {
+    id: "salud-celular",
+    name: "Apoyo para salud celular Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud celular",
+    description:
+      "Suplemento 3 en 1 basado en plantas que apoya los procesos normales de reciclaje celular, energía y metabolismo celular, así como protección antioxidante.",
+    variants: [{ sku: "27813", size: "120 cápsulas · 30 días", price: 87.75 }],
+    badge: "¡Nuevo!",
+    page: 38,
+  },
+
+  // ---- Energía y enfoque ----
+  {
+    id: "vitamina-b-doble",
+    name: "Suplemento Vitamina B de acción doble Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Energía y enfoque",
+    description:
+      "Brinda 8 vitaminas B esenciales de liberación instantánea y constante para un apoyo energético durante todo el día.",
+    variants: [{ sku: "10171", size: "120 tabletas", price: 44.0 }],
+    page: 44,
+  },
+  {
+    id: "ultra-enfoque-energia",
+    name: "Paquete de Ultra enfoque y energía Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Energía y enfoque",
+    description:
+      "Paquete de suplementos para maximizar el enfoque, con ginkgo biloba, extracto de té verde y rhodiola rosea.",
+    variants: [{ sku: "123842", size: "20 paquetes", price: 49.5 }],
+    page: 44,
+  },
+  {
+    id: "superalimento-verde",
+    name: "Superalimento verde en polvo Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Energía y enfoque",
+    description:
+      "Apoyo para energía y bienestar general con 6 vitaminas B esenciales y nutrientes de 10 verduras y hierbas, incluidos brócoli, espinaca y col rizada.",
+    variants: [{ sku: "25937", size: "30 porciones", price: 52.75 }],
+    page: 44,
+  },
+
+  // ---- Sueño, estrés y estado de ánimo ----
+  {
+    id: "salud-sueno",
+    name: "Salud del sueño Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Sueño y estrés",
+    description:
+      "Con 3 mg de melatonina basada en plantas de tomates para conciliar el sueño más rápido, más tiempo y sin somnolencia. Incluye extracto de flor de manzanilla de granjas propias.",
+    variants: [{ sku: "27940", size: "30 cápsulas", price: 32.5 }],
+    badge: "¡Nuevo!",
+    page: 48,
+  },
+  {
+    id: "dulces-suenos",
+    name: "Dulces Sueños n* by Nutrilite™ – Gomitas para dormir",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Sueño y estrés",
+    description:
+      "Gomitas sabor a moras azules y lavanda con 3 mg de melatonina y 5 mg de pasionaria para fomentar un buen descanso.",
+    variants: [{ sku: "24506", size: "30 porciones", price: 24.75 }],
+    page: 48,
+  },
+  {
+    id: "ashwagandha",
+    name: "Ashwagandha Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Sueño y estrés",
+    description:
+      "890 mg de ashwagandha de granjas orgánicas certificadas por porción, equivalente a 7,000 mg de raíz, para estrés ocasional, sueño reparador y estado de ánimo equilibrado.",
+    variants: [{ sku: "308641", size: "60 cápsulas", price: 51.75 }],
+    page: 49,
+  },
+  {
+    id: "probiotico-estres",
+    name: "Probiótico para el estrés Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Sueño y estrés",
+    description:
+      "Ayuda a reducir el estrés ocasional, fortalece la salud inmunológica, combate la fatiga mental y ayuda a una digestión saludable.",
+    variants: [{ sku: "25514", size: "30 cápsulas", price: 56.25 }],
+    page: 50,
+  },
+  {
+    id: "te-manzanilla",
+    name: "Té de manzanilla Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Sueño y estrés",
+    description: "Mezcla sin cafeína de hierbas y flores USDA Organic que calma y relaja.",
+    variants: [{ sku: "308636", size: "20 bolsitas de té", price: 20.25 }],
+    page: 50,
+  },
+
+  // ---- Salud inmunológica ----
+  {
+    id: "vitamina-d",
+    name: "Vitamina D Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud inmunológica",
+    description:
+      "50 mcg de vitamina D de champiñones ayudan a apoyar huesos fuertes y el funcionamiento inmunológico saludable, con vitamina K2 para optimizar la absorción.",
+    variants: [{ sku: "119346", size: "90 tabletas", price: 33.75 }],
+    page: 54,
+  },
+  {
+    id: "defensa-inmunologica",
+    name: "Defensa inmunológica Nutrilite™ con zinc y albahaca sagrada",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud inmunológica",
+    description: "Brinda apoyo a tus sistemas inmunológico y respiratorio.",
+    variants: [{ sku: "124692", size: "60 tabletas", price: 20.25 }],
+    page: 56,
+  },
+  {
+    id: "equinacea",
+    name: "Equinácea para inmunidad Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud inmunológica",
+    description: "Clínicamente probado que apoya el funcionamiento inmunológico.",
+    variants: [{ sku: "A5986", size: "120 tabletas", price: 46.0 }],
+    page: 56,
+  },
+  {
+    id: "protegete-gomitas",
+    name: "Protégete n* by Nutrilite™ – gomitas para la inmunidad",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud inmunológica",
+    description: "Beneficios que apoyan tu sistema inmunológico en un delicioso formato de gomita.",
+    variants: [{ sku: "124555", size: "30 porciones", price: 27.0 }],
+    page: 56,
+  },
+  {
+    id: "clearguard",
+    name: "Suplemento ClearGuard™ de Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud inmunológica",
+    description: "Ayuda a despejar tus fosas nasales naturalmente en 3 días o menos.",
+    variants: [{ sku: "102735", size: "180 tabletas", price: 31.5 }],
+    page: 56,
+  },
+  {
+    id: "vitamina-c",
+    name: "Vitamina C de acción prolongada Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud inmunológica",
+    description: "Fórmula de liberación lenta y constante para apoyo durante todo el día.",
+    variants: [
+      { sku: "109745", size: "60 tabletas", price: 23.5 },
+      { sku: "109747", size: "180 tabletas", price: 63.0 },
+    ],
+    page: 56,
+  },
+  {
+    id: "superalimento-inmunidad",
+    name: "Superalimento para la inmunidad en polvo Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud inmunológica",
+    description: "Apoyo inmunológico natural con 10 frutas orgánicas.",
+    variants: [{ sku: "125936", size: "30 porciones", price: 52.75 }],
+    page: 56,
+  },
+
+  // ---- Huesos y articulaciones ----
+  {
+    id: "curcuma",
+    name: "Cúrcuma Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Huesos y articulaciones",
+    description:
+      "Apoyo 3 en 1 para la salud de las articulaciones con extracto de cúrcuma 45 veces más absorbible que el estándar: cada porción equivale a 6,000 mg de extracto estándar.",
+    variants: [{ sku: "308642", size: "60 cápsulas", price: 40.5 }],
+    page: 61,
+  },
+  {
+    id: "salud-articulaciones",
+    name: "Salud de las articulaciones Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Huesos y articulaciones",
+    description:
+      "Mezcla única de siete ingredientes con niveles importantes de glucosamina y condroitina para apoyar articulaciones saludables.",
+    variants: [
+      { sku: "04664", size: "120 tabletas", price: 41.5 },
+      { sku: "06964", size: "240 tabletas", price: 74.25 },
+    ],
+    page: 62,
+  },
+  {
+    id: "cal-mag-d",
+    name: "Cal Mag D Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Huesos y articulaciones",
+    description:
+      "600 mg de calcio y 200 mg de magnesio de algas calcificadas de Islandia, más vitamina D para optimizar la absorción.",
+    variants: [{ sku: "10610", size: "180 tabletas", price: 50.75 }],
+    page: 62,
+  },
+  {
+    id: "paquete-salud-osea",
+    name: "Paquete de salud ósea Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Huesos y articulaciones",
+    description:
+      "Ayuda a desarrollar, apoyar y mantener huesos saludables. Cada porción diaria contiene Cal Mag D, vitamina D y Bone Guard.",
+    variants: [{ sku: "23362", size: "60 paquetes", price: 120.0 }],
+    page: 63,
+  },
+
+  // ---- Memoria y vista ----
+  {
+    id: "melena-de-leon",
+    name: "Champiñón melena de león Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Memoria y vista",
+    description:
+      "Apoya la salud cerebral, el funcionamiento cognitivo y nervioso con 20 veces más extracto de melena de león, equivalente a 10,800 mg de polvo seco.",
+    variants: [{ sku: "308639", size: "60 cápsulas", price: 39.5 }],
+    page: 64,
+  },
+  {
+    id: "salud-vision",
+    name: "Salud de la visión Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Memoria y vista",
+    description:
+      "Ayuda a los ojos a filtrar la luz azul y apoya la adaptación visual a la luz, incluida la visión nocturna.",
+    variants: [{ sku: "124708", size: "60 cápsulas blandas", price: 40.5 }],
+    page: 64,
+  },
+  {
+    id: "memory-builder",
+    name: "Suplemento Memory Builder™ de Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Memoria y vista",
+    description:
+      "Apoya la memoria a corto y largo plazo, y un flujo sanguíneo óptimo para nutrir el cerebro, con cistanche tubulosa y ginkgo biloba.",
+    variants: [{ sku: "11106", size: "60 tabletas", price: 49.5 }],
+    page: 64,
+  },
+
+  // ---- Corazón ----
+  {
+    id: "cuidado-corazon-ajo",
+    name: "Cuidado del corazón con ajo Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud del corazón",
+    description:
+      "Apoya la salud del corazón y ayuda a mantener presión arterial y colesterol ya normales, con 6 mg de alicina por porción.",
+    variants: [{ sku: "A5923", size: "120 tabletas", price: 41.5 }],
+    page: 65,
+  },
+  {
+    id: "coq10",
+    name: "Salud del corazón CoQ10 Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud del corazón",
+    description:
+      "Ayuda a mantener los niveles necesarios de CoQ10 para producir energía y apoyar la salud del corazón, hígado, riñones y todas las células.",
+    variants: [{ sku: "A8601", size: "60 cápsulas blandas", price: 23.5 }],
+    page: 65,
+  },
+  {
+    id: "salud-colesterol",
+    name: "Salud del colesterol Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud del corazón",
+    description:
+      "Ayuda a mantener niveles de colesterol ya normales con fitonutrientes y antioxidantes.",
+    variants: [{ sku: "100070", size: "60 cápsulas blandas", price: 40.5 }],
+    page: 66,
+  },
+  {
+    id: "paquete-salud-corazon",
+    name: "Paquete para la salud del corazón Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Salud del corazón",
+    description:
+      "Cada porción diaria contiene Omega avanzado, CoQ10 y Salud del colesterol para un corazón saludable.",
+    variants: [{ sku: "123367", size: "60 paquetes", price: 152.0 }],
+    page: 66,
+  },
+
+  // ---- Hombres ----
+  {
+    id: "salud-prostata",
+    name: "Salud de la próstata Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Hombres",
+    description:
+      "Apoya el funcionamiento normal de la próstata y la fluidez urinaria con una mezcla única de ingredientes basados en plantas, incluido serenoa.",
+    variants: [{ sku: "A8004", size: "100 cápsulas blandas", price: 54.0 }],
+    page: 70,
+  },
+  {
+    id: "epimedium-tribulus",
+    name: "Cápsulas de epimedium y tribulus Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Hombres",
+    description:
+      "Apoya la salud sexual y libido saludable con tribulus estandarizado al 85 % de saponinas, de granjas orgánicas certificadas.",
+    variants: [{ sku: "308640", size: "60 cápsulas", price: 52.75 }],
+    page: 70,
+  },
+  {
+    id: "paquete-hombres",
+    name: "Paquete para hombres Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Hombres",
+    description:
+      "Cada porción diaria contiene Multivitamínico para hombres, concentrado de frutas y verduras, omega y vitamina C de acción prolongada.",
+    variants: [{ sku: "23365", size: "30 paquetes", price: 87.75 }],
+    page: 70,
+  },
+
+  // ---- Mujeres ----
+  {
+    id: "menopausia",
+    name: "Apoyo completo para la menopausia Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Mujeres",
+    description:
+      "Con ruibarbo siberiano, clínicamente probado para aliviar bochornos, sudoración nocturna y cambios del estado de ánimo.",
+    variants: [{ sku: "26154", size: "30 tabletas", price: 45.0 }],
+    page: 72,
+  },
+  {
+    id: "apoyo-ciclo",
+    name: "Apoyo de ciclo Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Mujeres",
+    description:
+      "Sauzgatillo y azafrán clínicamente estudiados que ayudan a aliviar los síntomas comunes del ciclo menstrual.",
+    variants: [{ sku: "126161", size: "30 cápsulas", price: 44.0 }],
+    page: 73,
+  },
+  {
+    id: "hierro-folico",
+    name: "Hierro fólico Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Mujeres",
+    description: "Tres fuentes de hierro con ácido fólico, de nutrientes de plantas ricas en hierro.",
+    variants: [{ sku: "102046", size: "90 tabletas", price: 20.25 }],
+    page: 73,
+  },
+  {
+    id: "paquete-mujeres",
+    name: "Paquete para mujeres Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Mujeres",
+    description:
+      "Cada paquete contiene Multivitamínico para mujeres, concentrado de frutas y verduras, Cal Mag D y Salud del cabello, piel y uñas.",
+    variants: [{ sku: "23372", size: "30 paquetes", price: 73.25 }],
+    page: 73,
+  },
+
+  // ---- Piel desde adentro ----
+  {
+    id: "peptidos-colageno",
+    name: "Péptidos de colágeno #sinfiltro n* by Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Piel desde adentro",
+    description:
+      "13 g de colágeno que nutre la piel y extracto de aloe para protección antioxidante. Mézclalo en tus bebidas favoritas.",
+    variants: [{ sku: "25553", size: "15 sobres 13.5 g", price: 37.25 }],
+    page: 74,
+  },
+  {
+    id: "shots-colageno",
+    name: "Shots de colágeno n* by Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Piel desde adentro",
+    description:
+      "Shot con sabor a cereza y mora, con 7 g de colágeno, 60 mg de ácido hialurónico y 25 mg de extracto de acerola.",
+    variants: [{ sku: "24936", size: "9 shots de 89 ml", price: 51.75 }],
+    page: 74,
+  },
+  {
+    id: "cabello-piel-unas",
+    name: "Salud del cabello, piel y uñas Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Piel desde adentro",
+    description:
+      "Combina 1,000 mcg de biotina, 500 mg de colágeno y nutrientes de plantas de granjas propias para cabello, piel y uñas saludables.",
+    variants: [{ sku: "A7553", size: "60 tabletas", price: 30.25 }],
+    page: 74,
+  },
+
+  // ---- Niños ----
+  {
+    id: "multivitaminico-ninos",
+    name: "Multivitamínico masticable diario para niños Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Niños",
+    description:
+      "18 vitaminas y minerales para apoyar la salud inmunológica, de huesos y visión de los niños en crecimiento.",
+    variants: [{ sku: "23043", size: "60 tabletas", price: 22.5 }],
+    page: 76,
+  },
+  {
+    id: "brainiums-dha",
+    name: "Brainiums DHA™ para niños Nutrilite™ – Jelly splat",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Niños",
+    description:
+      "Jelly splat sabor fresa y cítricos sin azúcar, con 360 mg de omega 3 de pescado sostenible y chía, para la salud cerebral.",
+    variants: [{ sku: "305554", size: "30 jelly splats", price: 30.25 }],
+    page: 76,
+  },
+  {
+    id: "inmunidad-ninos-polvo",
+    name: "Inmunidad total en polvo de fusión rápida para niños Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Niños",
+    description: "Apoyo inmunológico cuatro en uno con vitaminas C y D, probióticos y zinc.",
+    variants: [{ sku: "23046", size: "30 sobres individuales", price: 33.75 }],
+    page: 76,
+  },
+  {
+    id: "gotas-inmunidad-ninos",
+    name: "Gotas de inmunidad para Niños Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Niños",
+    description:
+      "Apoyo inmunológico cuatro en uno para niños de 1 a 3 años: vitaminas C y D, zinc, bayas del saúco y acerolas.",
+    variants: [{ sku: "26185", size: "30 ml", price: 28.25 }],
+    page: 76,
+  },
+
+  // ---- Alimentación saludable todo en uno ----
+  {
+    id: "comida-completa-polvo",
+    name: "Comida completa en polvo Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Alimentación saludable",
+    description:
+      "20 g de proteína basada en plantas, 25 vitaminas y minerales y 6 g de fibra. Chocolate · Vainilla · Mora.",
+    variants: [{ size: "5 porciones", price: 82.25 }],
+    page: 81,
+  },
+  {
+    id: "barras-todo-en-uno",
+    name: "Barras todo en uno Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Alimentación saludable",
+    description:
+      "12 g de proteína basada en plantas, 25 vitaminas y minerales, 8 g de fibra y frutas y verduras enteras.",
+    variants: [{ size: "2 barras", price: 66.25 }],
+    page: 81,
+  },
+  {
+    id: "tubitos-2go",
+    name: "Tubitos 2GO™ de Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Alimentación saludable",
+    description:
+      "Refuerza tu agua con nutrientes: apoyo inmunológico, antioxidante o de articulaciones en formato refrescante y bajo en calorías.",
+    variants: [{ size: "20 tubos", price: 28.25 }],
+    page: 81,
+  },
+  {
+    id: "perfect-water",
+    name: "Perfect Empowered Drinking Water®",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Alimentación saludable",
+    description:
+      "Agua purificada, remineralizada, ionizada y micro estructurada con oxígeno de ligación molecular (MBO®) para optimizar la hidratación.",
+    variants: [{ sku: "285375", size: "24 botellas de 500 ml", price: 58.5 }],
+    page: 82,
+  },
+  {
+    id: "barras-bienestar",
+    name: "Barras de bienestar Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Alimentación saludable",
+    description:
+      "8 g de proteína e ingredientes saludables sin saborizantes, colorantes ni conservantes artificiales. Chocolate oscuro con nueces.",
+    variants: [{ sku: "111045", size: "2 barras", price: 33.75 }],
+    page: 82,
+  },
+
+  // ---- Control de peso ----
+  {
+    id: "masa-magra",
+    name: "Masa magra Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Control de peso",
+    description:
+      "Ácido linoleico conjugado (ALC) para ayudar a reducir la grasa corporal y apoyar la retención de masa muscular magra.",
+    variants: [{ sku: "00280", size: "180 cápsulas blandas", price: 60.75 }],
+    page: 84,
+  },
+  {
+    id: "slimmetry",
+    name: "Suplemento nutricional Slimmetry™ de Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Control de peso",
+    description:
+      "Extracto de té verde sin cafeína diseñado para mejorar la pérdida de peso combinado con plan de alimentación y ejercicio.",
+    variants: [{ sku: "17085", size: "60 tabletas", price: 38.25 }],
+    page: 84,
+  },
+  {
+    id: "bloqueador-carbohidratos",
+    name: "Bloqueador de carbohidratos Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Control de peso",
+    description:
+      "Bloquea los carbohidratos sin privar a tu cuerpo de vitaminas, minerales y fibras.",
+    variants: [{ sku: "00193", size: "90 tabletas", price: 42.75 }],
+    page: 84,
+  },
+  {
+    id: "pre-postbiotico",
+    name: "Pre y postbiótico metabólico Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Control de peso",
+    description:
+      "Prebióticos y un postbiótico clínicamente estudiado que apoyan un peso saludable y el funcionamiento metabólico normal.",
+    variants: [{ sku: "27620", size: "60 cápsulas", price: 47.25 }],
+    page: 84,
+  },
+];
