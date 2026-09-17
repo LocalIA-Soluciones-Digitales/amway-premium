@@ -4,9 +4,10 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import type { Product } from "@/data/types";
-import { priceRangeLabel } from "@/data/types";
+import { priceRangeLabel, directCheckoutPrice } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
 import { cn } from "@/lib/utils";
+import { BuyButton } from "./BuyButton";
 
 const BRAND_INITIALS: Record<string, string> = {
   Nutrilite: "N",
@@ -22,6 +23,7 @@ const BRAND_INITIALS: Record<string, string> = {
 };
 
 export function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
+  const canBuyDirectly = directCheckoutPrice(product) != null;
   return (
     <motion.article
       initial={{ opacity: 0, y: 28 }}
@@ -64,17 +66,20 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
         </h3>
         <p className="line-clamp-2 text-xs leading-relaxed text-mist">{product.description}</p>
 
-        <div className="mt-auto flex items-center justify-between pt-3">
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
           <span className="text-sm font-medium text-paper">{priceRangeLabel(product)}</span>
-          <a
-            href={waProductLink(product.name)}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Consultar ${product.name} por WhatsApp`}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-mist transition hover:bg-wellness hover:text-obsidian"
-          >
-            <MessageCircle size={16} />
-          </a>
+          <div className="flex items-center gap-1.5">
+            {canBuyDirectly && <BuyButton productId={product.id} />}
+            <a
+              href={waProductLink(product.name)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Consultar ${product.name} por WhatsApp`}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 text-mist transition hover:bg-wellness hover:text-obsidian"
+            >
+              <MessageCircle size={16} />
+            </a>
+          </div>
         </div>
       </div>
     </motion.article>

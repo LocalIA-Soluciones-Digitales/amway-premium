@@ -19,7 +19,7 @@ const FAQS = [
   },
   {
     q: "¿Los precios están en dólares o en euros?",
-    a: "El catálogo de referencia es de Estados Unidos y los precios base están en dólares (USD). Te confirmamos el importe final en euros, incluidos gastos de importación, antes de cerrar el pedido.",
+    a: "Todos los precios que ves en la web ya están en euros, convertidos al cambio oficial desde el catálogo original de Estados Unidos. No incluyen gastos de envío, que te confirmamos según destino.",
   },
   {
     q: "¿Qué pasa si un producto no está disponible?",
