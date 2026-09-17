@@ -58,7 +58,6 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Filtro de reemplazo para el purificador de agua eSpring.",
     variants: [{ sku: "22943", size: "1 filtro", price: 293.0 }],
-    image: "p191_2_103x133.webp",
     page: 189,
   },
   {

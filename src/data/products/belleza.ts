@@ -477,7 +477,6 @@ export const bellezaProducts: Product[] = [
       { sku: "26461", size: "Champú 750 ml", price: 33.75 },
       { sku: "26462", size: "Acondicionador 280 ml", price: 18.0 },
     ],
-    image: "p176_1_87x221.webp",
     page: 176,
   },
   {
@@ -576,7 +575,6 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Hidrata y refresca la piel al instante con un refuerzo antioxidante de cerezas acerola.",
     variants: [{ sku: "25893", size: "400 ml", price: 18.5 }],
-    image: "p180_7_88x217.webp",
     page: 180,
   },
   {
@@ -587,7 +585,6 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Alivia instantáneamente la resequedad, nutriendo e hidratando las manos ásperas.",
     variants: [{ sku: "25902", size: "75 ml", price: 17.75 }],
-    image: "p180_2_73x156.webp",
     page: 180,
   },
   {
@@ -598,7 +595,6 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado del bebé",
     description: "Fórmula suave y sin lágrimas para la piel y el cabello, sin fragancia.",
     variants: [{ sku: "26308", size: "400 ml", price: 18.25 }],
-    image: "p180_4_123x225.webp",
     page: 180,
   },
   {
@@ -609,7 +605,6 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado del bebé",
     description: "Mantiene la barrera de hidratación, relaja y reconforta la piel delicada del bebé.",
     variants: [{ sku: "26309", size: "400 ml", price: 18.25 }],
-    image: "p180_3_118x225.webp",
     page: 180,
   },
   {
@@ -620,7 +615,6 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "48 horas de protección contra el olor con secado rápido.",
     variants: [{ sku: "27877", size: "100 ml", price: 12.75 }],
-    image: "p181_2_76x215.webp",
     page: 181,
   },
   {
@@ -631,7 +625,6 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Protección suave contra olores todo el día sin dejar marcas blancas.",
     variants: [{ sku: "321108", size: "83.5 g", price: 14.5 }],
-    image: "p181_8_100x202.webp",
     page: 181,
   },
   {
@@ -714,7 +707,6 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado bucal",
     description: "Fórmula concentrada y sin alcohol que refresca el aliento y limpia entre los dientes.",
     variants: [{ sku: "24108", size: "72 ml", price: 16.5 }],
-    image: "p183_0_103x103.webp",
     page: 184,
   },
   {
@@ -725,7 +717,6 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado bucal",
     description: "Refresca el aliento al instante en cualquier momento y lugar, con un solo toque.",
     variants: [{ sku: "24111", size: "14 ml", price: 8.75 }],
-    image: "p184_4_77x209.webp",
     page: 184,
   },
 ];
