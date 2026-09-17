@@ -70,9 +70,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="grain min-h-full flex flex-col bg-obsidian">
+        <a
+          href="#main-content"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-obsidian transition-transform focus-visible:translate-y-0"
+        >
+          Saltar al contenido
+        </a>
         <SmoothScroll>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
           <Footer />
           <WhatsAppButton />
         </SmoothScroll>

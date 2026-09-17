@@ -21,20 +21,7 @@ const BRAND_INITIALS: Record<string, string> = {
   "Amway Home": "AH",
 };
 
-// Source photos extracted from the catalog vary wildly in native resolution.
-// Stretching a ~100px source to fill a 300px+ card looks blurry, so anything
-// below this bar renders at its true size instead of being scaled up.
-const MIN_SHARP_DIMENSION = 180;
-
-function parseImageSize(image: string): { width: number; height: number } | null {
-  const match = image.match(/_(\d+)x(\d+)\.webp$/);
-  if (!match) return null;
-  return { width: Number(match[1]), height: Number(match[2]) };
-}
-
 export function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
-  const size = product.image ? parseImageSize(product.image) : null;
-  const isSharp = size ? Math.min(size.width, size.height) >= MIN_SHARP_DIMENSION : false;
   return (
     <motion.article
       initial={{ opacity: 0, y: 28 }}
@@ -50,7 +37,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
       )}
 
       <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-br from-graphite-soft to-obsidian-soft p-6">
-        {product.image && size && isSharp ? (
+        {product.image ? (
           <Image
             src={`/images/catalog/${product.image}`}
             alt={product.name}
@@ -58,17 +45,6 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             sizes="(max-width: 768px) 50vw, 25vw"
             className="object-contain p-4 transition-transform duration-700 ease-out group-hover:scale-105"
           />
-        ) : product.image && size ? (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className="absolute h-24 w-24 rounded-full bg-white/[0.04] blur-2xl" />
-            <Image
-              src={`/images/catalog/${product.image}`}
-              alt={product.name}
-              width={size.width}
-              height={size.height}
-              className="relative max-h-[45%] w-auto object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-          </div>
         ) : (
           <div
             className={cn(

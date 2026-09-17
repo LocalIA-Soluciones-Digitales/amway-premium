@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -19,6 +20,7 @@ const NAV_LINKS = [
 ];
 
 export function Header() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -52,15 +54,29 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm text-mist transition-colors hover:text-white"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const active = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "relative text-sm transition-colors",
+                  active ? "text-white" : "text-mist hover:text-white"
+                )}
+              >
+                {link.label}
+                {active && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute -bottom-1.5 left-0 right-0 h-px bg-wellness"
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
@@ -100,22 +116,29 @@ export function Header() {
               </button>
             </div>
             <nav className="mt-12 flex flex-col gap-1">
-              {NAV_LINKS.map((link, i) => (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.04 * i, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <Link
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="block border-b border-white/5 py-4 font-display text-3xl text-paper"
+              {NAV_LINKS.map((link, i) => {
+                const active = pathname === link.href;
+                return (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.04 * i, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    {link.label}
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "block border-b border-white/5 py-4 font-display text-3xl",
+                        active ? "text-wellness" : "text-paper"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </nav>
           </motion.div>
         )}
