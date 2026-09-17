@@ -13,6 +13,12 @@ const IMAGES: Record<string, string> = {
   hogar: "p198_0_841x1091.webp",
 };
 
+const ACCENT_GLOW: Record<string, string> = {
+  wellness: "rgba(53,208,161,0.32)",
+  tech: "rgba(77,142,255,0.32)",
+  gold: "rgba(212,175,106,0.35)",
+};
+
 export function CategoryShowcase() {
   const categories = Object.entries(CATEGORY_META);
 
@@ -44,15 +50,25 @@ export function CategoryShowcase() {
           >
             <Link
               href={meta.href}
-              className="group relative flex h-80 flex-col justify-end overflow-hidden rounded-3xl border border-white/8 p-8 sm:h-96"
+              className="group relative flex h-80 flex-col justify-end overflow-hidden rounded-3xl border border-white/8 bg-graphite/30 p-8 sm:h-96"
             >
-              <Image
-                src={`/images/catalog/${IMAGES[slug]}`}
-                alt=""
-                fill
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+              <div
+                className="pointer-events-none absolute inset-0 opacity-70 transition-opacity duration-500 group-hover:opacity-100"
+                style={{
+                  background: `radial-gradient(circle at 75% 25%, ${ACCENT_GLOW[meta.accent]}, transparent 60%)`,
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/40 to-obsidian/10" />
+              <div className="pointer-events-none absolute inset-x-0 top-0 flex h-2/3 items-center justify-center">
+                <div className="relative h-full w-full">
+                  <Image
+                    src={`/images/catalog/${IMAGES[slug]}`}
+                    alt=""
+                    fill
+                    className="object-contain object-top p-8 transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                </div>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/55 to-transparent" />
 
               <div className="relative flex items-end justify-between">
                 <div>
