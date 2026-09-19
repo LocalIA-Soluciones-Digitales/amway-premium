@@ -11,7 +11,7 @@ export const hogarProducts: Product[] = [
     description:
       "Se ajusta a la mayoría de los grifos de cocina estándar mediante un dispositivo que se enrosca en tu grifo. Reduce eficazmente más de 170 contaminantes, incluidos microplásticos, PFOA y PFOS.",
     variants: [{ sku: "22940", size: "1 purificador de agua", price: 1508.0 }],
-    image: "p188_0_407x553.webp",
+    image: "hq_22940.webp",
     flagship: "espring",
     page: 188,
   },
@@ -25,7 +25,7 @@ export const hogarProducts: Product[] = [
       "Instalación bajo el mesón para disfrutar de agua más limpia, saludable y sabrosa sin tubos visibles.",
     variants: [{ sku: "22941", size: "1 purificador de agua", price: 1508.0 }],
     flagship: "espring",
-    image: "p189_2_422x540.webp",
+    image: "hq_22941.webp",
     page: 188,
   },
   {
@@ -36,7 +36,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Conéctalo directamente al grifo o a la máquina de hielo para instalaciones personalizadas.",
     variants: [{ sku: "22942", size: "1 purificador de agua", price: 1508.0 }],
-    image: "p191_3_96x131.webp",
+    image: "hq_22942.webp",
     page: 188,
   },
   {
@@ -47,7 +47,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Grifo de diseño en níquel, negro o cromo para dar estilo moderno a tu cocina.",
     variants: [{ sku: "28212UC", size: "Níquel / Negro / Cromo", price: 1620.0 }],
-    image: "p191_10_248x342.webp",
+    image: "hq_28212UC.webp",
     page: 189,
   },
   {
@@ -58,6 +58,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Filtro de reemplazo para el purificador de agua eSpring.",
     variants: [{ sku: "22943", size: "1 filtro", price: 293.0 }],
+    image: "hq_22943.webp",
     page: 189,
   },
   {
@@ -68,7 +69,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Cartucho de reemplazo con tecnología UV para el purificador de agua eSpring.",
     variants: [{ sku: "00186", size: "1 filtro", price: 336.0 }],
-    image: "p189_1_422x554.webp",
+    image: "flip_espringuv.webp",
     page: 189,
   },
 
@@ -82,7 +83,7 @@ export const hogarProducts: Product[] = [
     description:
       "Sistema de filtración de 3 niveles que captura 99.99 % de los contaminantes transportados por aire. Diseñado para habitaciones de hasta 465 pies cuadrados.",
     variants: [{ sku: "20539", size: "1 unidad", price: 1969.0 }],
-    image: "p194_0_851x606.webp",
+    image: "hq_20539.webp",
     flagship: "atmosphere",
     page: 194,
   },
@@ -94,6 +95,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Filtro HEPA de reemplazo, dura de 1 a 3 años según el uso.",
     variants: [{ sku: "20540", size: "1 filtro", price: 216.0 }],
+    image: "hq_20540.webp",
     page: 194,
   },
   {
@@ -104,6 +106,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Filtro de carbón contra olores, dura de 4 a 12 meses según el uso.",
     variants: [{ sku: "20541", size: "1 filtro", price: 158.0 }],
+    image: "hq_20541.webp",
     page: 194,
   },
   {
@@ -115,6 +118,7 @@ export const hogarProducts: Product[] = [
     description:
       "Sistema de filtrado 3 en 1 que filtra 99.99 % de las partículas contaminantes y elimina más de 300 contaminantes. Para habitaciones de hasta 200 pies cuadrados.",
     variants: [{ sku: "24746", size: "1 unidad", price: 1069.0 }],
+    image: "hq_24746.webp",
     flagship: "atmosphere",
     page: 194,
   },
@@ -126,6 +130,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Filtro de reemplazo para Atmosphere Mini, dura de 6 a 10 meses.",
     variants: [{ sku: "123322", size: "1 filtro", price: 203.0 }],
+    image: "hq_123322.webp",
     page: 194,
   },
   {
@@ -136,6 +141,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Elimina el 99.99 % de las impurezas y contaminantes transportados por aire.",
     variants: [{ sku: "101078", size: "1 filtro", price: 197.0 }],
+    image: "hq_101078.webp",
     page: 195,
   },
   {
@@ -146,6 +152,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Carbón de alta eficiencia para óptima reducción de olores y compuestos químicos.",
     variants: [{ sku: "118040", size: "1 filtro", price: 141.0 }],
+    image: "hq_118040.webp",
     page: 195,
   },
 
@@ -159,7 +166,7 @@ export const hogarProducts: Product[] = [
     description:
       "Cacerolas, sartenes, olla, horno holandés, colador, vaporeras y accesorios de acero inoxidable de alta gama, certificados por NSF International.",
     variants: [{ sku: "120231", size: "Set de 19 piezas", price: 1729.0 }],
-    image: "p196_0_840x458.webp",
+    image: "hq_120231.webp",
     flagship: "icook",
     page: 196,
   },
@@ -171,6 +178,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Sartenes de 2 y 3 cuartos de galón con sus tapas y una tapa domo pequeña.",
     variants: [{ sku: "01084", size: "5 piezas", price: 528.0 }],
+    image: "flip_icooksaute.webp",
     page: 197,
   },
   {
@@ -181,6 +189,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Cacerolas de acero inoxidable de 2 y 3 cuartos de galón con sus tapas correspondientes.",
     variants: [{ sku: "01082", size: "4 piezas", price: 348.0 }],
+    image: "hq_01082.webp",
     page: 197,
   },
   {
@@ -194,6 +203,7 @@ export const hogarProducts: Product[] = [
       { sku: "24694", size: "9.5 pulgadas", price: 258.0 },
       { sku: "24695", size: "11 pulgadas", price: 314.0 },
     ],
+    image: "flip_icooknonstick.webp",
     page: 197,
   },
   {
@@ -204,7 +214,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Diseñado por el experto Ken Onion, acero inoxidable forjado de primer nivel.",
     variants: [{ sku: "02709", size: "5 piezas", price: 619.0 }],
-    image: "p197_2_164x164.webp",
+    image: "flip_icookknives.webp",
     page: 197,
   },
   {
@@ -228,7 +238,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Limpiador concentrado que combate la suciedad diaria en múltiples superficies. Más de 1,000 usos.",
     variants: [{ sku: "E0001", size: "1 L", price: 15.0 }],
-    image: "p198_0_841x1091.webp",
+    image: "hq_E0001.webp",
     page: 198,
   },
   {
@@ -239,7 +249,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Cuatro paquetes de 24 toallitas para limpiar salpicaduras sobre la marcha.",
     variants: [{ sku: "110485", size: "96 toallitas", price: 18.25 }],
-    image: "p199_5_202x164.webp",
+    image: "hq_110485.webp",
     page: 198,
   },
   {
@@ -250,7 +260,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Reemplazo de líquido concentrado para la cocina.",
     variants: [{ sku: "12536", size: "1 L", price: 20.5 }],
-    image: "p199_3_101x208.webp",
+    image: "flip_locclocina.webp",
     page: 198,
   },
   {
@@ -261,7 +271,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Reemplazo de líquido concentrado para el baño.",
     variants: [{ sku: "12546", size: "1 L", price: 20.5 }],
-    image: "p199_0_101x208.webp",
+    image: "hq_12546.webp",
     page: 198,
   },
   {
@@ -272,7 +282,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Botella rociadora vacía de 500 ml para usar con los concentrados Amway Home.",
     variants: [{ sku: "16798", size: "500 ml", price: 8.25 }],
-    image: "p199_4_120x205.webp",
+    image: "flip_botellarociadora.webp",
     page: 198,
   },
   {
@@ -283,7 +293,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Reemplazo de líquido concentrado para vidrios.",
     variants: [{ sku: "12537", size: "1 L", price: 20.5 }],
-    image: "p199_1_93x208.webp",
+    image: "hq_12537.webp",
     page: 198,
   },
   {
@@ -294,7 +304,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Desinfectante concentrado de uso multiusos.",
     variants: [{ sku: "E3878", size: "1 L", price: 21.75 }],
-    image: "p199_6_142x212.webp",
+    image: "hq_E3878.webp",
     page: 198,
   },
   {
@@ -305,7 +315,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Desodorante desinfectante en formato aerosol.",
     variants: [{ sku: "E0023", size: "470 g", price: 15.75 }],
-    image: "p199_7_234x234.webp",
+    image: "hq_E0023.webp",
     page: 198,
   },
   {
@@ -316,7 +326,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Tabletas concentradas para el lavavajillas automático.",
     variants: [{ sku: "09867", size: "60 tabletas", price: 31.25 }],
-    image: "p199_8_177x174.webp",
+    image: "flip_dishdrops.webp",
     page: 198,
   },
   {
@@ -327,7 +337,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Almohadillas para una limpieza fácil de sartenes y utensilios.",
     variants: [{ sku: "10490", size: "4 almohadillas", price: 9.75 }],
-    image: "p199_2_128x140.webp",
+    image: "hq_10490.webp",
     page: 198,
   },
   {
@@ -338,7 +348,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Botella dispensadora vacía de 500 ml para el líquido para vajilla concentrado.",
     variants: [{ sku: "07890", size: "500 ml", price: 9.25 }],
-    image: "p199_10_114x137.webp",
+    image: "hq_07890.webp",
     page: 198,
   },
   {
@@ -349,7 +359,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Líquido concentrado para vajilla.",
     variants: [{ sku: "10488", size: "1 L", price: 19.0 }],
-    image: "p199_9_98x205.webp",
+    image: "hq_10488.webp",
     page: 198,
   },
 
@@ -362,7 +372,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Detergente de disolución rápida que deja la ropa más blanca y brillante, sin residuos irritantes.",
     variants: [{ sku: "10478", size: "4 L", price: 63.25 }],
-    image: "p200_4_183x225.webp",
+    image: "flip_sa8liquido.webp",
     page: 200,
   },
   {
@@ -373,7 +383,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Triple concentración para eliminar manchas y reavivar blancos y colores.",
     variants: [{ sku: "09849", size: "3 kg", price: 63.25 }],
-    image: "p200_2_109x110.webp",
+    image: "hq_09849.webp",
     page: 200,
   },
   {
@@ -384,7 +394,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Blanqueador activo de oxígeno que elimina las peores manchas a cualquier temperatura.",
     variants: [{ sku: "24485", size: "1 kg", price: 21.0 }],
-    image: "p201_3_146x164.webp",
+    image: "flip_blanqueador.webp",
     page: 201,
   },
   {
@@ -395,7 +405,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Restituye naturalmente la sensación suave y esponjosa de prendas y ropa de cama.",
     variants: [{ sku: "10403", size: "350 g", price: 22.25 }],
-    image: "p201_2_130x227.webp",
+    image: "flip_suavizante.webp",
     page: 201,
   },
   {
@@ -406,7 +416,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Un solo rociado ayuda a eliminar las manchas más difíciles sin frotar ni remojar.",
     variants: [{ sku: "10480", size: "1 L", price: 17.0 }],
-    image: "p201_1_109x219.webp",
+    image: "hq_10480.webp",
     page: 201,
   },
 ];

@@ -10,7 +10,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Una nueva generación de bebidas de energía premium con cafeína de origen natural y una megadosis de vitaminas B, rhodiola rosea, vitamina C y electrolitos. Mango durazno.",
     variants: [{ sku: "266673", size: "Doce latas de 355 ml", price: 50.75 }],
-    image: "p089_6_300x404.webp",
+    image: "hq_266673.webp",
     flagship: "xs-energy",
     badge: "¡Nuevo!",
     page: 88,
@@ -24,7 +24,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Una explosión de energía sin azúcar. Contiene 114 mg de cafeína, megadosis de vitaminas B y sabores naturales. Limonada, Cítrico, Arándano-Uva, Tamarindo, Tropical, Cereza negra, Root Beer, Clásico, Naranja, Summit, Watermelon Lemonade y más.",
     variants: [{ size: "Doce latas de 355 ml", price: 44.0 }],
-    image: "p089_6_300x404.webp",
+    image: "flip_xsenergydrink.webp",
     flagship: "xs-energy",
     page: 89,
   },
@@ -52,7 +52,7 @@ export const xsEnergyProducts: Product[] = [
       { size: "Doce latas de 355 ml", price: 48.25 },
       { sku: "27071", size: "Caja surtida Juiced and Burn", price: 47.25 },
     ],
-    image: "p089_2_116x220.webp",
+    image: "hq_27071.webp",
     page: 89,
   },
   {
@@ -81,7 +81,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "101593", size: "60 tabletas", price: 48.25 },
       { sku: "107846", size: "30 tabletas", price: 36.0 },
     ],
-    image: "p091_2_229x326.webp",
+    image: "hq_101593.webp",
     page: 91,
   },
   {
@@ -105,7 +105,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Los nueve EAA en proporción de BCAA optimizada 5:1:1, clínicamente probada para impulsar fuerza y rendimiento. Mora · Sandía.",
     variants: [{ size: "1 sobre · 30 porciones", price: 56.25 }],
-    image: "p093_1_213x264.webp",
+    image: "flip_xsaminomuscle.webp",
     page: 93,
   },
   {
@@ -141,7 +141,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "20 g de proteína de suero y caseína, sin gluten, colorantes ni conservantes artificiales.",
     variants: [{ size: "12 barras", price: 48.25 }],
-    image: "p095_2_129x167.webp",
+    image: "flip_xsproteinbar.webp",
     page: 94,
   },
   {
@@ -165,7 +165,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Dosis clínicamente estudiada de extracto de naranja sanguina Moro Morosil™ para apoyar metabolismo y control de peso.",
     variants: [{ sku: "127811", size: "30 sobres individuales", price: 51.75 }],
-    image: "p096_1_192x189.webp",
+    image: "hq_127811.webp",
     page: 96,
   },
   {
@@ -201,7 +201,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "300 mg de CBD con árnica montana, aloe vera y mentol para calmar y nutrir la piel cansada.",
     variants: [{ sku: "296753", size: "56.69 g", price: 68.75 }],
-    image: "p097_2_164x130.webp",
+    image: "hq_296753.webp",
     page: 96,
   },
   {

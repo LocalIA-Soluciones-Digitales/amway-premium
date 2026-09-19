@@ -11,7 +11,7 @@ export const bellezaProducts: Product[] = [
     description:
       "El gel refrescante limpia la piel de suciedad, impurezas y exceso de grasa, y revela un acabado fresco y sin brillo.",
     variants: [{ sku: "23792", size: "125 g", price: 31.5 }],
-    image: "p110_0_322x261.webp",
+    image: "hq_23792.webp",
     page: 116,
   },
   {
@@ -53,7 +53,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Limpiador, tónico e hidratante equilibrantes en un solo paquete.",
     variants: [{ sku: "266686", size: "Sistema de 3 pasos", price: 108.0 }],
-    image: "p110_0_322x261.webp",
+    image: "hq_266686.webp",
     page: 117,
   },
 
@@ -66,6 +66,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Espuma aireada que elimina suciedad, residuos e impurezas de la piel.",
     variants: [{ sku: "23793", size: "145 ml", price: 37.25 }],
+    image: "flip_espumahidratante.webp",
     page: 118,
   },
   {
@@ -76,6 +77,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Deja la piel con sensación suave, sedosa y una tez de aspecto saludable.",
     variants: [{ sku: "23795", size: "200 ml", price: 29.25 }],
+    image: "flip_hydratingtoner.webp",
     page: 118,
   },
   {
@@ -89,6 +91,7 @@ export const bellezaProducts: Product[] = [
       { sku: "23798", size: "Rostro · 50 g", price: 54.0 },
       { sku: "23796", size: "Ojos · 15 g", price: 48.25 },
     ],
+    image: "flip_gelcream.webp",
     page: 118,
   },
   {
@@ -99,6 +102,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Hidratante ligero e invisible con SPF 30 de amplio espectro.",
     variants: [{ sku: "23800", size: "50 g", price: 54.0 }],
+    image: "flip_hydratinglotion.webp",
     page: 118,
   },
   {
@@ -109,7 +113,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Limpiador, tónico e hidratante para pieles secas en un solo sistema.",
     variants: [{ sku: "266693", size: "Sistema de 3 pasos", price: 120.5 }],
-    image: "p110_1_323x260.webp",
+    image: "hq_266693.webp",
     page: 118,
   },
 
@@ -122,7 +126,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Elimina rápida y eficazmente suciedad, impurezas, maquillaje residual y exceso de grasa.",
     variants: [{ sku: "23781", size: "125 g", price: 38.25 }],
-    image: "p112_2_322x262.webp",
+    image: "hq_23781.webp",
     page: 120,
   },
   {
@@ -133,6 +137,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Se absorbe fácilmente dejando la piel suave, tersa y con brillo natural.",
     variants: [{ sku: "23783", size: "200 ml", price: 45.0 }],
+    image: "flip_renewingtoner.webp",
     page: 120,
   },
   {
@@ -147,6 +152,7 @@ export const bellezaProducts: Product[] = [
       { sku: "23785", size: "Rostro · 50 g", price: 86.5 },
       { sku: "23784", size: "Ojos · 15 g", price: 65.25 },
     ],
+    image: "flip_renewingcream.webp",
     page: 120,
   },
   {
@@ -160,6 +166,7 @@ export const bellezaProducts: Product[] = [
       { sku: "123857", size: "Loción · 50 g", price: 86.5 },
       { sku: "128541", size: "Crema · 50 g", price: 86.5 },
     ],
+    image: "hq_123857.webp",
     page: 120,
   },
   {
@@ -170,7 +177,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Limpiador, tónico e hidratante de la línea renovadora antiedad.",
     variants: [{ sku: "266694", size: "Sistema de 3 pasos", price: 169.75 }],
-    image: "p110_2_315x262.webp",
+    image: "hq_266694.webp",
     page: 120,
   },
 
@@ -184,6 +191,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Crema lujosamente rica que reafirma la apariencia de la piel flácida y reduce líneas y arrugas profundas.",
     variants: [{ sku: "23786", size: "50 g", price: 91.0 }],
+    image: "flip_ultralifting.webp",
     page: 122,
   },
   {
@@ -194,7 +202,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Limpiador renovador, tónico renovador y crema reafirmante.",
     variants: [{ sku: "266695", size: "Sistema de 3 pasos", price: 174.25 }],
-    image: "p112_0_315x259.webp",
+    image: "hq_266695.webp",
     page: 122,
   },
   {
@@ -206,6 +214,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Protección antioxidante con tono imperceptible y 80 minutos de resistencia al agua y la sudoración.",
     variants: [{ sku: "124823", size: "50 ml", price: 67.5 }],
+    image: "hq_124823.webp",
     page: 122,
   },
   {
@@ -217,6 +226,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Hidrata, alivia y empareja visiblemente el tono de la piel mientras duermes, hasta 8 horas de hidratación profunda.",
     variants: [{ sku: "25575", size: "80 ml", price: 67.5 }],
+    image: "flip_sleepingmask.webp",
     page: 122,
   },
   {
@@ -228,6 +238,7 @@ export const bellezaProducts: Product[] = [
     description:
       "El suero de vitamina C más vendido: ácido hialurónico triple para iluminar, reafirmar y reducir líneas y arrugas.",
     variants: [{ sku: "125517", size: "12 ml", price: 66.25 }],
+    image: "flip_vitaminc.webp",
     flagship: "artistry",
     page: 123,
   },
@@ -240,7 +251,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Ligero y de rápida absorción, reduce clínicamente los primeros signos del envejecimiento: líneas finas y poros dilatados.",
     variants: [{ sku: "27019", size: "30 ml", price: 99.0 }],
-    image: "p126_0_429x743.webp",
+    image: "flip_defyingserum.webp",
     page: 126,
   },
   {
@@ -252,7 +263,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Revela una piel visiblemente más joven en solo 7 días, con colágeno vegano y biopéptido de arándano rojo.",
     variants: [{ sku: "27020", size: "30 ml", price: 116.0 }],
-    image: "p127_0_428x743.webp",
+    image: "flip_correctingserum.webp",
     page: 127,
   },
   {
@@ -264,7 +275,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Aceite facial ligero 99 % basado en plantas con omega 3, 6, 7 y 9. La piel luce un 103 % más brillante tras su aplicación.",
     variants: [{ sku: "28047", size: "20 ml", price: 68.0 }],
-    image: "p129_0_1234x1349.webp",
+    image: "flip_omegadrops.webp",
     flagship: "artistry",
     badge: "¡Nuevo!",
     page: 128,
@@ -277,6 +288,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Mascarilla de hidrogel rica en antioxidantes que reduce la apariencia de piel opaca y tonos desiguales.",
     variants: [{ sku: "128276", size: "5 mascarillas", price: 45.0 }],
+    image: "flip_vitcmask.webp",
     badge: "¡Nuevo!",
     page: 131,
   },
@@ -306,6 +318,7 @@ export const bellezaProducts: Product[] = [
       { sku: "27571", size: "50 ml", price: 411.0 },
       { sku: "27575", size: "Recarga", price: 370.0 },
     ],
+    image: "flip_lxenriched.webp",
     flagship: "artistry",
     page: 134,
   },
@@ -321,6 +334,7 @@ export const bellezaProducts: Product[] = [
       { sku: "27572", size: "50 ml", price: 411.0 },
       { sku: "27576", size: "Recarga", price: 370.0 },
     ],
+    image: "hq_27572.webp",
     page: 134,
   },
   {
@@ -335,6 +349,7 @@ export const bellezaProducts: Product[] = [
       { sku: "27573", size: "15 ml", price: 231.0 },
       { sku: "27577", size: "Recarga", price: 208.0 },
     ],
+    image: "flip_lxeyecream.webp",
     page: 135,
   },
   {
@@ -346,6 +361,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Fórmula similar al «oro líquido» que aumenta la hidratación un 358 % e impulsa la absorción de la Crema enriquecida más de 5 veces.",
     variants: [{ sku: "27600", size: "125 ml", price: 148.0 }],
+    image: "flip_lxtoner.webp",
     badge: "¡Nuevo!",
     page: 135,
   },
@@ -382,7 +398,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Maquillaje",
     description: "Fórmula hidratante de alto brillo para un efecto de volumen perfecto en los labios.",
     variants: [{ sku: "127484", size: "5 g", price: 28.25 }],
-    image: "p171_2_215x252.webp",
+    image: "hq_127484.webp",
     page: 171,
   },
   {
@@ -403,6 +419,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Maquillaje",
     description: "Retira el maquillaje del día por completo, dejando la piel limpia y fresca.",
     variants: [{ sku: "123791", size: "200 ml", price: 41.5 }],
+    image: "flip_micellarremover.webp",
     page: 172,
   },
   {
@@ -413,7 +430,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Maquillaje",
     description: "Estuche portátil con brochas para base, polvo, iluminador, corrector, sombra y delineador.",
     variants: [{ sku: "10858", size: "1 juego", price: 90.0 }],
-    image: "p173_1_423x264.webp",
+    image: "hq_10858.webp",
     page: 172,
   },
   {
@@ -435,7 +452,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Fragancias",
     description: "Fragancia floral moderna y duradera: naranja clementina, rosa búlgara y ylang ylang de Madagascar.",
     variants: [{ sku: "119630", size: "50 ml", price: 129.0 }],
-    image: "p173_4_181x236.webp",
+    image: "hq_119630.webp",
     page: 172,
   },
   {
@@ -446,7 +463,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Fragancias",
     description: "Aroma masculino y distintivo con bergamota, salvia sclarea y pachulí.",
     variants: [{ sku: "120549", size: "50 ml", price: 127.0 }],
-    image: "p173_2_156x256.webp",
+    image: "hq_120549.webp",
     page: 172,
   },
 
@@ -462,7 +479,7 @@ export const bellezaProducts: Product[] = [
       { sku: "26463", size: "Champú 280 ml", price: 18.0 },
       { sku: "26464", size: "Champú 750 ml", price: 33.75 },
     ],
-    image: "p176_3_114x249.webp",
+    image: "flip_satiniqueantidandruff.webp",
     page: 175,
   },
   {
@@ -477,6 +494,7 @@ export const bellezaProducts: Product[] = [
       { sku: "26461", size: "Champú 750 ml", price: 33.75 },
       { sku: "26462", size: "Acondicionador 280 ml", price: 18.0 },
     ],
+    image: "flip_satiniquepurifying.webp",
     page: 176,
   },
   {
@@ -491,7 +509,7 @@ export const bellezaProducts: Product[] = [
       { sku: "126458", size: "Champú 750 ml", price: 34.75 },
       { sku: "126466", size: "Tónico para el cuero cabelludo 120 ml", price: 34.75 },
     ],
-    image: "p176_8_114x249.webp",
+    image: "flip_satiniqueantihairfall.webp",
     page: 176,
   },
   {
@@ -505,7 +523,7 @@ export const bellezaProducts: Product[] = [
       { sku: "126455", size: "280 ml", price: 17.0 },
       { sku: "126456", size: "750 ml", price: 31.5 },
     ],
-    image: "p177_0_114x248.webp",
+    image: "flip_satinique2in1.webp",
     page: 176,
   },
   {
@@ -519,7 +537,7 @@ export const bellezaProducts: Product[] = [
       { sku: "126449", size: "Champú 280 ml", price: 18.0 },
       { sku: "126451", size: "Acondicionador 280 ml", price: 18.0 },
     ],
-    image: "p177_5_114x248.webp",
+    image: "hq_126449.webp",
     page: 176,
   },
   {
@@ -534,7 +552,7 @@ export const bellezaProducts: Product[] = [
       { sku: "126465", size: "Tratamiento capilar 250 ml", price: 30.25 },
       { sku: "126467", size: "Suero de aceite 100 ml", price: 33.75 },
     ],
-    image: "p177_9_114x248.webp",
+    image: "flip_satiniquerepair.webp",
     page: 177,
   },
 
@@ -550,7 +568,7 @@ export const bellezaProducts: Product[] = [
       { sku: "25915", size: "1 L", price: 33.75 },
       { sku: "25892", size: "400 ml", price: 17.25 },
     ],
-    image: "p180_0_174x269.webp",
+    image: "hq_25915.webp",
     page: 180,
   },
   {
@@ -564,7 +582,7 @@ export const bellezaProducts: Product[] = [
       { sku: "25914", size: "1 L", price: 33.75 },
       { sku: "25890", size: "400 ml", price: 17.25 },
     ],
-    image: "p178_1_416x634.webp",
+    image: "hq_25914.webp",
     page: 180,
   },
   {
@@ -575,6 +593,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Hidrata y refresca la piel al instante con un refuerzo antioxidante de cerezas acerola.",
     variants: [{ sku: "25893", size: "400 ml", price: 18.5 }],
+    image: "hq_25893.webp",
     page: 180,
   },
   {
@@ -585,6 +604,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Alivia instantáneamente la resequedad, nutriendo e hidratando las manos ásperas.",
     variants: [{ sku: "25902", size: "75 ml", price: 17.75 }],
+    image: "hq_25902.webp",
     page: 180,
   },
   {
@@ -595,6 +615,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado del bebé",
     description: "Fórmula suave y sin lágrimas para la piel y el cabello, sin fragancia.",
     variants: [{ sku: "26308", size: "400 ml", price: 18.25 }],
+    image: "hq_26308.webp",
     page: 180,
   },
   {
@@ -605,6 +626,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado del bebé",
     description: "Mantiene la barrera de hidratación, relaja y reconforta la piel delicada del bebé.",
     variants: [{ sku: "26309", size: "400 ml", price: 18.25 }],
+    image: "hq_26309.webp",
     page: 180,
   },
   {
@@ -615,6 +637,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "48 horas de protección contra el olor con secado rápido.",
     variants: [{ sku: "27877", size: "100 ml", price: 12.75 }],
+    image: "hq_27877.webp",
     page: 181,
   },
   {
@@ -625,6 +648,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Protección suave contra olores todo el día sin dejar marcas blancas.",
     variants: [{ sku: "321108", size: "83.5 g", price: 14.5 }],
+    image: "hq_321108.webp",
     page: 181,
   },
   {
@@ -635,7 +659,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Elimina el 99.9 % de los gérmenes más comunes.",
     variants: [{ sku: "26855", size: "400 ml", price: 15.5 }],
-    image: "p181_5_182x312.webp",
+    image: "hq_26855.webp",
     page: 181,
   },
   {
@@ -646,7 +670,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Protección SPF 50 UVA/UVB de amplio espectro para toda la familia.",
     variants: [{ sku: "25901", size: "100 ml", price: 32.5 }],
-    image: "p181_7_134x255.webp",
+    image: "hq_25901.webp",
     page: 181,
   },
 
@@ -660,7 +684,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Cinco modos de cepillado, desinfectante UV que elimina el 99.9 % de los gérmenes y tres tipos de cerdas en forma de diamante.",
     variants: [{ sku: "127705", size: "1 unidad", price: 197.0 }],
-    image: "p183_6_287x467.webp",
+    image: "hq_127705.webp",
     page: 182,
   },
   {
@@ -671,7 +695,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado bucal",
     description: "Incluye 3 cabezales de repuesto para el cepillo eléctrico de acción múltiple.",
     variants: [{ sku: "127706", size: "3 cabezales", price: 42.75 }],
-    image: "p183_1_103x103.webp",
+    image: "hq_127706.webp",
     page: 182,
   },
   {
@@ -685,7 +709,7 @@ export const bellezaProducts: Product[] = [
       { sku: "24106", size: "Tubo 200 g", price: 9.0 },
       { sku: "26001", size: "Viaje · seis de 50 g", price: 24.75 },
     ],
-    image: "p184_1_106x253.webp",
+    image: "flip_glisterpaste.webp",
     page: 184,
   },
   {
@@ -707,6 +731,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado bucal",
     description: "Fórmula concentrada y sin alcohol que refresca el aliento y limpia entre los dientes.",
     variants: [{ sku: "24108", size: "72 ml", price: 16.5 }],
+    image: "hq_24108.webp",
     page: 184,
   },
   {
@@ -717,6 +742,7 @@ export const bellezaProducts: Product[] = [
     subcategory: "Cuidado bucal",
     description: "Refresca el aliento al instante en cualquier momento y lugar, con un solo toque.",
     variants: [{ sku: "24111", size: "14 ml", price: 8.75 }],
+    image: "hq_24111.webp",
     page: 184,
   },
 ];
