@@ -32,7 +32,7 @@ export function NutriliteBotanical({ image }: { image?: string }) {
     <div
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
-      className="relative aspect-square w-full overflow-hidden rounded-3xl bg-gradient-to-br from-wellness-dim/20 to-obsidian-soft"
+      className="relative aspect-square w-full overflow-hidden rounded-3xl bg-gradient-to-br from-forest-dim/30 to-carbon-soft"
     >
       <div
         className="pointer-events-none absolute inset-0 transition-opacity duration-700"
@@ -57,7 +57,7 @@ export function NutriliteBotanical({ image }: { image?: string }) {
       {LEAVES.map((leaf, i) => (
         <motion.div
           key={i}
-          className="absolute text-wellness"
+          className="absolute text-forest-soft"
           style={{ top: leaf.top, left: leaf.left }}
           animate={
             hovered

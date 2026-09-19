@@ -47,13 +47,13 @@ export const CATEGORY_META: Record<
     label: "Nutrición",
     tagline: "Vitaminas, proteínas e inmunidad basadas en la ciencia de las plantas.",
     href: "/nutricion",
-    accent: "wellness",
+    accent: "forest",
   },
   "xs-energy": {
     label: "XS Energy",
     tagline: "Energía, fuerza y recuperación para tu mejor rendimiento.",
     href: "/xs-energy",
-    accent: "tech",
+    accent: "xs",
   },
   belleza: {
     label: "Belleza",

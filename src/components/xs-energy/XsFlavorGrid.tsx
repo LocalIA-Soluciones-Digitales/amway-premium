@@ -59,7 +59,7 @@ const FLAVORS: Flavor[] = [
 
 export function XsFlavorGrid() {
   return (
-    <section className="relative overflow-hidden py-24 sm:py-32">
+    <section className="relative overflow-hidden bg-xs-ink py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -68,10 +68,10 @@ export function XsFlavorGrid() {
           transition={{ duration: 0.6 }}
           className="mb-14 max-w-2xl"
         >
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-tech">
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-xs-red">
             Elige tu sabor
           </p>
-          <h2 className="mt-4 font-display text-3xl uppercase italic text-paper sm:text-5xl">
+          <h2 className="mt-4 font-display text-3xl uppercase italic text-cream sm:text-5xl">
             Una explosión para cada momento.
           </h2>
         </motion.div>
@@ -118,11 +118,11 @@ export function XsFlavorGrid() {
                 />
               </motion.div>
 
-              <div className="relative bg-obsidian/80 px-4 py-4 backdrop-blur-sm">
-                <p className="font-display text-sm leading-tight text-paper sm:text-base">
+              <div className="relative bg-xs-ink/80 px-4 py-4 backdrop-blur-sm">
+                <p className="font-display text-sm leading-tight text-cream sm:text-base">
                   {flavor.name}
                 </p>
-                <p className="mt-0.5 text-xs uppercase tracking-wide text-mist">
+                <p className="mt-0.5 text-xs uppercase tracking-wide text-cream/55">
                   {flavor.variant}
                 </p>
               </div>

@@ -21,8 +21,8 @@ export default function XsEnergyPage() {
 
       <XsFlavorGrid />
 
-      <section id="catalogo" className="mx-auto max-w-7xl px-6 pb-24 sm:px-8">
-        <h2 className="mb-8 font-display text-2xl text-paper sm:text-3xl">
+      <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
+        <h2 className="mb-8 font-display text-2xl text-carbon sm:text-3xl">
           Catálogo XS Energy completo
         </h2>
         <ProductExplorer products={products} subcategories={subcategories} brands={brands} />

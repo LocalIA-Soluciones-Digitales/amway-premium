@@ -36,19 +36,19 @@ export function HogarHighlights({
         return (
           <div
             key={product.id}
-            className="overflow-hidden rounded-3xl border border-white/8 bg-graphite/30"
+            className="overflow-hidden rounded-3xl border border-white/10 bg-carbon"
           >
             <Scene image={image} />
             <div className="p-5">
-              <p className="text-[11px] uppercase tracking-wide text-tech">{tag}</p>
-              <h3 className="mt-2 font-display text-lg text-paper">{product.name}</h3>
+              <p className="text-[11px] uppercase tracking-wide text-[#8fb4c2]">{tag}</p>
+              <h3 className="mt-2 font-display text-lg text-cream">{product.name}</h3>
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-sm text-paper">{priceRangeLabel(product)}</span>
+                <span className="text-sm text-cream">{priceRangeLabel(product)}</span>
                 <a
                   href={waProductLink(product.name)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full bg-white/5 px-4 py-2 text-xs text-mist transition hover:bg-tech hover:text-obsidian"
+                  className="rounded-full bg-white/5 px-4 py-2 text-xs text-cream/60 transition hover:bg-tech hover:text-cream"
                 >
                   Consultar
                 </a>

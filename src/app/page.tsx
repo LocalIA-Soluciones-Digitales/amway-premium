@@ -1,8 +1,13 @@
 import { Hero } from "@/components/home/Hero";
-import { CategoryShowcase } from "@/components/home/CategoryShowcase";
-import { FlagshipShowcase } from "@/components/home/FlagshipShowcase";
 import { TrustBar } from "@/components/home/TrustBar";
-import { Testimonials } from "@/components/home/Testimonials";
+import { CategoryShowcase } from "@/components/home/CategoryShowcase";
+import { BestSellers } from "@/components/home/BestSellers";
+import { Manifesto } from "@/components/home/Manifesto";
+import { XsEnergyMoment } from "@/components/home/XsEnergyMoment";
+import { FlagshipShowcase } from "@/components/home/FlagshipShowcase";
+import { BeautyEditorial } from "@/components/home/BeautyEditorial";
+import { ProductDiscovery } from "@/components/home/ProductDiscovery";
+import { AboutSeller } from "@/components/home/AboutSeller";
 import { FinalCta } from "@/components/home/FinalCta";
 import { SITE } from "@/data/site-config";
 
@@ -11,7 +16,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: SITE.name,
-    image: `${SITE.url}/images/catalog/p017_0_841x1091.webp`,
+    image: `${SITE.url}/images/editorial/hero-bienestar.webp`,
     description:
       "Distribuidor independiente de productos originales Amway importados de Estados Unidos: Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook.",
     address: {
@@ -34,8 +39,13 @@ export default function Home() {
       <Hero />
       <TrustBar />
       <CategoryShowcase />
+      <BestSellers />
+      <Manifesto />
+      <XsEnergyMoment />
       <FlagshipShowcase />
-      <Testimonials />
+      <BeautyEditorial />
+      <ProductDiscovery />
+      <AboutSeller />
       <FinalCta />
     </>
   );

@@ -13,7 +13,7 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#05060a",
+          background: "#1c1a16",
           borderRadius: 14,
         }}
       >
@@ -21,10 +21,10 @@ export default function Icon() {
           style={{
             fontSize: 34,
             fontFamily: "Georgia, serif",
-            color: "#35d0a1",
+            color: "#f7f4ee",
           }}
         >
-          A<span style={{ color: "#d4af6a" }}>.</span>
+          A<span style={{ color: "#b8905a" }}>.</span>
         </span>
       </div>
     ),

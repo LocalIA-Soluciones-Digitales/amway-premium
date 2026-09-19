@@ -11,7 +11,7 @@ export function ArtistryGlow({ image }: { image?: string }) {
     <div
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
-      className="relative aspect-square w-full overflow-hidden rounded-3xl bg-gradient-to-br from-gold-soft/10 to-obsidian-soft"
+      className="relative aspect-square w-full overflow-hidden rounded-3xl bg-gradient-to-br from-gold-soft/10 to-carbon-soft"
     >
       <motion.div
         className="pointer-events-none absolute inset-0"
