@@ -4,20 +4,32 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useLenis } from "lenis/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { waProductLink } from "@/data/site-config";
-import { energyProduct, ENERGY_FLAVORS } from "@/data/energy-drinks";
+import { waLink } from "@/data/site-config";
+import { ENERGY_FLAVORS } from "@/data/energy-drinks";
 
 const N = ENERGY_FLAVORS.length;
+
+// One real lifestyle photo per chapter, chosen to feature that flavor's can
+// where the source photography allows it (see ASSETS_NEEDED.md).
+const CHAPTER_BG = [
+  "office-laptop.webp",
+  "ginger-mountain.webp",
+  "hero-mountain-toast.webp",
+  "cheers-closeup.webp",
+  "friends-bench.webp",
+  "cheers-cooler.webp",
+];
 
 export function EnergyScrollStory() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const bgARef = useRef<HTMLDivElement>(null);
-  const bgBRef = useRef<HTMLDivElement>(null);
+  const bgRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const washARef = useRef<HTMLDivElement>(null);
+  const washBRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef(0);
-  const bgToggleRef = useRef<"a" | "b">("a");
+  const layerToggleRef = useRef<"a" | "b">("a");
 
   const [activeIndex, setActiveIndex] = useState(0);
   const lenis = useLenis();
@@ -61,21 +73,30 @@ export function EnergyScrollStory() {
     return () => trigger.kill();
   }, []);
 
-  // Chrome (headline + background wash) reacts only to discrete index changes,
-  // animated independently from the continuously-scrubbed can stack above.
+  // Chrome (background photo, color wash, headline) reacts only to discrete
+  // index changes, crossfading independently from the continuously-scrubbed
+  // can stack above.
   useEffect(() => {
     const flavor = ENERGY_FLAVORS[activeIndex];
-    const showEl = bgToggleRef.current === "a" ? bgARef.current : bgBRef.current;
-    const hideEl = bgToggleRef.current === "a" ? bgBRef.current : bgARef.current;
 
-    if (showEl) {
-      showEl.style.background = `radial-gradient(circle at 50% 38%, ${flavor.accentSoft}, transparent 62%)`;
-      gsap.to(showEl, { opacity: 1, duration: 0.9, ease: "power2.out" });
+    // Every flavor's background photo is a permanent, pre-loaded layer in
+    // the DOM (like the can stack below) — only opacity ever animates, so
+    // there is no src-swap race or flash between chapters.
+    bgRefs.current.forEach((el, i) => {
+      if (!el) return;
+      gsap.to(el, { opacity: i === activeIndex ? 1 : 0, duration: 1, ease: "power2.out" });
+    });
+
+    const showWash = layerToggleRef.current === "a" ? washARef.current : washBRef.current;
+    const hideWash = layerToggleRef.current === "a" ? washBRef.current : washARef.current;
+
+    if (showWash) {
+      showWash.style.background = `radial-gradient(circle at 50% 38%, ${flavor.accentSoft}, transparent 62%)`;
+      gsap.to(showWash, { opacity: 1, duration: 1, ease: "power2.out" });
     }
-    if (hideEl) {
-      gsap.to(hideEl, { opacity: 0, duration: 0.9, ease: "power2.out" });
-    }
-    bgToggleRef.current = bgToggleRef.current === "a" ? "b" : "a";
+    if (hideWash) gsap.to(hideWash, { opacity: 0, duration: 1, ease: "power2.out" });
+
+    layerToggleRef.current = layerToggleRef.current === "a" ? "b" : "a";
 
     if (headlineRef.current) {
       const words = headlineRef.current.querySelectorAll(".story-word");
@@ -95,7 +116,6 @@ export function EnergyScrollStory() {
   }
 
   const active = ENERGY_FLAVORS[activeIndex];
-  const product = energyProduct(active.productId);
 
   return (
     <div
@@ -104,8 +124,28 @@ export function EnergyScrollStory() {
       style={{ height: `${N * 100}vh` }}
     >
       <div ref={stageRef} className="sticky top-0 h-screen w-full overflow-hidden bg-xs-ink">
-        <div ref={bgARef} className="absolute inset-0 opacity-100 transition-none" />
-        <div ref={bgBRef} className="absolute inset-0 opacity-0 transition-none" />
+        {ENERGY_FLAVORS.map((flavor, i) => (
+          <div
+            key={flavor.id}
+            ref={(el) => {
+              bgRefs.current[i] = el;
+            }}
+            className="absolute inset-0"
+            style={{ opacity: i === 0 ? 1 : 0 }}
+          >
+            <Image
+              src={`/images/xs-energy/lifestyle/${CHAPTER_BG[i]}`}
+              alt=""
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              className="scale-110 object-cover"
+            />
+          </div>
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-t from-xs-ink via-xs-ink/70 to-xs-ink/50" />
+        <div ref={washARef} className="absolute inset-0" style={{ opacity: 1 }} />
+        <div ref={washBRef} className="absolute inset-0" style={{ opacity: 0 }} />
 
         <div className="pointer-events-none absolute left-8 top-28 font-mono text-xs tracking-widest text-cream/40">
           {String(activeIndex + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
@@ -114,11 +154,16 @@ export function EnergyScrollStory() {
         <div
           ref={headlineRef}
           key={active.id}
-          className="pointer-events-none absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 text-center"
+          className="pointer-events-none absolute inset-x-0 top-[38%] z-10 -translate-y-1/2 text-center"
         >
           <span className="block overflow-hidden">
-            <span className="story-word inline-block font-display text-[13vw] italic uppercase leading-[0.85] text-cream/90">
+            <span className="story-word inline-block font-display text-[11vw] italic uppercase leading-[0.85] text-cream/90">
               {active.name}
+            </span>
+          </span>
+          <span className="mt-2 block overflow-hidden">
+            <span className="story-word inline-block text-sm font-medium uppercase tracking-[0.3em] text-cream/55">
+              {active.flavorEs}
             </span>
           </span>
         </div>
@@ -131,19 +176,21 @@ export function EnergyScrollStory() {
             }}
             className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center will-change-transform"
           >
-            <div className="relative h-[58vh] w-[280px]">
+            <div className="relative h-[52vh] w-[240px]">
               <Image
-                src={`/images/catalog/${flavor.image}`}
-                alt={`XS™ ${flavor.line} sabor ${flavor.name}`}
+                src={`/images/xs-energy/cans/${flavor.image}`}
+                alt={`XS™ ${flavor.name} sabor ${flavor.flavorEs}`}
                 fill
-                sizes="280px"
+                sizes="240px"
                 className="object-contain drop-shadow-[0_35px_50px_rgba(0,0,0,0.55)]"
               />
             </div>
           </div>
         ))}
 
-        <div className="absolute inset-x-0 bottom-14 z-30 flex flex-col items-center gap-6 px-8">
+        <div className="absolute inset-x-0 bottom-14 z-30 flex flex-col items-center gap-5 px-8">
+          <p className="max-w-md text-center text-sm leading-relaxed text-cream/65">{active.benefit}</p>
+
           <div className="flex items-center gap-3 text-cream/70">
             <span className="text-xs font-semibold uppercase tracking-[0.3em]">{active.line}</span>
             {active.tag && (
@@ -154,12 +201,12 @@ export function EnergyScrollStory() {
           </div>
 
           <a
-            href={waProductLink(`${product.name} · ${active.name}`)}
+            href={waLink(`Hola, quiero información sobre XS™ ${active.name} sabor ${active.flavorEs}.`)}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-cream px-7 py-3 text-sm font-bold uppercase tracking-wide text-carbon transition hover:bg-white"
+            className="group relative overflow-hidden rounded-full bg-cream px-7 py-3 text-sm font-bold uppercase tracking-wide text-carbon transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98]"
           >
-            Pedir {active.name}
+            Consultar {active.name}
           </a>
 
           <div className="flex items-center gap-2.5">

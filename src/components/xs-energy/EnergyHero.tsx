@@ -2,20 +2,26 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { gsap } from "@/lib/gsap";
 import { waLink } from "@/data/site-config";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-import { ENERGY_FLAVORS } from "@/data/energy-drinks";
+import { ENERGY_FLAVORS, XS_ANNIVERSARY } from "@/data/energy-drinks";
 
 const HERO_CAN = ENERGY_FLAVORS[0];
 
 export function EnergyHero({ waMessage }: { waMessage: string }) {
+  const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const reducedMotion = usePrefersReducedMotion();
+
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
+  const canY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   useEffect(() => {
     if (!titleRef.current || !canRef.current) return;
@@ -69,36 +75,41 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
 
   return (
     <section
-      ref={stageRef}
+      ref={sectionRef}
       className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-xs-ink pt-20"
-      style={{ perspective: "1400px" }}
     >
-      <div className="pointer-events-none absolute inset-0">
-        <div
-          className="absolute left-1/2 top-1/2 h-[70vh] w-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[110px] animate-pulse-slow"
-          style={{ background: `radial-gradient(circle, ${HERO_CAN.accentSoft}, transparent 70%)` }}
+      <motion.div style={{ y: reducedMotion ? 0 : bgY }} className="absolute inset-0">
+        <Image
+          src="/images/xs-energy/lifestyle/girl-mountain.webp"
+          alt="Aventura al aire libre con XS™ Power Water+"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[30%_center]"
         />
-        <div
-          className="absolute -left-[12%] top-0 h-[140%] w-[60%] origin-top-left -skew-x-[14deg]"
-          style={{ background: "linear-gradient(160deg, rgba(63,107,125,0.28), transparent 70%)" }}
-        />
-        <div
-          className="absolute -right-[15%] top-[-10%] h-[130%] w-[55%] origin-top-right skew-x-[10deg]"
-          style={{ background: "linear-gradient(200deg, rgba(232,56,79,0.2), transparent 65%)" }}
-        />
-      </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-xs-ink via-xs-ink/75 to-xs-ink/35" />
+        <div className="absolute inset-0 bg-gradient-to-r from-xs-ink/70 via-xs-ink/20 to-transparent" />
+      </motion.div>
 
-      <div className="relative flex w-full max-w-7xl flex-col items-center px-6 sm:px-8">
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[70vh] w-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[110px] animate-pulse-slow"
+        style={{ background: `radial-gradient(circle, ${HERO_CAN.accentSoft}, transparent 70%)` }}
+      />
+
+      <motion.div
+        style={{ opacity: reducedMotion ? 1 : contentOpacity }}
+        className="relative flex w-full max-w-7xl flex-col items-center px-6 sm:px-8"
+      >
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.05 }}
           className="text-sm font-bold uppercase tracking-[0.4em] text-xs-red"
         >
-          XS™ Energy Drink
+          XS™ Power Drinks
         </motion.p>
 
-        <div className="relative mt-6 flex w-full min-h-[44vh] items-center justify-center sm:min-h-[56vh]">
+        <div ref={stageRef} className="relative mt-6 flex w-full min-h-[44vh] items-center justify-center sm:min-h-[56vh]" style={{ perspective: "1400px" }}>
           <h1
             ref={titleRef}
             className="pointer-events-none select-none whitespace-nowrap font-display text-[15vw] italic leading-[0.82] text-cream sm:text-[19vw] lg:text-[15vw]"
@@ -112,22 +123,37 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
             </span>
           </h1>
 
-          <div
+          <motion.div
             ref={canRef}
+            style={{ y: reducedMotion ? 0 : canY, transformStyle: "preserve-3d" }}
             className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
-            style={{ transformStyle: "preserve-3d" }}
           >
             <div className="relative h-[40vh] w-full max-w-[200px] sm:h-[62vh] sm:max-w-[340px] lg:h-[68vh] lg:max-w-[420px]">
               <Image
-                src={`/images/catalog/${HERO_CAN.image}`}
-                alt={`Lata XS™ Energy Drink sabor ${HERO_CAN.name}`}
+                src={`/images/xs-energy/cans/${HERO_CAN.image}`}
+                alt={`Lata XS™ ${HERO_CAN.name} sabor ${HERO_CAN.flavorEs}`}
                 fill
                 priority
                 sizes="(max-width: 640px) 200px, (max-width: 1024px) 340px, 420px"
                 className="object-contain drop-shadow-[0_40px_60px_rgba(0,0,0,0.55)]"
               />
             </div>
-          </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.6, rotate: -8 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 0.9, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="pointer-events-none absolute -right-2 top-0 z-20 h-16 w-16 animate-[spin_18s_linear_infinite] sm:h-24 sm:w-24 lg:-right-6"
+          >
+            <Image
+              src="/images/xs-energy/badge-20-years.webp"
+              alt="20 años de aventura XS™"
+              fill
+              sizes="96px"
+              className="object-contain drop-shadow-lg"
+            />
+          </motion.div>
         </div>
 
         <motion.p
@@ -136,8 +162,8 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
           transition={{ duration: 0.7, delay: 1.15 }}
           className="mt-6 max-w-md text-center text-base leading-relaxed text-cream/60 sm:text-lg"
         >
-          Sin azúcar, con 114 mg de cafeína y megadosis de vitaminas B. Ocho sabores
-          reales, cero límites.
+          Sin azúcares añadidos, sin colorantes ni aromas artificiales.
+          Celebramos {XS_ANNIVERSARY.years} años de aventura con seis sabores reales.
         </motion.p>
 
         <motion.div
@@ -148,9 +174,10 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
         >
           <a
             href="#historia"
-            className="rounded-full bg-xs-red px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-cream transition hover:bg-xs-red/90"
+            className="group relative overflow-hidden rounded-full bg-xs-red px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-cream transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98]"
           >
-            Descubre los sabores
+            <span className="relative z-10">Descubre los sabores</span>
+            <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-0" />
           </a>
           <a
             href={waLink(waMessage)}
@@ -161,7 +188,7 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
             WhatsApp
           </a>
         </motion.div>
-      </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0 }}

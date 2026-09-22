@@ -10,29 +10,25 @@ La mayoría de la fotografía editorial del rediseño se curó a partir de los c
 - **Contenido recomendado:** retrato real, cercano y natural (no de estudio corporativo) de la persona que atiende Amway Barakaldo — luz natural, sin texto superpuesto.
 - **Estado actual:** se usa un marco de placeholder claramente identificado como tal (borde discontinuo + etiqueta "Añade tu fotografía aquí"), nunca una foto de stock haciéndose pasar por la persona real.
 
-## 2. Vídeo de hero / "XS Energy Moment"
+## 2. Vídeo de hero — `src/components/home/Hero.tsx`
 
-- **Dónde se usaría:** `src/components/home/Hero.tsx` y/o `src/components/home/XsEnergyMoment.tsx`, como capa de vídeo opcional detrás de la fotografía actual.
-- **Archivo esperado:** `public/videos/hero-bienestar.mp4` (+ `.webm` opcional) y/o `public/videos/xs-energy.mp4`.
+- **Dónde se usaría:** capa de vídeo opcional detrás de la fotografía actual del hero de la home.
+- **Archivo esperado:** `public/videos/hero-bienestar.mp4` (+ `.webm` opcional).
 - **Specs:** 8–15 s, 1920×1080 o superior, sin audio (se reproduce `muted loop autoplay playsInline`), tamaño optimizado (<8 MB ideal), con una imagen de `poster` igual al frame inicial.
-- **Contenido recomendado:** hero — lifestyle/bienestar cotidiano (luz natural, ritmo pausado). XS Energy — movimiento/deporte, ritmo más intenso.
-- **Estado actual:** no existe ningún vídeo de marca aprovechable en los materiales disponibles (solo clips personales ajenos al proyecto). Ambas secciones están construidas para funcionar perfectamente solo con fotografía, y aceptan un vídeo de fondo sin cambios estructurales el día que exista.
+- **Contenido recomendado:** lifestyle/bienestar cotidiano (luz natural, ritmo pausado).
+- **Estado actual:** sigue sin existir un vídeo de marca aprovechable para esta sección concreta. La sección funciona perfectamente solo con fotografía y acepta un vídeo de fondo sin cambios estructurales el día que exista.
 
-## 3. Latas XS™ Energy Drink en alta resolución — microsite de Bebidas Energéticas
+## 3. [RESUELTO] Latas y fotografía XS™ Power Drink / Power Water+ — apartado de Bebidas Energéticas
 
-- **Dónde se usa:** `src/components/xs-energy/EnergyHero.tsx`, `EnergyScrollStory.tsx`, `EnergyFlavorSwipe.tsx` y `EnergyFlavorGrid.tsx` (todo el nuevo apartado de bebidas energéticas en `/xs-energy`).
-- **Estado actual:** se usan los 8 recortes reales ya existentes en `public/images/catalog/p089_*.webp` (fondo transparente confirmado). Funcionan, pero su resolución nativa es baja para el uso que reciben ahora — como máximo ~320×607 px — y en el hero (donde la lata ocupa hasta el 68% de la altura de pantalla) y en la escena de scroll se nota cierta suavidad/pixelado al ampliarlas.
-- **Archivos ideales (mismos 8 sabores, mismo encuadre de estudio):**
-  - `xs-watermelon-lemonade.webp`, `xs-tropical.webp`, `xs-cranberry-grape.webp`, `xs-naranja.webp`, `xs-energy-burn-blue-razz.webp`, `xs-energy-burn-kiwi-fresa.webp`, `xs-jugos-mango-pina-guayaba.webp`, `xs-classic.webp`
-  - **Resolución recomendada:** 1200×1800 px o superior, fondo 100% transparente, vista frontal centrada, iluminación de estudio (igual que las actuales, solo que a mayor resolución).
-- **Nota sobre 2 de las 8 latas:** en `src/data/energy-drinks.ts`, las variantes `naranja` y `classic` llevan `verified: false` porque el texto de sabor impreso en esas dos fotos concretas es ilegible al tamaño actual — no se ha inventado el nombre del sabor. Si se sustituyen por fotos de mayor resolución, se puede confirmar el sabor exacto impreso y actualizar `name`/`verified` en ese archivo.
+El propietario del sitio proporcionó material oficial de Amway (fotografía de producto en alta resolución, el vídeo de lanzamiento y el dossier de lanzamiento en PDF/PPTX de `XS™ Power Water+` y `XS™ Power Drink`, mercado UE, `250 ml`). A partir de ahí:
 
-## 4. Elementos flotantes opcionales para el hero/escena de scroll de Bebidas Energéticas
+- **Latas reales (6 sabores, cutouts con transparencia real, recortadas de la fotografía oficial):** `public/images/xs-energy/cans/*.webp` — Lemon Peach (Power Water+), Ginger Passion Fruit (Power Drink+), Orange Kumquat Blast, Pink Grapefruit Blast, Wild Berry Blast, Tropical Blast. Nombres, sabores y beneficios verificados contra el dossier oficial en `src/data/energy-drinks.ts` — nada inventado.
+- **Fotografía lifestyle real (9 fotos, mercado UE):** `public/images/xs-energy/lifestyle/*.webp`, usada como fondo del hero y de cada capítulo de la historia de scroll.
+- **Vídeo de lanzamiento oficial con subtítulos en español:** `public/videos/xs-energy-launch.mp4` (comprimido a ~6 MB para web) + `public/images/xs-energy/video-poster.webp`, usado en `EnergyVideoMoment.tsx` como momento reproducible bajo demanda (no autoplay, por rendimiento).
+- **Insignia de aniversario:** `public/images/xs-energy/badge-20-years.webp` (recorte transparente del propio dossier).
 
-- **Dónde se usaría:** capas decorativas detrás/delante de la lata en `EnergyHero.tsx` y `EnergyScrollStory.tsx`.
-- **Archivos sugeridos:** gotas de condensación, hielo o splash, en PNG/WebP con fondo transparente, recorte limpio, ~800×800 px.
-- **Estado actual:** no existe ningún asset de este tipo en el proyecto; la experiencia actual funciona solo con las latas y gradientes de color (sin placeholders), y estas capas son una mejora opcional, no un bloqueante.
+Esto sustituye por completo a las 8 latas de baja resolución de `public/images/catalog/p089_*.webp` que se usaban antes en esta sección (esas imágenes pertenecen a otra línea de producto — la gama estadounidense — y ya no se referencian desde `/xs-energy`; el catálogo de nutrición deportiva más abajo en la misma página no se ha tocado y sigue usándolas donde corresponde).
 
-## 5. Número de WhatsApp de producción
+## 4. Número de WhatsApp de producción
 
 No es un asset visual, pero queda anotado aquí porque bloquea el lanzamiento real: `SITE.whatsapp` en `src/data/site-config.ts` sigue siendo el número de pruebas indicado por el propietario del sitio. Sustituir por el número definitivo del negocio antes de publicar.

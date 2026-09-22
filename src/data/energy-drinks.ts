@@ -1,165 +1,118 @@
-import { xsEnergyProducts } from "./products/xs-energy";
-
-// The flagship canned energy-drink line inside the broader XS catalog — the
-// four products whose subcategory is the literal "Bebidas de energía".
-// Everything below is sourced from real fields in xs-energy.ts; nothing here
-// is invented. Where a can's printed flavor couldn't be verified legibly, it
-// stays generic instead of guessing.
-export const energyDrinkProducts = xsEnergyProducts.filter(
-  (p) => p.subcategory === "Bebidas de energía"
-);
-
-export function energyProduct(id: string) {
-  const p = xsEnergyProducts.find((x) => x.id === id);
-  if (!p) throw new Error(`Unknown XS energy product: ${id}`);
-  return p;
-}
+// Real XS™ Power Drink / Power Water+ line-up (EU market, 250 ml), sourced
+// from Amway's own official Spanish launch materials (product photography,
+// launch deck and sample card) — see ASSETS_NEEDED.md for provenance. Copy
+// below is translated near-verbatim from that deck; nothing is invented.
 
 export interface EnergyFlavor {
   id: string;
-  /** Flavor/variant name as printed on the can or listed verbatim in the product description. */
+  /** Official flavor name as printed on the can. */
   name: string;
+  /** Spanish flavour descriptor as used in the official materials. */
+  flavorEs: string;
   /** Product line this can belongs to. */
   line: string;
   tag?: string;
+  /** One real, verbatim-sourced benefit line for this specific can. */
+  benefit: string;
   image: string;
-  imageWidth: number;
-  imageHeight: number;
-  /** Dominant accent color sampled from the can artwork itself. */
   accent: string;
   accentSoft: string;
-  productId: string;
-  verified: boolean;
 }
 
 export const ENERGY_FLAVORS: EnergyFlavor[] = [
   {
-    id: "watermelon-lemonade",
-    name: "Watermelon Lemonade",
-    line: "XS™ Energy Drink",
-    tag: "Zero Sugar",
-    image: "p089_6_300x404.webp",
-    imageWidth: 320,
-    imageHeight: 431,
-    accent: "#f07890",
-    accentSoft: "rgba(240,120,144,0.5)",
-    productId: "xs-energy-drink",
-    verified: true,
+    id: "lemon-peach",
+    name: "Power Water+",
+    flavorEs: "Limón-Melocotón",
+    line: "XS™ Power Water+",
+    tag: "Sin gas · Colágeno",
+    benefit: "Contribuye a revitalizar el cabello y la piel desde el interior.",
+    image: "lemon-peach.webp",
+    accent: "#0c6c84",
+    accentSoft: "rgba(12,108,132,0.55)",
+  },
+  {
+    id: "ginger-passion-fruit",
+    name: "Power Drink+",
+    flavorEs: "Jengibre y Maracuyá",
+    line: "XS™ Power Drink+",
+    tag: "Vitamina C + Zinc",
+    benefit: "Aporta energía y ayuda a mantener las defensas inmunitarias.",
+    image: "ginger-passion-fruit.webp",
+    accent: "#c9932a",
+    accentSoft: "rgba(201,147,42,0.5)",
+  },
+  {
+    id: "orange-kumquat",
+    name: "Orange Kumquat Blast",
+    flavorEs: "Sabor Naranja",
+    line: "XS™ Power Drink",
+    benefit: "Favorece la agilidad mental y combate el cansancio.",
+    image: "orange-kumquat.webp",
+    accent: "#b44824",
+    accentSoft: "rgba(180,72,36,0.5)",
+  },
+  {
+    id: "pink-grapefruit",
+    name: "Pink Grapefruit Blast",
+    flavorEs: "Sabor Pomelo",
+    line: "XS™ Power Drink",
+    benefit: "Favorece la agilidad mental y combate el cansancio.",
+    image: "pink-grapefruit.webp",
+    accent: "#b43060",
+    accentSoft: "rgba(180,48,96,0.5)",
+  },
+  {
+    id: "wild-berry",
+    name: "Wild Berry Blast",
+    flavorEs: "Sabor Baya Silvestre",
+    line: "XS™ Power Drink",
+    benefit: "Favorece la agilidad mental y combate el cansancio.",
+    image: "wild-berry.webp",
+    accent: "#543c78",
+    accentSoft: "rgba(84,60,120,0.5)",
   },
   {
     id: "tropical",
-    name: "Tropical",
-    line: "XS™ Energy Drink",
-    tag: "Zero Sugar",
-    image: "p089_1_280x404.webp",
-    imageWidth: 280,
-    imageHeight: 404,
-    accent: "#4890cc",
-    accentSoft: "rgba(72,144,204,0.5)",
-    productId: "xs-energy-drink",
-    verified: true,
-  },
-  {
-    id: "cranberry-grape",
-    name: "Arándano-Uva",
-    line: "XS™ Energy Drink",
-    tag: "Zero Sugar",
-    image: "p089_7_280x386.webp",
-    imageWidth: 280,
-    imageHeight: 386,
-    accent: "#c03ca8",
-    accentSoft: "rgba(192,60,168,0.5)",
-    productId: "xs-energy-drink",
-    verified: true,
-  },
-  {
-    id: "naranja",
-    name: "Naranja",
-    line: "XS™ Energy Drink",
-    image: "p089_5_174x250.webp",
-    imageWidth: 174,
-    imageHeight: 250,
-    accent: "#f07848",
-    accentSoft: "rgba(240,120,72,0.5)",
-    productId: "xs-energy-drink",
-    verified: false,
-  },
-  {
-    id: "energy-burn-blue-razz",
-    name: "Frambuesa azul",
-    line: "XS™ Energy + Burn",
-    image: "p089_2_116x220.webp",
-    imageWidth: 320,
-    imageHeight: 607,
-    accent: "#489ccc",
-    accentSoft: "rgba(72,156,204,0.5)",
-    productId: "xs-energy-burn",
-    verified: true,
-  },
-  {
-    id: "energy-burn-kiwi-fresa",
-    name: "Kiwi y fresa",
-    line: "XS™ Energy + Burn",
-    image: "p089_3_141x216.webp",
-    imageWidth: 141,
-    imageHeight: 216,
-    accent: "#9cc054",
-    accentSoft: "rgba(156,192,84,0.5)",
-    productId: "xs-energy-burn",
-    verified: true,
-  },
-  {
-    id: "jugos-mango-pina-guayaba",
-    name: "Mango-piña-guayaba",
-    line: "XS™ Jugos burbujeantes",
-    tag: "25% jugo real",
-    image: "p089_0_174x250.webp",
-    imageWidth: 174,
-    imageHeight: 250,
-    accent: "#f09c54",
-    accentSoft: "rgba(240,156,84,0.5)",
-    productId: "xs-jugos-burbujeantes",
-    verified: true,
-  },
-  {
-    id: "classic",
-    name: "Selección clásica",
-    line: "XS™ Energy Drink",
-    image: "p089_4_174x250.webp",
-    imageWidth: 174,
-    imageHeight: 250,
-    accent: "#e4609c",
-    accentSoft: "rgba(228,96,156,0.5)",
-    productId: "xs-energy-drink",
-    verified: false,
+    name: "Tropical Blast",
+    flavorEs: "Sabor Tropical",
+    line: "XS™ Power Drink",
+    benefit: "Favorece la agilidad mental y combate el cansancio.",
+    image: "tropical.webp",
+    accent: "#0c3054",
+    accentSoft: "rgba(12,48,84,0.5)",
   },
 ];
 
-// Real, verbatim facts pulled from product descriptions — used for the
-// typographic "benefit" reveals during the scroll story. Nothing invented.
+// Real, verbatim-sourced facts — used for the typographic benefit reveals.
 export const ENERGY_FACTS = [
   {
-    id: "caffeine",
-    value: "114 mg",
-    label: "de cafeína",
-    detail: "Una explosión de energía sin azúcar, con sabores naturales.",
+    id: "b-vitamins",
+    value: "Vitaminas B",
+    label: "combaten el cansancio",
+    detail: "Complejo de vitaminas del grupo B que favorece la agilidad mental y ayuda a mantener la atención.",
   },
   {
-    id: "vitamins",
-    value: "Megadosis",
-    label: "de vitaminas B",
-    detail: "En cada lata de la línea XS™ Energy Drink.",
+    id: "collagen",
+    value: "2500 mg",
+    label: "de colágeno por lata",
+    detail: "XS™ Power Water+ contribuye a revitalizar el cabello y la piel desde el interior.",
   },
   {
-    id: "juice",
-    value: "25%",
-    label: "jugo de fruta real",
-    detail: "Los jugos de energía burbujeantes XS™, con 250% de vitamina C y sin colorantes artificiales.",
+    id: "immune",
+    value: "Vitamina C + Zinc",
+    label: "defensas inmunitarias",
+    detail: "XS™ Power Drink+ aporta energía y ayuda a mantener las defensas inmunitarias.",
   },
   {
-    id: "burn",
-    value: "EGCG",
-    label: "extracto de té verde",
-    detail: "XS™ Energy + Burn añade cromo y vitamina C para impulsar el metabolismo.",
+    id: "clean",
+    value: "0",
+    label: "azúcares añadidos",
+    detail: "Sin colorantes ni aromas artificiales en toda la gama XS™ Power Drink.",
   },
 ] as const;
+
+export const XS_ANNIVERSARY = {
+  years: 20,
+  claim: "20 años de aventura",
+} as const;

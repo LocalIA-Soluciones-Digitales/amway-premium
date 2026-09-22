@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
 import { EnergyHero } from "@/components/xs-energy/EnergyHero";
 import { EnergyFacts } from "@/components/xs-energy/EnergyFacts";
+import { EnergyVideoMoment } from "@/components/xs-energy/EnergyVideoMoment";
 import { EnergyStory } from "@/components/xs-energy/EnergyStory";
 import { EnergyFlavorGrid } from "@/components/xs-energy/EnergyFlavorGrid";
 import { getBrands, getProductsByCategory, getSubcategories } from "@/data/products";
 
 export const metadata: Metadata = {
-  title: "XS Energy™ — Bebidas de energía, fuerza y recuperación",
+  title: "XS Energy™ — Power Drinks, fuerza y recuperación",
   description:
-    "Bebidas de energía XS™ en ocho sabores reales, más pre-entrenamiento, creatina, proteínas y recuperación deportiva. Nutrición deportiva Amway importada de Estados Unidos.",
+    "XS™ Power Drink y Power Water+ en seis sabores reales, más pre-entrenamiento, creatina, proteínas y recuperación deportiva. Nutrición deportiva Amway importada de Estados Unidos.",
 };
 
 export default function XsEnergyPage() {
@@ -22,6 +23,8 @@ export default function XsEnergyPage() {
       <EnergyHero waMessage="Hola, quiero información sobre las bebidas de energía XS." />
 
       <EnergyFacts />
+
+      <EnergyVideoMoment />
 
       <EnergyStory />
 
