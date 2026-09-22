@@ -1,25 +1,27 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import { priceRangeLabel } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
 import { PRODUCTS } from "@/data/products";
 
-const FEATURED: { id: string; image: string }[] = [
-  { id: "double-x", image: "/images/products/double-x.webp" },
-  { id: "art-suero-vitamina-c", image: "/images/products/artistry-serum-vitamina-c.webp" },
-  { id: "espring-mesón", image: "/images/products/espring.webp" },
-  { id: "xs-elite-focus", image: "/images/products/xs-elite-focus.webp" },
+const FEATURED: { id: string; image: string; href: string }[] = [
+  { id: "xs-elite-focus", image: "/images/products/xs-elite-focus.webp", href: "/xs-energy" },
+  { id: "espring-mesón", image: "/images/products/espring.webp", href: "/hogar#catalogo" },
+  { id: "double-x", image: "/images/products/double-x.webp", href: "/nutricion#catalogo" },
 ];
 
 export function BestSellers() {
-  const items = FEATURED.map(({ id, image }) => {
+  const items = FEATURED.map(({ id, image, href }) => {
     const product = PRODUCTS.find((p) => p.id === id);
     if (!product) return null;
-    return { product, image };
-  }).filter((x): x is { product: (typeof PRODUCTS)[number]; image: string } => x != null);
+    return { product, image, href };
+  }).filter(
+    (x): x is { product: (typeof PRODUCTS)[number]; image: string; href: string } => x != null
+  );
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-24 sm:px-8 sm:py-32">
@@ -46,27 +48,29 @@ export function BestSellers() {
         </a>
       </motion.div>
 
-      <div className="grid grid-cols-2 gap-x-6 gap-y-14 sm:grid-cols-4">
-        {items.map(({ product, image }, i) => (
+      <div className="grid grid-cols-2 gap-x-6 gap-y-14 sm:grid-cols-3">
+        {items.map(({ product, image, href }, i) => (
           <motion.div
             key={product.id}
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="group flex flex-col"
+            className="flex flex-col"
           >
-            <div className="relative aspect-square overflow-hidden bg-linen">
-              <Image
-                src={image}
-                alt={product.name}
-                fill
-                sizes="(max-width: 640px) 50vw, 25vw"
-                className="object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-[1.08]"
-              />
-            </div>
-            <p className="mt-5 text-[11px] uppercase tracking-wider text-stone">{product.brand}</p>
-            <h3 className="mt-1 font-display text-lg leading-snug text-carbon">{product.name}</h3>
+            <Link href={href} className="group block">
+              <div className="relative aspect-square overflow-hidden bg-linen">
+                <Image
+                  src={image}
+                  alt={product.name}
+                  fill
+                  sizes="(max-width: 640px) 50vw, 33vw"
+                  className="object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-[1.08]"
+                />
+              </div>
+              <p className="mt-5 text-[11px] uppercase tracking-wider text-stone">{product.brand}</p>
+              <h3 className="mt-1 font-display text-lg leading-snug text-carbon">{product.name}</h3>
+            </Link>
             <div className="mt-3 flex items-center justify-between">
               <span className="text-sm font-medium text-carbon">{priceRangeLabel(product)}</span>
               <a
