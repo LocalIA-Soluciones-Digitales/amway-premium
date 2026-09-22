@@ -31,6 +31,13 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         smoothWheel: true,
         touchMultiplier: 1.5,
         autoRaf: false,
+        // The site is a single vertical column with no horizontal-scroll
+        // widgets, but sections like the XS Energy can carousel look
+        // horizontal, so people swipe/tilt-wheel sideways over them. With
+        // the default "vertical" gesture orientation Lenis silently drops
+        // any gesture with no vertical component instead of scrolling —
+        // "both" folds a horizontal-dominant delta into page scroll too.
+        gestureOrientation: "both",
       }}
     >
       <LenisGsapBridge />
