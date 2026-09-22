@@ -91,7 +91,7 @@ export function Header() {
       <div
         className={cn(
           "mx-auto flex max-w-7xl items-center justify-between rounded-full px-5 transition-all duration-500 sm:px-8",
-          scrolled ? "glass max-w-6xl py-2.5 mx-4 shadow-[0_8px_30px_rgba(28,26,22,0.08)]" : "py-1"
+          scrolled ? "glass max-w-6xl py-2.5 shadow-[0_8px_30px_rgba(28,26,22,0.08)]" : "py-1"
         )}
       >
         <Link
