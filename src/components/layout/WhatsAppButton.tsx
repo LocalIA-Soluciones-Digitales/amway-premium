@@ -24,9 +24,9 @@ export function WhatsAppButton() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="glass-strong w-72 overflow-hidden rounded-2xl p-4 text-sm shadow-2xl shadow-black/50 sm:w-80"
+            className="glass-dark w-72 overflow-hidden rounded-2xl p-4 text-sm shadow-2xl shadow-black/30 sm:w-80"
           >
-            <p className="mb-3 font-display text-base text-paper">
+            <p className="mb-3 font-display text-base text-cream">
               ¿Hablamos por WhatsApp?
             </p>
             <div className="flex flex-col gap-2">
@@ -36,7 +36,7 @@ export function WhatsAppButton() {
                   href={waLink(WA_PRESETS[preset.key])}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-mist transition hover:border-wellness/40 hover:bg-wellness/10 hover:text-white"
+                  className="rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-cream/60 transition hover:border-[#25D366]/40 hover:bg-[#25D366]/10 hover:text-cream"
                 >
                   {preset.label}
                 </a>

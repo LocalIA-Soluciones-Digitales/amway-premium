@@ -4,50 +4,57 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { waLink } from "@/data/site-config";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
-const ACCENT_GLOW: Record<string, string> = {
-  wellness: "rgba(53,208,161,0.35)",
-  tech: "rgba(77,142,255,0.35)",
-  gold: "rgba(212,175,106,0.4)",
+const ACCENT_TEXT: Record<string, string> = {
+  forest: "text-forest-soft",
+  gold: "text-gold-soft",
+  tech: "text-[#8fb4c2]",
+  xs: "text-[#ff8095]",
 };
 
 export function CategoryHero({
   eyebrow,
   title,
   description,
-  image,
-  accent = "wellness",
+  photo,
+  accent = "forest",
   waMessage,
   children,
 }: {
   eyebrow: string;
   title: string;
   description: string;
-  image?: string;
-  accent?: "wellness" | "tech" | "gold";
+  photo: string;
+  accent?: "forest" | "gold" | "tech" | "xs";
   waMessage: string;
   children?: ReactNode;
 }) {
-  const accentClass =
-    accent === "gold" ? "text-gold" : accent === "tech" ? "text-tech" : "text-wellness";
-
   return (
-    <section className="relative overflow-hidden pb-16 pt-36 sm:pt-40">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-obsidian" />
-        <div
-          className="absolute -top-1/4 left-[-15%] h-[60vh] w-[60vh] rounded-full opacity-30 blur-[110px]"
-          style={{ background: `radial-gradient(circle, ${ACCENT_GLOW[accent]}, transparent 70%)` }}
+    <section className="relative flex min-h-[85svh] items-end overflow-hidden">
+      <div className="absolute inset-0">
+        <Image
+          src={photo}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/55 to-carbon/25" />
+        <div className="absolute inset-0 bg-carbon/10" />
       </div>
 
-      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-14 px-6 sm:px-8 lg:grid-cols-[1.1fr_0.9fr]">
-        <div>
+      <div className="relative w-full px-6 pb-16 pt-40 sm:px-8 sm:pb-20">
+        <div className="mx-auto max-w-7xl">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className={`text-sm font-medium uppercase tracking-[0.2em] ${accentClass}`}
+            className={cn(
+              "text-sm font-medium uppercase tracking-[0.25em]",
+              ACCENT_TEXT[accent]
+            )}
           >
             {eyebrow}
           </motion.p>
@@ -55,7 +62,7 @@ export function CategoryHero({
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-4 max-w-2xl font-display text-4xl leading-[1.05] text-paper sm:text-5xl lg:text-6xl"
+            className="mt-4 max-w-3xl font-display text-5xl leading-[0.98] text-cream sm:text-7xl lg:text-8xl"
           >
             {title}
           </motion.h1>
@@ -63,7 +70,7 @@ export function CategoryHero({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-5 max-w-xl text-base leading-relaxed text-mist sm:text-lg"
+            className="mt-6 max-w-xl text-base leading-relaxed text-cream/75 sm:text-lg"
           >
             {description}
           </motion.p>
@@ -72,11 +79,11 @@ export function CategoryHero({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-8 flex flex-wrap gap-3"
+            className="mt-9 flex flex-wrap gap-3"
           >
             <a
               href="#catalogo"
-              className="rounded-full bg-paper px-6 py-3 text-sm font-medium text-obsidian transition hover:bg-white"
+              className="rounded-full bg-cream px-6 py-3 text-sm font-medium text-carbon transition hover:bg-white"
             >
               Ver productos
             </a>
@@ -84,7 +91,7 @@ export function CategoryHero({
               href={waLink(waMessage)}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-paper transition hover:border-wellness/50 hover:bg-wellness/10"
+              className="rounded-full border border-cream/30 px-6 py-3 text-sm font-medium text-cream transition hover:bg-cream/10"
             >
               Consultar por WhatsApp
             </a>
@@ -92,27 +99,6 @@ export function CategoryHero({
 
           {children}
         </div>
-
-        {image && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="relative mx-auto aspect-[4/5] w-full max-w-md"
-          >
-            <div className="glass absolute inset-0 rounded-[2rem]" />
-            <div className="absolute inset-6 overflow-hidden rounded-[1.5rem]">
-              <Image
-                src={`/images/catalog/${image}`}
-                alt=""
-                fill
-                priority
-                sizes="420px"
-                className="object-contain p-6"
-              />
-            </div>
-          </motion.div>
-        )}
       </div>
     </section>
   );

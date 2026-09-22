@@ -31,18 +31,20 @@ export default function BellezaPage() {
         eyebrow="Artistry™ · Belleza elevada por la ciencia"
         title="Belleza que no tiene edad."
         description="Artistry Skin Nutrition™ y Artistry LongXevity™ combinan décadas de innovación con la ciencia de plantas de Nutrilite™, además de Satinique™, g&h™ y Glister™."
-        image="p129_0_1234x1349.webp"
+        photo="/images/editorial/belleza-editorial.webp"
         accent="gold"
         waMessage="Hola, quiero información sobre los productos Artistry."
       />
 
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
-        <h2 className="font-display text-2xl text-paper sm:text-3xl">Iconos Artistry™</h2>
-        <BellezaHighlights items={highlights} />
+      <section className="bg-carbon-soft py-20">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8">
+          <h2 className="font-display text-2xl text-cream sm:text-3xl">Iconos Artistry™</h2>
+          <BellezaHighlights items={highlights} />
+        </div>
       </section>
 
-      <section id="catalogo" className="mx-auto max-w-7xl px-6 pb-24 sm:px-8">
-        <h2 className="mb-8 font-display text-2xl text-paper sm:text-3xl">
+      <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
+        <h2 className="mb-8 font-display text-2xl text-carbon sm:text-3xl">
           Catálogo Belleza completo
         </h2>
         <ProductExplorer products={products} subcategories={subcategories} brands={brands} />

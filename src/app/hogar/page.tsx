@@ -36,18 +36,20 @@ export default function HogarPage() {
         eyebrow="eSpring™ · Atmosphere™ · iCook™"
         title="Hábitos para un hogar más limpio."
         description="Desde agua purificada y aire más limpio hasta cocina inteligente y limpieza más segura: tecnología Amway para tu día a día."
-        image="p198_0_841x1091.webp"
+        photo="/images/editorial/hogar-cocina.webp"
         accent="tech"
         waMessage="Hola, quiero información sobre los productos para el hogar."
       />
 
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
-        <h2 className="font-display text-2xl text-paper sm:text-3xl">Tecnología para tu hogar</h2>
-        <HogarHighlights items={highlights} />
+      <section className="bg-carbon-soft py-20">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8">
+          <h2 className="font-display text-2xl text-cream sm:text-3xl">Tecnología para tu hogar</h2>
+          <HogarHighlights items={highlights} />
+        </div>
       </section>
 
-      <section id="catalogo" className="mx-auto max-w-7xl px-6 pb-24 sm:px-8">
-        <h2 className="mb-8 font-display text-2xl text-paper sm:text-3xl">
+      <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
+        <h2 className="mb-8 font-display text-2xl text-carbon sm:text-3xl">
           Catálogo Hogar completo
         </h2>
         <ProductExplorer products={products} subcategories={subcategories} brands={brands} />

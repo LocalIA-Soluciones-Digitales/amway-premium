@@ -58,7 +58,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05060a",
+  themeColor: "#f7f4ee",
   width: "device-width",
   initialScale: 1,
 };
@@ -69,10 +69,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es"
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
-      <body className="grain min-h-full flex flex-col bg-obsidian">
+      <body className="grain min-h-full flex flex-col bg-cream">
         <a
           href="#main-content"
-          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-obsidian transition-transform focus-visible:translate-y-0"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-carbon px-5 py-2.5 text-sm font-medium text-cream transition-transform focus-visible:translate-y-0"
         >
           Saltar al contenido
         </a>

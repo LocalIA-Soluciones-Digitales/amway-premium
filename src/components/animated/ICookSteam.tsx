@@ -18,7 +18,7 @@ export function ICookSteam({ image }: { image?: string }) {
     <div
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
-      className="relative aspect-square w-full overflow-hidden rounded-3xl bg-gradient-to-br from-graphite-soft to-obsidian-soft"
+      className="relative aspect-square w-full overflow-hidden rounded-3xl bg-gradient-to-br from-carbon-soft to-carbon"
     >
       {image && (
         <div className="absolute inset-0 flex items-center justify-center p-8">

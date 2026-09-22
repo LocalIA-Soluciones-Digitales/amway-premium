@@ -1,23 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  --color-obsidian: #05060a;
-  --color-obsidian-soft: #0d0f16;
-  --color-graphite: #1a1d27;
-  --color-graphite-soft: #262a38;
-  --color-mist: #8b8fa3;
-  --color-paper: #f7f7f5;
+  /* Base — blanco roto, crema, grises cálidos, carbón */
+  --color-cream: #f7f4ee;
+  --color-cream-soft: #fbf9f5;
+  --color-linen: #efe9dd;
+  --color-stone: #8a8271;
+  --color-stone-soft: #b7ae9b;
+  --color-carbon: #1c1a16;
+  --color-carbon-soft: #2c2822;
+
   --color-white: #ffffff;
 
-  --color-wellness: #35d0a1;
-  --color-wellness-dim: #1f7a5e;
-  --color-tech: #4d8eff;
-  --color-tech-dim: #29477f;
-  --color-gold: #d4af6a;
-  --color-gold-soft: #efd9ab;
+  /* Acentos */
+  --color-forest: #1f4438;
+  --color-forest-dim: #163127;
+  --color-forest-soft: #4d7a68;
+  --color-gold: #b8905a;
+  --color-gold-soft: #e4cba3;
+  --color-tech: #3f6b7d;
+  --color-tech-dim: #2c4c5a;
 
-  --background: var(--color-obsidian);
-  --foreground: var(--color-paper);
+  /* XS Energy conserva su propio acento intenso, reservado a su "momento" */
+  --color-xs-red: #e8384f;
+  --color-xs-ink: #0c0d10;
+
+  --background: var(--color-cream);
+  --foreground: var(--color-carbon);
 
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -26,19 +35,23 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --color-obsidian: var(--color-obsidian);
-  --color-obsidian-soft: var(--color-obsidian-soft);
-  --color-graphite: var(--color-graphite);
-  --color-graphite-soft: var(--color-graphite-soft);
-  --color-mist: var(--color-mist);
-  --color-paper: var(--color-paper);
+  --color-cream: var(--color-cream);
+  --color-cream-soft: var(--color-cream-soft);
+  --color-linen: var(--color-linen);
+  --color-stone: var(--color-stone);
+  --color-stone-soft: var(--color-stone-soft);
+  --color-carbon: var(--color-carbon);
+  --color-carbon-soft: var(--color-carbon-soft);
 
-  --color-wellness: var(--color-wellness);
-  --color-wellness-dim: var(--color-wellness-dim);
-  --color-tech: var(--color-tech);
-  --color-tech-dim: var(--color-tech-dim);
+  --color-forest: var(--color-forest);
+  --color-forest-dim: var(--color-forest-dim);
+  --color-forest-soft: var(--color-forest-soft);
   --color-gold: var(--color-gold);
   --color-gold-soft: var(--color-gold-soft);
+  --color-tech: var(--color-tech);
+  --color-tech-dim: var(--color-tech-dim);
+  --color-xs-red: var(--color-xs-red);
+  --color-xs-ink: var(--color-xs-ink);
 
   --font-sans: var(--font-inter);
   --font-display: var(--font-fraunces);
@@ -66,7 +79,7 @@
 }
 
 html {
-  background: var(--color-obsidian);
+  background: var(--color-cream);
   scroll-behavior: auto;
 }
 
@@ -79,8 +92,8 @@ body {
 }
 
 ::selection {
-  background: var(--color-wellness);
-  color: var(--color-obsidian);
+  background: var(--color-forest);
+  color: var(--color-cream);
 }
 
 /* Custom scrollbar - premium thin style */
@@ -88,41 +101,34 @@ body {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-obsidian);
+  background: var(--color-cream);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-graphite-soft);
+  background: var(--color-stone-soft);
   border-radius: 999px;
-  border: 2px solid var(--color-obsidian);
+  border: 2px solid var(--color-cream);
 }
 
 .font-display {
   font-family: var(--font-fraunces), Georgia, serif;
 }
 
-.text-gradient-wellness {
-  background: linear-gradient(120deg, var(--color-wellness), var(--color-tech));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.text-gradient-gold {
-  background: linear-gradient(120deg, var(--color-gold-soft), var(--color-gold));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
 .glass {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(28, 26, 22, 0.08);
 }
 
 .glass-strong {
-  background: rgba(13, 15, 22, 0.72);
+  background: rgba(251, 249, 245, 0.82);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(28, 26, 22, 0.08);
+}
+
+.glass-dark {
+  background: rgba(12, 13, 16, 0.72);
   backdrop-filter: blur(24px) saturate(160%);
   -webkit-backdrop-filter: blur(24px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -153,7 +159,7 @@ body {
 
 /* Keyboard-navigation focus ring, mouse users never see it */
 :focus-visible {
-  outline: 2px solid var(--color-wellness);
+  outline: 2px solid var(--color-forest);
   outline-offset: 3px;
   border-radius: 4px;
 }

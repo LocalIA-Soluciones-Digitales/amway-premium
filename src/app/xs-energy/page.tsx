@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
-import { XsHero } from "@/components/xs-energy/XsHero";
-import { XsFlavorGrid } from "@/components/xs-energy/XsFlavorGrid";
+import { EnergyHero } from "@/components/xs-energy/EnergyHero";
+import { EnergyFacts } from "@/components/xs-energy/EnergyFacts";
+import { EnergyVideoMoment } from "@/components/xs-energy/EnergyVideoMoment";
+import { EnergyStory } from "@/components/xs-energy/EnergyStory";
+import { EnergyFlavorGrid } from "@/components/xs-energy/EnergyFlavorGrid";
 import { getBrands, getProductsByCategory, getSubcategories } from "@/data/products";
 
 export const metadata: Metadata = {
-  title: "XS Energy™ — Energía, fuerza y recuperación",
+  title: "XS Energy™ — Power Drinks, fuerza y recuperación",
   description:
-    "Bebidas de energía XS™, pre-entrenamiento, creatina, proteínas y recuperación deportiva. Nutrición deportiva Amway importada de Estados Unidos.",
+    "XS™ Power Drink y Power Water+ en seis sabores reales, más pre-entrenamiento, creatina, proteínas y recuperación deportiva. Nutrición deportiva Amway importada de Estados Unidos.",
 };
 
 export default function XsEnergyPage() {
@@ -17,14 +20,24 @@ export default function XsEnergyPage() {
 
   return (
     <>
-      <XsHero waMessage="Hola, quiero información sobre los productos XS Energy." />
+      <EnergyHero waMessage="Hola, quiero información sobre las bebidas de energía XS." />
 
-      <XsFlavorGrid />
+      <EnergyFacts />
 
-      <section id="catalogo" className="mx-auto max-w-7xl px-6 pb-24 sm:px-8">
-        <h2 className="mb-8 font-display text-2xl text-paper sm:text-3xl">
-          Catálogo XS Energy completo
+      <EnergyVideoMoment />
+
+      <EnergyStory />
+
+      <EnergyFlavorGrid />
+
+      <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
+        <h2 className="mb-2 font-display text-2xl text-carbon sm:text-3xl">
+          Catálogo XS™ completo
         </h2>
+        <p className="mb-8 max-w-2xl text-sm text-stone">
+          Además de las bebidas de energía: pre-entrenamiento, creatina, proteínas y
+          recuperación deportiva XS™.
+        </p>
         <ProductExplorer products={products} subcategories={subcategories} brands={brands} />
       </section>
     </>

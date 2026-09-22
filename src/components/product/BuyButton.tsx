@@ -46,14 +46,14 @@ export function BuyButton({
         aria-label="Comprar ahora con tarjeta"
         className={
           className ??
-          "flex h-9 items-center gap-1.5 rounded-full bg-gold px-3 text-xs font-medium text-obsidian transition hover:bg-gold-soft disabled:opacity-60"
+          "flex h-9 items-center gap-1.5 rounded-full bg-carbon px-3 text-xs font-medium text-cream transition hover:bg-carbon-soft disabled:opacity-60"
         }
       >
         {loading ? <Loader2 size={14} className="animate-spin" /> : <CreditCard size={14} />}
         {label}
       </button>
       {error && (
-        <p className="absolute right-0 top-full z-10 mt-2 w-48 rounded-lg bg-obsidian-soft p-2 text-[11px] leading-snug text-mist shadow-lg ring-1 ring-white/10">
+        <p className="absolute right-0 top-full z-10 mt-2 w-48 rounded-lg bg-carbon p-2 text-[11px] leading-snug text-cream/70 shadow-lg ring-1 ring-white/10">
           {error}
         </p>
       )}

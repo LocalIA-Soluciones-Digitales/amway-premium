@@ -6,22 +6,13 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { CATEGORY_META } from "@/data/products";
 
-const IMAGES: Record<string, string> = {
-  nutricion: "p027_0_1047x1242.webp",
-  "xs-energy": "p089_6_300x404.webp",
-  belleza: "p129_0_1234x1349.webp",
-  hogar: "p198_0_841x1091.webp",
-};
-
-const ACCENT_GLOW: Record<string, string> = {
-  wellness: "rgba(53,208,161,0.32)",
-  tech: "rgba(77,142,255,0.32)",
-  gold: "rgba(212,175,106,0.35)",
-};
+const TILES: { slug: "nutricion" | "belleza" | "hogar"; image: string; span: string }[] = [
+  { slug: "nutricion", image: "/images/editorial/nutricion-botanico.webp", span: "sm:col-span-7 sm:row-span-2" },
+  { slug: "belleza", image: "/images/editorial/belleza-editorial.webp", span: "sm:col-span-5" },
+  { slug: "hogar", image: "/images/editorial/hogar-familia.webp", span: "sm:col-span-5" },
+];
 
 export function CategoryShowcase() {
-  const categories = Object.entries(CATEGORY_META);
-
   return (
     <section className="mx-auto max-w-7xl px-6 py-24 sm:px-8 sm:py-32">
       <motion.div
@@ -31,57 +22,52 @@ export function CategoryShowcase() {
         transition={{ duration: 0.6 }}
         className="mb-14 max-w-2xl"
       >
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-wellness">
+        <p className="text-sm font-medium uppercase tracking-[0.2em] text-forest">
           Nuestro catálogo
         </p>
-        <h2 className="mt-4 font-display text-3xl text-paper sm:text-5xl">
-          Cuatro mundos, una sola calidad.
+        <h2 className="mt-4 font-display text-4xl leading-[1.05] text-carbon sm:text-6xl">
+          Tres mundos, una sola calidad.
         </h2>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        {categories.map(([slug, meta], i) => (
-          <motion.div
-            key={slug}
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Link
-              href={meta.href}
-              className="group relative flex h-80 flex-col justify-end overflow-hidden rounded-3xl border border-white/8 bg-graphite/30 p-8 sm:h-96"
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-12 sm:grid-rows-2">
+        {TILES.map(({ slug, image, span }, i) => {
+          const meta = CATEGORY_META[slug];
+          return (
+            <motion.div
+              key={slug}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className={span}
             >
-              <div
-                className="pointer-events-none absolute inset-0 opacity-70 transition-opacity duration-500 group-hover:opacity-100"
-                style={{
-                  background: `radial-gradient(circle at 75% 25%, ${ACCENT_GLOW[meta.accent]}, transparent 60%)`,
-                }}
-              />
-              <div className="pointer-events-none absolute inset-x-0 top-0 flex h-2/3 items-center justify-center">
-                <div className="relative h-full w-full">
-                  <Image
-                    src={`/images/catalog/${IMAGES[slug]}`}
-                    alt=""
-                    fill
-                    className="object-contain object-top p-8 transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                </div>
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/55 to-transparent" />
+              <Link
+                href={meta.href}
+                className="group relative flex h-72 flex-col justify-end overflow-hidden sm:h-full sm:min-h-[17rem]"
+              >
+                <Image
+                  src={image}
+                  alt={meta.label}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-carbon/85 via-carbon/15 to-transparent transition-opacity duration-500 group-hover:from-carbon/90" />
 
-              <div className="relative flex items-end justify-between">
-                <div>
-                  <h3 className="font-display text-2xl text-paper sm:text-3xl">{meta.label}</h3>
-                  <p className="mt-2 max-w-xs text-sm text-mist">{meta.tagline}</p>
+                <div className="relative flex items-end justify-between p-7 sm:p-8">
+                  <div>
+                    <h3 className="font-display text-2xl text-cream sm:text-3xl">{meta.label}</h3>
+                    <p className="mt-2 max-w-xs text-sm text-cream/70">{meta.tagline}</p>
+                  </div>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream/10 text-cream backdrop-blur transition group-hover:bg-cream group-hover:text-carbon">
+                    <ArrowUpRight size={18} />
+                  </span>
                 </div>
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-paper transition group-hover:bg-wellness group-hover:text-obsidian">
-                  <ArrowUpRight size={18} />
-                </span>
-              </div>
-            </Link>
-          </motion.div>
-        ))}
+              </Link>
+            </motion.div>
+          );
+        })}
       </div>
     </section>
   );

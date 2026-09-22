@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 
 export default function CheckoutExitoPage() {
   return (
-    <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 pt-24 text-center sm:px-8">
-      <CheckCircle2 className="text-wellness" size={56} />
-      <h1 className="mt-6 font-display text-3xl text-paper sm:text-4xl">
+    <div className="flex min-h-[80vh] flex-col items-center justify-center bg-cream px-6 pt-24 text-center sm:px-8">
+      <CheckCircle2 className="text-forest" size={56} />
+      <h1 className="mt-6 font-display text-3xl text-carbon sm:text-4xl">
         ¡Gracias por tu pedido!
       </h1>
-      <p className="mt-4 max-w-md text-mist">
+      <p className="mt-4 max-w-md text-stone">
         Hemos recibido tu pago correctamente. Te escribiremos en breve por WhatsApp para
         confirmar los datos de envío.
       </p>
@@ -24,13 +24,13 @@ export default function CheckoutExitoPage() {
           href={waLink(WA_PRESETS.order)}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full bg-wellness px-7 py-3.5 text-sm font-medium text-obsidian transition hover:bg-wellness/90"
+          className="rounded-full bg-forest px-7 py-3.5 text-sm font-medium text-cream transition hover:bg-forest-dim"
         >
           Confirmar por WhatsApp
         </a>
         <Link
           href="/catalogo"
-          className="rounded-full border border-white/20 px-7 py-3.5 text-sm font-medium text-paper transition hover:border-white/40"
+          className="rounded-full border border-carbon/20 px-7 py-3.5 text-sm font-medium text-carbon transition hover:border-carbon/40"
         >
           Seguir comprando
         </Link>

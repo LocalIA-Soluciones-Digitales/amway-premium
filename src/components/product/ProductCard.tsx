@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
 import type { Product } from "@/data/types";
 import { priceRangeLabel, directCheckoutPrice } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
@@ -26,48 +26,49 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
   const canBuyDirectly = directCheckoutPrice(product) != null;
   return (
     <motion.article
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.55, delay: (index % 6) * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/8 bg-graphite/40 transition-colors hover:border-white/20"
+      className="group relative flex flex-col"
     >
-      {product.badge && (
-        <span className="absolute left-3 top-3 z-10 rounded-full bg-gold px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-obsidian">
-          {product.badge}
-        </span>
-      )}
-
-      <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-br from-graphite-soft to-obsidian-soft p-6">
+      <a
+        href={waProductLink(product.name)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-linen"
+      >
+        {product.badge && (
+          <span className="absolute left-0 top-0 z-10 bg-carbon px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-cream">
+            {product.badge}
+          </span>
+        )}
         {product.image ? (
           <Image
             src={`/images/catalog/${product.image}`}
             alt={product.name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            className="object-contain p-4 transition-transform duration-700 ease-out group-hover:scale-105"
+            className="object-contain p-8 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
           />
         ) : (
-          <div
-            className={cn(
-              "flex h-20 w-20 items-center justify-center rounded-full text-lg font-display",
-              "bg-white/5 text-white/70 ring-1 ring-white/10"
-            )}
-          >
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-sm font-display text-stone ring-1 ring-carbon/8">
             {BRAND_INITIALS[product.brand] ?? product.brand.slice(0, 2)}
           </div>
         )}
-      </div>
+        <span className="pointer-events-none absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-cream text-carbon opacity-0 shadow-sm transition-opacity duration-300 group-hover:opacity-100">
+          <ArrowUpRight size={16} />
+        </span>
+      </a>
 
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <p className="text-[11px] uppercase tracking-wider text-wellness">{product.brand}</p>
-        <h3 className="line-clamp-2 font-display text-base leading-snug text-paper">
+      <div className="flex flex-1 flex-col gap-1.5 pt-4">
+        <p className="text-[11px] uppercase tracking-wider text-stone">{product.brand}</p>
+        <h3 className="line-clamp-2 font-display text-lg leading-snug text-carbon">
           {product.name}
         </h3>
-        <p className="line-clamp-2 text-xs leading-relaxed text-mist">{product.description}</p>
 
-        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
-          <span className="text-sm font-medium text-paper">{priceRangeLabel(product)}</span>
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <span className="text-sm font-medium text-carbon">{priceRangeLabel(product)}</span>
           <div className="flex items-center gap-1.5">
             {canBuyDirectly && <BuyButton productId={product.id} />}
             <a
@@ -75,7 +76,10 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Consultar ${product.name} por WhatsApp`}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 text-mist transition hover:bg-wellness hover:text-obsidian"
+              className={cn(
+                "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-carbon/10 text-stone transition",
+                "hover:border-forest/30 hover:bg-forest hover:text-cream"
+              )}
             >
               <MessageCircle size={16} />
             </a>

@@ -37,15 +37,15 @@ export function FaqAccordion() {
   return (
     <div className="mx-auto max-w-3xl">
       {FAQS.map((item, i) => (
-        <div key={item.q} className="border-b border-white/8">
+        <div key={item.q} className="border-b border-carbon/10">
           <button
             onClick={() => setOpen(open === i ? null : i)}
             className="flex w-full items-center justify-between py-6 text-left"
           >
-            <span className="font-display text-lg text-paper">{item.q}</span>
+            <span className="font-display text-lg text-carbon">{item.q}</span>
             <ChevronDown
               size={18}
-              className={`shrink-0 text-mist transition-transform ${open === i ? "rotate-180" : ""}`}
+              className={`shrink-0 text-forest transition-transform ${open === i ? "rotate-180" : ""}`}
             />
           </button>
           <AnimatePresence initial={false}>
@@ -57,7 +57,7 @@ export function FaqAccordion() {
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 className="overflow-hidden"
               >
-                <p className="pb-6 text-sm leading-relaxed text-mist">{item.a}</p>
+                <p className="pb-6 text-sm leading-relaxed text-stone">{item.a}</p>
               </motion.div>
             )}
           </AnimatePresence>

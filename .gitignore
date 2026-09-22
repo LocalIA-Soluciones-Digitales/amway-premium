@@ -36,6 +36,15 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Technical reference only (reverse-engineering CiaoEnergy's UX) — never part
+# of the app, never imported, never committed.
+/CiaoEnergy/
+
+# Raw source marketing material (official Amway product photography, launch
+# video, PDF/PPTX dossier) — the web-ready derivatives it was processed into
+# live in public/images/xs-energy and public/videos, which ARE committed.
+/XS Energy/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

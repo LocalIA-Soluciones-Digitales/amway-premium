@@ -11,24 +11,28 @@ export const metadata: Metadata = {
 export default function FaqPage() {
   return (
     <div className="pt-32">
-      <section className="mx-auto max-w-3xl px-6 pb-14 text-center sm:px-8">
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-wellness">
-          Preguntas frecuentes
-        </p>
-        <h1 className="mt-4 font-display text-4xl text-paper sm:text-5xl">¿En qué te ayudamos?</h1>
+      <section className="border-b border-carbon/10 bg-linen">
+        <div className="mx-auto max-w-3xl px-6 py-16 text-center sm:px-8 sm:py-20">
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-forest">
+            Preguntas frecuentes
+          </p>
+          <h1 className="mt-5 font-display text-5xl leading-[1.05] text-carbon sm:text-6xl">
+            ¿En qué te ayudamos?
+          </h1>
+        </div>
       </section>
 
-      <section className="px-6 pb-20 sm:px-8">
+      <section className="px-6 py-16 sm:px-8">
         <FaqAccordion />
       </section>
 
       <section className="mx-auto max-w-2xl px-6 pb-28 text-center sm:px-8">
-        <p className="text-mist">¿No encuentras la respuesta que buscas?</p>
+        <p className="text-stone">¿No encuentras la respuesta que buscas?</p>
         <a
           href={waLink(WA_PRESETS.info)}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-6 inline-flex rounded-full bg-wellness px-8 py-3.5 text-sm font-medium text-obsidian transition hover:bg-wellness/90"
+          className="mt-6 inline-flex rounded-full bg-forest px-8 py-3.5 text-sm font-medium text-cream transition hover:bg-forest-dim"
         >
           Pregúntanos por WhatsApp
         </a>

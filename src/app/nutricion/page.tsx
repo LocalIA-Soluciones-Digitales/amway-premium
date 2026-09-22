@@ -31,18 +31,20 @@ export default function NutricionPage() {
         eyebrow="Nutrilite™ · Ciencia basada en plantas"
         title="La mejor versión de ti, cultivada desde la raíz."
         description="Más de 90 años de innovación agrícola orgánica: vitaminas, proteínas, salud digestiva, inmunológica y nutrición específica para toda la familia."
-        image="p017_0_841x1091.webp"
-        accent="wellness"
+        photo="/images/editorial/nutricion-botanico.webp"
+        accent="forest"
         waMessage="Hola, quiero información sobre los suplementos Nutrilite."
       />
 
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
-        <h2 className="font-display text-2xl text-paper sm:text-3xl">Nuestros imprescindibles</h2>
-        <NutricionHighlights items={highlights} />
+      <section className="bg-carbon-soft py-20">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8">
+          <h2 className="font-display text-2xl text-cream sm:text-3xl">Nuestros imprescindibles</h2>
+          <NutricionHighlights items={highlights} />
+        </div>
       </section>
 
-      <section id="catalogo" className="mx-auto max-w-7xl px-6 pb-24 sm:px-8">
-        <h2 className="mb-8 font-display text-2xl text-paper sm:text-3xl">
+      <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
+        <h2 className="mb-8 font-display text-2xl text-carbon sm:text-3xl">
           Catálogo Nutrición completo
         </h2>
         <ProductExplorer products={products} subcategories={subcategories} brands={brands} />

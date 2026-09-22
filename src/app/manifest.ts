@@ -9,8 +9,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Distribuidor independiente de productos originales Amway importados de Estados Unidos.",
     start_url: "/",
     display: "standalone",
-    background_color: "#05060a",
-    theme_color: "#05060a",
+    background_color: "#f7f4ee",
+    theme_color: "#f7f4ee",
     icons: [
       {
         src: "/icon",

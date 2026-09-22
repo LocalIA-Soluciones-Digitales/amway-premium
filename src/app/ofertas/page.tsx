@@ -14,31 +14,33 @@ export default function OfertasPage() {
 
   return (
     <div className="pt-32">
-      <section className="mx-auto max-w-7xl px-6 pb-14 sm:px-8">
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-gold">
-          Novedades y destacados
-        </p>
-        <h1 className="mt-4 max-w-2xl font-display text-4xl text-paper sm:text-5xl">
-          Lo último de nuestro catálogo.
-        </h1>
-        <p className="mt-4 max-w-xl text-mist">
-          Los lanzamientos más recientes y los productos más solicitados, tal y como aparecen en
-          el catálogo oficial de Estados Unidos.
-        </p>
+      <section className="border-b border-carbon/10 bg-linen">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 sm:py-20">
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-gold">
+            Novedades y destacados
+          </p>
+          <h1 className="mt-5 max-w-2xl font-display text-5xl leading-[1.05] text-carbon sm:text-6xl">
+            Lo último de nuestro catálogo.
+          </h1>
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-stone sm:text-lg">
+            Los lanzamientos más recientes y los productos más solicitados, tal y como aparecen en
+            el catálogo oficial de Estados Unidos.
+          </p>
+        </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-16 sm:px-8">
-        <h2 className="mb-6 font-display text-2xl text-paper">Novedades ¡Nuevo!</h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <section className="mx-auto max-w-7xl px-6 py-16 sm:px-8">
+        <h2 className="mb-6 font-display text-2xl text-carbon">Novedades ¡Nuevo!</h2>
+        <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
           {news.map((p, i) => (
             <ProductCard key={p.id} product={p} index={i} />
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-8">
-        <h2 className="mb-6 font-display text-2xl text-paper">Productos insignia</h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <section className="mx-auto max-w-7xl px-6 py-16 sm:px-8">
+        <h2 className="mb-6 font-display text-2xl text-carbon">Productos insignia</h2>
+        <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
           {flagship.map((p, i) => (
             <ProductCard key={p.id} product={p} index={i} />
           ))}
