@@ -213,7 +213,6 @@ export const xsEnergyProducts: Product[] = [
     description:
       "12 % de agua de coco, 64 mg de magnesio y 600 mg de potasio, más vitaminas A, B, C y E. Fresa y sandía · Piña y coco.",
     variants: [{ size: "12 paquetes", price: 33.75 }],
-    image: "p096_0_429x535.webp",
     page: 96,
   },
   {
