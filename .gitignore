@@ -36,6 +36,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Technical reference only (reverse-engineering CiaoEnergy's UX) — never part
+# of the app, never imported, never committed.
+/CiaoEnergy/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
