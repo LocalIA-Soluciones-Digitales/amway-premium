@@ -3,26 +3,33 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
-import { priceRangeLabel } from "@/data/types";
-import { waProductLink } from "@/data/site-config";
-import { PRODUCTS } from "@/data/products";
+import { ArrowUpRight } from "lucide-react";
 
-const FEATURED: { id: string; image: string; href: string }[] = [
-  { id: "xs-elite-focus", image: "/images/products/xs-elite-focus.webp", href: "/xs-energy" },
-  { id: "espring-mesón", image: "/images/products/espring.webp", href: "/hogar#catalogo" },
-  { id: "double-x", image: "/images/products/double-x.webp", href: "/nutricion#catalogo" },
-];
+const RANGES = [
+  {
+    id: "xs-energy",
+    brand: "XS™ Energy",
+    tagline: "Power Drinks en seis sabores reales, pre-entreno y recuperación deportiva.",
+    image: "/images/xs-energy/lifestyle/cheers-cooler.webp",
+    href: "/xs-energy",
+  },
+  {
+    id: "espring",
+    brand: "eSpring™",
+    tagline: "Purificación LED UV-C: filtra más de 170 contaminantes al instante.",
+    image: "/images/espring/kitchen-lifestyle.webp",
+    href: "/espring",
+  },
+  {
+    id: "nutrilite",
+    brand: "Nutrilite™",
+    tagline: "Vitaminas y proteínas cultivadas desde la raíz, ciencia basada en plantas.",
+    image: "/images/products/double-x.webp",
+    href: "/nutricion",
+  },
+] as const;
 
 export function BestSellers() {
-  const items = FEATURED.map(({ id, image, href }) => {
-    const product = PRODUCTS.find((p) => p.id === id);
-    if (!product) return null;
-    return { product, image, href };
-  }).filter(
-    (x): x is { product: (typeof PRODUCTS)[number]; image: string; href: string } => x != null
-  );
-
   return (
     <section className="mx-auto max-w-7xl px-6 py-24 sm:px-8 sm:py-32">
       <motion.div
@@ -48,41 +55,42 @@ export function BestSellers() {
         </a>
       </motion.div>
 
-      <div className="grid grid-cols-2 gap-x-6 gap-y-14 sm:grid-cols-3">
-        {items.map(({ product, image, href }, i) => (
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+        {RANGES.map((range, i) => (
           <motion.div
-            key={product.id}
+            key={range.id}
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col"
+            transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Link href={href} className="group block">
-              <div className="relative aspect-square overflow-hidden bg-linen">
-                <Image
-                  src={image}
-                  alt={product.name}
-                  fill
-                  sizes="(max-width: 640px) 50vw, 33vw"
-                  className="object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-[1.08]"
-                />
+            <Link
+              href={range.href}
+              className="group relative block aspect-[4/5] overflow-hidden rounded-3xl bg-carbon"
+            >
+              <Image
+                src={range.image}
+                alt={range.brand}
+                fill
+                sizes="(max-width: 640px) 100vw, 33vw"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/35 to-transparent" />
+
+              <div className="absolute inset-x-0 bottom-0 p-7">
+                <h3 className="font-display text-2xl text-cream sm:text-3xl">{range.brand}</h3>
+                <p className="mt-2 max-w-[26ch] text-sm leading-relaxed text-cream/70">
+                  {range.tagline}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-cream">
+                  Descubre la gama
+                  <ArrowUpRight
+                    size={16}
+                    className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </span>
               </div>
-              <p className="mt-5 text-[11px] uppercase tracking-wider text-stone">{product.brand}</p>
-              <h3 className="mt-1 font-display text-lg leading-snug text-carbon">{product.name}</h3>
             </Link>
-            <div className="mt-3 flex items-center justify-between">
-              <span className="text-sm font-medium text-carbon">{priceRangeLabel(product)}</span>
-              <a
-                href={waProductLink(product.name)}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Consultar ${product.name} por WhatsApp`}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-carbon/10 text-stone transition hover:border-forest/30 hover:bg-forest hover:text-cream"
-              >
-                <MessageCircle size={16} />
-              </a>
-            </div>
           </motion.div>
         ))}
       </div>
