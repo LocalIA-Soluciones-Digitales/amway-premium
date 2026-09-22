@@ -40,7 +40,7 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
       onPointerMove={onMove}
       onPointerLeave={onLeave}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d", transformPerspective: 900 }}
-      className="group relative flex aspect-[3/4.2] flex-col justify-end overflow-hidden rounded-2xl"
+      className="group relative flex aspect-[3/5] flex-col justify-end overflow-hidden rounded-2xl"
     >
       <div
         className="absolute inset-0 origin-top-left skew-y-[-8deg] scale-125 opacity-90 transition-transform duration-500 ease-out group-hover:skew-y-0 group-hover:scale-110"
@@ -54,14 +54,16 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
         </span>
       )}
 
-      <div className="relative flex flex-1 items-center justify-center pt-8" style={{ transform: "translateZ(40px)" }}>
-        <Image
-          src={`/images/xs-energy/cans/${flavor.image}`}
-          alt={`${flavor.name} · ${flavor.flavorEs}`}
-          width={200}
-          height={280}
-          className="h-[72%] w-auto object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.55)] transition-transform duration-500 group-hover:scale-105"
-        />
+      <div className="relative flex flex-1 items-center justify-center pt-6" style={{ transform: "translateZ(40px)" }}>
+        <div className="relative aspect-[0.4] w-[44%]">
+          <Image
+            src={`/images/xs-energy/cans/${flavor.image}`}
+            alt={`${flavor.name} · ${flavor.flavorEs}`}
+            fill
+            sizes="(max-width: 640px) 22vw, 14vw"
+            className="object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.55)] transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
       </div>
 
       <div className="relative bg-xs-ink/80 px-4 py-4 backdrop-blur-sm">
