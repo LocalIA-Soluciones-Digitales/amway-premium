@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown } from "lucide-react";
@@ -9,11 +8,6 @@ import { gsap } from "@/lib/gsap";
 import { waLink } from "@/data/site-config";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { ENERGY_FLAVORS, XS_ANNIVERSARY } from "@/data/energy-drinks";
-
-const EnergyAtmosphere = dynamic(
-  () => import("@/components/animated/EnergyAtmosphere").then((m) => m.EnergyAtmosphere),
-  { ssr: false }
-);
 
 const HERO_CAN = ENERGY_FLAVORS[0];
 
@@ -101,10 +95,6 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
         className="pointer-events-none absolute left-1/2 top-1/2 h-[70vh] w-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[110px] animate-pulse-slow"
         style={{ background: `radial-gradient(circle, ${HERO_CAN.accentSoft}, transparent 70%)` }}
       />
-
-      {!reducedMotion && (
-        <EnergyAtmosphere accent={HERO_CAN.accent} className="pointer-events-none absolute inset-0" />
-      )}
 
       <motion.div
         style={{ opacity: reducedMotion ? 1 : contentOpacity }}
