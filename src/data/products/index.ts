@@ -35,6 +35,10 @@ export function getFlagshipProducts(): Product[] {
   return PRODUCTS.filter((p) => p.flagship);
 }
 
+export function getEspringProducts(): Product[] {
+  return hogarProducts.filter((p) => p.brand === "eSpring");
+}
+
 export function getProductById(id: string): Product | undefined {
   return PRODUCTS.find((p) => p.id === id);
 }

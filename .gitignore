@@ -45,6 +45,10 @@ yarn-error.log*
 # live in public/images/xs-energy and public/videos, which ARE committed.
 /XS Energy/
 
+# Same as above, for eSpring — see public/images/espring and
+# public/videos/espring for the committed web-ready derivatives.
+/eSpring/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -12,6 +12,7 @@ const CATEGORY_LINKS = [
   { href: "/nutricion", label: "Nutrición", tagline: "Vitaminas y bienestar diario" },
   { href: "/belleza", label: "Belleza", tagline: "Artistry, Satinique y g&h" },
   { href: "/hogar", label: "Hogar", tagline: "Agua, aire y cocina" },
+  { href: "/espring", label: "eSpring", tagline: "Agua purificada al instante" },
   { href: "/xs-energy", label: "XS Energy", tagline: "Power Drink y nutrición deportiva" },
 ];
 
@@ -24,7 +25,7 @@ const CATEGORY_HREFS = new Set(CATEGORY_LINKS.map((l) => l.href));
 
 // Routes that open on a full-bleed photographic hero dark enough for light
 // header text; everywhere else the header starts directly in its light state.
-const DARK_HERO_ROUTES = new Set(["/", "/nutricion", "/belleza", "/hogar", "/xs-energy"]);
+const DARK_HERO_ROUTES = new Set(["/", "/nutricion", "/belleza", "/hogar", "/espring", "/xs-energy"]);
 
 export function Header() {
   const pathname = usePathname();

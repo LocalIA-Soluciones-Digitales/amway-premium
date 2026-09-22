@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import type { Product } from "@/data/types";
 import { priceRangeLabel } from "@/data/types";
@@ -53,6 +54,14 @@ export function HogarHighlights({
                   Consultar
                 </a>
               </div>
+              {scene === "espring" && (
+                <Link
+                  href="/espring"
+                  className="mt-3 inline-block text-xs text-spring-blue underline-offset-4 transition hover:underline"
+                >
+                  Descubre eSpring™ →
+                </Link>
+              )}
             </div>
           </div>
         );

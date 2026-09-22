@@ -25,6 +25,11 @@
   --color-xs-red: #e8384f;
   --color-xs-ink: #0c0d10;
 
+  /* eSpring conserva su propio acento acuático, reservado a su "momento" */
+  --color-spring-blue: #2fb2d9;
+  --color-spring-blue-soft: #a9e4f2;
+  --color-spring-ink: #0a161d;
+
   --background: var(--color-cream);
   --foreground: var(--color-carbon);
 
@@ -52,6 +57,9 @@
   --color-tech-dim: var(--color-tech-dim);
   --color-xs-red: var(--color-xs-red);
   --color-xs-ink: var(--color-xs-ink);
+  --color-spring-blue: var(--color-spring-blue);
+  --color-spring-blue-soft: var(--color-spring-blue-soft);
+  --color-spring-ink: var(--color-spring-ink);
 
   --font-sans: var(--font-inter);
   --font-display: var(--font-fraunces);
