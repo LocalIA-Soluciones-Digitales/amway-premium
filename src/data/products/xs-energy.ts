@@ -24,7 +24,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Una explosión de energía sin azúcar. Contiene 114 mg de cafeína, megadosis de vitaminas B y sabores naturales. Limonada, Cítrico, Arándano-Uva, Tamarindo, Tropical, Cereza negra, Root Beer, Clásico, Naranja, Summit, Watermelon Lemonade y más.",
     variants: [{ size: "Doce latas de 355 ml", price: 44.0 }],
-    image: "flip_xsenergydrink.webp",
+    image: "xs-power-drink.webp",
     flagship: "xs-energy",
     page: 89,
   },
