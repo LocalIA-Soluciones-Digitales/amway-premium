@@ -2,20 +2,25 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/data/site-config";
 
-const NAV_LINKS = [
-  { href: "/nutricion", label: "Nutrición" },
-  { href: "/belleza", label: "Belleza" },
-  { href: "/hogar", label: "Hogar" },
-  { href: "/xs-energy", label: "XS Energy" },
+const CATEGORY_LINKS = [
+  { href: "/nutricion", label: "Nutrición", tagline: "Vitaminas y bienestar diario" },
+  { href: "/belleza", label: "Belleza", tagline: "Artistry, Satinique y g&h" },
+  { href: "/hogar", label: "Hogar", tagline: "Agua, aire y cocina" },
+  { href: "/xs-energy", label: "XS Energy", tagline: "Power Drink y nutrición deportiva" },
+];
+
+const TOP_LINKS = [
   { href: "/catalogo", label: "Catálogo" },
   { href: "/ofertas", label: "Ofertas" },
 ];
+
+const CATEGORY_HREFS = new Set(CATEGORY_LINKS.map((l) => l.href));
 
 // Routes that open on a full-bleed photographic hero dark enough for light
 // header text; everywhere else the header starts directly in its light state.
@@ -25,6 +30,8 @@ export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -37,7 +44,39 @@ export function Header() {
     document.documentElement.style.overflow = open ? "hidden" : "";
   }, [open]);
 
+  useEffect(() => setCategoriesOpen(false), [pathname]);
+
+  useEffect(() => {
+    if (!categoriesOpen) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setCategoriesOpen(false);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [categoriesOpen]);
+
+  function openCategories() {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setCategoriesOpen(true);
+  }
+  function scheduleCloseCategories() {
+    closeTimer.current = setTimeout(() => setCategoriesOpen(false), 150);
+  }
+
   const dark = !scrolled && !open && DARK_HERO_ROUTES.has(pathname);
+  const onCategoryRoute = CATEGORY_HREFS.has(pathname);
+
+  const linkClass = (active: boolean) =>
+    cn(
+      "relative text-sm transition-colors",
+      dark
+        ? active
+          ? "text-cream"
+          : "text-cream/70 hover:text-cream"
+        : active
+          ? "text-carbon"
+          : "text-stone hover:text-carbon"
+    );
 
   return (
     <header
@@ -67,24 +106,72 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
-          {NAV_LINKS.map((link) => {
+          <div
+            className="relative"
+            onMouseEnter={openCategories}
+            onMouseLeave={scheduleCloseCategories}
+          >
+            <button
+              type="button"
+              onClick={openCategories}
+              aria-haspopup="menu"
+              aria-expanded={categoriesOpen}
+              className={cn("flex items-center gap-1", linkClass(onCategoryRoute))}
+            >
+              Categorías
+              <ChevronDown
+                size={14}
+                className={cn("transition-transform duration-300", categoriesOpen && "rotate-180")}
+              />
+              {onCategoryRoute && (
+                <motion.span
+                  layoutId="nav-active"
+                  className={cn(
+                    "absolute -bottom-1.5 left-0 right-0 h-px",
+                    dark ? "bg-cream" : "bg-forest"
+                  )}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                />
+              )}
+            </button>
+
+            <AnimatePresence>
+              {categoriesOpen && (
+                <motion.div
+                  role="menu"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="glass-strong absolute left-1/2 top-full mt-3 w-72 -translate-x-1/2 rounded-2xl p-2 shadow-[0_20px_50px_rgba(28,26,22,0.12)]"
+                >
+                  {CATEGORY_LINKS.map((link) => {
+                    const active = pathname === link.href;
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        role="menuitem"
+                        onClick={() => setCategoriesOpen(false)}
+                        className={cn(
+                          "block rounded-xl px-4 py-2.5 transition-colors",
+                          active ? "bg-forest/10" : "hover:bg-carbon/5"
+                        )}
+                      >
+                        <span className="font-display text-base text-carbon">{link.label}</span>
+                        <span className="block text-xs text-stone">{link.tagline}</span>
+                      </Link>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {TOP_LINKS.map((link) => {
             const active = pathname === link.href;
             return (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "relative text-sm transition-colors",
-                  dark
-                    ? active
-                      ? "text-cream"
-                      : "text-cream/70 hover:text-cream"
-                    : active
-                      ? "text-carbon"
-                      : "text-stone hover:text-carbon"
-                )}
-              >
+              <Link key={link.href} href={link.href} aria-current={active ? "page" : undefined} className={linkClass(active)}>
                 {link.label}
                 {active && (
                   <motion.span
@@ -154,8 +241,38 @@ export function Header() {
                 <X size={20} />
               </button>
             </div>
-            <nav className="mt-12 flex flex-col gap-1">
-              {[...NAV_LINKS, { href: "/sobre-nosotros", label: "Nosotros" }, { href: "/contacto", label: "Contacto" }].map(
+            <nav className="mt-10 flex flex-1 flex-col overflow-y-auto">
+              <p className="mb-1 mt-2 text-xs font-medium uppercase tracking-[0.2em] text-stone">
+                Categorías
+              </p>
+              {CATEGORY_LINKS.map((link, i) => {
+                const active = pathname === link.href;
+                return (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.04 * i, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "block border-b border-carbon/8 py-4 font-display text-3xl",
+                        active ? "text-forest" : "text-carbon"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                );
+              })}
+
+              <p className="mb-1 mt-6 text-xs font-medium uppercase tracking-[0.2em] text-stone">
+                Explorar
+              </p>
+              {[...TOP_LINKS, { href: "/sobre-nosotros", label: "Nosotros" }, { href: "/contacto", label: "Contacto" }].map(
                 (link, i) => {
                   const active = pathname === link.href;
                   return (
@@ -163,7 +280,7 @@ export function Header() {
                       key={link.href}
                       initial={{ opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.04 * i, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      transition={{ delay: 0.04 * (i + CATEGORY_LINKS.length), duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     >
                       <Link
                         href={link.href}
