@@ -1,11 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useLenis } from "lenis/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { waLink } from "@/data/site-config";
 import { ENERGY_FLAVORS } from "@/data/energy-drinks";
+
+const EnergyAtmosphere = dynamic(
+  () => import("@/components/animated/EnergyAtmosphere").then((m) => m.EnergyAtmosphere),
+  { ssr: false }
+);
 
 const N = ENERGY_FLAVORS.length;
 
@@ -146,6 +152,13 @@ export function EnergyScrollStory() {
         <div className="absolute inset-0 bg-gradient-to-t from-xs-ink via-xs-ink/70 to-xs-ink/50" />
         <div ref={washARef} className="absolute inset-0" style={{ opacity: 1 }} />
         <div ref={washBRef} className="absolute inset-0" style={{ opacity: 0 }} />
+
+        <EnergyAtmosphere
+          accent={active.accent}
+          burstKey={activeIndex}
+          bubbleCount={70}
+          className="pointer-events-none absolute inset-0 z-[5]"
+        />
 
         <div className="pointer-events-none absolute left-8 top-28 font-mono text-xs tracking-widest text-cream/40">
           {String(activeIndex + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
