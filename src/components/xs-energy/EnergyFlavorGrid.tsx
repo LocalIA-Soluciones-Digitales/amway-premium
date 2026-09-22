@@ -54,7 +54,7 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
         </span>
       )}
 
-      <div className="relative flex flex-1 items-center justify-center pt-6" style={{ transform: "translateZ(40px)" }}>
+      <div className="relative flex min-h-0 flex-1 items-center justify-center pt-6" style={{ transform: "translateZ(40px)" }}>
         <div className="relative aspect-[0.4] w-[44%]">
           <Image
             src={`/images/xs-energy/cans/${flavor.image}`}
@@ -66,7 +66,7 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
         </div>
       </div>
 
-      <div className="relative flex h-24 flex-col justify-center bg-xs-ink/80 px-4 py-3 backdrop-blur-sm">
+      <div className="relative flex h-24 shrink-0 flex-col justify-center bg-xs-ink/80 px-4 py-3 backdrop-blur-sm">
         <p className="line-clamp-2 font-display text-sm leading-tight text-cream sm:text-base">{flavor.name}</p>
         <p className="mt-0.5 line-clamp-2 text-xs uppercase leading-snug tracking-wide text-cream/55">{flavor.flavorEs}</p>
       </div>
