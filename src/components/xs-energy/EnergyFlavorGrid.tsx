@@ -66,9 +66,9 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
         </div>
       </div>
 
-      <div className="relative bg-xs-ink/80 px-4 py-4 backdrop-blur-sm">
-        <p className="font-display text-sm leading-tight text-cream sm:text-base">{flavor.name}</p>
-        <p className="mt-0.5 text-xs uppercase tracking-wide text-cream/55">{flavor.flavorEs}</p>
+      <div className="relative flex h-24 flex-col justify-center bg-xs-ink/80 px-4 py-3 backdrop-blur-sm">
+        <p className="line-clamp-2 font-display text-sm leading-tight text-cream sm:text-base">{flavor.name}</p>
+        <p className="mt-0.5 line-clamp-2 text-xs uppercase leading-snug tracking-wide text-cream/55">{flavor.flavorEs}</p>
       </div>
     </motion.a>
   );
