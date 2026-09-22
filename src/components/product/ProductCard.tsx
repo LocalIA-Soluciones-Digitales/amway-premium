@@ -45,7 +45,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
         )}
         {product.image ? (
           <Image
-            src={`/images/catalog/${product.image}`}
+            src={product.image.includes("/") ? `/images/${product.image}` : `/images/catalog/${product.image}`}
             alt={product.name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"

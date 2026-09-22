@@ -41,7 +41,11 @@ export async function POST(request: NextRequest) {
           product_data: {
             name: product.name,
             description: `${product.brand} · ${product.variants[0].size}`,
-            images: product.image ? [`${origin}/images/catalog/${product.image}`] : undefined,
+            images: product.image
+              ? [
+                  `${origin}/images/${product.image.includes("/") ? product.image : `catalog/${product.image}`}`,
+                ]
+              : undefined,
           },
         },
       },
