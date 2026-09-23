@@ -43,7 +43,7 @@ export function ProductExplorer({
   }, [products, subcategory, brand, query, sort]);
 
   const selectClass =
-    "appearance-none rounded-none border-0 border-b border-carbon/15 bg-transparent py-2.5 pr-6 text-sm text-carbon focus:border-forest focus:outline-none";
+    "appearance-none rounded-none border-0 border-b border-carbon/15 bg-transparent py-2.5 pr-6 text-base text-carbon focus:border-forest focus:outline-none sm:text-sm";
 
   return (
     <div>
@@ -54,7 +54,7 @@ export function ProductExplorer({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar producto, beneficio o marca…"
-            className="w-full border-b border-carbon/15 bg-transparent py-2.5 pl-6 pr-4 text-sm text-carbon placeholder:text-stone/70 focus:border-forest focus:outline-none"
+            className="w-full border-b border-carbon/15 bg-transparent py-2.5 pl-6 pr-4 text-base text-carbon placeholder:text-stone/70 focus:border-forest focus:outline-none sm:text-sm"
           />
         </div>
 

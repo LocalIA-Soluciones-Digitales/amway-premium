@@ -21,7 +21,7 @@ export function ContactForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Nombre y apellidos"
-          className="mt-2 w-full border-b border-carbon/15 bg-transparent py-2.5 text-sm text-carbon placeholder:text-stone/70 focus:border-forest focus:outline-none"
+          className="mt-2 w-full border-b border-carbon/15 bg-transparent py-2.5 text-base text-carbon placeholder:text-stone/70 focus:border-forest focus:outline-none sm:text-sm"
         />
       </div>
       <div>
@@ -31,7 +31,7 @@ export function ContactForm() {
           onChange={(e) => setMessage(e.target.value)}
           rows={5}
           placeholder="Cuéntanos qué producto te interesa…"
-          className="mt-2 w-full border-b border-carbon/15 bg-transparent py-2.5 text-sm text-carbon placeholder:text-stone/70 focus:border-forest focus:outline-none"
+          className="mt-2 w-full border-b border-carbon/15 bg-transparent py-2.5 text-base text-carbon placeholder:text-stone/70 focus:border-forest focus:outline-none sm:text-sm"
         />
       </div>
       <button
