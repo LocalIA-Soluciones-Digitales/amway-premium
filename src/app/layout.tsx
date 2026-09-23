@@ -7,6 +7,9 @@ import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { CatalogStateProvider } from "@/components/catalog/CatalogStateProvider";
+import { StoreOnly } from "@/components/layout/StoreOnly";
+import { fetchCatalogoPublico } from "@/lib/catalog-state";
 import { SITE } from "@/data/site-config";
 
 const inter = Inter({
@@ -66,7 +69,11 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // Precios/agotados del panel de gestión: se sirven con la página y se
+  // regeneran como mucho cada minuto (el cliente además los refresca).
+  const catalogo = await fetchCatalogoPublico({ next: { revalidate: 60, tags: ["amway-catalogo"] } });
+
   return (
     <html
       lang="es"
@@ -80,15 +87,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Saltar al contenido
         </a>
         <SmoothScroll>
-          <CartProvider>
-            <Header />
-            <main id="main-content" className="flex-1">
-              {children}
-            </main>
-            <Footer />
-            <WhatsAppButton />
-            <CartDrawer />
-          </CartProvider>
+          <CatalogStateProvider initial={catalogo}>
+            <CartProvider>
+              <StoreOnly>
+                <Header />
+              </StoreOnly>
+              <main id="main-content" className="flex-1">
+                {children}
+              </main>
+              <StoreOnly>
+                <Footer />
+                <WhatsAppButton />
+              </StoreOnly>
+              <CartDrawer />
+            </CartProvider>
+          </CatalogStateProvider>
         </SmoothScroll>
       </body>
     </html>

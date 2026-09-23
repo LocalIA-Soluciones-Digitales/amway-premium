@@ -7,24 +7,27 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { CreditCard, Loader2, MessageCircle, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { getProductById } from "@/data/products";
-import { productImageSrc, variantPriceEur } from "@/data/types";
+import { productImageSrc, type Product } from "@/data/types";
 import { waLink } from "@/data/site-config";
 import { formatEUR } from "@/lib/currency";
+import { cn } from "@/lib/utils";
+import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
 import { cestaItemKey, MAX_QUANTITY_PER_LINE, useCesta, type CestaItem } from "./CartProvider";
 
-function lineDetails(item: CestaItem) {
+type PriceOf = (product: Product, variantIndex: number) => number | null;
+
+function lineDetails(item: CestaItem, priceOf: PriceOf) {
   const product = getProductById(item.productId);
   if (!product) return null;
   const variant = product.variants[item.variantIndex];
-  const price = variantPriceEur(product, item.variantIndex);
-  if (!variant || price == null) return null;
-  return { product, variant, price };
+  if (!variant) return null;
+  return { product, variant, price: priceOf(product, item.variantIndex) ?? 0 };
 }
 
-function whatsappOrderMessage(items: CestaItem[], subtotal: number): string {
+function whatsappOrderMessage(items: CestaItem[], subtotal: number, priceOf: PriceOf, skip: Set<string>): string {
   const lines = items.flatMap((item) => {
-    const d = lineDetails(item);
-    if (!d) return [];
+    const d = lineDetails(item, priceOf);
+    if (!d || skip.has(cestaItemKey(item))) return [];
     const detail = [d.variant.size, item.flavor].filter(Boolean).join(" · ");
     return [`• ${item.quantity} × ${d.product.name} (${detail}) — ${formatEUR(d.price * item.quantity)}`];
   });
@@ -32,7 +35,9 @@ function whatsappOrderMessage(items: CestaItem[], subtotal: number): string {
 }
 
 export function CartDrawer() {
-  const { items, isOpen, closeCesta, increase, decrease, removeItem, totalUnits, subtotal } = useCesta();
+  const { items, isOpen, closeCesta, increase, decrease, removeItem, totalUnits, subtotal, unavailableKeys } = useCesta();
+  const catalog = useCatalogState();
+  const hasUnavailable = unavailableKeys.size > 0;
   const lenis = useLenis();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -141,12 +146,13 @@ export function CartDrawer() {
               <>
                 <ul data-lenis-prevent className="flex-1 divide-y divide-carbon/8 overflow-y-auto overscroll-contain px-6">
                   {items.map((item) => {
-                    const d = lineDetails(item);
+                    const d = lineDetails(item, catalog.precio);
                     if (!d) return null;
                     const key = cestaItemKey(item);
+                    const unavailable = unavailableKeys.has(key);
                     const src = productImageSrc(d.product);
                     return (
-                      <li key={key} className="flex gap-4 py-5">
+                      <li key={key} className={cn("flex gap-4 py-5", unavailable && "opacity-60")}>
                         <div className="relative h-24 w-20 shrink-0 overflow-hidden bg-linen">
                           {src && (
                             <Image src={src} alt={d.product.name} fill sizes="80px" className="object-contain p-2" />
@@ -162,6 +168,11 @@ export function CartDrawer() {
                               <p className="mt-0.5 truncate text-xs text-stone">
                                 {[d.variant.size, item.flavor].filter(Boolean).join(" · ")}
                               </p>
+                              {unavailable && (
+                                <p className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-xs-red">
+                                  Agotado · quítalo para pagar
+                                </p>
+                              )}
                             </div>
                             <button
                               type="button"
@@ -195,7 +206,7 @@ export function CartDrawer() {
                               </button>
                             </div>
                             <span className="text-sm font-medium tabular-nums text-carbon">
-                              {formatEUR(d.price * item.quantity)}
+                              {unavailable ? "—" : formatEUR(d.price * item.quantity)}
                             </span>
                           </div>
                         </div>
@@ -220,14 +231,14 @@ export function CartDrawer() {
                   <button
                     type="button"
                     onClick={checkout}
-                    disabled={loading}
+                    disabled={loading || hasUnavailable}
                     className="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-carbon text-sm font-medium text-cream transition hover:bg-carbon-soft disabled:opacity-60"
                   >
                     {loading ? <Loader2 size={16} className="animate-spin" /> : <CreditCard size={16} />}
                     Pagar con tarjeta
                   </button>
                   <a
-                    href={waLink(whatsappOrderMessage(items, subtotal))}
+                    href={waLink(whatsappOrderMessage(items, subtotal, catalog.precio, unavailableKeys))}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-2.5 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-carbon/15 text-sm font-medium text-carbon transition hover:border-forest/30 hover:bg-forest hover:text-cream"

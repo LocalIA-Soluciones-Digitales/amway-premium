@@ -20,6 +20,7 @@ const CATEGORY_LINKS = [
 const TOP_LINKS = [
   { href: "/catalogo", label: "Catálogo" },
   { href: "/ofertas", label: "Ofertas" },
+  { href: "/opiniones", label: "Opiniones" },
 ];
 
 const CATEGORY_HREFS = new Set(CATEGORY_LINKS.map((l) => l.href));

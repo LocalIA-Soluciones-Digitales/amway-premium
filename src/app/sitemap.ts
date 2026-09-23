@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/espring",
     "/catalogo",
     "/ofertas",
+    "/opiniones",
     "/sobre-nosotros",
     "/faq",
     "/contacto",

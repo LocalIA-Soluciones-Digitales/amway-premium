@@ -3,13 +3,25 @@ import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { waLink, WA_PRESETS } from "@/data/site-config";
 import { ClearCartOnMount } from "@/components/cart/ClearCartOnMount";
+import { registrarPedidoStripe } from "@/lib/amway-pedidos";
 
 export const metadata: Metadata = {
   title: "Pedido confirmado",
   robots: { index: false, follow: false },
 };
 
-export default function CheckoutExitoPage() {
+export default async function CheckoutExitoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ session_id?: string }>;
+}) {
+  const { session_id } = await searchParams;
+  // Deja el pedido apuntado en el panel de gestión. Si falla (sin token,
+  // Supabase caído) el cliente ya ha pagado: la página se muestra igual.
+  if (session_id) {
+    await registrarPedidoStripe(session_id).catch((e) => console.error("No se pudo registrar el pedido", e));
+  }
+
   return (
     <div className="flex min-h-[80vh] flex-col items-center justify-center bg-cream px-6 pt-24 text-center sm:px-8">
       <ClearCartOnMount />

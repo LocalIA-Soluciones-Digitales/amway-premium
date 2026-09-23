@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import type { Product } from "@/data/types";
-import { priceFrom } from "@/data/types";
 import { ProductCard } from "./ProductCard";
 import { cn } from "@/lib/utils";
+import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
+import { SolicitudModal } from "@/components/catalog/SolicitudModal";
 
 export function ProductExplorer({
   products,
@@ -20,9 +21,16 @@ export function ProductExplorer({
   const [subcategory, setSubcategory] = useState<string | null>(null);
   const [brand, setBrand] = useState<string | null>(null);
   const [sort, setSort] = useState<"relevancia" | "precio-asc" | "precio-desc">("relevancia");
+  const [solicitudOpen, setSolicitudOpen] = useState(false);
+  const catalog = useCatalogState();
 
   const filtered = useMemo(() => {
-    let list = products;
+    // Cheapest selling price, including any price set in the admin panel.
+    const minPrice = (p: Product) => {
+      const prices = p.variants.map((_, i) => catalog.precio(p, i)).filter((x): x is number => x != null);
+      return prices.length ? Math.min(...prices) : null;
+    };
+    let list = products.filter((p) => !catalog.oculto(p.id));
     if (subcategory) list = list.filter((p) => p.subcategory === subcategory);
     if (brand) list = list.filter((p) => p.brand === brand);
     if (query.trim()) {
@@ -35,12 +43,12 @@ export function ProductExplorer({
       );
     }
     if (sort === "precio-asc") {
-      list = [...list].sort((a, b) => (priceFrom(a) ?? Infinity) - (priceFrom(b) ?? Infinity));
+      list = [...list].sort((a, b) => (minPrice(a) ?? Infinity) - (minPrice(b) ?? Infinity));
     } else if (sort === "precio-desc") {
-      list = [...list].sort((a, b) => (priceFrom(b) ?? -Infinity) - (priceFrom(a) ?? -Infinity));
+      list = [...list].sort((a, b) => (minPrice(b) ?? -Infinity) - (minPrice(a) ?? -Infinity));
     }
     return list;
-  }, [products, subcategory, brand, query, sort]);
+  }, [products, subcategory, brand, query, sort, catalog]);
 
   const selectClass =
     "appearance-none rounded-none border-0 border-b border-carbon/15 bg-transparent py-2.5 pr-6 text-base text-carbon focus:border-forest focus:outline-none sm:text-sm";
@@ -118,6 +126,22 @@ export function ProductExplorer({
           No encontramos productos con esos filtros. Prueba con otra búsqueda.
         </div>
       )}
+
+      <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-carbon/10 pt-8 sm:flex-row sm:items-center">
+        <div>
+          <p className="font-display text-xl text-carbon">¿No encuentras un producto?</p>
+          <p className="mt-1 text-sm text-stone">Pídenoslo y lo buscamos en el catálogo oficial de Amway.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setSolicitudOpen(true)}
+          className="flex items-center gap-2 rounded-full border border-carbon/15 px-6 py-3 text-sm font-medium text-carbon transition hover:border-carbon/40"
+        >
+          Solicitar producto
+          <ArrowRight size={15} />
+        </button>
+      </div>
+      <SolicitudModal open={solicitudOpen} onClose={() => setSolicitudOpen(false)} tipo="otro" />
     </div>
   );
 }

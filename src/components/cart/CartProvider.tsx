@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { getProductById } from "@/data/products";
-import { variantPriceEur } from "@/data/types";
+import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
 
 // Same shape of logic as the Arrantza basket (localStorage-backed, cross-tab
 // sync, "just added" flash, version counter for the header bump), but with
@@ -30,8 +30,8 @@ export function cestaItemKey(item: Pick<CestaItem, "productId" | "variantIndex" 
   return `${item.productId}|${item.variantIndex}|${item.flavor}`;
 }
 
-// Drops anything the catalogue no longer sells at a fixed price, so a stale
-// basket from an older deploy never reaches checkout with a missing product.
+// Drops anything the catalogue no longer has, so a stale basket from an
+// older deploy never reaches checkout with a missing product or format.
 function sanitize(raw: unknown): CestaItem[] {
   if (!Array.isArray(raw)) return [];
   const out: CestaItem[] = [];
@@ -39,7 +39,7 @@ function sanitize(raw: unknown): CestaItem[] {
     if (!i || typeof i.productId !== "string") continue;
     const product = getProductById(i.productId);
     const variantIndex = Number.isInteger(i.variantIndex) ? i.variantIndex : 0;
-    if (!product || variantPriceEur(product, variantIndex) == null) continue;
+    if (!product || !product.variants[variantIndex]) continue;
     const quantity = Number.isInteger(i.quantity) ? i.quantity : 1;
     out.push({
       productId: i.productId,
@@ -81,6 +81,8 @@ interface CestaContextValue {
   clearCesta: () => void;
   totalUnits: number;
   subtotal: number;
+  /** Lines the shop has marked sold out (or hidden) since they were added. */
+  unavailableKeys: Set<string>;
   justAddedKey: string | null;
   cestaVersion: number;
 }
@@ -94,6 +96,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [justAddedKey, setJustAddedKey] = useState<string | null>(null);
   const [cestaVersion, setCestaVersion] = useState(0);
   const justAddedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const catalog = useCatalogState();
 
   // Read after mount (never during render) to avoid hydration mismatches.
   useEffect(() => {
@@ -168,11 +171,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const value = useMemo<CestaContextValue>(() => {
     let totalUnits = 0;
     let subtotal = 0;
+    const unavailableKeys = new Set<string>();
     for (const i of items) {
       const product = getProductById(i.productId);
-      const price = product ? variantPriceEur(product, i.variantIndex) : null;
+      const price = product ? catalog.precio(product, i.variantIndex) : null;
       totalUnits += i.quantity;
-      if (price != null) subtotal += price * i.quantity;
+      if (price == null || catalog.agotado(i.productId) || catalog.oculto(i.productId)) {
+        unavailableKeys.add(cestaItemKey(i));
+      } else {
+        subtotal += price * i.quantity;
+      }
     }
     return {
       items,
@@ -187,10 +195,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       clearCesta,
       totalUnits,
       subtotal,
+      unavailableKeys,
       justAddedKey,
       cestaVersion,
     };
-  }, [items, isLoaded, isOpen, openCesta, closeCesta, addItem, increase, decrease, removeItem, clearCesta, justAddedKey, cestaVersion]);
+  }, [catalog, items, isLoaded, isOpen, openCesta, closeCesta, addItem, increase, decrease, removeItem, clearCesta, justAddedKey, cestaVersion]);
 
   return <CestaContext.Provider value={value}>{children}</CestaContext.Provider>;
 }

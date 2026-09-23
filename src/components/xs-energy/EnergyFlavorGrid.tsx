@@ -6,14 +6,17 @@ import { motion, useMotionValue, useSpring, useTransform, type MotionValue } fro
 import { MessageCircle } from "lucide-react";
 import { waLink } from "@/data/site-config";
 import { ENERGY_FLAVORS, type EnergyFlavor } from "@/data/energy-drinks";
-import { getProductById, directCheckoutPrice } from "@/data/products";
+import { getProductById } from "@/data/products";
+import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
 import { formatEUR } from "@/lib/currency";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 
 function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const product = getProductById(flavor.productId);
-  const price = product ? directCheckoutPrice(product) : null;
+  const catalog = useCatalogState();
+  const agotado = catalog.agotado(flavor.productId);
+  const price = product && product.variants.length === 1 ? catalog.precio(product, 0) : null;
   const flavorLabel = `${flavor.name} · ${flavor.flavorEs}`;
   const px = useMotionValue(0.5);
   const py = useMotionValue(0.5);
@@ -82,7 +85,12 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
             {product && <p className="text-[10px] text-cream/50">{product.variants[0].size}</p>}
           </div>
           <div className="flex items-center gap-1.5">
-            {price != null && (
+            {agotado && (
+              <span className="rounded-full bg-xs-red px-3 py-2 text-[10px] font-bold uppercase tracking-wide text-cream">
+                Agotado
+              </span>
+            )}
+            {price != null && !agotado && (
               <AddToCartButton
                 productId={flavor.productId}
                 flavor={flavorLabel}
