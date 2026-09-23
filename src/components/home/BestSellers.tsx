@@ -94,6 +94,14 @@ export function BestSellers() {
           </motion.div>
         ))}
       </div>
+
+      <Link
+        href="/catalogo"
+        className="mt-10 flex items-center justify-center gap-2 rounded-full border border-carbon/15 py-3.5 text-sm font-medium text-carbon transition hover:border-carbon/40 sm:hidden"
+      >
+        Ver catálogo completo
+        <ArrowUpRight size={16} />
+      </Link>
     </section>
   );
 }

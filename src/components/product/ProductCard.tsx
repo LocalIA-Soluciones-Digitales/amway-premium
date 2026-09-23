@@ -73,7 +73,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
             className={cn(
-              "object-contain p-8 transition-transform duration-700 ease-out group-hover:scale-[1.06]",
+              "object-contain p-5 transition-transform duration-700 ease-out group-hover:scale-[1.06] sm:p-8",
               agotado && "opacity-60 grayscale-[35%]"
             )}
           />

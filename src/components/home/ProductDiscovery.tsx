@@ -47,11 +47,14 @@ export function ProductDiscovery() {
               href={need.href}
               className="group flex items-center justify-between gap-6 py-7 transition-colors hover:bg-linen/60 sm:px-2"
             >
-              <div className="flex items-baseline gap-6 sm:gap-10">
+              <div className="flex min-w-0 items-baseline gap-5 sm:gap-10">
                 <span className="text-sm text-stone">{String(i + 1).padStart(2, "0")}</span>
-                <span className="font-display text-3xl text-carbon transition-transform duration-300 group-hover:translate-x-2 sm:text-4xl">
-                  {need.label}
-                </span>
+                <div className="min-w-0">
+                  <span className="block font-display text-3xl text-carbon transition-transform duration-300 group-hover:translate-x-2 sm:text-4xl">
+                    {need.label}
+                  </span>
+                  <span className="mt-1 block text-sm text-stone sm:hidden">{need.description}</span>
+                </div>
               </div>
               <div className="flex items-center gap-6">
                 <span className="hidden max-w-[14rem] text-right text-sm text-stone sm:block">

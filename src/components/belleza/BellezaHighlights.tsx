@@ -12,9 +12,10 @@ const ArtistryGlow = dynamic(
 
 export function BellezaHighlights({ items }: { items: { product: Product; image: string }[] }) {
   return (
-    <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
+    // Swipeable row on phones (next card peeks in), three-column grid from sm up.
+    <div className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0">
       {items.map(({ product, image }) => (
-        <div key={product.id} className="overflow-hidden rounded-3xl border border-white/10 bg-carbon">
+        <div key={product.id} className="w-[82%] shrink-0 snap-start overflow-hidden rounded-3xl border border-white/10 bg-carbon sm:w-auto">
           <ArtistryGlow image={image} />
           <div className="p-5">
             <h3 className="font-display text-lg text-cream">{product.name}</h3>

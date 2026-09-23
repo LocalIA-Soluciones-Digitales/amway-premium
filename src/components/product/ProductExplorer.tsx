@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, ChevronDown, Search } from "lucide-react";
 import type { Product } from "@/data/types";
 import { ProductCard } from "./ProductCard";
 import { cn } from "@/lib/utils";
@@ -51,7 +51,10 @@ export function ProductExplorer({
   }, [products, subcategory, brand, query, sort, catalog]);
 
   const selectClass =
-    "appearance-none rounded-none border-0 border-b border-carbon/15 bg-transparent py-2.5 pr-6 text-base text-carbon focus:border-forest focus:outline-none sm:text-sm";
+    "w-full min-w-0 cursor-pointer appearance-none truncate rounded-none border-0 border-b border-carbon/15 bg-transparent py-2.5 pr-6 text-base text-carbon focus:border-forest focus:outline-none sm:text-sm";
+  const chevron = (
+    <ChevronDown size={14} className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-stone" />
+  );
 
   return (
     <div>
@@ -66,42 +69,55 @@ export function ProductExplorer({
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-6">
-          <select
-            value={subcategory ?? ""}
-            onChange={(e) => setSubcategory(e.target.value || null)}
-            className={selectClass}
-          >
-            <option value="">Todas las categorías</option>
-            {subcategories.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
+        {/* Two columns on phones (sort spans both), a single row from sm up. */}
+        <div className="grid grid-cols-2 gap-x-5 gap-y-3 sm:flex sm:items-center sm:gap-6">
+          <div className="relative min-w-0">
+            <select
+              value={subcategory ?? ""}
+              onChange={(e) => setSubcategory(e.target.value || null)}
+              aria-label="Categoría"
+              className={selectClass}
+            >
+              <option value="">Todas las categorías</option>
+              {subcategories.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+            {chevron}
+          </div>
 
-          <select
-            value={brand ?? ""}
-            onChange={(e) => setBrand(e.target.value || null)}
-            className={selectClass}
-          >
-            <option value="">Todas las marcas</option>
-            {brands.map((b) => (
-              <option key={b} value={b}>
-                {b}
-              </option>
-            ))}
-          </select>
+          <div className="relative min-w-0">
+            <select
+              value={brand ?? ""}
+              onChange={(e) => setBrand(e.target.value || null)}
+              aria-label="Marca"
+              className={selectClass}
+            >
+              <option value="">Todas las marcas</option>
+              {brands.map((b) => (
+                <option key={b} value={b}>
+                  {b}
+                </option>
+              ))}
+            </select>
+            {chevron}
+          </div>
 
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as typeof sort)}
-            className={selectClass}
-          >
-            <option value="relevancia">Relevancia</option>
-            <option value="precio-asc">Precio: menor a mayor</option>
-            <option value="precio-desc">Precio: mayor a menor</option>
-          </select>
+          <div className="relative col-span-2 min-w-0">
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as typeof sort)}
+              aria-label="Ordenar por"
+              className={selectClass}
+            >
+              <option value="relevancia">Relevancia</option>
+              <option value="precio-asc">Precio: menor a mayor</option>
+              <option value="precio-desc">Precio: mayor a menor</option>
+            </select>
+            {chevron}
+          </div>
         </div>
       </div>
 
@@ -135,7 +151,7 @@ export function ProductExplorer({
         <button
           type="button"
           onClick={() => setSolicitudOpen(true)}
-          className="flex items-center gap-2 rounded-full border border-carbon/15 px-6 py-3 text-sm font-medium text-carbon transition hover:border-carbon/40"
+          className="flex w-full items-center justify-center gap-2 rounded-full border border-carbon/15 px-6 py-3 text-sm font-medium text-carbon transition hover:border-carbon/40 sm:w-auto"
         >
           Solicitar producto
           <ArrowRight size={15} />

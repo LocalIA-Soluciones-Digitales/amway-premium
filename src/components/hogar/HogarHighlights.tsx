@@ -31,13 +31,14 @@ export function HogarHighlights({
   items: { product: Product; scene: keyof typeof SCENES; image?: string; tag: string }[];
 }) {
   return (
-    <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
+    // Swipeable row on phones (next card peeks in), three-column grid from sm up.
+    <div className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0">
       {items.map(({ product, scene, image, tag }) => {
         const Scene = SCENES[scene];
         return (
           <div
             key={product.id}
-            className="overflow-hidden rounded-3xl border border-white/10 bg-carbon"
+            className="w-[82%] shrink-0 snap-start overflow-hidden rounded-3xl border border-white/10 bg-carbon sm:w-auto"
           >
             <Scene image={image} />
             <div className="p-5">

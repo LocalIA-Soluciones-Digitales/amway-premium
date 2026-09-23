@@ -84,7 +84,10 @@ export function Header() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-40 transition-all duration-500",
+        "fixed inset-x-0 top-0 transition-all duration-500",
+        // The mobile menu lives inside the header, so lift the whole header
+        // above the floating WhatsApp button while the menu is open.
+        open ? "z-[55]" : "z-40",
         scrolled ? "py-2" : "py-6"
       )}
     >
@@ -252,7 +255,7 @@ export function Header() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex flex-col bg-cream-soft/98 px-6 py-6 backdrop-blur-xl lg:hidden"
+            className="fixed inset-0 z-50 flex flex-col bg-cream-soft/98 px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-7 backdrop-blur-xl sm:px-8 lg:hidden"
           >
             <div className="flex items-center justify-between">
               <span className="font-display text-lg text-carbon">{SITE.name}</span>
@@ -264,7 +267,7 @@ export function Header() {
                 <X size={20} />
               </button>
             </div>
-            <nav className="mt-10 flex flex-1 flex-col overflow-y-auto">
+            <nav data-lenis-prevent className="mt-8 flex flex-1 flex-col overflow-y-auto overscroll-contain">
               <p className="mb-1 mt-2 text-xs font-medium uppercase tracking-[0.2em] text-stone">
                 Categorías
               </p>
@@ -281,12 +284,12 @@ export function Header() {
                       href={link.href}
                       onClick={() => setOpen(false)}
                       aria-current={active ? "page" : undefined}
-                      className={cn(
-                        "block border-b border-carbon/8 py-4 font-display text-3xl",
-                        active ? "text-forest" : "text-carbon"
-                      )}
+                      className="block border-b border-carbon/8 py-3.5"
                     >
-                      {link.label}
+                      <span className={cn("block font-display text-3xl", active ? "text-forest" : "text-carbon")}>
+                        {link.label}
+                      </span>
+                      <span className="mt-0.5 block text-xs text-stone">{link.tagline}</span>
                     </Link>
                   </motion.div>
                 );
