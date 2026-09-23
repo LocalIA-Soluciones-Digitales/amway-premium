@@ -35,6 +35,8 @@ export interface Pedido {
   cliente_telefono: string | null;
   direccion: string | null;
   notas: string | null;
+  seguimiento: string | null;
+  enviado_at: string | null;
   created_at: string;
 }
 

@@ -478,3 +478,7 @@ create table if not exists public.amway_errores (
 alter table public.amway_errores enable row level security;
 create policy "amway_errores_dev" on public.amway_errores for select to authenticated using (public.amway_es_desarrollador());
 create policy "amway_errores_dev_delete" on public.amway_errores for delete to authenticated using (public.amway_es_desarrollador());
+
+-- Envíos: nº de seguimiento y fecha de envío (para avisar al cliente).
+alter table public.amway_pedidos add column if not exists seguimiento text check (seguimiento is null or char_length(seguimiento) <= 200);
+alter table public.amway_pedidos add column if not exists enviado_at timestamptz;

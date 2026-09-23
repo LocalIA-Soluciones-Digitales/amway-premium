@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
-import { ChevronDown, Loader2, MessageCircle, Plus, Search, Trash2, X } from "lucide-react";
+import { ChevronDown, Loader2, Plus, Search, Trash2, X } from "lucide-react";
+import { PedidoDetalle } from "./PedidoDetalle";
 import { PRODUCTS, getProductById } from "@/data/products";
 import { amwayDb } from "@/lib/amway-db";
 import { fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
@@ -13,12 +14,10 @@ import {
   METODO_PAGO,
   PanelHeader,
   Segmented,
-  btnGhost,
   btnPrimary,
   eur,
   fecha,
   inputClass,
-  waHref,
   type MetodoPago,
   type Pedido,
   type PedidoEstado,
@@ -159,71 +158,7 @@ export function PedidosPanel({ onChange }: { onChange: () => void }) {
                   <ChevronDown size={16} className={cn("text-stone transition", open && "rotate-180")} />
                 </button>
 
-                {open && (
-                  <div className="grid gap-6 border-t border-carbon/8 px-4 py-5 sm:px-5 lg:grid-cols-[1fr_18rem]">
-                    <div>
-                      <table className="w-full text-sm">
-                        <tbody>
-                          {p.items.map((i, idx) => (
-                            <tr key={idx} className="border-b border-carbon/5 last:border-0">
-                              <td className="py-2 pr-3 tabular-nums text-stone">{i.cantidad}×</td>
-                              <td className="py-2 pr-3">
-                                <p className="text-carbon">{i.nombre}</p>
-                                <p className="text-xs text-stone">{[i.formato, i.sabor].filter(Boolean).join(" · ")}</p>
-                              </td>
-                              <td className="py-2 text-right tabular-nums text-carbon">{eur(i.precio_eur * i.cantidad)}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                      {p.envio_eur > 0 && <p className="mt-2 text-right text-xs text-stone">Envío: {eur(p.envio_eur)}</p>}
-                      <textarea
-                        defaultValue={p.notas ?? ""}
-                        onBlur={(e) => e.target.value !== (p.notas ?? "") && actualizar(p.id, { notas: e.target.value || null })}
-                        placeholder="Notas internas (nº de seguimiento, incidencias…)"
-                        rows={2}
-                        className={cn(inputClass, "mt-4 w-full")}
-                      />
-                    </div>
-                    <div className="flex flex-col gap-3 text-sm">
-                      <div className="rounded-xl bg-cream p-3">
-                        <p className="font-medium text-carbon">{p.cliente_nombre || "—"}</p>
-                        {p.cliente_telefono && <p className="text-stone">{p.cliente_telefono}</p>}
-                        {p.cliente_email && <p className="break-all text-stone">{p.cliente_email}</p>}
-                        {p.direccion && <p className="mt-1 text-stone">{p.direccion}</p>}
-                      </div>
-                      <label className="flex flex-col gap-1 text-xs text-stone">
-                        Estado
-                        <select
-                          value={p.estado}
-                          onChange={(e) => actualizar(p.id, { estado: e.target.value as PedidoEstado })}
-                          className={inputClass}
-                        >
-                          {Object.entries(ESTADO_PEDIDO).map(([v, { label }]) => (
-                            <option key={v} value={v}>
-                              {label}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                      <div className="flex flex-wrap gap-2">
-                        {p.cliente_telefono && (
-                          <a
-                            href={waHref(p.cliente_telefono, `Hola ${p.cliente_nombre ?? ""}, te escribimos por tu pedido #${p.numero}.`)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={btnGhost}
-                          >
-                            <MessageCircle size={14} /> WhatsApp
-                          </a>
-                        )}
-                        <button type="button" onClick={() => borrar(p)} className={cn(btnGhost, "text-xs-red")}>
-                          <Trash2 size={14} /> Borrar
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                {open && <PedidoDetalle p={p} onUpdate={(c) => actualizar(p.id, c)} onDelete={() => borrar(p)} />}
               </div>
             );
           })}

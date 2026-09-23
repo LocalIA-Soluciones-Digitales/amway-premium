@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
-import { AlertTriangle, CheckCircle2, CircleDashed, Database, GitCommit, Server } from "lucide-react";
+import { AlertTriangle, ArrowUpRight, CheckCircle2, CircleDashed, Database, GitCommit, Server } from "lucide-react";
 import { amwayDb } from "@/lib/amway-db";
 import { PRODUCTS } from "@/data/products";
 import { Card, CardTitle, Loading, PanelHeader } from "../shared";
@@ -28,6 +28,13 @@ const TABLAS = [
   ["amway_errores", "Errores registrados"],
   ["amway_admins", "Usuarios del panel"],
 ] as const;
+
+const ENLACES: [string, string, string][] = [
+  ["Supabase · base de datos", "https://supabase.com/dashboard/project/ukhfaphloxlszomccgde/editor", "Tablas amway_*, usuarios, SQL"],
+  ["Vercel · despliegues", "https://vercel.com/edortadossantos-projects/amway-premium", "Deploys, variables y logs"],
+  ["Stripe · pagos", "https://dashboard.stripe.com/payments", "Cobros, devoluciones y claves"],
+  ["GitHub · código", "https://github.com/LocalIA-Soluciones-Digitales/amway-premium", "Commits e historial"],
+];
 
 function Check({ ok, warn, label, detail }: { ok: boolean; warn?: boolean; label: string; detail: string }) {
   return (
@@ -127,6 +134,27 @@ export function EstadoPanel({ session }: { session: Session }) {
                 </div>
               </dl>
             )}
+          </Card>
+
+          <Card className="lg:col-span-2">
+            <CardTitle>Accesos directos</CardTitle>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+              {ENLACES.map(([t, href, d]) => (
+                <a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-start justify-between gap-2 rounded-xl border border-carbon/[0.07] px-4 py-3 transition hover:border-carbon/20 hover:bg-cream/50"
+                >
+                  <span>
+                    <span className="block text-sm font-medium text-carbon">{t}</span>
+                    <span className="text-xs text-stone">{d}</span>
+                  </span>
+                  <ArrowUpRight size={15} className="mt-0.5 shrink-0 text-stone transition group-hover:text-carbon" />
+                </a>
+              ))}
+            </div>
           </Card>
 
           <Card className="lg:col-span-2">

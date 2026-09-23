@@ -30,6 +30,11 @@ function emptyRow(productId: string): ProductoAjusteRow {
   return { product_id: productId, precios_eur: {}, costes_eur: {}, agotado: false, oculto: false, stock: null };
 }
 
+// Importe con coma decimal, como lo escribe y lee la vendedora.
+function fmtNum(n: number | undefined | null): string {
+  return n == null ? "" : n.toFixed(2).replace(".", ",");
+}
+
 function parseEur(v: string): number | null {
   const n = Number(v.replace(",", ".").trim());
   return v.trim() === "" || !Number.isFinite(n) || n < 0 ? null : Math.round(n * 100) / 100;
@@ -45,13 +50,60 @@ function margen(p: Product, row: ProductoAjusteRow, i: number): number | null {
   return venta != null && coste != null && venta > 0 ? ((venta - coste) / venta) * 100 : null;
 }
 
+type Vista = "lista" | "tarjetas";
+type Orden = "nombre" | "precio" | "margen" | "stock";
+const VISTA_KEY = "amway_premium_admin_vista_productos";
+
+function minPrecio(p: Product, r: ProductoAjusteRow) {
+  const ps = p.variants.map((_, i) => precioFinal(p, r, i)).filter((x): x is number => x != null);
+  return ps.length ? Math.min(...ps) : null;
+}
+
+function minMargen(p: Product, r: ProductoAjusteRow) {
+  const ms = p.variants.map((_, i) => margen(p, r, i)).filter((x): x is number => x != null);
+  return ms.length ? Math.min(...ms) : null;
+}
+
+type AccionBloque = "agotar" | "reponer" | "ocultar" | "mostrar" | "precio" | "margen";
+
+const ACCIONES_BLOQUE: [AccionBloque, string][] = [
+  ["agotar", "Marcar agotado"],
+  ["reponer", "Marcar disponible"],
+  ["ocultar", "Ocultar"],
+  ["mostrar", "Mostrar"],
+  ["precio", "Ajustar precio %"],
+  ["margen", "Fijar margen %"],
+];
+
 export function ProductosPanel({ session }: { session: Session }) {
   const [rows, setRows] = useState<Map<string, ProductoAjusteRow> | null>(null);
   const [query, setQuery] = useState("");
   const [categoria, setCategoria] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todos");
+  const [vista, setVista] = useState<Vista>("lista");
+  const [orden, setOrden] = useState<Orden>("nombre");
+  const [seleccion, setSeleccion] = useState<Set<string>>(new Set());
   const [editando, setEditando] = useState<Product | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const v = localStorage.getItem(VISTA_KEY);
+      if (v === "lista" || v === "tarjetas") setVista(v);
+    } catch {
+      // storage blocked: keep default
+    }
+  }, []);
+
+  function cambiarVista(v: Vista) {
+    setVista(v);
+    try {
+      localStorage.setItem(VISTA_KEY, v);
+    } catch {
+      // storage blocked
+    }
+  }
 
   const cargar = useCallback(async () => {
     const { data, error: e } = await amwayDb().from("amway_productos").select("*");
@@ -63,56 +115,75 @@ export function ProductosPanel({ session }: { session: Session }) {
     void cargar();
   }, [cargar]);
 
-  const guardar = useCallback(
-    async (row: ProductoAjusteRow) => {
-      // Optimistic: toggles feel instant; reverted if the write fails.
-      const prev = rows?.get(row.product_id);
-      setRows((m) => new Map(m).set(row.product_id, row));
+  useEffect(() => {
+    if (!aviso) return;
+    const t = setTimeout(() => setAviso(null), 3500);
+    return () => clearTimeout(t);
+  }, [aviso]);
+
+  const rowOf = useCallback((id: string) => rows?.get(id) ?? emptyRow(id), [rows]);
+
+  // Guarda una o varias filas de golpe (optimista, con vuelta atrás si falla).
+  const guardarVarios = useCallback(
+    async (nuevas: ProductoAjusteRow[]) => {
+      if (nuevas.length === 0) return true;
+      const antes = new Map(rows ?? []);
+      setRows((m) => {
+        const next = new Map(m);
+        for (const r of nuevas) next.set(r.product_id, r);
+        return next;
+      });
       const { data, error: e } = await amwayDb()
         .from("amway_productos")
-        .upsert({
-          product_id: row.product_id,
-          precios_eur: row.precios_eur,
-          costes_eur: row.costes_eur,
-          agotado: row.agotado,
-          oculto: row.oculto,
-          stock: row.stock,
-        })
-        .select()
-        .single();
+        .upsert(
+          nuevas.map((r) => ({
+            product_id: r.product_id,
+            precios_eur: r.precios_eur,
+            costes_eur: r.costes_eur,
+            agotado: r.agotado,
+            oculto: r.oculto,
+            stock: r.stock,
+          }))
+        )
+        .select();
       if (e || !data) {
-        setRows((m) => {
-          const next = new Map(m);
-          if (prev) next.set(row.product_id, prev);
-          else next.delete(row.product_id);
-          return next;
-        });
+        setRows(antes);
         setError("No se pudo guardar. Revisa la conexión e inténtalo otra vez.");
         return false;
       }
       setError(null);
-      setRows((m) => new Map(m).set(row.product_id, data as ProductoAjusteRow));
+      setRows((m) => {
+        const next = new Map(m);
+        for (const r of data as ProductoAjusteRow[]) next.set(r.product_id, r);
+        return next;
+      });
       void revalidarTienda(session.access_token);
       return true;
     },
     [rows, session.access_token]
   );
 
+  const guardar = useCallback((row: ProductoAjusteRow) => guardarVarios([row]), [guardarVarios]);
+
   const categorias = useMemo(() => Array.from(new Set(PRODUCTS.map((p) => p.category))), []);
 
-  const counts = useMemo(() => {
+  const resumen = useMemo(() => {
     const all = rows ? Array.from(rows.values()) : [];
+    const margenes = PRODUCTS.map((p) => minMargen(p, rowOf(p.id))).filter((x): x is number => x != null);
     return {
       agotados: all.filter((r) => r.agotado).length,
       ocultos: all.filter((r) => r.oculto).length,
+      sinCoste: PRODUCTS.filter((p) => p.variants.some((_, i) => rowOf(p.id).costes_eur[String(i)] == null)).length,
+      pocoStock: all.filter((r) => !r.agotado && r.stock != null && r.stock <= 3).length,
+      margenMedio: margenes.length ? margenes.reduce((a, b) => a + b, 0) / margenes.length : null,
     };
-  }, [rows]);
+  }, [rows, rowOf]);
 
   const lista = useMemo(() => {
     if (!rows) return [];
     const q = query.trim().toLowerCase();
-    return PRODUCTS.filter((p) => {
-      const r = rows.get(p.id) ?? emptyRow(p.id);
+    const l = PRODUCTS.filter((p) => {
+      const r = rowOf(p.id);
       if (categoria && p.category !== categoria) return false;
       if (q && !`${p.name} ${p.brand} ${p.subcategory} ${p.variants.map((v) => v.sku ?? "").join(" ")}`.toLowerCase().includes(q))
         return false;
@@ -122,16 +193,131 @@ export function ProductosPanel({ session }: { session: Session }) {
       if (filtro === "sin-coste") return p.variants.some((_, i) => r.costes_eur[String(i)] == null);
       return true;
     });
-  }, [rows, query, categoria, filtro]);
+    const num = (x: number | null, vacio: number) => (x == null ? vacio : x);
+    return [...l].sort((a, b) => {
+      const ra = rowOf(a.id);
+      const rb = rowOf(b.id);
+      if (orden === "precio") return num(minPrecio(a, ra), Infinity) - num(minPrecio(b, rb), Infinity);
+      if (orden === "margen") return num(minMargen(a, ra), Infinity) - num(minMargen(b, rb), Infinity);
+      if (orden === "stock") return num(ra.stock, Infinity) - num(rb.stock, Infinity);
+      return a.name.localeCompare(b.name, "es");
+    });
+  }, [rows, rowOf, query, categoria, filtro, orden]);
+
+  const seleccionados = lista.filter((p) => seleccion.has(p.id));
+  const todosMarcados = lista.length > 0 && seleccionados.length === lista.length;
+
+  function toggleSel(id: string) {
+    setSeleccion((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  async function enBloque(accion: AccionBloque) {
+    let nuevas: ProductoAjusteRow[] = [];
+    let saltados = 0;
+    if (accion === "precio") {
+      const v = prompt("¿Cuánto quieres subir (+) o bajar (−) el precio de venta? En %, por ejemplo 5 o -10");
+      const pct = Number(v?.replace(",", "."));
+      if (!v || !Number.isFinite(pct) || pct <= -90 || pct > 300) return;
+      nuevas = seleccionados.map((p) => {
+        const r = rowOf(p.id);
+        const precios = { ...r.precios_eur };
+        p.variants.forEach((_, i) => {
+          const actual = precioFinal(p, r, i);
+          if (actual != null) precios[String(i)] = Math.round(actual * (1 + pct / 100) * 100) / 100;
+        });
+        return { ...r, precios_eur: precios };
+      });
+    } else if (accion === "margen") {
+      const v = prompt("Margen objetivo sobre el precio de venta, en % (por ejemplo 30). Solo cambia formatos con coste.");
+      const m = Number(v?.replace(",", "."));
+      if (!v || !Number.isFinite(m) || m <= 0 || m >= 95) return;
+      for (const p of seleccionados) {
+        const r = rowOf(p.id);
+        const precios = { ...r.precios_eur };
+        let cambiado = false;
+        p.variants.forEach((_, i) => {
+          const coste = r.costes_eur[String(i)];
+          if (coste == null) return;
+          precios[String(i)] = Math.round((coste / (1 - m / 100)) * 100) / 100;
+          cambiado = true;
+        });
+        if (cambiado) nuevas.push({ ...r, precios_eur: precios });
+        else saltados++;
+      }
+    } else {
+      const patch: Partial<ProductoAjusteRow> =
+        accion === "agotar"
+          ? { agotado: true }
+          : accion === "reponer"
+            ? { agotado: false }
+            : accion === "ocultar"
+              ? { oculto: true }
+              : { oculto: false };
+      nuevas = seleccionados.map((p) => ({ ...rowOf(p.id), ...patch }));
+    }
+    const ok = await guardarVarios(nuevas);
+    if (ok) {
+      const n = nuevas.length;
+      setAviso(`${n} producto${n === 1 ? "" : "s"} actualizado${n === 1 ? "" : "s"}${saltados ? ` · ${saltados} sin coste, sin cambios` : ""}.`);
+      setSeleccion(new Set());
+    }
+  }
+
+  const kpis: { label: string; value: number; f: Filtro; tone: string }[] = [
+    { label: "Agotados", value: resumen.agotados, f: "agotados", tone: resumen.agotados ? "text-red-600" : "text-carbon" },
+    { label: "Ocultos", value: resumen.ocultos, f: "ocultos", tone: "text-carbon" },
+    { label: "Poco stock (≤ 3)", value: resumen.pocoStock, f: "ajustes", tone: resumen.pocoStock ? "text-amber-700" : "text-carbon" },
+    { label: "Sin coste", value: resumen.sinCoste, f: "sin-coste", tone: "text-carbon" },
+  ];
 
   return (
-    <div>
+    <div className="pb-20">
       <PanelHeader
         title="Productos y precios"
-        description="Disponibilidad y visibilidad al instante. Pulsa Editar para cambiar precios, costes o stock; la tienda se actualiza sola."
+        description="Disponibilidad al instante, precios editables en la propia lista y cambios en bloque. La tienda se actualiza sola."
+        actions={
+          <Segmented
+            value={vista}
+            onChange={cambiarVista}
+            options={[
+              { value: "lista", label: "Lista" },
+              { value: "tarjetas", label: "Tarjetas" },
+            ]}
+          />
+        }
       />
 
-      <div className="mb-6 flex flex-col gap-3 xl:flex-row xl:items-center">
+      {rows && (
+        <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-5">
+          {kpis.map((k) => (
+            <button
+              key={k.label}
+              type="button"
+              onClick={() => setFiltro(filtro === k.f ? "todos" : k.f)}
+              className={cn(
+                "rounded-2xl border bg-white px-4 py-3 text-left transition hover:border-carbon/20",
+                filtro === k.f ? "border-carbon/40" : "border-carbon/[0.07]"
+              )}
+            >
+              <p className={cn("font-display text-2xl tabular-nums", k.tone)}>{k.value}</p>
+              <p className="text-xs text-stone">{k.label}</p>
+            </button>
+          ))}
+          <div className="col-span-2 rounded-2xl border border-carbon/[0.07] bg-white px-4 py-3 sm:col-span-1">
+            <p className="font-display text-2xl tabular-nums text-carbon">
+              {resumen.margenMedio == null ? "—" : `${resumen.margenMedio.toFixed(0)} %`}
+            </p>
+            <p className="text-xs text-stone">Margen medio (con coste)</p>
+          </div>
+        </div>
+      )}
+
+      <div className="mb-4 flex flex-col gap-3 xl:flex-row xl:items-center">
         <div className="relative flex-1">
           <Search size={15} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-stone" />
           <input
@@ -141,22 +327,30 @@ export function ProductosPanel({ session }: { session: Session }) {
             className={cn(inputClass, "w-full pl-10")}
           />
         </div>
-        <select value={categoria} onChange={(e) => setCategoria(e.target.value)} className={inputClass} aria-label="Categoría">
-          <option value="">Todas las categorías</option>
-          {categorias.map((c) => (
-            <option key={c} value={c}>
-              {CATEGORIA_LABEL[c] ?? c}
-            </option>
-          ))}
-        </select>
+        <div className="flex flex-wrap gap-2">
+          <select value={categoria} onChange={(e) => setCategoria(e.target.value)} className={inputClass} aria-label="Categoría">
+            <option value="">Todas las categorías</option>
+            {categorias.map((c) => (
+              <option key={c} value={c}>
+                {CATEGORIA_LABEL[c] ?? c}
+              </option>
+            ))}
+          </select>
+          <select value={orden} onChange={(e) => setOrden(e.target.value as Orden)} className={inputClass} aria-label="Ordenar">
+            <option value="nombre">Orden: nombre</option>
+            <option value="precio">Orden: precio</option>
+            <option value="margen">Orden: margen (menor primero)</option>
+            <option value="stock">Orden: stock (menor primero)</option>
+          </select>
+        </div>
         <Segmented
           value={filtro}
           onChange={setFiltro}
           options={[
             { value: "todos", label: "Todos" },
-            { value: "agotados", label: "Agotados", count: counts.agotados },
-            { value: "ocultos", label: "Ocultos", count: counts.ocultos },
-            { value: "ajustes", label: "Precio o stock propio" },
+            { value: "agotados", label: "Agotados", count: resumen.agotados },
+            { value: "ocultos", label: "Ocultos" },
+            { value: "ajustes", label: "Con precio o stock propio" },
             { value: "sin-coste", label: "Sin coste" },
           ]}
         />
@@ -168,27 +362,91 @@ export function ProductosPanel({ session }: { session: Session }) {
         <Loading />
       ) : lista.length === 0 ? (
         <Empty icon={<PackageSearch size={18} />}>No hay productos con esos filtros.</Empty>
-      ) : (
-        <>
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">{lista.length} productos</p>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            {lista.map((p) => (
-              <ProductoCard
-                key={p.id}
-                product={p}
-                row={rows.get(p.id) ?? emptyRow(p.id)}
-                onPatch={(patch) => guardar({ ...(rows.get(p.id) ?? emptyRow(p.id)), ...patch })}
-                onEdit={() => setEditando(p)}
-              />
-            ))}
+      ) : vista === "lista" ? (
+        <div className="overflow-hidden rounded-2xl border border-carbon/[0.07] bg-white shadow-[0_1px_3px_rgba(28,26,22,0.04)]">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[60rem] text-sm">
+              <thead className="bg-cream-soft">
+                <tr className="border-b border-carbon/[0.07] text-left text-[11px] uppercase tracking-wider text-stone">
+                  <th className="w-10 py-3 pl-4">
+                    <input
+                      type="checkbox"
+                      checked={todosMarcados}
+                      onChange={() => setSeleccion(todosMarcados ? new Set() : new Set(lista.map((p) => p.id)))}
+                      aria-label="Seleccionar todos"
+                      className="h-4 w-4 accent-carbon"
+                    />
+                  </th>
+                  <th className="py-3 pr-3 font-medium">Producto · {lista.length}</th>
+                  <th className="py-3 pr-3 font-medium">Precio venta</th>
+                  <th className="py-3 pr-3 font-medium">Coste</th>
+                  <th className="py-3 pr-3 font-medium">Margen</th>
+                  <th className="py-3 pr-3 font-medium">Stock</th>
+                  <th className="py-3 pr-3 font-medium">Disponible</th>
+                  <th className="py-3 pr-3 font-medium">Visible</th>
+                  <th className="py-3 pr-4" />
+                </tr>
+              </thead>
+              <tbody>
+                {lista.map((p) => (
+                  <FilaProducto
+                    key={p.id}
+                    product={p}
+                    row={rowOf(p.id)}
+                    selected={seleccion.has(p.id)}
+                    onSelect={() => toggleSel(p.id)}
+                    onPatch={(patch) => guardar({ ...rowOf(p.id), ...patch })}
+                    onEdit={() => setEditando(p)}
+                  />
+                ))}
+              </tbody>
+            </table>
           </div>
-        </>
+        </div>
+      ) : (
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          {lista.map((p) => (
+            <ProductoCard
+              key={p.id}
+              product={p}
+              row={rowOf(p.id)}
+              onPatch={(patch) => guardar({ ...rowOf(p.id), ...patch })}
+              onEdit={() => setEditando(p)}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Barra de acciones en bloque */}
+      {seleccionados.length > 0 && (
+        <div className="fixed inset-x-3 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-4xl flex-wrap items-center gap-2 rounded-2xl bg-carbon px-4 py-3 text-cream shadow-[0_20px_50px_rgba(28,26,22,0.35)]">
+          <span className="mr-2 text-sm font-medium tabular-nums">{seleccionados.length} seleccionados</span>
+          {ACCIONES_BLOQUE.map(([a, l]) => (
+            <button
+              key={a}
+              type="button"
+              onClick={() => enBloque(a)}
+              className="rounded-full bg-cream/10 px-3 py-1.5 text-xs font-medium transition hover:bg-cream/20"
+            >
+              {l}
+            </button>
+          ))}
+          <button type="button" onClick={() => setSeleccion(new Set())} className="ml-auto text-xs text-cream/60 hover:text-cream">
+            Deseleccionar
+          </button>
+        </div>
+      )}
+
+      {aviso && (
+        <div role="status" className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-forest px-5 py-2.5 text-sm text-cream shadow-lg">
+          {aviso}
+        </div>
       )}
 
       {editando && rows && (
         <EditorProducto
           product={editando}
-          row={rows.get(editando.id) ?? emptyRow(editando.id)}
+          row={rowOf(editando.id)}
           onClose={() => setEditando(null)}
           onSave={async (row) => {
             const ok = await guardar(row);
@@ -196,6 +454,174 @@ export function ProductosPanel({ session }: { session: Session }) {
           }}
         />
       )}
+    </div>
+  );
+}
+
+function FilaProducto({
+  product,
+  row,
+  selected,
+  onSelect,
+  onPatch,
+  onEdit,
+}: {
+  product: Product;
+  row: ProductoAjusteRow;
+  selected: boolean;
+  onSelect: () => void;
+  onPatch: (patch: Partial<ProductoAjusteRow>) => void;
+  onEdit: () => void;
+}) {
+  const src = productImageSrc(product);
+  const unico = product.variants.length === 1;
+  const m = minMargen(product, row);
+  const precio = minPrecio(product, row);
+
+  return (
+    <tr
+      className={cn(
+        "border-b border-carbon/[0.05] transition last:border-0 hover:bg-cream/40",
+        selected && "bg-cream/70",
+        row.oculto && "opacity-60"
+      )}
+    >
+      <td className="py-2.5 pl-4">
+        <input type="checkbox" checked={selected} onChange={onSelect} aria-label={`Seleccionar ${product.name}`} className="h-4 w-4 accent-carbon" />
+      </td>
+      <td className="py-2.5 pr-3">
+        <div className="flex items-center gap-3">
+          <div className="relative h-11 w-9 shrink-0 overflow-hidden rounded-lg bg-linen">
+            {src && <Image src={src} alt="" fill sizes="36px" className="object-contain p-0.5" />}
+          </div>
+          <div className="min-w-0">
+            <p className="max-w-[22rem] truncate font-medium text-carbon" title={product.name}>
+              {product.name}
+            </p>
+            <p className="truncate text-xs text-stone">
+              {product.brand} · {unico ? product.variants[0].size : `${product.variants.length} formatos`}
+            </p>
+          </div>
+        </div>
+      </td>
+      <td className="py-2.5 pr-3">
+        {unico ? (
+          <InlineEur
+            value={row.precios_eur["0"]}
+            placeholder={variantPriceEur(product, 0)}
+            label={`Precio de ${product.name}`}
+            onSave={(v) => {
+              const precios = { ...row.precios_eur };
+              if (v == null) delete precios["0"];
+              else precios["0"] = v;
+              onPatch({ precios_eur: precios });
+            }}
+          />
+        ) : (
+          <button type="button" onClick={onEdit} className="text-left text-carbon hover:underline">
+            <span className="text-xs text-stone">desde </span>
+            <span className="tabular-nums">{precio != null ? eur(precio) : "—"}</span>
+          </button>
+        )}
+      </td>
+      <td className="py-2.5 pr-3">
+        {unico ? (
+          <InlineEur
+            value={row.costes_eur["0"]}
+            placeholder={null}
+            label={`Coste de ${product.name}`}
+            onSave={(v) => {
+              const costes = { ...row.costes_eur };
+              if (v == null) delete costes["0"];
+              else costes["0"] = v;
+              onPatch({ costes_eur: costes });
+            }}
+          />
+        ) : (
+          <button type="button" onClick={onEdit} className="text-xs text-stone hover:text-carbon hover:underline">
+            Por formato
+          </button>
+        )}
+      </td>
+      <td className={cn("py-2.5 pr-3 tabular-nums", m == null ? "text-stone" : m < 10 ? "text-red-600" : "text-forest")}>
+        {m == null ? "—" : `${m.toFixed(0)} %`}
+      </td>
+      <td className="py-2.5 pr-3">
+        {row.stock == null ? (
+          <span className="text-xs text-stone">—</span>
+        ) : (
+          <Badge tone={row.stock === 0 ? "red" : row.stock <= 3 ? "amber" : "green"}>{row.stock}</Badge>
+        )}
+      </td>
+      <td className="py-2.5 pr-3">
+        <Switch label="" checked={!row.agotado} onChange={(v) => onPatch({ agotado: !v })} />
+      </td>
+      <td className="py-2.5 pr-3">
+        <Switch label="" checked={!row.oculto} onChange={(v) => onPatch({ oculto: !v })} />
+      </td>
+      <td className="py-2.5 pr-4 text-right">
+        <button
+          type="button"
+          onClick={onEdit}
+          aria-label={`Editar ${product.name}`}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-full text-stone transition hover:bg-carbon/[0.05] hover:text-carbon"
+        >
+          <Pencil size={14} />
+        </button>
+      </td>
+    </tr>
+  );
+}
+
+// Importe editable en la propia celda: guarda al salir o con Enter,
+// Escape deshace. Vacío = volver al valor por defecto.
+function InlineEur({
+  value,
+  placeholder,
+  label,
+  onSave,
+}: {
+  value: number | undefined;
+  placeholder: number | null;
+  label: string;
+  onSave: (v: number | null) => void;
+}) {
+  const inicial = fmtNum(value);
+  const [v, setV] = useState(inicial);
+  useEffect(() => setV(inicial), [inicial]);
+
+  function commit() {
+    if (v === inicial) return;
+    const n = parseEur(v);
+    if (v.trim() !== "" && n == null) {
+      setV(inicial);
+      return;
+    }
+    onSave(n);
+  }
+
+  return (
+    <div className="relative w-28">
+      <input
+        inputMode="decimal"
+        value={v}
+        onChange={(e) => setV(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+          if (e.key === "Escape") {
+            setV(inicial);
+            (e.target as HTMLInputElement).blur();
+          }
+        }}
+        placeholder={placeholder != null ? fmtNum(placeholder) : "—"}
+        aria-label={label}
+        className={cn(
+          "h-8 w-full rounded-lg border border-transparent bg-transparent px-2 pr-6 text-right text-sm tabular-nums text-carbon transition placeholder:text-carbon/70 hover:border-carbon/10 focus:border-carbon/25 focus:bg-white focus:outline-none",
+          v !== "" && "font-medium text-forest placeholder:text-stone"
+        )}
+      />
+      <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-stone">€</span>
     </div>
   );
 }
@@ -285,8 +711,8 @@ function EditorProducto({
   onClose: () => void;
   onSave: (row: ProductoAjusteRow) => Promise<void>;
 }) {
-  const [precios, setPrecios] = useState(product.variants.map((_, i) => row.precios_eur[String(i)]?.toString() ?? ""));
-  const [costes, setCostes] = useState(product.variants.map((_, i) => row.costes_eur[String(i)]?.toString() ?? ""));
+  const [precios, setPrecios] = useState(product.variants.map((_, i) => fmtNum(row.precios_eur[String(i)])));
+  const [costes, setCostes] = useState(product.variants.map((_, i) => fmtNum(row.costes_eur[String(i)])));
   const [stock, setStock] = useState(row.stock?.toString() ?? "");
   const [saving, setSaving] = useState(false);
 
@@ -336,7 +762,7 @@ function EditorProducto({
                         inputMode="decimal"
                         value={precios[i]}
                         onChange={(e) => setPrecios((p) => p.map((x, j) => (j === i ? e.target.value : x)))}
-                        placeholder={base != null ? base.toFixed(2) : "Sin precio"}
+                        placeholder={base != null ? fmtNum(base) : "Sin precio"}
                         aria-label={`Precio de venta de ${v.size}`}
                         className={cn(inputClass, "w-32 pr-7 tabular-nums")}
                       />
@@ -423,7 +849,7 @@ function Switch({ label, checked, onChange }: { label: string; checked: boolean;
           )}
         />
       </span>
-      {label}
+      {label ? <span>{label}</span> : <span className="sr-only">{checked ? "Sí" : "No"}</span>}
     </button>
   );
 }

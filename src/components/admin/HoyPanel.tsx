@@ -10,7 +10,7 @@ import { calcular } from "./ContabilidadPanel";
 import { pedidosValidos, variacion } from "./report-data";
 import { Badge, Card, CardTitle, ESTADO_PEDIDO, Loading, Stat, eur, fecha, type Gasto, type Pedido, type ProductoAjusteRow } from "./shared";
 
-export type GestionTab = "hoy" | "pedidos" | "productos" | "solicitudes" | "resenas" | "contabilidad";
+export type GestionTab = "hoy" | "pedidos" | "clientes" | "productos" | "solicitudes" | "contabilidad" | "resenas";
 
 function saludo() {
   const h = new Date().getHours();
