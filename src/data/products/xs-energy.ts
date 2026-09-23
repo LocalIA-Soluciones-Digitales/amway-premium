@@ -10,7 +10,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Una nueva generación de bebidas de energía premium con cafeína de origen natural y una megadosis de vitaminas B, rhodiola rosea, vitamina C y electrolitos. Mango durazno.",
     variants: [{ sku: "266673", size: "Doce latas de 355 ml", price: 50.75 }],
-    image: "xs-energy/catalog/elite-focus.webp",
+    image: "xs-energy/catalog/elite-focus.png",
     flagship: "xs-energy",
     badge: "¡Nuevo!",
     page: 88,
@@ -24,7 +24,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Una explosión de energía sin azúcar. Contiene 114 mg de cafeína, megadosis de vitaminas B y sabores naturales. Limonada, Cítrico, Arándano-Uva, Tamarindo, Tropical, Cereza negra, Root Beer, Clásico, Naranja, Summit, Watermelon Lemonade y más.",
     variants: [{ size: "Doce latas de 355 ml", price: 44.0 }],
-    image: "xs-energy/catalog/power-drink.webp",
+    image: "xs-energy/catalog/power-drink.png",
     flagship: "xs-energy",
     page: 89,
   },
@@ -37,7 +37,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Toda la energía con 25 % de jugo de fruta real, 250 % de vitamina C y sin colorantes artificiales. Mango-piña-guayaba · Toronja rosada.",
     variants: [{ size: "Doce latas de 355 ml", price: 44.0 }],
-    image: "xs-energy/catalog/jugos-burbujeantes.webp",
+    image: "xs-energy/catalog/jugos-burbujeantes.png",
     page: 89,
   },
   {
@@ -52,7 +52,7 @@ export const xsEnergyProducts: Product[] = [
       { size: "Doce latas de 355 ml", price: 48.25 },
       { sku: "27071", size: "Caja surtida Juiced and Burn", price: 47.25 },
     ],
-    image: "xs-energy/catalog/energy-burn.webp",
+    image: "xs-energy/catalog/energy-burn.png",
     page: 89,
   },
   {
@@ -81,7 +81,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "101593", size: "60 tabletas", price: 48.25 },
       { sku: "107846", size: "30 tabletas", price: 36.0 },
     ],
-    image: "xs-energy/catalog/enfoque-energia.webp",
+    image: "xs-energy/catalog/enfoque-energia.png",
     page: 91,
   },
   {
@@ -105,7 +105,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Los nueve EAA en proporción de BCAA optimizada 5:1:1, clínicamente probada para impulsar fuerza y rendimiento. Mora · Sandía.",
     variants: [{ size: "1 sobre · 30 porciones", price: 56.25 }],
-    image: "xs-energy/catalog/muscle-multiplier.webp",
+    image: "xs-energy/catalog/muscle-multiplier.png",
     page: 93,
   },
   {
@@ -117,7 +117,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "30 g de aislado de proteína de suero de leche premium de ganado alimentado con pasto y 6.9 g de aminoácidos de cadena ramificada.",
     variants: [{ size: "1 sobre · 20 porciones", price: 74.25 }],
-    image: "xs-energy/catalog/proteina-suero.webp",
+    image: "xs-energy/catalog/proteina-suero.png",
     page: 94,
   },
   {
@@ -129,7 +129,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "25 g de proteínas de suero de leche y caseína. Chocolate intenso · Crema de vainilla.",
     variants: [{ size: "2 batidos de 325 ml", price: 60.75 }],
-    image: "xs-energy/catalog/batidos-proteina.webp",
+    image: "xs-energy/catalog/batidos-proteina.png",
     page: 94,
   },
   {
@@ -141,7 +141,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "20 g de proteína de suero y caseína, sin gluten, colorantes ni conservantes artificiales.",
     variants: [{ size: "12 barras", price: 48.25 }],
-    image: "xs-energy/catalog/barras-proteina.webp",
+    image: "xs-energy/catalog/barras-proteina.png",
     page: 94,
   },
   {
@@ -153,7 +153,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Proteína de guisante de alta calidad para un snack sin azúcar agregada ni colorantes artificiales. Barbacoa · Lima y sriracha.",
     variants: [{ size: "12 porciones", price: 47.25 }],
-    image: "xs-energy/catalog/hojuelas-proteina.webp",
+    image: "xs-energy/catalog/hojuelas-proteina.png",
     page: 95,
   },
   {
@@ -165,7 +165,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Dosis clínicamente estudiada de extracto de naranja sanguina Moro Morosil™ para apoyar metabolismo y control de peso.",
     variants: [{ sku: "127811", size: "30 sobres individuales", price: 51.75 }],
-    image: "xs-energy/catalog/impulso-polvo.webp",
+    image: "xs-energy/catalog/impulso-polvo.png",
     page: 96,
   },
   {
@@ -177,7 +177,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Suplemento de hidratación con vitaminas B, selenio y 5 g de azúcar para añadir a cualquier botella de agua.",
     variants: [{ size: "20 tubos", price: 27.0 }],
-    image: "xs-energy/catalog/tubitos-deportivos.webp",
+    image: "xs-energy/catalog/tubitos-deportivos.png",
     page: 96,
   },
   {
@@ -189,7 +189,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "400 mg de CBD de extracto de cáñamo de alto espectro para la recuperación activa, con sensación de alivio hasta 2 horas.",
     variants: [{ sku: "00323", size: "56.69 g", price: 80.0 }],
-    image: "xs-energy/catalog/crema-cbd-pro.webp",
+    image: "xs-energy/catalog/crema-cbd-pro.png",
     page: 96,
   },
   {
@@ -201,7 +201,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "300 mg de CBD con árnica montana, aloe vera y mentol para calmar y nutrir la piel cansada.",
     variants: [{ sku: "296753", size: "56.69 g", price: 68.75 }],
-    image: "xs-energy/catalog/crema-cbd.webp",
+    image: "xs-energy/catalog/crema-cbd.png",
     page: 96,
   },
   {
@@ -227,7 +227,7 @@ export const xsEnergyProducts: Product[] = [
       { size: "1 sobre · 30 porciones", price: 65.25 },
       { size: "2 sobres individuales", price: 40.5 },
     ],
-    image: "xs-energy/catalog/recuperacion-pos.webp",
+    image: "xs-energy/catalog/recuperacion-pos.png",
     page: 96,
   },
   {
@@ -239,7 +239,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Apoyo fundacional para el rendimiento muscular, energía y nutrición diaria antes, durante y después del entrenamiento.",
     variants: [{ size: "Stack completo", price: null }],
-    image: "xs-energy/catalog/stack-inicial.webp",
+    image: "xs-energy/catalog/stack-inicial.png",
     page: 98,
   },
   {
@@ -251,7 +251,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Aumenta tu energía, apoya un metabolismo saludable, ayuda a reducir la grasa corporal y desarrolla masa muscular.",
     variants: [{ size: "Stack completo", price: null }],
-    image: "xs-energy/catalog/stack-tonificacion.webp",
+    image: "xs-energy/catalog/stack-tonificacion.png",
     page: 98,
   },
   {
@@ -262,7 +262,7 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Stacks XS",
     description: "Creado para usuarios comprometidos de nutrición deportiva con la meta de obtener masa muscular.",
     variants: [{ size: "Stack completo", price: null }],
-    image: "xs-energy/catalog/stack-muscular.webp",
+    image: "xs-energy/catalog/stack-muscular.png",
     page: 99,
   },
   {
