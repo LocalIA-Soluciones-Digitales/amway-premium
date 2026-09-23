@@ -95,6 +95,7 @@ export const xsEnergyProducts: Product[] = [
       "Fórmula de rendimiento con 5 g de monohidrato de creatina y 2 g de calcio HMB para maximizar fuerza, poder y recuperación muscular.",
     variants: [{ sku: "128463", size: "30 porciones · sin sabor", price: 62.0 }],
     badge: "¡Nuevo!",
+    image: "xs-energy/catalog/creatina.png",
     page: 92,
   },
   {
@@ -214,6 +215,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "12 % de agua de coco, 64 mg de magnesio y 600 mg de potasio, más vitaminas A, B, C y E. Fresa y sandía · Piña y coco.",
     variants: [{ size: "12 paquetes", price: 33.75 }],
+    image: "xs-energy/catalog/agua-coco-fresa-sandia.png",
     page: 96,
   },
   {
@@ -274,6 +276,7 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Stacks XS",
     description: "Diseñado para apoyar tu control de peso y metas de fitness de varias maneras.",
     variants: [{ size: "Stack completo", price: null }],
+    image: "xs-energy/catalog/stack-reduccion.png",
     page: 99,
   },
 ];
