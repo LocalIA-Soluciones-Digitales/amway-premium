@@ -49,10 +49,10 @@ yarn-error.log*
 # public/videos/espring for the committed web-ready derivatives.
 /eSpring/
 
-# Full Amway product catalogs (PDF, ~107 MB) — reference material for sourcing
-# product photos, not web-ready assets. Extracted images live in
-# public/images/xs-energy/catalog and ARE committed.
-/public/images/xs-energy/catalogs/
+# Full Amway product catalogs (PDF, ~107 MB) — reference material covering
+# Nutrition, Beauty and Home, not tied to any single product line. Extracted
+# product photos live under public/images/<category> and ARE committed.
+/public/catalog/
 
 # typescript
 *.tsbuildinfo
