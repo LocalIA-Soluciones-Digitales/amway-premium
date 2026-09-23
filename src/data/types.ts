@@ -27,7 +27,8 @@ export interface Product {
   image?: string;
   badge?: string;
   flagship?: FlagshipKey;
-  page: number;
+  // Page in the printed catalogue; absent for products added from amway.com.
+  page?: number;
 }
 
 export function priceFrom(p: Product): number | null {

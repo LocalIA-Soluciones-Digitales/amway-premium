@@ -99,7 +99,11 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Contiene los 9 aminoácidos esenciales y 21 g de proteína de plantas de arroz integral, guisantes y chía, cultivados en granjas orgánicas certificadas. Chocolate · Vainilla · Sin sabor.",
-    variants: [{ size: "5 porciones", price: 49.5 }],
+    variants: [
+      { sku: "125921", size: "Chocolate · 15 porciones", price: 49.5 },
+      { sku: "125923", size: "Vainilla · 15 porciones", price: 49.5 },
+      { sku: "125925", size: "Sin sabor · 15 porciones", price: 49.5 },
+    ],
     image: "nutrilite/catalog/proteina-vegetal-polvo.webp",
     page: 25,
   },
@@ -111,7 +115,10 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Batidos listos para beber con 20 g de proteína basada en plantas, 25 vitaminas y minerales, 5 g de fibra y frutas y verduras enteras. Chocolate · Vainilla.",
-    variants: [{ size: "2 batidos", price: 83.25 }],
+    variants: [
+      { sku: "318668", size: "Chocolate · 12 batidos de 325 ml", price: 83.25 },
+      { sku: "318669", size: "Vainilla · 12 batidos de 325 ml", price: 83.25 },
+    ],
     image: "nutrilite/catalog/batidos-todo-en-uno.webp",
     page: 25,
   },
@@ -223,6 +230,7 @@ export const nutricionProducts: Product[] = [
       "Suplemento 3 en 1 basado en plantas que apoya los procesos normales de reciclaje celular, energía y metabolismo celular, así como protección antioxidante.",
     variants: [{ sku: "27813", size: "120 cápsulas · 30 días", price: 87.75 }],
     badge: "¡Nuevo!",
+    image: "nutrilite/catalog/salud-celular.webp",
     page: 38,
   },
 
@@ -235,7 +243,10 @@ export const nutricionProducts: Product[] = [
     subcategory: "Energía y enfoque",
     description:
       "Brinda 8 vitaminas B esenciales de liberación instantánea y constante para un apoyo energético durante todo el día.",
-    variants: [{ sku: "10171", size: "120 tabletas", price: 44.0 }],
+    variants: [
+      { sku: "10171", size: "120 tabletas", price: 44.0 },
+      { sku: "122971", size: "30 tabletas", price: 14.25 },
+    ],
     image: "nutrilite/catalog/vitamina-b-doble.webp",
     page: 44,
   },
@@ -733,7 +744,11 @@ export const nutricionProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description:
       "20 g de proteína basada en plantas, 25 vitaminas y minerales y 6 g de fibra. Chocolate · Vainilla · Mora.",
-    variants: [{ size: "5 porciones", price: 82.25 }],
+    variants: [
+      { sku: "318670", size: "Chocolate · 15 porciones", price: 82.25 },
+      { sku: "318671", size: "Vainilla · 15 porciones", price: 82.25 },
+      { sku: "318672", size: "Moras · 15 porciones", price: 82.25 },
+    ],
     image: "nutrilite/catalog/comida-completa-polvo.webp",
     page: 81,
   },
@@ -745,7 +760,11 @@ export const nutricionProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description:
       "12 g de proteína basada en plantas, 25 vitaminas y minerales, 8 g de fibra y frutas y verduras enteras.",
-    variants: [{ size: "2 barras", price: 66.25 }],
+    variants: [
+      { sku: "316302", size: "Peanut butter · 12 barras", price: 66.25 },
+      { sku: "316303", size: "Doble chocolate · 12 barras", price: 66.25 },
+      { sku: "316305", size: "Moras y semillas · 12 barras", price: 66.25 },
+    ],
     image: "nutrilite/catalog/barras-todo-en-uno.webp",
     page: 81,
   },
@@ -757,7 +776,12 @@ export const nutricionProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description:
       "Refuerza tu agua con nutrientes: apoyo inmunológico, antioxidante o de articulaciones en formato refrescante y bajo en calorías.",
-    variants: [{ size: "20 tubos", price: 28.25 }],
+    variants: [
+      { sku: "110922", size: "Paquete surtido · 20 tubitos", price: 28.25 },
+      { sku: "110538", size: "Salud antioxidante, mango cítrico · 20 tubitos", price: 28.25 },
+      { sku: "110855", size: "Salud inmunológica, fresa y kiwi · 20 tubitos", price: 28.25 },
+      { sku: "110857", size: "Salud de las articulaciones, frambuesa · 20 tubitos", price: 28.25 },
+    ],
     image: "nutrilite/catalog/tubitos-2go.webp",
     page: 81,
   },
@@ -834,5 +858,127 @@ export const nutricionProducts: Product[] = [
     variants: [{ sku: "27620", size: "60 cápsulas", price: 47.25 }],
     image: "nutrilite/catalog/pre-postbiotico.webp",
     page: 84,
+  },
+  // ---- Añadidos desde amway.com (EE. UU.) ----
+  {
+    id: "apoyo-higado",
+    name: "Apoyo al hígado Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Mezcla de cardo mariano, cúrcuma y raíz de diente de león que apoya la función normal del hígado y su actividad metabólica.",
+    variants: [{ sku: "A8084", size: "60 tabletas", price: 40.5 }],
+    image: "nutrilite/catalog/apoyo-higado.webp",
+  },
+  {
+    id: "vitamina-e-masticable",
+    name: "Vitamina E masticable Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Tabletas masticables de vitamina E con lecitina, un antioxidante que ayuda a proteger las células.",
+    variants: [{ sku: "A4042", size: "270 tabletas", price: 50.75 }],
+    image: "nutrilite/catalog/vitamina-e-masticable.webp",
+  },
+  {
+    id: "gomitas-curcuma",
+    name: "Gomitas de cúrcuma Nutrilite™ Organics",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Huesos y articulaciones",
+    description:
+      "Gomitas orgánicas de cúrcuma con sabor a mandarina y jengibre que apoyan la salud de las articulaciones.",
+    variants: [{ sku: "308638", size: "120 gomitas", price: 45.0 }],
+    image: "nutrilite/catalog/gomitas-curcuma.webp",
+  },
+  {
+    id: "gomitas-colageno",
+    name: "Gomitas de colágeno #sinfiltro n* by Nutrilite™",
+    brand: "n* by Nutrilite",
+    category: "nutricion",
+    subcategory: "Piel desde adentro",
+    description:
+      "Gomitas de colágeno que ayudan a revelar el brillo saludable de tu piel.",
+    variants: [{ sku: "125545", size: "15 porciones", price: 25.75 }],
+    image: "nutrilite/catalog/gomitas-colageno.webp",
+  },
+  {
+    id: "mojo-vision",
+    name: "Mojo visión n* by Nutrilite™ – Gomitas para luz azul",
+    brand: "n* by Nutrilite",
+    category: "nutricion",
+    subcategory: "Memoria y vista",
+    description:
+      "Gomitas que ayudan a proteger los ojos expuestos a diario a la luz azul de las pantallas.",
+    variants: [{ sku: "125544", size: "30 porciones", price: 24.75 }],
+    image: "nutrilite/catalog/mojo-vision.webp",
+  },
+  {
+    id: "begin-30",
+    name: "Solución Begin 30 Holistic Wellness Program Nutrilite™",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Alimentación saludable",
+    description:
+      "Paquete de tres productos para la salud intestinal que acompaña los cuatro pilares de bienestar del programa Begin 30.",
+    variants: [
+      { sku: "326780", size: "Chocolate/Chocolate", price: 240.75 },
+      { sku: "326783", size: "Chocolate/Sin sabor", price: 240.75 },
+      { sku: "326779", size: "Vainilla/Vainilla", price: 240.75 },
+      { sku: "326778", size: "Vainilla/Chocolate", price: 240.75 },
+      { sku: "326782", size: "Vainilla/Sin sabor", price: 240.75 },
+      { sku: "326781", size: "Sin sabor/Sin sabor", price: 240.75 },
+    ],
+    image: "nutrilite/catalog/begin-30.webp",
+  },
+  {
+    id: "solucion-energia",
+    name: "Solución de energía",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Energía y enfoque",
+    description:
+      "Selección de productos Nutrilite™ y XS™ para mantener la energía y el enfoque durante el día.",
+    variants: [{ sku: "321549", size: "1 paquete", price: 180.0 }],
+    image: "nutrilite/catalog/solucion-energia.webp",
+  },
+  {
+    id: "solucion-envejecimiento",
+    name: "Solución de envejecimiento saludable",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Selección de suplementos Nutrilite™ para apoyar un envejecimiento saludable.",
+    variants: [{ sku: "321548", size: "1 paquete", price: 173.25 }],
+    image: "nutrilite/catalog/solucion-envejecimiento.webp",
+  },
+  {
+    id: "solucion-nutricion-diaria",
+    name: "Solución de nutrición diaria",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Nutrición diaria",
+    description:
+      "Selección de productos Nutrilite™ para cubrir las bases de la nutrición diaria, con batido de proteína en el sabor que elijas.",
+    variants: [
+      { sku: "318781", size: "Vainilla", price: 174.5 },
+      { sku: "322021", size: "Chocolate", price: 174.5 },
+      { sku: "322022", size: "Sin sabor", price: 174.5 },
+    ],
+    image: "nutrilite/catalog/solucion-nutricion-diaria.webp",
+  },
+  {
+    id: "solucion-sueno-estres",
+    name: "Solución para el sueño + estrés",
+    brand: "Nutrilite",
+    category: "nutricion",
+    subcategory: "Sueño y estrés",
+    description:
+      "Productos Nutrilite™ para apoyar un sueño saludable y controlar el estrés ocasional.",
+    variants: [{ sku: "321893", size: "1 paquete", price: 220.5 }],
+    image: "nutrilite/catalog/solucion-sueno-estres.webp",
   },
 ];

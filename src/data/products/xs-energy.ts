@@ -36,7 +36,11 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Bebidas de energía",
     description:
       "Toda la energía con 25 % de jugo de fruta real, 250 % de vitamina C y sin colorantes artificiales. Mango-piña-guayaba · Toronja rosada.",
-    variants: [{ size: "Doce latas de 355 ml", price: 44.0 }],
+    variants: [
+      { sku: "126986", size: "Mango, piña y guayaba · 12 latas de 355 ml", price: 44.0 },
+      { sku: "126984", size: "Mango, piña y guayaba sin cafeína · 12 latas de 355 ml", price: 44.0 },
+      { sku: "126987", size: "Toronja rosada · 12 latas de 355 ml", price: 44.0 },
+    ],
     image: "xs-energy/catalog/jugos-burbujeantes.png",
     page: 89,
   },
@@ -49,7 +53,8 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Impulsa tu metabolismo con extracto de té verde, EGCG, cromo y vitamina C. Frambuesa azul · Kiwi y fresa · Caja surtida.",
     variants: [
-      { size: "Doce latas de 355 ml", price: 48.25 },
+      { sku: "127935", size: "Frambuesa azul · 12 latas de 355 ml", price: 48.25 },
+      { sku: "127936", size: "Kiwi y fresa · 12 latas de 355 ml", price: 48.25 },
       { sku: "27071", size: "Caja surtida Juiced and Burn", price: 47.25 },
     ],
     image: "xs-energy/catalog/energy-burn.png",
@@ -64,8 +69,10 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Formulado con ingredientes probados clínicamente: 4 g de beta-alanina CarnoSyn®, 3.4 g de L-citrulina, 115 mg de cafeína natural y rhodiola rosea. Frambuesa azul · Manzana verde.",
     variants: [
-      { size: "1 sobre · 30 porciones", price: 65.25 },
-      { size: "2 sobres individuales", price: 40.5 },
+      { sku: "316375", size: "Frambuesa azul · 30 porciones", price: 65.25 },
+      { sku: "316376", size: "Manzana verde · 30 porciones", price: 65.25 },
+      { sku: "316377", size: "Frambuesa azul · 12 sobres", price: 40.5 },
+      { sku: "316378", size: "Manzana verde · 12 sobres", price: 40.5 },
     ],
     image: "xs-energy/catalog/pre-entrenamiento.png",
     page: 90,
@@ -106,7 +113,10 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Nutrición deportiva",
     description:
       "Los nueve EAA en proporción de BCAA optimizada 5:1:1, clínicamente probada para impulsar fuerza y rendimiento. Mora · Sandía.",
-    variants: [{ size: "1 sobre · 30 porciones", price: 56.25 }],
+    variants: [
+      { sku: "126753", size: "Explosión de mora · 30 porciones", price: 56.25 },
+      { sku: "126754", size: "Sandía · 30 porciones", price: 56.25 },
+    ],
     image: "xs-energy/catalog/muscle-multiplier.png",
     page: 93,
   },
@@ -118,7 +128,14 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Nutrición deportiva",
     description:
       "30 g de aislado de proteína de suero de leche premium de ganado alimentado con pasto y 6.9 g de aminoácidos de cadena ramificada.",
-    variants: [{ size: "1 sobre · 20 porciones", price: 74.25 }],
+    variants: [
+      { sku: "128154", size: "Chocolate · 20 porciones", price: 74.25 },
+      { sku: "128155", size: "Fresa · 20 porciones", price: 74.25 },
+      { sku: "128156", size: "Vainilla · 20 porciones", price: 74.25 },
+      { sku: "128167", size: "Chocolate · 10 sobres", price: 60.75 },
+      { sku: "128168", size: "Fresa · 10 sobres", price: 60.75 },
+      { sku: "128169", size: "Vainilla · 10 sobres", price: 60.75 },
+    ],
     image: "xs-energy/catalog/proteina-suero.png",
     page: 94,
   },
@@ -130,7 +147,10 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Nutrición deportiva",
     description:
       "25 g de proteínas de suero de leche y caseína. Chocolate intenso · Crema de vainilla.",
-    variants: [{ size: "2 batidos de 325 ml", price: 60.75 }],
+    variants: [
+      { sku: "110369", size: "Chocolate intenso · 12 batidos de 325 ml", price: 60.75 },
+      { sku: "110370", size: "Crema de vainilla · 12 batidos de 325 ml", price: 60.75 },
+    ],
     image: "xs-energy/catalog/batidos-proteina.png",
     page: 94,
   },
@@ -142,7 +162,10 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Nutrición deportiva",
     description:
       "20 g de proteína de suero y caseína, sin gluten, colorantes ni conservantes artificiales.",
-    variants: [{ size: "12 barras", price: 48.25 }],
+    variants: [
+      { sku: "110385", size: "Chocolate y peanut butter · 12 barras", price: 48.25 },
+      { sku: "110386", size: "Chocolate y mora · 12 barras", price: 48.25 },
+    ],
     image: "xs-energy/catalog/barras-proteina.png",
     page: 94,
   },
@@ -154,7 +177,10 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Nutrición deportiva",
     description:
       "Proteína de guisante de alta calidad para un snack sin azúcar agregada ni colorantes artificiales. Barbacoa · Lima y sriracha.",
-    variants: [{ size: "12 porciones", price: 47.25 }],
+    variants: [
+      { sku: "110627", size: "Barbacoa · 12 envases", price: 47.25 },
+      { sku: "110628", size: "Lima y sriracha · 12 envases", price: 47.25 },
+    ],
     image: "xs-energy/catalog/hojuelas-proteina.png",
     page: 95,
   },
@@ -178,7 +204,10 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Quema y recuperación",
     description:
       "Suplemento de hidratación con vitaminas B, selenio y 5 g de azúcar para añadir a cualquier botella de agua.",
-    variants: [{ size: "20 tubos", price: 27.0 }],
+    variants: [
+      { sku: "110390", size: "Ponche de frutas · 20 tubitos", price: 27.0 },
+      { sku: "305555", size: "Limonada de frambuesa · 20 tubitos", price: 27.0 },
+    ],
     image: "xs-energy/catalog/tubitos-deportivos.png",
     page: 96,
   },
@@ -214,7 +243,10 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Quema y recuperación",
     description:
       "12 % de agua de coco, 64 mg de magnesio y 600 mg de potasio, más vitaminas A, B, C y E. Fresa y sandía · Piña y coco.",
-    variants: [{ size: "12 paquetes", price: 33.75 }],
+    variants: [
+      { sku: "110601", size: "Fresa y sandía · 12 paquetes", price: 33.75 },
+      { sku: "110631", size: "Piña y coco · 12 paquetes", price: 33.75 },
+    ],
     image: "xs-energy/catalog/agua-coco-fresa-sandia.png",
     page: 96,
   },
@@ -227,8 +259,8 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Dosis clínicas de L-glutamina y glucosamina HCL, cúrcuma y 2 g de la mezcla Muscle Multiplier. Ponche de frutas.",
     variants: [
-      { size: "1 sobre · 30 porciones", price: 65.25 },
-      { size: "2 sobres individuales", price: 40.5 },
+      { sku: "316379", size: "Ponche de frutas · 30 porciones", price: 65.25 },
+      { sku: "316380", size: "Ponche de frutas · 12 sobres", price: 40.5 },
     ],
     image: "xs-energy/catalog/recuperacion-pos.png",
     page: 96,
@@ -278,5 +310,21 @@ export const xsEnergyProducts: Product[] = [
     variants: [{ size: "Stack completo", price: null }],
     image: "xs-energy/catalog/stack-reduccion.png",
     page: 99,
+  },
+  // ---- Añadidos desde amway.com (EE. UU.) ----
+  {
+    id: "xs-solucion-fitness",
+    name: "Solución inicial de fitness XS™",
+    brand: "XS",
+    category: "xs-energy",
+    subcategory: "Stacks XS",
+    description:
+      "Los productos esenciales XS™ para empezar a entrenar: energía, proteína y recuperación en un solo paquete.",
+    variants: [
+      { sku: "128209", size: "Chocolate", price: 211.5 },
+      { sku: "128210", size: "Fresa", price: 211.5 },
+      { sku: "128208", size: "Vainilla", price: 211.5 },
+    ],
+    image: "xs-energy/catalog/xs-solucion-fitness.webp",
   },
 ];
