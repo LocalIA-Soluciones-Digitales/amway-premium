@@ -3,11 +3,18 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { MessageCircle } from "lucide-react";
 import { waLink } from "@/data/site-config";
 import { ENERGY_FLAVORS, type EnergyFlavor } from "@/data/energy-drinks";
+import { getProductById, directCheckoutPrice } from "@/data/products";
+import { formatEUR } from "@/lib/currency";
+import { BuyButton } from "@/components/product/BuyButton";
 
 function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) {
-  const ref = useRef<HTMLAnchorElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const product = getProductById(flavor.productId);
+  const price = product ? directCheckoutPrice(product) : null;
+  const flavorLabel = `${flavor.name} · ${flavor.flavorEs}`;
   const px = useMotionValue(0.5);
   const py = useMotionValue(0.5);
   const springConfig = { stiffness: 220, damping: 20 };
@@ -16,7 +23,7 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
   const rotateX = useTransform(spy, [0, 1], [8, -8]);
   const rotateY = useTransform(spx, [0, 1], [-8, 8]);
 
-  function onMove(e: React.PointerEvent<HTMLAnchorElement>) {
+  function onMove(e: React.PointerEvent<HTMLDivElement>) {
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
     px.set((e.clientX - rect.left) / rect.width);
@@ -28,11 +35,8 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
   }
 
   return (
-    <motion.a
+    <motion.div
       ref={ref}
-      href={waLink(`Hola, quiero información sobre XS™ ${flavor.name} sabor ${flavor.flavorEs}.`)}
-      target="_blank"
-      rel="noopener noreferrer"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
@@ -66,11 +70,38 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
         </div>
       </div>
 
-      <div className="relative flex h-24 shrink-0 flex-col justify-center bg-xs-ink/80 px-4 py-3 backdrop-blur-sm">
+      <div className="relative flex shrink-0 flex-col justify-center bg-xs-ink/80 px-4 py-3 backdrop-blur-sm">
         <p className="line-clamp-2 font-display text-sm leading-tight text-cream sm:text-base">{flavor.name}</p>
         <p className="mt-0.5 line-clamp-2 text-xs uppercase leading-snug tracking-wide text-cream/55">{flavor.flavorEs}</p>
+
+        <div className="mt-3 flex flex-wrap items-end justify-between gap-2">
+          <div className="leading-tight">
+            <p className="text-sm font-semibold text-cream sm:text-base">
+              {price != null ? formatEUR(price) : "Consultar precio"}
+            </p>
+            {product && <p className="text-[10px] text-cream/50">{product.variants[0].size}</p>}
+          </div>
+          <div className="flex items-center gap-1.5">
+            {price != null && (
+              <BuyButton
+                productId={flavor.productId}
+                flavor={flavorLabel}
+                className="flex h-9 items-center gap-1.5 rounded-full bg-cream px-3 text-xs font-semibold text-carbon transition hover:bg-white disabled:opacity-60"
+              />
+            )}
+            <a
+              href={waLink(`Hola, quiero pedir XS™ ${flavor.name} sabor ${flavor.flavorEs}.`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Pedir ${flavorLabel} por WhatsApp`}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cream/20 text-cream/80 transition hover:border-cream hover:bg-cream hover:text-carbon"
+            >
+              <MessageCircle size={16} />
+            </a>
+          </div>
+        </div>
       </div>
-    </motion.a>
+    </motion.div>
   );
 }
 

@@ -12,7 +12,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { productId } = await request.json().catch(() => ({ productId: null }));
+  const { productId, flavor: rawFlavor } = await request.json().catch(() => ({ productId: null }));
+  // Optional flavour chosen on a per-flavour card (e.g. the XS™ grid), kept
+  // short so it can't be used to stuff arbitrary text into the Stripe session.
+  const flavor = typeof rawFlavor === "string" && rawFlavor.length <= 80 ? rawFlavor.trim() : "";
   const product = typeof productId === "string" ? getProductById(productId) : undefined;
 
   if (!product) {
@@ -40,7 +43,7 @@ export async function POST(request: NextRequest) {
           unit_amount: eurToCents(eurPrice),
           product_data: {
             name: product.name,
-            description: `${product.brand} · ${product.variants[0].size}`,
+            description: [product.brand, product.variants[0].size, flavor].filter(Boolean).join(" · "),
             images: product.image
               ? [
                   `${origin}/images/${product.image.includes("/") ? product.image : `catalog/${product.image}`}`,
@@ -50,7 +53,7 @@ export async function POST(request: NextRequest) {
         },
       },
     ],
-    metadata: { productId: product.id, sku: product.variants[0].sku ?? "" },
+    metadata: { productId: product.id, sku: product.variants[0].sku ?? "", flavor },
     success_url: `${origin}/checkout/exito?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/checkout/cancelado`,
   });

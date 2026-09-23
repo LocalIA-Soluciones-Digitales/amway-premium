@@ -12,6 +12,8 @@ export interface EnergyFlavor {
   /** Product line this can belongs to. */
   line: string;
   tag?: string;
+  /** Catalog product this can is sold as (price + Stripe checkout). */
+  productId: string;
   /** One real, verbatim-sourced benefit line for this specific can. */
   benefit: string;
   image: string;
@@ -25,6 +27,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Power Water+",
     flavorEs: "Limón-Melocotón",
     line: "XS™ Power Water+",
+    productId: "xs-energy-drink",
     tag: "Sin gas · Colágeno",
     benefit: "Contribuye a revitalizar el cabello y la piel desde el interior.",
     image: "lemon-peach.webp",
@@ -36,6 +39,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Power Drink+",
     flavorEs: "Jengibre y Maracuyá",
     line: "XS™ Power Drink+",
+    productId: "xs-energy-drink",
     tag: "Vitamina C + Zinc",
     benefit: "Aporta energía y ayuda a mantener las defensas inmunitarias.",
     image: "ginger-passion-fruit.webp",
@@ -47,6 +51,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Orange Kumquat Blast",
     flavorEs: "Sabor Naranja",
     line: "XS™ Power Drink",
+    productId: "xs-energy-drink",
     benefit: "Favorece la agilidad mental y combate el cansancio.",
     image: "orange-kumquat.webp",
     accent: "#b44824",
@@ -57,6 +62,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Pink Grapefruit Blast",
     flavorEs: "Sabor Pomelo",
     line: "XS™ Power Drink",
+    productId: "xs-energy-drink",
     benefit: "Favorece la agilidad mental y combate el cansancio.",
     image: "pink-grapefruit.webp",
     accent: "#b43060",
@@ -67,6 +73,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Wild Berry Blast",
     flavorEs: "Sabor Baya Silvestre",
     line: "XS™ Power Drink",
+    productId: "xs-energy-drink",
     benefit: "Favorece la agilidad mental y combate el cansancio.",
     image: "wild-berry.webp",
     accent: "#543c78",
@@ -77,6 +84,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Tropical Blast",
     flavorEs: "Sabor Tropical",
     line: "XS™ Power Drink",
+    productId: "xs-energy-drink",
     benefit: "Favorece la agilidad mental y combate el cansancio.",
     image: "tropical.webp",
     accent: "#0c3054",

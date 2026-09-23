@@ -5,10 +5,12 @@ import { CreditCard, Loader2 } from "lucide-react";
 
 export function BuyButton({
   productId,
+  flavor,
   className,
   label = "Comprar",
 }: {
   productId: string;
+  flavor?: string;
   className?: string;
   label?: string;
 }) {
@@ -22,7 +24,7 @@ export function BuyButton({
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId }),
+        body: JSON.stringify({ productId, flavor }),
       });
       const data = await res.json();
       if (!res.ok || !data.url) {
