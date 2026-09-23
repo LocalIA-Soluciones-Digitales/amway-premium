@@ -11,7 +11,7 @@ export const hogarProducts: Product[] = [
     description:
       "Se ajusta a la mayoría de los grifos de cocina estándar mediante un dispositivo que se enrosca en tu grifo. Reduce eficazmente más de 170 contaminantes, incluidos microplásticos, PFOA y PFOS.",
     variants: [{ sku: "22940", size: "1 purificador de agua", price: 1508.0 }],
-    image: "hq_22940.webp",
+    image: "espring/catalog/encima-meson.webp",
     flagship: "espring",
     page: 188,
   },
@@ -25,7 +25,7 @@ export const hogarProducts: Product[] = [
       "Instalación bajo el mesón para disfrutar de agua más limpia, saludable y sabrosa sin tubos visibles.",
     variants: [{ sku: "22941", size: "1 purificador de agua", price: 1508.0 }],
     flagship: "espring",
-    image: "hq_22941.webp",
+    image: "espring/catalog/bajo-meson-grifo-auxiliar.webp",
     page: 188,
   },
   {
@@ -36,7 +36,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Conéctalo directamente al grifo o a la máquina de hielo para instalaciones personalizadas.",
     variants: [{ sku: "22942", size: "1 purificador de agua", price: 1508.0 }],
-    image: "hq_22942.webp",
+    image: "espring/catalog/bajo-meson-linea-simple.webp",
     page: 188,
   },
   {
@@ -47,7 +47,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Grifo de diseño en níquel, negro o cromo para dar estilo moderno a tu cocina.",
     variants: [{ sku: "28212UC", size: "Níquel / Negro / Cromo", price: 1620.0 }],
-    image: "hq_28212UC.webp",
+    image: "espring/catalog/grifo-diseno.webp",
     page: 189,
   },
   {
@@ -58,7 +58,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Filtro de reemplazo para el purificador de agua eSpring.",
     variants: [{ sku: "22943", size: "1 filtro", price: 293.0 }],
-    image: "hq_22943.webp",
+    image: "espring/catalog/filtro-carbon.webp",
     page: 189,
   },
   {
@@ -69,7 +69,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Cartucho de reemplazo con tecnología UV para el purificador de agua eSpring.",
     variants: [{ sku: "00186", size: "1 filtro", price: 336.0 }],
-    image: "flip_espringuv.webp",
+    image: "espring/catalog/filtro-uv.webp",
     page: 189,
   },
 
