@@ -1,4 +1,10 @@
 import type { Product } from "../types";
+import { USD_TO_EUR_RATE } from "@/lib/currency";
+
+// Accessories that only exist in the Spanish catalog (Amway España, April
+// 2026) carry an official EUR price; prices here are stored in USD, so we
+// divide by the rate to make the displayed EUR match the catalog exactly.
+const fromEur = (eur: number) => eur / USD_TO_EUR_RATE;
 
 export const hogarProducts: Product[] = [
   // ---- eSpring ----
@@ -71,6 +77,78 @@ export const hogarProducts: Product[] = [
     variants: [{ sku: "00186", size: "1 filtro", price: 336.0 }],
     image: "espring/catalog/filtro-uv.webp",
     page: 189,
+  },
+  {
+    id: "espring-kit-grifo-auxiliar",
+    name: "Kit para grifo auxiliar eSpring™",
+    brand: "eSpring",
+    category: "hogar",
+    subcategory: "Agua y aire limpios",
+    description:
+      "Para uso con el sistema de tratamiento de agua eSpring con instalación bajo el mesón.",
+    variants: [{ sku: "125627", size: "1 kit", price: fromEur(186.80) }],
+    image: "espring/catalog/kit-grifo-auxiliar.webp",
+    page: 35,
+  },
+  {
+    id: "espring-kit-grifo-existente",
+    name: "Kit para grifo existente eSpring™",
+    brand: "eSpring",
+    category: "hogar",
+    subcategory: "Agua y aire limpios",
+    description:
+      "Para uso con el sistema de tratamiento de agua eSpring con instalación encima del mesón. Se ajusta a tu grifo existente sin herramientas especiales.",
+    variants: [{ sku: "127065", size: "1 kit", price: fromEur(129.59) }],
+    image: "espring/catalog/kit-grifo-existente.webp",
+    page: 35,
+  },
+  {
+    id: "espring-botella",
+    name: "Botella eSpring™",
+    brand: "eSpring",
+    category: "hogar",
+    subcategory: "Agua y aire limpios",
+    description:
+      "Botella de acero inoxidable con compartimento incorporado para tus complementos Nutrilite™ y/o XS™ diarios. Duradera, a prueba de fugas y perfecta para un estilo de vida activo.",
+    variants: [{ sku: "329780", size: "1 botella", price: fromEur(53.38) }],
+    image: "espring/catalog/botella.webp",
+    page: 35,
+  },
+  {
+    id: "espring-kit-pared",
+    name: "Kit para instalación en pared eSpring™",
+    brand: "eSpring",
+    category: "hogar",
+    subcategory: "Agua y aire limpios",
+    description:
+      "Permite fijar la unidad eSpring de forma segura en una pared de yeso, madera u hormigón para liberar espacio en el mesón. Solo para sistemas con instalación para grifo existente.",
+    variants: [{ sku: "127068", size: "1 kit", price: fromEur(53.38) }],
+    image: "espring/catalog/kit-pared.webp",
+    page: 36,
+  },
+  {
+    id: "espring-tubos-recambio",
+    name: "Conjunto de tubos de recambio eSpring™",
+    brand: "eSpring",
+    category: "hogar",
+    subcategory: "Agua y aire limpios",
+    description:
+      "Para uso con el sistema de tratamiento de agua eSpring con instalación encima del mesón. Compatible con el sistema eSpring anterior y con el nuevo.",
+    variants: [{ sku: "127064", size: "1 conjunto", price: fromEur(28.02) }],
+    image: "espring/catalog/tubos-recambio.webp",
+    page: 36,
+  },
+  {
+    id: "espring-prefiltro",
+    name: "Pre-filtro de recambio eSpring™",
+    brand: "eSpring",
+    category: "hogar",
+    subcategory: "Agua y aire limpios",
+    description:
+      "Sustituyendo de forma sencilla el pre-filtro de tu unidad, mantienes tu sistema eSpring funcionando de forma óptima.",
+    variants: [{ sku: "127063", size: "1 pre-filtro", price: fromEur(24.01) }],
+    image: "espring/catalog/prefiltro.webp",
+    page: 36,
   },
 
   // ---- Atmosphere ----
