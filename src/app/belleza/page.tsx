@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const HIGHLIGHT_IDS = [
-  { id: "art-gotas-omega", image: "p129_0_1234x1349.webp" },
+  { id: "art-suero-desafiante", image: "p129_0_1234x1349.webp" },
   { id: "longxevity-crema-enriquecida", image: "p129_0_1234x1349.webp" },
   { id: "art-suero-vitamina-c", image: "p129_0_1234x1349.webp" },
 ];
