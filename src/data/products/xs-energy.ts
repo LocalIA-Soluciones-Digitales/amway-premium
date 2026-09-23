@@ -67,6 +67,7 @@ export const xsEnergyProducts: Product[] = [
       { size: "1 sobre · 30 porciones", price: 65.25 },
       { size: "2 sobres individuales", price: 40.5 },
     ],
+    image: "xs-energy/catalog/pre-entrenamiento.png",
     page: 90,
   },
   {
