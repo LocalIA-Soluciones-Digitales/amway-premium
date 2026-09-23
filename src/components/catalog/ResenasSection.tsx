@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { CheckCircle2, Loader2, Star } from "lucide-react";
 import { PRODUCTS } from "@/data/products";
 import { amwayDb } from "@/lib/amway-db";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { fieldClass } from "@/components/ui/Dialog";
 
@@ -129,6 +130,7 @@ function ResenaForm() {
       setError("No se pudo enviar tu opinión. Inténtalo de nuevo en unos minutos.");
       return;
     }
+    track("resena", product?.id);
     setEstado("ok");
   }
 

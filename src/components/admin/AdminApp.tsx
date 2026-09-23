@@ -1,39 +1,40 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent } from "react";
-import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Session } from "@supabase/supabase-js";
 import {
+  Activity,
   BarChart3,
+  Bug,
   ClipboardList,
   LayoutDashboard,
-  Loader2,
-  LogOut,
   MessageSquareQuote,
   Package,
+  Server,
+  ShieldCheck,
   ShoppingBag,
+  TrendingUp,
 } from "lucide-react";
 import { amwayDb } from "@/lib/amway-db";
-import { cn } from "@/lib/utils";
 import { SITE } from "@/data/site-config";
-import { inputClass, btnGhost, btnPrimary } from "./shared";
-import { ResumenPanel } from "./ResumenPanel";
+import { AdminLogin } from "./AdminLogin";
+import { DashboardShell, type ShellTab } from "./DashboardShell";
+import { HoyPanel, type GestionTab } from "./HoyPanel";
 import { PedidosPanel } from "./PedidosPanel";
 import { ProductosPanel } from "./ProductosPanel";
 import { SolicitudesPanel } from "./SolicitudesPanel";
 import { ResenasPanel } from "./ResenasPanel";
 import { ContabilidadPanel } from "./ContabilidadPanel";
+import { InformesPanel } from "./dev/InformesPanel";
+import { VentasInformePanel } from "./dev/VentasInformePanel";
+import { EstadoPanel } from "./dev/EstadoPanel";
+import { ErroresPanel } from "./dev/ErroresPanel";
+import { AccesosPanel } from "./dev/AccesosPanel";
+import { Loading, btnGhost, btnPrimary } from "./shared";
 
-export type AdminView = "resumen" | "pedidos" | "productos" | "solicitudes" | "resenas" | "contabilidad";
-
-const NAV: { id: AdminView; label: string; icon: typeof Package }[] = [
-  { id: "resumen", label: "Resumen", icon: LayoutDashboard },
-  { id: "pedidos", label: "Pedidos", icon: ShoppingBag },
-  { id: "productos", label: "Productos y precios", icon: Package },
-  { id: "solicitudes", label: "Solicitudes", icon: ClipboardList },
-  { id: "resenas", label: "Reseñas", icon: MessageSquareQuote },
-  { id: "contabilidad", label: "Contabilidad", icon: BarChart3 },
-];
+type Rol = "gestor" | "desarrollador";
+type DevTab = "informes" | "ventas" | "estado" | "errores" | "accesos";
 
 export interface Pendientes {
   pedidos: number;
@@ -44,7 +45,8 @@ export interface Pendientes {
 export function AdminApp() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [esAdmin, setEsAdmin] = useState<boolean | null>(null);
+  const [rol, setRol] = useState<Rol | null | undefined>(undefined);
+  const [nombre, setNombre] = useState<string | null>(null);
 
   useEffect(() => {
     const db = amwayDb();
@@ -56,37 +58,43 @@ export function AdminApp() {
     return () => data.subscription.unsubscribe();
   }, []);
 
-  const comprobarAdmin = useCallback(async () => {
-    const { data } = await amwayDb().rpc("amway_es_admin");
-    setEsAdmin(data === true);
+  const comprobarRol = useCallback(async () => {
+    const db = amwayDb();
+    const { data } = await db.rpc("amway_mi_rol");
+    setRol((data as Rol | null) ?? null);
+    if (data) {
+      const email = (await db.auth.getUser()).data.user?.email?.toLowerCase();
+      const { data: me } = await db.from("amway_admins").select("nombre").eq("email", email ?? "").maybeSingle();
+      setNombre((me as { nombre: string | null } | null)?.nombre ?? null);
+    }
   }, []);
 
   useEffect(() => {
     if (!session) {
-      setEsAdmin(null);
+      setRol(undefined);
       return;
     }
-    void comprobarAdmin();
-  }, [session, comprobarAdmin]);
+    void comprobarRol();
+  }, [session, comprobarRol]);
 
-  if (loading || (session && esAdmin === null)) {
+  if (loading || (session && rol === undefined)) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream">
-        <Loader2 className="animate-spin text-stone" />
+        <Loading />
       </div>
     );
   }
 
-  if (!session) return <LoginForm />;
+  if (!session) return <AdminLogin />;
 
-  if (!esAdmin) {
+  if (!rol) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-cream px-6 text-center">
         <p className="font-display text-2xl text-carbon">Esta cuenta no tiene acceso al panel</p>
         <p className="text-sm text-stone">{session.user.email}</p>
         <div className="flex flex-wrap justify-center gap-2">
           {/* Access is granted in amway_admins; re-check without logging out. */}
-          <button type="button" className={btnPrimary} onClick={() => void comprobarAdmin()}>
+          <button type="button" className={btnPrimary} onClick={() => void comprobarRol()}>
             Volver a comprobar
           </button>
           <button type="button" className={btnGhost} onClick={() => amwayDb().auth.signOut()}>
@@ -97,69 +105,16 @@ export function AdminApp() {
     );
   }
 
-  return <AdminShell session={session} />;
+  return <Paneles session={session} rol={rol} nombre={nombre} />;
 }
 
-function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [sending, setSending] = useState(false);
-
-  async function submit(e: FormEvent) {
-    e.preventDefault();
-    setSending(true);
-    setError(null);
-    const { error: authError } = await amwayDb().auth.signInWithPassword({ email: email.trim(), password });
-    if (authError) setError("Correo o contraseña incorrectos");
-    setSending(false);
-  }
-
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-cream px-6">
-      <form onSubmit={submit} className="w-full max-w-sm rounded-3xl bg-white p-8 shadow-[0_20px_60px_rgba(28,26,22,0.08)]">
-        <p className="font-display text-xl text-carbon">
-          {SITE.name}
-          <span className="ml-1 text-gold">.</span>
-        </p>
-        <h1 className="mt-6 font-display text-3xl text-carbon">Panel de gestión</h1>
-        <p className="mt-1 text-sm text-stone">Accede con tu cuenta de administración.</p>
-        <div className="mt-6 flex flex-col gap-3">
-          <input
-            type="email"
-            required
-            autoComplete="email"
-            placeholder="Correo"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={inputClass}
-          />
-          <input
-            type="password"
-            required
-            autoComplete="current-password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={inputClass}
-          />
-          {error && <p role="alert" className="text-sm text-xs-red">{error}</p>}
-          <button type="submit" disabled={sending} className={cn(btnPrimary, "mt-2 h-11")}>
-            {sending && <Loader2 size={16} className="animate-spin" />}
-            Entrar
-          </button>
-        </div>
-        <Link href="/" className="mt-6 block text-center text-xs text-stone hover:text-carbon">
-          ← Volver a la tienda
-        </Link>
-      </form>
-    </div>
-  );
-}
-
-function AdminShell({ session }: { session: Session }) {
-  const [view, setView] = useState<AdminView>("resumen");
+function Paneles({ session, rol, nombre }: { session: Session; rol: Rol; nombre: string | null }) {
+  const router = useRouter();
+  const [vista, setVista] = useState<"gestion" | "desarrollo">(rol === "desarrollador" ? "desarrollo" : "gestion");
+  const [gTab, setGTab] = useState<GestionTab>("hoy");
+  const [dTab, setDTab] = useState<DevTab>("informes");
   const [pendientes, setPendientes] = useState<Pendientes>({ pedidos: 0, solicitudes: 0, resenas: 0 });
+  const [errores, setErrores] = useState(0);
 
   const refrescarPendientes = useCallback(async () => {
     const db = amwayDb();
@@ -169,82 +124,81 @@ function AdminShell({ session }: { session: Session }) {
       db.from("amway_resenas").select("id", { count: "exact", head: true }).eq("estado", "pendiente"),
     ]);
     setPendientes({ pedidos: p.count ?? 0, solicitudes: s.count ?? 0, resenas: r.count ?? 0 });
-  }, []);
+    if (rol === "desarrollador") {
+      const hace7 = new Date(Date.now() - 7 * 864e5).toISOString();
+      const e = await db.from("amway_errores").select("id", { count: "exact", head: true }).gte("created_at", hace7);
+      setErrores(e.count ?? 0);
+    }
+  }, [rol]);
 
+  // Refresh badges on tab change and every minute (new web orders arrive on their own).
   useEffect(() => {
     void refrescarPendientes();
-  }, [refrescarPendientes, view]);
+    const t = setInterval(refrescarPendientes, 60_000);
+    return () => clearInterval(t);
+  }, [refrescarPendientes, gTab, dTab]);
 
-  const badge: Partial<Record<AdminView, number>> = {
-    pedidos: pendientes.pedidos,
-    solicitudes: pendientes.solicitudes,
-    resenas: pendientes.resenas,
-  };
+  async function signOut() {
+    await amwayDb().auth.signOut();
+    router.push("/");
+  }
+
+  const esDev = rol === "desarrollador";
+
+  if (vista === "desarrollo" && esDev) {
+    const tabs: ShellTab<DevTab>[] = [
+      { id: "informes", label: "Visitas", icon: Activity },
+      { id: "ventas", label: "Informe de ventas", icon: TrendingUp },
+      { id: "estado", label: "Estado", icon: Server },
+      { id: "errores", label: "Errores", icon: Bug, badge: errores },
+      { id: "accesos", label: "Accesos", icon: ShieldCheck },
+    ];
+    return (
+      <DashboardShell
+        title="Desarrollo"
+        subtitle={`${SITE.name} · Panel de desarrollo`}
+        tabs={tabs}
+        tab={dTab}
+        onTab={setDTab}
+        email={session.user.email}
+        onSignOut={signOut}
+        viewSwitch={{ current: "Panel de desarrollo", other: "Panel de gestión", onSwitch: () => setVista("gestion") }}
+      >
+        {dTab === "informes" && <InformesPanel />}
+        {dTab === "ventas" && <VentasInformePanel />}
+        {dTab === "estado" && <EstadoPanel session={session} />}
+        {dTab === "errores" && <ErroresPanel />}
+        {dTab === "accesos" && <AccesosPanel session={session} />}
+      </DashboardShell>
+    );
+  }
+
+  const tabs: ShellTab<GestionTab>[] = [
+    { id: "hoy", label: "Hoy", icon: LayoutDashboard },
+    { id: "pedidos", label: "Pedidos", icon: ShoppingBag, badge: pendientes.pedidos },
+    { id: "productos", label: "Productos", icon: Package },
+    { id: "solicitudes", label: "Solicitudes", icon: ClipboardList, badge: pendientes.solicitudes },
+    { id: "resenas", label: "Reseñas", icon: MessageSquareQuote, badge: pendientes.resenas },
+    { id: "contabilidad", label: "Contabilidad", icon: BarChart3 },
+  ];
 
   return (
-    <div className="min-h-screen bg-cream lg:grid lg:grid-cols-[15rem_1fr]">
-      <aside className="sticky top-0 z-30 border-b border-carbon/8 bg-cream-soft/95 backdrop-blur lg:h-screen lg:border-b-0 lg:border-r">
-        <div className="flex items-center justify-between px-5 pb-2 pt-[calc(1rem+env(safe-area-inset-top))] lg:block lg:px-6 lg:pt-7">
-          <Link href="/" className="font-display text-lg text-carbon">
-            {SITE.name}
-            <span className="ml-1 text-gold">.</span>
-          </Link>
-          <p className="hidden text-[11px] uppercase tracking-[0.2em] text-stone lg:mt-1 lg:block">Gestión</p>
-          <button
-            type="button"
-            onClick={() => amwayDb().auth.signOut()}
-            aria-label="Cerrar sesión"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-stone hover:bg-carbon/5 lg:hidden"
-          >
-            <LogOut size={16} />
-          </button>
-        </div>
-        <nav className="flex gap-1 overflow-x-auto px-3 pb-3 lg:mt-6 lg:flex-col lg:overflow-visible lg:px-3">
-          {NAV.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => setView(id)}
-              className={cn(
-                "flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2 text-sm transition lg:py-2.5",
-                view === id ? "bg-carbon text-cream" : "text-stone hover:bg-carbon/5 hover:text-carbon"
-              )}
-            >
-              <Icon size={16} />
-              <span className="whitespace-nowrap">{label}</span>
-              {!!badge[id] && (
-                <span
-                  className={cn(
-                    "ml-auto rounded-full px-1.5 text-[10px] font-semibold tabular-nums",
-                    view === id ? "bg-cream text-carbon" : "bg-xs-red text-cream"
-                  )}
-                >
-                  {badge[id]}
-                </span>
-              )}
-            </button>
-          ))}
-        </nav>
-        <div className="absolute inset-x-0 bottom-0 hidden border-t border-carbon/8 p-4 lg:block">
-          <p className="truncate text-xs text-stone">{session.user.email}</p>
-          <button
-            type="button"
-            onClick={() => amwayDb().auth.signOut()}
-            className="mt-2 flex items-center gap-2 text-sm text-carbon hover:text-xs-red"
-          >
-            <LogOut size={14} /> Cerrar sesión
-          </button>
-        </div>
-      </aside>
-
-      <div className="min-w-0 px-4 py-8 sm:px-8 lg:px-10 lg:py-10">
-        {view === "resumen" && <ResumenPanel onNavigate={setView} pendientes={pendientes} />}
-        {view === "pedidos" && <PedidosPanel onChange={refrescarPendientes} />}
-        {view === "productos" && <ProductosPanel session={session} />}
-        {view === "solicitudes" && <SolicitudesPanel onChange={refrescarPendientes} />}
-        {view === "resenas" && <ResenasPanel session={session} onChange={refrescarPendientes} />}
-        {view === "contabilidad" && <ContabilidadPanel />}
-      </div>
-    </div>
+    <DashboardShell
+      title="Gestión"
+      subtitle={`${SITE.name} · Panel de gestión`}
+      tabs={tabs}
+      tab={gTab}
+      onTab={setGTab}
+      email={session.user.email}
+      onSignOut={signOut}
+      viewSwitch={esDev ? { current: "Panel de gestión", other: "Panel de desarrollo", onSwitch: () => setVista("desarrollo") } : undefined}
+    >
+      {gTab === "hoy" && <HoyPanel onNavigate={setGTab} pendientes={pendientes} nombre={nombre} />}
+      {gTab === "pedidos" && <PedidosPanel onChange={refrescarPendientes} />}
+      {gTab === "productos" && <ProductosPanel session={session} />}
+      {gTab === "solicitudes" && <SolicitudesPanel onChange={refrescarPendientes} />}
+      {gTab === "resenas" && <ResenasPanel session={session} onChange={refrescarPendientes} />}
+      {gTab === "contabilidad" && <ContabilidadPanel />}
+    </DashboardShell>
   );
 }

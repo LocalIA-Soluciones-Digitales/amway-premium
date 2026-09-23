@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, ShieldUser, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/data/site-config";
 import { CartButton } from "@/components/cart/CartButton";
@@ -192,6 +192,22 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          {/* Acceso al panel: discreto, separado de la navegación principal. */}
+          <Link
+            href="/admin"
+            rel="nofollow"
+            aria-label="Panel de gestión"
+            title="Panel de gestión"
+            className={cn(
+              "inline-flex h-8 items-center gap-1.5 rounded-full border pl-2.5 pr-3 text-xs font-medium transition-colors",
+              dark
+                ? "border-cream/25 text-cream/70 hover:border-cream/50 hover:bg-cream/10 hover:text-cream"
+                : "border-carbon/10 text-stone hover:border-carbon/25 hover:bg-carbon/5 hover:text-carbon"
+            )}
+          >
+            <ShieldUser size={14} />
+            Panel
+          </Link>
           <Link
             href="/sobre-nosotros"
             className={cn(
@@ -305,6 +321,15 @@ export function Header() {
                 }
               )}
             </nav>
+            <Link
+              href="/admin"
+              rel="nofollow"
+              onClick={() => setOpen(false)}
+              className="mx-auto mt-6 inline-flex items-center gap-2 rounded-full border border-carbon/15 px-4 py-2 text-xs font-medium text-stone transition hover:border-carbon/30 hover:text-carbon"
+            >
+              <ShieldUser size={14} />
+              Panel de gestión
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>

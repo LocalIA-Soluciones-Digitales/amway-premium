@@ -9,6 +9,7 @@ import { CartProvider } from "@/components/cart/CartProvider";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { CatalogStateProvider } from "@/components/catalog/CatalogStateProvider";
 import { StoreOnly } from "@/components/layout/StoreOnly";
+import { Analytics } from "@/components/layout/Analytics";
 import { fetchCatalogoPublico } from "@/lib/catalog-state";
 import { SITE } from "@/data/site-config";
 
@@ -100,6 +101,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 <WhatsAppButton />
               </StoreOnly>
               <CartDrawer />
+              <Analytics />
             </CartProvider>
           </CatalogStateProvider>
         </SmoothScroll>

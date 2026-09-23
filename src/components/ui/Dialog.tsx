@@ -11,12 +11,15 @@ export function Dialog({
   onClose,
   title,
   eyebrow,
+  wide,
   children,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   eyebrow?: string;
+  /** Wider sheet for admin editors. */
+  wide?: boolean;
   children: ReactNode;
 }) {
   const lenis = useLenis();
@@ -59,7 +62,7 @@ export function Dialog({
             exit={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             data-lenis-prevent
-            className="relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-3xl bg-cream-soft px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 shadow-2xl sm:max-w-lg sm:rounded-3xl sm:pb-7"
+            className={`relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-3xl bg-cream-soft px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 shadow-2xl sm:rounded-3xl sm:pb-7 ${wide ? "sm:max-w-3xl" : "sm:max-w-lg"}`}
           >
             <div className="flex items-start justify-between gap-4">
               <div>

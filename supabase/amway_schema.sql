@@ -413,3 +413,68 @@ revoke execute on function public.amway_set_updated_at() from public, anon, auth
 -- Token del servidor para registrar pedidos (su sha256, nunca el token):
 --   insert into public.amway_config (clave, valor) values ('pedidos_token_sha256', '<sha256 hex>')
 --   on conflict (clave) do update set valor = excluded.valor;
+
+-- ============================================================
+-- Roles, visitas y errores (panel de desarrollo)
+-- ============================================================
+-- Roles: 'gestor' (lleva la tienda) y 'desarrollador' (además ve informes,
+-- visitas, errores y gestiona accesos). Ambos pasan amway_es_admin().
+alter table public.amway_admins add column if not exists rol text not null default 'gestor'
+  check (rol in ('gestor', 'desarrollador'));
+alter table public.amway_admins add column if not exists nombre text;
+
+create or replace function public.amway_es_desarrollador()
+returns boolean language sql stable security definer set search_path = public
+as $$
+  select exists (select 1 from public.amway_admins
+    where email = lower(coalesce(auth.jwt() ->> 'email', '')) and rol = 'desarrollador');
+$$;
+
+create or replace function public.amway_mi_rol()
+returns text language sql stable security definer set search_path = public
+as $$ select rol from public.amway_admins where email = lower(coalesce(auth.jwt() ->> 'email', '')); $$;
+
+drop policy if exists "amway_admins_select_self" on public.amway_admins;
+create policy "amway_admins_select" on public.amway_admins for select to authenticated
+  using (public.amway_es_admin());
+drop policy if exists "amway_admins_write_dev" on public.amway_admins;
+create policy "amway_admins_write_dev" on public.amway_admins for all to authenticated
+  using (public.amway_es_desarrollador()) with check (public.amway_es_desarrollador());
+
+-- Visitas: analítica propia, solo se registra con consentimiento de cookies.
+create table if not exists public.amway_visitas (
+  id uuid primary key default gen_random_uuid(),
+  session_id uuid not null,
+  event_type text not null default 'pageview'
+    check (event_type in ('pageview', 'add_to_cart', 'cart_open', 'checkout_start', 'whatsapp_click', 'solicitud', 'resena')),
+  path text not null,
+  label text,
+  referrer text,
+  source_category text not null default 'direct'
+    check (source_category in ('google_ads', 'google_organic', 'social', 'referral', 'direct', 'other')),
+  utm_source text,
+  utm_medium text,
+  utm_campaign text,
+  device_type text check (device_type is null or device_type in ('mobile', 'tablet', 'desktop')),
+  is_returning boolean not null default false,
+  created_at timestamptz not null default now()
+);
+alter table public.amway_visitas enable row level security;
+create policy "amway_visitas_dev" on public.amway_visitas for select to authenticated using (public.amway_es_desarrollador());
+create policy "amway_visitas_dev_delete" on public.amway_visitas for delete to authenticated using (public.amway_es_desarrollador());
+create index if not exists idx_amway_visitas_created_at on public.amway_visitas (created_at desc);
+create index if not exists idx_amway_visitas_event on public.amway_visitas (event_type, created_at desc);
+-- amway_registrar_visita(...) y amway_registrar_error(...): security definer,
+-- con freno anti-abuso por sesión / por hora (ver migración amway_roles_visitas_errores).
+
+create table if not exists public.amway_errores (
+  id uuid primary key default gen_random_uuid(),
+  mensaje text not null,
+  detalle text,
+  path text,
+  user_agent text,
+  created_at timestamptz not null default now()
+);
+alter table public.amway_errores enable row level security;
+create policy "amway_errores_dev" on public.amway_errores for select to authenticated using (public.amway_es_desarrollador());
+create policy "amway_errores_dev_delete" on public.amway_errores for delete to authenticated using (public.amway_es_desarrollador());

@@ -114,7 +114,10 @@ export const CATEGORIA_GASTO: Record<Gasto["categoria"], string> = {
 
 // ---------- Utilidades ----------
 
-export const eur = (n: number | null | undefined) => formatEUR(Number(n ?? 0));
+// `|| 0` also turns -0 into 0, so an empty period never shows "-0,00 €".
+export const eur = (n: number | null | undefined) => formatEUR(Number(n ?? 0) || 0);
+
+export const dec = (n: number, digits = 1) => n.toLocaleString("es-ES", { minimumFractionDigits: digits, maximumFractionDigits: digits });
 
 export function fecha(iso: string, withTime = false): string {
   return new Date(iso).toLocaleString("es-ES", {
@@ -154,67 +157,123 @@ export function downloadCsv(filename: string, rows: (string | number | null | un
 type Tone = "amber" | "blue" | "violet" | "green" | "grey" | "red";
 
 const TONES: Record<Tone, string> = {
-  amber: "bg-amber-100 text-amber-900",
-  blue: "bg-sky-100 text-sky-900",
-  violet: "bg-violet-100 text-violet-900",
-  green: "bg-emerald-100 text-emerald-900",
-  grey: "bg-carbon/8 text-stone",
-  red: "bg-red-100 text-red-900",
+  amber: "bg-amber-50 text-amber-800 ring-amber-200/70",
+  blue: "bg-sky-50 text-sky-800 ring-sky-200/70",
+  violet: "bg-violet-50 text-violet-800 ring-violet-200/70",
+  green: "bg-emerald-50 text-emerald-800 ring-emerald-200/70",
+  grey: "bg-carbon/[0.04] text-stone ring-carbon/10",
+  red: "bg-red-50 text-red-700 ring-red-200/70",
 };
 
 export function Badge({ tone = "grey", children }: { tone?: Tone; children: ReactNode }) {
   return (
-    <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium", TONES[tone])}>
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-medium ring-1 ring-inset",
+        TONES[tone]
+      )}
+    >
       {children}
     </span>
   );
 }
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <div className={cn("rounded-2xl border border-carbon/8 bg-white p-5", className)}>{children}</div>;
+  return (
+    <div className={cn("rounded-2xl border border-carbon/[0.07] bg-white p-5 shadow-[0_1px_3px_rgba(28,26,22,0.04)]", className)}>
+      {children}
+    </div>
+  );
 }
 
-export function Stat({ label, value, hint, tone }: { label: string; value: ReactNode; hint?: ReactNode; tone?: "good" | "bad" }) {
+export function CardTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
   return (
-    <Card>
-      <p className="text-xs uppercase tracking-wider text-stone">{label}</p>
+    <div className="mb-4 flex items-center justify-between gap-3">
+      <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">{children}</h3>
+      {action}
+    </div>
+  );
+}
+
+export function Stat({
+  label,
+  value,
+  hint,
+  tone,
+  icon,
+  delta,
+}: {
+  label: string;
+  value: ReactNode;
+  hint?: ReactNode;
+  tone?: "good" | "bad";
+  icon?: ReactNode;
+  /** Change vs. previous period, in %. */
+  delta?: number | null;
+}) {
+  return (
+    <Card className="flex flex-col">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">{label}</p>
+        {icon && <span className="flex h-8 w-8 items-center justify-center rounded-full bg-cream text-stone">{icon}</span>}
+      </div>
       <p
         className={cn(
-          "mt-2 font-display text-3xl tabular-nums",
+          "mt-3 font-display text-[2rem] leading-none tabular-nums",
           tone === "good" ? "text-forest" : tone === "bad" ? "text-xs-red" : "text-carbon"
         )}
       >
         {value}
       </p>
-      {hint && <p className="mt-1 text-xs text-stone">{hint}</p>}
+      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-stone">
+        {delta != null && Number.isFinite(delta) && (
+          <span className={cn("font-medium tabular-nums", delta > 0 ? "text-emerald-700" : delta < 0 ? "text-red-600" : "text-stone")}>
+            {delta > 0 ? "▲" : delta < 0 ? "▼" : "■"} {Math.abs(delta).toFixed(0)} %
+          </span>
+        )}
+        {hint}
+      </div>
     </Card>
   );
 }
 
 export function PanelHeader({ title, description, actions }: { title: string; description?: string; actions?: ReactNode }) {
   return (
-    <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <h1 className="font-display text-3xl text-carbon">{title}</h1>
-        {description && <p className="mt-1 text-sm text-stone">{description}</p>}
+    <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div className="min-w-0">
+        <h2 className="font-display text-[1.75rem] leading-tight text-carbon">{title}</h2>
+        {description && <p className="mt-1 max-w-2xl text-sm text-stone">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
     </div>
   );
 }
 
-export function Empty({ children }: { children: ReactNode }) {
-  return <div className="rounded-2xl border border-dashed border-carbon/15 py-14 text-center text-sm text-stone">{children}</div>;
+export function Empty({ children, icon }: { children: ReactNode; icon?: ReactNode }) {
+  return (
+    <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-carbon/15 bg-white/50 px-6 py-14 text-center text-sm text-stone">
+      {icon && <span className="flex h-11 w-11 items-center justify-center rounded-full bg-cream text-stone">{icon}</span>}
+      {children}
+    </div>
+  );
+}
+
+export function Loading() {
+  return (
+    <div className="flex justify-center py-24">
+      <span className="h-6 w-6 animate-spin rounded-full border-2 border-carbon/15 border-t-carbon" aria-label="Cargando" />
+    </div>
+  );
 }
 
 export const inputClass =
-  "rounded-lg border border-carbon/15 bg-white px-3 py-2 text-base text-carbon placeholder:text-stone/60 focus:border-forest focus:outline-none sm:text-sm";
+  "h-10 rounded-xl border border-carbon/[0.12] bg-white px-3 text-base text-carbon placeholder:text-stone/60 transition focus:border-carbon/30 focus:outline-none focus:ring-4 focus:ring-carbon/[0.04] sm:text-sm";
 
 export const btnPrimary =
-  "inline-flex items-center justify-center gap-1.5 rounded-full bg-carbon px-4 py-2 text-sm font-medium text-cream transition hover:bg-carbon-soft disabled:opacity-50";
+  "inline-flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-carbon px-4 text-sm font-medium text-cream shadow-sm transition hover:bg-carbon-soft disabled:cursor-not-allowed disabled:opacity-40";
 
 export const btnGhost =
-  "inline-flex items-center justify-center gap-1.5 rounded-full border border-carbon/15 px-4 py-2 text-sm text-carbon transition hover:bg-carbon/5 disabled:opacity-50";
+  "inline-flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-carbon/[0.12] bg-white px-4 text-sm text-carbon transition hover:border-carbon/25 hover:bg-cream disabled:cursor-not-allowed disabled:opacity-40";
 
 export function Segmented<T extends string>({
   value,
@@ -226,19 +285,28 @@ export function Segmented<T extends string>({
   options: { value: T; label: string; count?: number }[];
 }) {
   return (
-    <div className="flex flex-wrap gap-1 rounded-full bg-carbon/5 p-1">
+    <div className="flex max-w-full gap-1 overflow-x-auto rounded-full border border-carbon/[0.07] bg-white p-1 [scrollbar-width:none]">
       {options.map((o) => (
         <button
           key={o.value}
           type="button"
           onClick={() => onChange(o.value)}
           className={cn(
-            "rounded-full px-3 py-1.5 text-xs font-medium transition",
-            value === o.value ? "bg-white text-carbon shadow-sm" : "text-stone hover:text-carbon"
+            "inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition",
+            value === o.value ? "bg-carbon text-cream" : "text-stone hover:bg-cream hover:text-carbon"
           )}
         >
           {o.label}
-          {o.count != null && o.count > 0 && <span className="ml-1.5 tabular-nums text-stone">{o.count}</span>}
+          {o.count != null && o.count > 0 && (
+            <span
+              className={cn(
+                "min-w-[1.1rem] rounded-full px-1 text-center text-[10px] tabular-nums",
+                value === o.value ? "bg-cream/20" : "bg-xs-red text-cream"
+              )}
+            >
+              {o.count}
+            </span>
+          )}
         </button>
       ))}
     </div>

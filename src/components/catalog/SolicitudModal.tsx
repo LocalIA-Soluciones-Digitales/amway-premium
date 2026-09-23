@@ -4,6 +4,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import type { Product } from "@/data/types";
 import { amwayDb } from "@/lib/amway-db";
+import { track } from "@/lib/analytics";
 import { Dialog, fieldClass } from "@/components/ui/Dialog";
 
 export type SolicitudTipo = "agotado" | "encargo" | "otro";
@@ -81,6 +82,7 @@ export function SolicitudModal({
       setError("No se pudo enviar la solicitud. Inténtalo de nuevo o escríbenos por WhatsApp.");
       return;
     }
+    track("solicitud", product?.id ?? tipo);
     setEstado("ok");
   }
 

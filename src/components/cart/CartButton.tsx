@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCesta } from "./CartProvider";
+import { track } from "@/lib/analytics";
 
 export function CartButton({ dark }: { dark: boolean }) {
   const { openCesta, totalUnits, cestaVersion, isLoaded } = useCesta();
@@ -12,7 +13,10 @@ export function CartButton({ dark }: { dark: boolean }) {
   return (
     <button
       type="button"
-      onClick={openCesta}
+      onClick={() => {
+        openCesta();
+        track("cart_open");
+      }}
       aria-label={count > 0 ? `Abrir cesta (${count} producto${count === 1 ? "" : "s"})` : "Abrir cesta"}
       className={cn(
         "relative flex h-10 w-10 items-center justify-center rounded-full border transition",

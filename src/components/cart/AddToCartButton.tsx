@@ -3,6 +3,7 @@
 import { Check, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { cestaItemKey, useCesta } from "./CartProvider";
+import { track } from "@/lib/analytics";
 
 export function AddToCartButton({
   productId,
@@ -25,7 +26,10 @@ export function AddToCartButton({
   return (
     <button
       type="button"
-      onClick={() => addItem(productId, variantIndex, flavor)}
+      onClick={() => {
+        addItem(productId, variantIndex, flavor);
+        track("add_to_cart", productId);
+      }}
       aria-label={ariaLabel ?? "Añadir a la cesta"}
       className={cn(
         "flex h-9 items-center justify-center gap-1.5 rounded-full px-3 text-xs font-medium transition",

@@ -10,6 +10,7 @@ import { getProductById } from "@/data/products";
 import { productImageSrc, type Product } from "@/data/types";
 import { waLink } from "@/data/site-config";
 import { formatEUR } from "@/lib/currency";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
 import { cestaItemKey, MAX_QUANTITY_PER_LINE, useCesta, type CestaItem } from "./CartProvider";
@@ -83,6 +84,7 @@ export function CartDrawer() {
         setLoading(false);
         return;
       }
+      track("checkout_start", `${items.length} líneas · ${subtotal.toFixed(2)}`);
       window.location.href = data.url;
     } catch {
       setError("No se pudo conectar con el servidor de pago.");
