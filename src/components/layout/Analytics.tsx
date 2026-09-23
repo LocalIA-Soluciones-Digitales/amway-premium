@@ -58,27 +58,30 @@ export function Analytics() {
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           role="dialog"
           aria-label="Preferencias de cookies"
-          className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[55] mx-auto max-w-xl rounded-2xl bg-carbon p-4 text-cream shadow-2xl sm:left-6 sm:right-auto sm:mx-0 sm:p-5"
+          className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[55] mx-auto max-w-sm rounded-2xl border border-cream/10 bg-carbon/95 p-5 text-cream shadow-[0_20px_50px_rgba(28,26,22,0.35)] backdrop-blur-md sm:left-8 sm:right-auto sm:bottom-[calc(2rem+env(safe-area-inset-bottom))] sm:mx-0"
         >
-          <div className="flex items-start gap-3">
-            <Cookie size={18} className="mt-0.5 shrink-0 text-gold-soft" />
-            <p className="text-sm leading-relaxed text-cream/80">
-              Usamos cookies propias para saber qué páginas y productos interesan más y mejorar la tienda. No
-              las compartimos con nadie.
-            </p>
+          <div className="flex items-center gap-3">
+            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-cream/10">
+              <Cookie size={17} className="text-gold-soft" />
+            </span>
+            <p className="font-display text-lg leading-none">Tu privacidad</p>
           </div>
-          <div className="mt-4 flex justify-end gap-2">
+          <p className="mt-3 text-sm leading-relaxed text-cream/75">
+            Usamos cookies propias para saber qué páginas y productos interesan más y mejorar la tienda. No las
+            compartimos con nadie.
+          </p>
+          <div className="mt-5 grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => decide("rechazadas")}
-              className="rounded-full border border-cream/20 px-4 py-2 text-xs font-medium text-cream/80 transition hover:bg-cream/10"
+              className="rounded-full border border-cream/20 px-4 py-2.5 text-sm font-medium text-cream/85 transition hover:border-cream/40 hover:bg-cream/10"
             >
               Rechazar
             </button>
             <button
               type="button"
               onClick={() => decide("aceptadas")}
-              className="rounded-full bg-cream px-4 py-2 text-xs font-semibold text-carbon transition hover:bg-white"
+              className="rounded-full bg-cream px-4 py-2.5 text-sm font-semibold text-carbon transition hover:bg-white"
             >
               Aceptar
             </button>
