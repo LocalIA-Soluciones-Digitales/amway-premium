@@ -167,7 +167,7 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
             style={{ y: reducedMotion ? 0 : canY, transformStyle: "preserve-3d" }}
             className="relative flex items-center justify-center"
           >
-            <div className="relative h-[34vh] w-full max-w-[190px] sm:h-[48vh] sm:max-w-[280px] lg:h-[58vh] lg:max-w-[360px]">
+            <div className="relative h-[34vh] w-[190px] sm:h-[48vh] sm:w-[280px] lg:h-[58vh] lg:w-[360px]">
               <Image
                 src={`/images/xs-energy/cans/${HERO_CAN.image}`}
                 alt={`Lata XS™ ${HERO_CAN.name} sabor ${HERO_CAN.flavorEs}`}
