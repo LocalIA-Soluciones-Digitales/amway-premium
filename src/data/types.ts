@@ -44,6 +44,29 @@ export function priceRangeLabel(p: Product): string {
   return min === max ? formatEUR(min) : `Desde ${formatEUR(min)}`;
 }
 
+// EUR price of one specific variant (size/format), or null when that variant
+// has no published price and has to be quoted by WhatsApp.
+export function variantPriceEur(p: Product, variantIndex: number): number | null {
+  const price = p.variants[variantIndex]?.price;
+  return price == null ? null : usdToEur(price);
+}
+
+// Index of the cheapest priced variant — the one a card preselects so the
+// price it shows matches the "Desde …" sorting of the catalogue.
+export function cheapestVariantIndex(p: Product): number {
+  let best = 0;
+  p.variants.forEach((v, i) => {
+    const current = p.variants[best].price;
+    if (v.price != null && (current == null || v.price < current)) best = i;
+  });
+  return best;
+}
+
+export function productImageSrc(p: Product): string | null {
+  if (!p.image) return null;
+  return p.image.includes("/") ? `/images/${p.image}` : `/images/catalog/${p.image}`;
+}
+
 // A product can go straight to Stripe Checkout only when its price is
 // unambiguous (a single variant) — anything else needs a human to confirm
 // which size/flavour before charging a card.

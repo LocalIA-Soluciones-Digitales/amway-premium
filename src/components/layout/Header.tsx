@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/data/site-config";
+import { CartButton } from "@/components/cart/CartButton";
 
 const CATEGORY_LINKS = [
   { href: "/nutricion", label: "Nutrición", tagline: "Vitaminas y bienestar diario" },
@@ -210,18 +211,22 @@ export function Header() {
           >
             Contacto
           </Link>
+          <CartButton dark={dark} />
         </div>
 
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Abrir menú"
-          className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-full border transition lg:hidden",
-            dark ? "border-cream/30 text-cream" : "border-carbon/15 text-carbon"
-          )}
-        >
-          <Menu size={20} />
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <CartButton dark={dark} />
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Abrir menú"
+            className={cn(
+              "flex h-10 w-10 items-center justify-center rounded-full border transition",
+              dark ? "border-cream/30 text-cream" : "border-carbon/15 text-carbon"
+            )}
+          >
+            <Menu size={20} />
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>

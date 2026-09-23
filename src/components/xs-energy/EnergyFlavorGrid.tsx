@@ -8,7 +8,7 @@ import { waLink } from "@/data/site-config";
 import { ENERGY_FLAVORS, type EnergyFlavor } from "@/data/energy-drinks";
 import { getProductById, directCheckoutPrice } from "@/data/products";
 import { formatEUR } from "@/lib/currency";
-import { BuyButton } from "@/components/product/BuyButton";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 
 function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -83,10 +83,11 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
           </div>
           <div className="flex items-center gap-1.5">
             {price != null && (
-              <BuyButton
+              <AddToCartButton
                 productId={flavor.productId}
                 flavor={flavorLabel}
-                className="flex h-9 items-center gap-1.5 rounded-full bg-cream px-3 text-xs font-semibold text-carbon transition hover:bg-white disabled:opacity-60"
+                ariaLabel={`Añadir ${flavorLabel} a la cesta`}
+                className="bg-cream font-semibold text-carbon hover:bg-white"
               />
             )}
             <a

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { waLink, WA_PRESETS } from "@/data/site-config";
+import { ClearCartOnMount } from "@/components/cart/ClearCartOnMount";
 
 export const metadata: Metadata = {
   title: "Pedido confirmado",
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default function CheckoutExitoPage() {
   return (
     <div className="flex min-h-[80vh] flex-col items-center justify-center bg-cream px-6 pt-24 text-center sm:px-8">
+      <ClearCartOnMount />
       <CheckCircle2 className="text-forest" size={56} />
       <h1 className="mt-6 font-display text-3xl text-carbon sm:text-4xl">
         ¡Gracias por tu pedido!
