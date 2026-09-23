@@ -16,7 +16,7 @@ import {
 import { amwayDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/data/site-config";
-import { inputClass, btnPrimary } from "./shared";
+import { inputClass, btnGhost, btnPrimary } from "./shared";
 import { ResumenPanel } from "./ResumenPanel";
 import { PedidosPanel } from "./PedidosPanel";
 import { ProductosPanel } from "./ProductosPanel";
@@ -56,15 +56,18 @@ export function AdminApp() {
     return () => data.subscription.unsubscribe();
   }, []);
 
+  const comprobarAdmin = useCallback(async () => {
+    const { data } = await amwayDb().rpc("amway_es_admin");
+    setEsAdmin(data === true);
+  }, []);
+
   useEffect(() => {
     if (!session) {
       setEsAdmin(null);
       return;
     }
-    amwayDb()
-      .rpc("amway_es_admin")
-      .then(({ data }) => setEsAdmin(data === true));
-  }, [session]);
+    void comprobarAdmin();
+  }, [session, comprobarAdmin]);
 
   if (loading || (session && esAdmin === null)) {
     return (
@@ -81,9 +84,15 @@ export function AdminApp() {
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-cream px-6 text-center">
         <p className="font-display text-2xl text-carbon">Esta cuenta no tiene acceso al panel</p>
         <p className="text-sm text-stone">{session.user.email}</p>
-        <button type="button" className={btnPrimary} onClick={() => amwayDb().auth.signOut()}>
-          Cerrar sesión
-        </button>
+        <div className="flex flex-wrap justify-center gap-2">
+          {/* Access is granted in amway_admins; re-check without logging out. */}
+          <button type="button" className={btnPrimary} onClick={() => void comprobarAdmin()}>
+            Volver a comprobar
+          </button>
+          <button type="button" className={btnGhost} onClick={() => amwayDb().auth.signOut()}>
+            Cerrar sesión
+          </button>
+        </div>
       </div>
     );
   }
