@@ -15,7 +15,25 @@ function LenisGsapBridge() {
     const update = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(update);
     gsap.ticker.lagSmoothing(0);
-    return () => gsap.ticker.remove(update);
+
+    // Lenis only re-measures its scroll limit when <html> resizes. Watch the
+    // body too, so content that grows after load (images, hydration, lazy
+    // sections) never leaves a stale limit that clamps scrolling mid-page.
+    let frame = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        lenis.resize();
+        ScrollTrigger.refresh();
+      });
+    });
+    observer.observe(document.body);
+
+    return () => {
+      gsap.ticker.remove(update);
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
   }, [lenis]);
 
   return null;
