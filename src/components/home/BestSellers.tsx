@@ -24,7 +24,7 @@ const RANGES = [
     id: "nutrilite",
     brand: "Nutrilite™",
     tagline: "Vitaminas y proteínas cultivadas desde la raíz, ciencia basada en plantas.",
-    image: "/images/products/double-x.webp",
+    image: "/images/editorial/nutricion-familia.webp",
     href: "/nutricion",
   },
 ] as const;
