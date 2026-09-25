@@ -1,17 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import dynamic from "next/dynamic";
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { priceRangeLabel } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
 import { PRODUCTS } from "@/data/products";
-
-const ESpringScene = dynamic(
-  () => import("@/components/animated/ESpringScene").then((m) => m.ESpringScene),
-  { ssr: false }
-);
 
 const ESPRING = PRODUCTS.find((p) => p.id === "espring-mesón")!;
 
@@ -49,19 +42,21 @@ export function FlagshipShowcase() {
           </div>
         </div>
 
-        <motion.div style={{ scale }} className="relative mx-auto aspect-square w-full max-w-lg">
-          <ESpringScene />
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className="relative h-2/3 w-2/3">
-              <Image
-                src="/images/products/espring.webp"
-                alt={ESPRING.name}
-                fill
-                sizes="400px"
-                className="object-contain drop-shadow-2xl"
-              />
-            </div>
-          </div>
+        <motion.div
+          style={{ scale }}
+          className="relative aspect-video w-full overflow-hidden rounded-2xl shadow-2xl ring-1 ring-cream/10"
+        >
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            src="/videos/espring/purifier-loop.mp4"
+            poster="/images/espring/purifier-loop-poster.webp"
+            aria-label={`${ESPRING.name} filtrando agua`}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+          />
         </motion.div>
       </div>
     </section>
