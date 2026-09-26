@@ -28,19 +28,42 @@ const SCENES: Record<string, React.ComponentType<{ image?: string }>> = {
 export function HogarHighlights({
   items,
 }: {
-  items: { product: Product; scene: keyof typeof SCENES; image?: string; tag: string }[];
+  items: {
+    product: Product;
+    scene: keyof typeof SCENES;
+    image?: string;
+    video?: string;
+    poster?: string;
+    tag: string;
+  }[];
 }) {
   return (
     // Swipeable row on phones (next card peeks in), three-column grid from sm up.
     <div className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0">
-      {items.map(({ product, scene, image, tag }) => {
+      {items.map(({ product, scene, image, video, poster, tag }) => {
         const Scene = SCENES[scene];
         return (
           <div
             key={product.id}
             className="w-[82%] shrink-0 snap-start overflow-hidden rounded-3xl border border-white/10 bg-carbon sm:w-auto"
           >
-            <Scene image={image} />
+            {video ? (
+              <div className="relative aspect-square w-full overflow-hidden">
+                <video
+                  className="absolute inset-0 h-full w-full object-cover"
+                  src={video}
+                  poster={poster}
+                  aria-label={product.name}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                />
+              </div>
+            ) : (
+              <Scene image={image} />
+            )}
             <div className="p-5">
               <p className="text-[11px] uppercase tracking-wide text-[#8fb4c2]">{tag}</p>
               <h3 className="mt-2 font-display text-lg text-cream">{product.name}</h3>

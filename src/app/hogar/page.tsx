@@ -20,7 +20,13 @@ export default function HogarPage() {
   const icook = getProductById("icook-coleccion-19")!;
 
   const highlights = [
-    { product: espring, scene: "espring" as const, tag: "Agua purificada al instante" },
+    {
+      product: espring,
+      scene: "espring" as const,
+      video: "/videos/espring/purifier-loop.mp4",
+      poster: "/images/espring/purifier-loop-poster.webp",
+      tag: "Agua purificada al instante",
+    },
     { product: atmosphere, scene: "atmosphere" as const, tag: "Aire visiblemente más limpio" },
     {
       product: icook,
