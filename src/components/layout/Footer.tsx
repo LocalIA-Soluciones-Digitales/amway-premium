@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SITE, waLink, WA_PRESETS } from "@/data/site-config";
 
@@ -30,9 +31,11 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
           <div className="col-span-2">
-            <p className="font-display text-3xl text-cream">
+            <p className="flex items-center gap-3 font-display text-3xl text-cream">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cream p-1.5">
+                <Image src="/brand/logo-mark.png" alt="" width={48} height={48} className="h-full w-full" />
+              </span>
               {SITE.name}
-              <span className="text-gold">.</span>
             </p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/55">
               {SITE.legalNote} Servicio local en {SITE.city}, {SITE.region}, con atención

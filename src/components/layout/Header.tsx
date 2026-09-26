@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -103,12 +104,26 @@ export function Header() {
         <Link
           href="/"
           className={cn(
-            "font-display text-lg tracking-tight transition-colors sm:text-xl",
+            "flex items-center gap-2.5 font-display text-lg tracking-tight transition-colors sm:text-xl",
             dark ? "text-cream" : "text-carbon"
           )}
         >
+          <span
+            className={cn(
+              "flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors sm:h-9 sm:w-9",
+              dark && "bg-cream"
+            )}
+          >
+            <Image
+              src="/brand/logo-mark.png"
+              alt=""
+              width={36}
+              height={36}
+              priority
+              className={cn("h-full w-full object-contain", dark && "p-1")}
+            />
+          </span>
           {SITE.name}
-          <span className="ml-1.5 text-gold">.</span>
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
@@ -258,7 +273,10 @@ export function Header() {
             className="fixed inset-0 z-50 flex flex-col bg-cream-soft/98 px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-7 backdrop-blur-xl sm:px-8 lg:hidden"
           >
             <div className="flex items-center justify-between">
-              <span className="font-display text-lg text-carbon">{SITE.name}</span>
+              <span className="flex items-center gap-2.5 font-display text-lg text-carbon">
+                <Image src="/brand/logo-mark.png" alt="" width={32} height={32} className="h-8 w-8" />
+                {SITE.name}
+              </span>
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Cerrar menú"
