@@ -27,11 +27,20 @@ export default function HogarPage() {
       poster: "/images/espring/purifier-loop-poster.webp",
       tag: "Agua purificada al instante",
     },
-    { product: atmosphere, scene: "atmosphere" as const, tag: "Aire visiblemente más limpio" },
+    {
+      product: atmosphere,
+      scene: "atmosphere" as const,
+      video: "/videos/hogar/atmosphere-sky.mp4",
+      poster: "/images/hogar/atmosphere-sky-poster.webp",
+      videoPosition: "center 40%",
+      tag: "Aire visiblemente más limpio",
+    },
     {
       product: icook,
       scene: "icook" as const,
-      image: "p196_0_840x458.webp",
+      video: "/videos/hogar/icook.mp4",
+      poster: "/images/hogar/icook-poster.webp",
+      videoPosition: "center 60%",
       tag: "Cocina como un profesional",
     },
   ];

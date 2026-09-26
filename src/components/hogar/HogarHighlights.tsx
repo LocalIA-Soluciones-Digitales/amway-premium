@@ -34,13 +34,15 @@ export function HogarHighlights({
     image?: string;
     video?: string;
     poster?: string;
+    /** CSS object-position for the square crop of the video. */
+    videoPosition?: string;
     tag: string;
   }[];
 }) {
   return (
     // Swipeable row on phones (next card peeks in), three-column grid from sm up.
     <div className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0">
-      {items.map(({ product, scene, image, video, poster, tag }) => {
+      {items.map(({ product, scene, image, video, poster, videoPosition, tag }) => {
         const Scene = SCENES[scene];
         return (
           <div
@@ -51,6 +53,7 @@ export function HogarHighlights({
               <div className="relative aspect-square w-full overflow-hidden">
                 <video
                   className="absolute inset-0 h-full w-full object-cover"
+                  style={videoPosition ? { objectPosition: videoPosition } : undefined}
                   src={video}
                   poster={poster}
                   aria-label={product.name}
