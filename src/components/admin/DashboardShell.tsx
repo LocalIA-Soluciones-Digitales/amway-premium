@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { Check, ChevronDown, ExternalLink, LogOut, type LucideIcon } from "lucide-react";
+import { Check, ChevronDown, ExternalLink, KeyRound, LogOut, type LucideIcon } from "lucide-react";
 import { SITE } from "@/data/site-config";
 import { cn } from "@/lib/utils";
+import { CambiarContrasena } from "./CambiarContrasena";
 
 export interface ShellTab<T extends string> {
   id: T;
@@ -43,6 +44,7 @@ export function DashboardShell<T extends string>({
   viewSwitch?: ViewSwitch;
   children: ReactNode;
 }) {
+  const [pwOpen, setPwOpen] = useState(false);
   const tabsNav = (
     <nav className="-mx-1 flex items-center gap-1 overflow-x-auto px-1 [scrollbar-width:none]" aria-label="Secciones">
       {tabs.map(({ id, label, icon: Icon, badge }) => {
@@ -112,6 +114,15 @@ export function DashboardShell<T extends string>({
             </div>
             <button
               type="button"
+              onClick={() => setPwOpen(true)}
+              aria-label="Cambiar contraseña"
+              title="Cambiar contraseña"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-carbon/10 bg-white text-stone transition hover:border-carbon/25 hover:text-carbon"
+            >
+              <KeyRound size={15} />
+            </button>
+            <button
+              type="button"
               onClick={onSignOut}
               aria-label="Cerrar sesión"
               title="Cerrar sesión"
@@ -132,6 +143,7 @@ export function DashboardShell<T extends string>({
       </header>
 
       <div className="mx-auto max-w-[1440px] px-4 pb-24 pt-8 sm:px-8 print:max-w-none print:p-0">{children}</div>
+      <CambiarContrasena email={email} open={pwOpen} onClose={() => setPwOpen(false)} />
     </div>
   );
 }
