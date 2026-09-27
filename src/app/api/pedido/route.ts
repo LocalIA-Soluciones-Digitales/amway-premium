@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { amwayRpc } from "@/lib/amway-db";
 import { validarPedidoWeb } from "@/lib/pedido-web";
+import { avisarPedidoNuevo } from "@/lib/push";
 
 // Pedido con pago en efectivo al recoger: se apunta en el panel como
 // "pendiente de pago" y la cesta abre WhatsApp con el nº de pedido.
@@ -37,6 +38,7 @@ export async function POST(request: NextRequest) {
       },
       { cache: "no-store" }
     );
+    await avisarPedidoNuevo(pedido.id);
     return NextResponse.json({ numero: pedido.numero, total });
   } catch (e) {
     console.error("No se pudo registrar el pedido en efectivo", e);

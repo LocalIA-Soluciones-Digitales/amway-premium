@@ -606,3 +606,137 @@ $$;
 alter table public.amway_visitas drop constraint if exists amway_visitas_event_type_check;
 alter table public.amway_visitas add constraint amway_visitas_event_type_check
   check (event_type in ('pageview', 'add_to_cart', 'cart_open', 'checkout_start', 'whatsapp_click', 'solicitud', 'resena', 'asistente'));
+
+-- ============================================================
+-- Control de recogidas y avisos push de pedidos nuevos
+-- ============================================================
+-- preparado_at: la gestora marca la bolsa como preparada para la recogida.
+-- push_avisado_at: el aviso al móvil ya se envió (evita duplicados entre la
+-- página de éxito y el webhook de Stripe).
+alter table public.amway_pedidos add column if not exists preparado_at timestamptz;
+alter table public.amway_pedidos add column if not exists push_avisado_at timestamptz;
+
+-- Dispositivos con los avisos activados desde el panel (como
+-- push_suscripciones de Arrantza, pero propio de esta tienda).
+create table if not exists public.amway_push_suscripciones (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  endpoint text not null unique,
+  p256dh text not null,
+  auth text not null,
+  user_agent text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+alter table public.amway_push_suscripciones enable row level security;
+
+drop policy if exists "amway_push_select_propias" on public.amway_push_suscripciones;
+create policy "amway_push_select_propias" on public.amway_push_suscripciones for select to authenticated
+  using (public.amway_es_admin() and (email = lower(coalesce(auth.jwt() ->> 'email', '')) or public.amway_es_desarrollador()));
+drop policy if exists "amway_push_delete_propias" on public.amway_push_suscripciones;
+create policy "amway_push_delete_propias" on public.amway_push_suscripciones for delete to authenticated
+  using (public.amway_es_admin() and (email = lower(coalesce(auth.jwt() ->> 'email', '')) or public.amway_es_desarrollador()));
+
+create or replace function public.amway_guardar_suscripcion_push(
+  p_endpoint text, p_p256dh text, p_auth text, p_user_agent text
+)
+returns void
+language plpgsql security definer set search_path = public
+as $$
+begin
+  if not public.amway_es_admin() then
+    raise exception 'no autorizado';
+  end if;
+  if coalesce(p_endpoint, '') !~ '^https://' or coalesce(p_p256dh, '') = '' or coalesce(p_auth, '') = '' then
+    raise exception 'suscripción inválida';
+  end if;
+  insert into public.amway_push_suscripciones (email, endpoint, p256dh, auth, user_agent)
+  values (lower(auth.jwt() ->> 'email'), p_endpoint, p_p256dh, p_auth, left(p_user_agent, 400))
+  on conflict (endpoint) do update
+    set email = excluded.email, p256dh = excluded.p256dh, auth = excluded.auth,
+        user_agent = excluded.user_agent, updated_at = now();
+end;
+$$;
+revoke all on function public.amway_guardar_suscripcion_push(text, text, text, text) from public, anon;
+grant execute on function public.amway_guardar_suscripcion_push(text, text, text, text) to authenticated;
+
+create or replace function public.amway_token_servidor_valido(p_token text)
+returns boolean
+language sql stable security definer set search_path = public
+as $$
+  select exists (
+    select 1 from public.amway_config
+    where clave = 'pedidos_token_sha256'
+      and valor = encode(sha256(convert_to(coalesce(p_token, ''), 'UTF8')), 'hex')
+  );
+$$;
+revoke all on function public.amway_token_servidor_valido(text) from public, anon, authenticated;
+
+-- El servidor Next.js (con el token de pedidos) reclama el aviso de un
+-- pedido web: solo la primera llamada recibe el resumen y los destinos.
+create or replace function public.amway_push_pedido(p_token text, p_pedido_id uuid)
+returns jsonb
+language plpgsql security definer set search_path = public
+as $$
+declare
+  v_pedido public.amway_pedidos;
+begin
+  if not public.amway_token_servidor_valido(p_token) then
+    raise exception 'no autorizado';
+  end if;
+
+  update public.amway_pedidos set push_avisado_at = now()
+  where id = p_pedido_id and origen = 'web' and push_avisado_at is null
+  returning * into v_pedido;
+  if v_pedido.id is null then
+    return null;
+  end if;
+
+  return jsonb_build_object(
+    'pedido', jsonb_build_object(
+      'id', v_pedido.id, 'numero', v_pedido.numero, 'total_eur', v_pedido.total_eur,
+      'metodo_pago', v_pedido.metodo_pago, 'estado', v_pedido.estado,
+      'cliente_nombre', v_pedido.cliente_nombre,
+      'recogida_fecha', v_pedido.recogida_fecha, 'recogida_hora', v_pedido.recogida_hora,
+      'unidades', (select coalesce(sum((i ->> 'cantidad')::int), 0) from jsonb_array_elements(v_pedido.items) i)
+    ),
+    'destinos', coalesce((
+      select jsonb_agg(jsonb_build_object('endpoint', s.endpoint, 'p256dh', s.p256dh, 'auth', s.auth))
+      from public.amway_push_suscripciones s
+      join public.amway_admins a on a.email = s.email
+    ), '[]'::jsonb)
+  );
+end;
+$$;
+revoke all on function public.amway_push_pedido(text, uuid) from public, authenticated;
+grant execute on function public.amway_push_pedido(text, uuid) to anon;
+
+-- Borra las suscripciones que el navegador ya ha dado de baja (404/410).
+drop function if exists public.amway_push_caducadas(text, text[]);
+create function public.amway_push_caducadas(p_token text, p_endpoints text[])
+returns integer
+language plpgsql security definer set search_path = public
+as $$
+declare
+  v_n integer;
+begin
+  if not public.amway_token_servidor_valido(p_token) then
+    raise exception 'no autorizado';
+  end if;
+  delete from public.amway_push_suscripciones where endpoint = any (p_endpoints);
+  get diagnostics v_n = row_count;
+  return v_n;
+end;
+$$;
+revoke all on function public.amway_push_caducadas(text, text[]) from public, authenticated;
+grant execute on function public.amway_push_caducadas(text, text[]) to anon;
+
+-- Pedidos nuevos al instante en el panel (Realtime respeta la RLS: solo
+-- los administradores los reciben).
+do $$
+begin
+  if not exists (select 1 from pg_publication_tables
+                 where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'amway_pedidos') then
+    alter publication supabase_realtime add table public.amway_pedidos;
+  end if;
+end $$;

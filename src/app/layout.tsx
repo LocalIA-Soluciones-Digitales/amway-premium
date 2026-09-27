@@ -28,6 +28,7 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
+  manifest: "/manifest.webmanifest",
   title: {
     default: `${SITE.name} — Productos Amway Premium de Estados Unidos`,
     template: `%s · ${SITE.name}`,

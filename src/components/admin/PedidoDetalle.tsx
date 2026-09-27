@@ -56,6 +56,17 @@ function mensajes(p: Pedido) {
             p.seguimiento ? `\n\nNº de seguimiento: ${p.seguimiento}` : ""
           }\n\nCualquier cosa, escríbeme por aquí.`,
         },
+    ...(cuando
+      ? [
+          {
+            id: "listo",
+            label: "Avisar de que está preparado",
+            texto: `Hola ${nombre}, tu pedido nº ${p.numero} ya está preparado 🛍️ Te espero ${cuando}.${
+              p.estado === "pendiente" ? ` Recuerda: ${eur(p.total_eur)} en efectivo.` : ""
+            }`,
+          },
+        ]
+      : []),
     {
       id: "resena",
       label: "Pedir una reseña",
@@ -93,6 +104,71 @@ ${p.recogida_fecha ? `<p style="margin-top:24px"><strong>Recogida:</strong> ${es
   }. ¡Gracias por tu compra!</p>
 <script>window.onload=()=>{window.print()}</script></body></html>`);
   w.document.close();
+}
+
+// Día y hora de recogida, con opción de cambiarlos (el cliente avisa de un
+// imprevisto) o de ponerlos en una venta manual que pasará a recoger.
+function Recogida({ p, onUpdate }: { p: Pedido; onUpdate: (c: Partial<Pedido>) => void }) {
+  const [editando, setEditando] = useState(false);
+  const [dia, setDia] = useState(p.recogida_fecha ?? "");
+  const [hora, setHora] = useState(p.recogida_hora ?? "");
+
+  if (!editando) {
+    return (
+      <div className="mt-2 flex items-start gap-1.5 rounded-lg bg-white px-2.5 py-2 text-carbon">
+        <CalendarClock size={14} className="mt-0.5 shrink-0 text-stone" />
+        <span className="min-w-0 flex-1">{p.recogida_fecha ? `Recoge ${cuandoRecoge(p)}` : "Sin día de recogida"}</span>
+        <button
+          type="button"
+          onClick={() => {
+            setDia(p.recogida_fecha ?? "");
+            setHora(p.recogida_hora ?? "");
+            setEditando(true);
+          }}
+          className="shrink-0 text-xs text-forest hover:underline"
+        >
+          {p.recogida_fecha ? "Cambiar" : "Poner"}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-2 flex flex-col gap-2 rounded-lg bg-white p-2.5">
+      <div className="flex gap-2">
+        <input type="date" value={dia} onChange={(e) => setDia(e.target.value)} className={cn(inputClass, "min-w-0 flex-1")} aria-label="Día" />
+        <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} step={900} className={cn(inputClass, "w-28")} aria-label="Hora" />
+      </div>
+      <div className="flex justify-end gap-2">
+        {p.recogida_fecha && (
+          <button
+            type="button"
+            onClick={() => {
+              onUpdate({ recogida_fecha: null, recogida_hora: null });
+              setEditando(false);
+            }}
+            className="mr-auto text-xs text-stone hover:text-carbon"
+          >
+            Quitar
+          </button>
+        )}
+        <button type="button" onClick={() => setEditando(false)} className={cn(btnGhost, "h-8 px-3 text-xs")}>
+          Cancelar
+        </button>
+        <button
+          type="button"
+          disabled={!dia}
+          onClick={() => {
+            onUpdate({ recogida_fecha: dia, recogida_hora: hora || null });
+            setEditando(false);
+          }}
+          className={cn(btnPrimary, "h-8 px-3 text-xs")}
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export function PedidoDetalle({
@@ -186,12 +262,7 @@ export function PedidoDetalle({
           {p.cliente_telefono && <p className="text-stone">{p.cliente_telefono}</p>}
           {p.cliente_email && <p className="break-all text-stone">{p.cliente_email}</p>}
           {p.direccion && <p className="mt-1 text-stone">{p.direccion}</p>}
-          {recoge && (
-            <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-white px-2.5 py-2 text-carbon">
-              <CalendarClock size={14} className="mt-0.5 shrink-0 text-stone" />
-              <span>Recoge {cuandoRecoge(p)}</span>
-            </p>
-          )}
+          {(recoge || !cancelado) && <Recogida p={p} onUpdate={onUpdate} />}
           <p className="mt-2 text-xs text-stone">
             {METODO_PAGO[p.metodo_pago]} · {p.origen === "web" ? "Pedido web" : "Venta manual"}
             {p.enviado_at && ` · enviado ${fecha(p.enviado_at)}`}

@@ -32,6 +32,7 @@ export function DashboardShell<T extends string>({
   email,
   onSignOut,
   viewSwitch,
+  actions,
   children,
 }: {
   title: string;
@@ -42,6 +43,7 @@ export function DashboardShell<T extends string>({
   email?: string;
   onSignOut: () => void;
   viewSwitch?: ViewSwitch;
+  actions?: ReactNode;
   children: ReactNode;
 }) {
   const [pwOpen, setPwOpen] = useState(false);
@@ -109,6 +111,7 @@ export function DashboardShell<T extends string>({
             >
               Ver tienda <ExternalLink size={12} />
             </Link>
+            {actions}
             <div className="hidden text-right lg:block">
               <p className="max-w-[12rem] truncate text-xs text-carbon">{email}</p>
             </div>

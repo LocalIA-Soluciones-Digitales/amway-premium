@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, ClipboardList, Euro, MessageSquareQuote, PackageX, ShoppingBag, Truck } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ArrowRight, CalendarCheck2, ClipboardList, Euro, MessageSquareQuote, PackageX, ShoppingBag, Truck } from "lucide-react";
 import { getProductById } from "@/data/products";
 import { amwayDb } from "@/lib/amway-db";
+import { hoyMadrid, sumarDias } from "@/lib/recogida";
+import { APreparar, CabeceraGrupo, FilaRecogida, agruparPorDia } from "./recogidas";
 import type { Pendientes } from "./AdminApp";
 import { ColumnChart } from "./charts";
 import { calcular } from "./ContabilidadPanel";
@@ -17,8 +19,48 @@ function saludo() {
   return h < 14 ? "Buenos días" : h < 21 ? "Buenas tardes" : "Buenas noches";
 }
 
-export function HoyPanel({ onNavigate, pendientes, nombre }: { onNavigate: (v: GestionTab) => void; pendientes: Pendientes; nombre?: string | null }) {
+export function HoyPanel({
+  onNavigate,
+  onAbrirPedido,
+  onChange,
+  pendientes,
+  nombre,
+}: {
+  onNavigate: (v: GestionTab) => void;
+  onAbrirPedido?: (id: string) => void;
+  onChange?: () => void;
+  pendientes: Pendientes;
+  nombre?: string | null;
+}) {
   const [pedidos, setPedidos] = useState<Pedido[] | null>(null);
+  const [recogidas, setRecogidas] = useState<Pedido[] | null>(null);
+
+  // Recogidas de hoy (también las ya hechas), las atrasadas y las de mañana,
+  // aunque el pedido se hiciera hace más de un mes.
+  const cargarRecogidas = useCallback(async () => {
+    const hoy = hoyMadrid();
+    const { data } = await amwayDb()
+      .from("amway_pedidos")
+      .select("*")
+      .not("recogida_fecha", "is", null)
+      .lte("recogida_fecha", sumarDias(hoy, 1))
+      .or(`estado.in.(pendiente,pagado,enviado),recogida_fecha.eq.${hoy}`)
+      .limit(300);
+    setRecogidas((data as Pedido[] | null) ?? []);
+  }, []);
+
+  useEffect(() => {
+    void cargarRecogidas();
+  }, [cargarRecogidas]);
+
+  async function actualizarRecogida(id: string, cambios: Partial<Pedido>) {
+    setRecogidas((prev) => prev?.map((p) => (p.id === id ? { ...p, ...cambios } : p)) ?? null);
+    await amwayDb().from("amway_pedidos").update(cambios).eq("id", id);
+    onChange?.();
+  }
+
+  const gruposRecogida = useMemo(() => (recogidas ? agruparPorDia(recogidas) : []), [recogidas]);
+  const grupoHoy = gruposRecogida.find((g) => g.etiqueta === "Hoy");
   const [gastosMes, setGastosMes] = useState<Gasto[]>([]);
   const [productos, setProductos] = useState<ProductoAjusteRow[]>([]);
 
@@ -132,6 +174,46 @@ export function HoyPanel({ onNavigate, pendientes, nombre }: { onNavigate: (v: G
               </button>
             ))}
           </div>
+
+          <Card>
+            <CardTitle
+              action={
+                <button type="button" onClick={() => onNavigate("pedidos")} className="text-xs text-forest hover:underline">
+                  Ver agenda
+                </button>
+              }
+            >
+              Recogidas
+            </CardTitle>
+            {!recogidas ? (
+              <Loading />
+            ) : gruposRecogida.length === 0 ? (
+              <div className="flex flex-col items-center gap-2 py-8 text-center text-sm text-stone">
+                <CalendarCheck2 size={20} className="text-stone/60" />
+                Nadie viene a recoger hoy ni mañana.
+              </div>
+            ) : (
+              <div className="flex flex-col gap-5">
+                {!grupoHoy && <p className="text-sm text-stone">Hoy no hay recogidas.</p>}
+                {gruposRecogida.map((g) => (
+                  <div key={g.key} className="flex flex-col gap-2">
+                    <CabeceraGrupo g={g} />
+                    {g.etiqueta === "Hoy" && <APreparar pedidos={g.pedidos} />}
+                    {g.pedidos.map((p) => (
+                      <FilaRecogida
+                        key={p.id}
+                        p={p}
+                        mostrarFecha={g.key === "atrasados"}
+                        abierto={false}
+                        onAbrir={() => onAbrirPedido?.(p.id)}
+                        onUpdate={(c) => void actualizarRecogida(p.id, c)}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
 
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             <Stat label="Ventas hoy" value={eur(d.hoy.ventas)} icon={<Euro size={15} />} delta={variacion(d.hoy.ventas, d.ayer.ventas)} hint="vs. ayer" />

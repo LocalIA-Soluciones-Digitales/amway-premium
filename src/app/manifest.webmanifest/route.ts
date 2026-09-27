@@ -1,8 +1,13 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/data/site-config";
 
-export default function manifest(): MetadataRoute.Manifest {
-  return {
+// Manifest de la tienda. Va como ruta normal (y no como app/manifest.ts)
+// para que /admin pueda declarar el suyo propio en su layout: el de la
+// convención de archivos se impone a cualquier metadata anidada.
+export const dynamic = "force-static";
+
+export function GET() {
+  const manifest: MetadataRoute.Manifest = {
     name: `${SITE.name} — Productos Amway Premium`,
     short_name: SITE.name,
     description:
@@ -22,4 +27,5 @@ export default function manifest(): MetadataRoute.Manifest {
       },
     ],
   };
+  return Response.json(manifest, { headers: { "Content-Type": "application/manifest+json" } });
 }

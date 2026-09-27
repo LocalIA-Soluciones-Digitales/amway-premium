@@ -39,6 +39,7 @@ export interface Pedido {
   enviado_at: string | null;
   recogida_fecha: string | null; // YYYY-MM-DD (recogida en mano)
   recogida_hora: string | null; // HH:MM
+  preparado_at: string | null; // bolsa preparada para la recogida
   created_at: string;
 }
 

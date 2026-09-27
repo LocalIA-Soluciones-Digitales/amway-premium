@@ -2,6 +2,7 @@ import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { amwayRpc } from "@/lib/amway-db";
 import { getProductById } from "@/data/products";
+import { avisarPedidoNuevo } from "@/lib/push";
 
 // Registra en amway_pedidos un pago confirmado por Stripe. Lo llaman la
 // página de éxito y (si está configurado) el webhook; la función SQL es
@@ -62,7 +63,7 @@ export async function registrarPedidoStripe(sessionId: string): Promise<PedidoPa
   const token = process.env.AMWAY_PEDIDOS_TOKEN;
   if (!token) return pagado;
 
-  await amwayRpc("amway_registrar_pedido_web", {
+  const pedidoId = await amwayRpc<string | null>("amway_registrar_pedido_web", {
     p_token: token,
     p_stripe_session_id: session.id,
     p_items: items,
@@ -77,5 +78,6 @@ export async function registrarPedidoStripe(sessionId: string): Promise<PedidoPa
     p_recogida_hora: pagado.recogidaHora,
     p_notas: meta.notas || null,
   }, { cache: "no-store" });
+  await avisarPedidoNuevo(pedidoId);
   return pagado;
 }

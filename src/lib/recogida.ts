@@ -40,8 +40,13 @@ function ahoraMadrid(now: Date): { fecha: string; minutos: number } {
   return { fecha: `${parts.year}-${parts.month}-${parts.day}`, minutos: Number(parts.hour) * 60 + Number(parts.minute) };
 }
 
+// Fecha de hoy en Madrid (YYYY-MM-DD).
+export function hoyMadrid(now = new Date()): string {
+  return ahoraMadrid(now).fecha;
+}
+
 // Aritmética de calendario sobre YYYY-MM-DD (a mediodía UTC, sin saltos de hora).
-function sumarDias(fecha: string, n: number): string {
+export function sumarDias(fecha: string, n: number): string {
   const d = new Date(`${fecha}T12:00:00Z`);
   d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
