@@ -10,6 +10,7 @@ import {
   Banknote,
   CalendarDays,
   CheckCircle2,
+  Clock,
   CreditCard,
   Loader2,
   MessageCircle,
@@ -31,6 +32,9 @@ import {
   fechaCorta,
   fechaLarga,
   horasDisponibles,
+  rangoFechas,
+  recogidaValida,
+  RECOGIDA,
   type MetodoPagoWeb,
 } from "@/lib/recogida";
 import { cn } from "@/lib/utils";
@@ -83,7 +87,11 @@ export function CartDrawer() {
 
   // Recalculado en cada apertura: los huecos de hoy caducan con la hora.
   const dias = useMemo(() => (isOpen ? diasRecogida() : []), [isOpen]);
+  const rango = useMemo(() => rangoFechas(), [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
   const horas = useMemo(() => (fecha ? horasDisponibles(fecha) : []), [fecha]);
+  // Lo que el cliente ha escrito a mano ("Otro día" / "Otra hora").
+  const fechaLibre = fecha && !dias.includes(fecha) ? fecha : "";
+  const horaLibre = hora && !horas.includes(hora) ? hora : "";
 
   useEffect(() => {
     if (!isOpen) return;
@@ -115,13 +123,10 @@ export function CartDrawer() {
     } catch {}
   }, []);
 
-  // Si el día elegido ya no está (o la hora ya no cabe), se vuelve a elegir.
+  // Un día ya pasado (la cesta abierta de un día para otro) se vuelve a elegir.
   useEffect(() => {
-    if (fecha && !dias.includes(fecha)) setFecha(null);
-  }, [dias, fecha]);
-  useEffect(() => {
-    if (hora && !horas.includes(hora)) setHora(null);
-  }, [horas, hora]);
+    if (fecha && fecha < rango.min) setFecha(null);
+  }, [rango, fecha]);
 
   const lineasValidas = items.flatMap((item) => {
     const d = lineDetails(item, catalog.precio);
@@ -132,6 +137,16 @@ export function CartDrawer() {
     e.preventDefault();
     if (!fecha || !hora) {
       setError("Elige el día y la hora a la que pasarás a recogerlo.");
+      return;
+    }
+    if (!recogidaValida({ fecha, hora })) {
+      setError(
+        fecha > rango.max
+          ? `Solo podemos apartarlo hasta el ${fechaLarga(rango.max)}.`
+          : `Elige una hora entre las ${RECOGIDA.horaMin} y las ${RECOGIDA.horaMax}${
+              fecha === rango.min ? ", con al menos una hora de margen" : ""
+            }.`
+      );
       return;
     }
     setLoading(true);
@@ -395,7 +410,7 @@ export function CartDrawer() {
               <form onSubmit={enviar} className="flex min-h-0 flex-1 flex-col">
                 <div data-lenis-prevent className="flex-1 divide-y divide-carbon/8 overflow-y-auto overscroll-contain px-6">
                   <Seccion titulo="¿Qué día pasas a recogerlo?">
-                    <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none]">
+                    <div className="grid grid-cols-5 gap-2">
                       {dias.map((d) => {
                         const c = fechaCorta(d);
                         const activo = d === fecha;
@@ -407,7 +422,7 @@ export function CartDrawer() {
                             aria-pressed={activo}
                             aria-label={fechaLarga(d)}
                             className={cn(
-                              "flex w-16 shrink-0 snap-start flex-col items-center rounded-2xl border py-2.5 transition",
+                              "flex flex-col items-center rounded-2xl border py-2 transition",
                               activo
                                 ? "border-carbon bg-carbon text-cream"
                                 : "border-carbon/15 bg-white text-carbon hover:border-carbon/35"
@@ -422,28 +437,73 @@ export function CartDrawer() {
                         );
                       })}
                     </div>
+                    <label
+                      className={cn(
+                        "mt-2 flex h-12 items-center gap-3 rounded-2xl border bg-white pl-3.5 pr-2 transition",
+                        fechaLibre ? "border-carbon ring-1 ring-carbon" : "border-carbon/15"
+                      )}
+                    >
+                      <CalendarDays size={16} className="shrink-0 text-stone" />
+                      <span className="shrink-0 text-sm text-carbon">Otro día</span>
+                      <input
+                        type="date"
+                        value={fechaLibre}
+                        min={rango.min}
+                        max={rango.max}
+                        onChange={(e) => setFecha(e.target.value || null)}
+                        aria-label="Elegir otro día de recogida"
+                        className="h-full min-w-0 flex-1 bg-transparent text-right text-base text-carbon outline-none"
+                      />
+                    </label>
                   </Seccion>
 
                   <Seccion titulo="¿A qué hora?">
                     {fecha ? (
-                      <div className="grid grid-cols-4 gap-2">
-                        {horas.map((h) => (
-                          <button
-                            key={h}
-                            type="button"
-                            onClick={() => setHora(h)}
-                            aria-pressed={h === hora}
-                            className={cn(
-                              "h-10 rounded-xl border text-sm tabular-nums transition",
-                              h === hora
-                                ? "border-carbon bg-carbon text-cream"
-                                : "border-carbon/15 bg-white text-carbon hover:border-carbon/35"
-                            )}
-                          >
-                            {h}
-                          </button>
-                        ))}
-                      </div>
+                      <>
+                        {horas.length > 0 && (
+                          <div className="grid grid-cols-4 gap-2">
+                            {horas.map((h) => (
+                              <button
+                                key={h}
+                                type="button"
+                                onClick={() => setHora(h)}
+                                aria-pressed={h === hora}
+                                className={cn(
+                                  "h-10 rounded-xl border text-sm tabular-nums transition",
+                                  h === hora
+                                    ? "border-carbon bg-carbon text-cream"
+                                    : "border-carbon/15 bg-white text-carbon hover:border-carbon/35"
+                                )}
+                              >
+                                {h}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                        <label
+                          className={cn(
+                            "mt-2 flex h-12 items-center gap-3 rounded-2xl border bg-white pl-3.5 pr-2 transition",
+                            horaLibre ? "border-carbon ring-1 ring-carbon" : "border-carbon/15"
+                          )}
+                        >
+                          <Clock size={16} className="shrink-0 text-stone" />
+                          <span className="shrink-0 text-sm text-carbon">Otra hora</span>
+                          <input
+                            type="time"
+                            value={horaLibre}
+                            min={RECOGIDA.horaMin}
+                            max={RECOGIDA.horaMax}
+                            step={300}
+                            onChange={(e) => setHora(e.target.value || null)}
+                            aria-label="Elegir otra hora de recogida"
+                            className="h-full min-w-0 flex-1 bg-transparent text-right text-base tabular-nums text-carbon outline-none"
+                          />
+                        </label>
+                        <p className="mt-2 text-xs text-stone">
+                          Puedes proponer cualquier hora entre las {RECOGIDA.horaMin} y las {RECOGIDA.horaMax}; te la
+                          confirmamos por WhatsApp.
+                        </p>
+                      </>
                     ) : (
                       <p className="text-sm text-stone">Elige primero el día.</p>
                     )}

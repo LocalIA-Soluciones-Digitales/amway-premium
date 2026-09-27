@@ -8,6 +8,11 @@ export const RECOGIDA = {
   cerrado: [0], // 0 = domingo
   horas: ["10:00", "11:00", "12:00", "13:00", "17:00", "18:00", "19:00", "20:00"],
   antelacionMin: 120, // la primera hora de hoy tiene que quedar a 2 h vista
+  // Día y hora a elección del cliente ("Otro día" / "Otra hora").
+  maxDias: 60,
+  horaMin: "08:00",
+  horaMax: "22:00",
+  antelacionLibreMin: 60,
 } as const;
 
 export type MetodoPagoWeb = "tarjeta" | "efectivo";
@@ -45,8 +50,8 @@ function sumarDias(fecha: string, n: number): string {
 const diaSemana = (fecha: string) => new Date(`${fecha}T12:00:00Z`).getUTCDay();
 const aMinutos = (hora: string) => Number(hora.slice(0, 2)) * 60 + Number(hora.slice(3, 5));
 
+// Horas sugeridas para una fecha (las de hoy, solo las que quedan a tiempo).
 export function horasDisponibles(fecha: string, now = new Date()): string[] {
-  if ((RECOGIDA.cerrado as readonly number[]).includes(diaSemana(fecha))) return [];
   const hoy = ahoraMadrid(now);
   if (fecha < hoy.fecha) return [];
   if (fecha > hoy.fecha) return [...RECOGIDA.horas];
@@ -57,15 +62,33 @@ export function diasRecogida(now = new Date()): string[] {
   const out: string[] = [];
   let fecha = ahoraMadrid(now).fecha;
   for (let i = 0; out.length < RECOGIDA.diasVista && i < 31; i++, fecha = sumarDias(fecha, 1)) {
-    if (horasDisponibles(fecha, now).length > 0) out.push(fecha);
+    const cerrado = (RECOGIDA.cerrado as readonly number[]).includes(diaSemana(fecha));
+    if (!cerrado && horasDisponibles(fecha, now).length > 0) out.push(fecha);
   }
   return out;
 }
 
+// Límites del selector de fecha libre (min/max del <input type="date">).
+export function rangoFechas(now = new Date()): { min: string; max: string } {
+  const hoy = ahoraMadrid(now).fecha;
+  return { min: hoy, max: sumarDias(hoy, RECOGIDA.maxDias) };
+}
+
+// Una hora concreta vale si cae en el horario y, si es hoy, aún da tiempo.
+export function horaValida(fecha: string, hora: string, now = new Date()): boolean {
+  if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(hora)) return false;
+  if (hora < RECOGIDA.horaMin || hora > RECOGIDA.horaMax) return false;
+  const hoy = ahoraMadrid(now);
+  return fecha !== hoy.fecha || aMinutos(hora) >= hoy.minutos + RECOGIDA.antelacionLibreMin;
+}
+
+// Cualquier día de hoy a +60 días (también los que no se sugieren) y
+// cualquier hora dentro del horario: el cliente puede proponer la suya.
 export function recogidaValida(r: Partial<Recogida> | null | undefined, now = new Date()): r is Recogida {
   if (!r || typeof r.fecha !== "string" || typeof r.hora !== "string") return false;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(r.fecha)) return false;
-  return diasRecogida(now).includes(r.fecha) && horasDisponibles(r.fecha, now).includes(r.hora);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(r.fecha) || Number.isNaN(Date.parse(`${r.fecha}T12:00:00Z`))) return false;
+  const { min, max } = rangoFechas(now);
+  return r.fecha >= min && r.fecha <= max && horaValida(r.fecha, r.hora, now);
 }
 
 // "martes 29 de septiembre"
