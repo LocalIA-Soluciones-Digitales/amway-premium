@@ -482,3 +482,119 @@ create policy "amway_errores_dev_delete" on public.amway_errores for delete to a
 -- Envíos: nº de seguimiento y fecha de envío (para avisar al cliente).
 alter table public.amway_pedidos add column if not exists seguimiento text check (seguimiento is null or char_length(seguimiento) <= 200);
 alter table public.amway_pedidos add column if not exists enviado_at timestamptz;
+
+-- ============================================================
+-- Recogida en mano (día + hora) y pedidos web en efectivo
+-- ============================================================
+alter table public.amway_pedidos add column if not exists recogida_fecha date;
+alter table public.amway_pedidos add column if not exists recogida_hora text
+  check (recogida_hora is null or recogida_hora ~ '^([01][0-9]|2[0-3]):[0-5][0-9]$');
+create index if not exists idx_amway_pedidos_recogida on public.amway_pedidos (recogida_fecha)
+  where recogida_fecha is not null;
+
+-- Pago con tarjeta: igual que antes, más la recogida elegida en la cesta.
+-- Los parámetros nuevos tienen default, así que las llamadas antiguas
+-- (con nombre) siguen funcionando durante el despliegue.
+drop function if exists public.amway_registrar_pedido_web(text, text, jsonb, numeric, numeric, text, text, text, text, text);
+create or replace function public.amway_registrar_pedido_web(
+  p_token text,
+  p_stripe_session_id text,
+  p_items jsonb,
+  p_total_eur numeric,
+  p_envio_eur numeric,
+  p_metodo_pago text,
+  p_cliente_nombre text,
+  p_cliente_email text,
+  p_cliente_telefono text,
+  p_direccion text,
+  p_recogida_fecha date default null,
+  p_recogida_hora text default null,
+  p_notas text default null
+)
+returns uuid
+language plpgsql security definer set search_path = public
+as $$
+declare
+  v_hash text;
+  v_id uuid;
+begin
+  select valor into v_hash from public.amway_config where clave = 'pedidos_token_sha256';
+  if v_hash is null or v_hash <> encode(sha256(convert_to(coalesce(p_token, ''), 'UTF8')), 'hex') then
+    raise exception 'no autorizado';
+  end if;
+  if p_stripe_session_id is null or jsonb_typeof(p_items) <> 'array' then
+    raise exception 'pedido inválido';
+  end if;
+
+  select id into v_id from public.amway_pedidos where stripe_session_id = p_stripe_session_id;
+  if v_id is not null then
+    return v_id;
+  end if;
+
+  insert into public.amway_pedidos (
+    origen, metodo_pago, estado, stripe_session_id, items, total_eur, envio_eur,
+    cliente_nombre, cliente_email, cliente_telefono, direccion, recogida_fecha, recogida_hora, notas
+  ) values (
+    'web', coalesce(nullif(p_metodo_pago, ''), 'tarjeta'), 'pagado', p_stripe_session_id, p_items,
+    p_total_eur, coalesce(p_envio_eur, 0),
+    nullif(p_cliente_nombre, ''), nullif(p_cliente_email, ''), nullif(p_cliente_telefono, ''), nullif(p_direccion, ''),
+    p_recogida_fecha, nullif(p_recogida_hora, ''), nullif(left(p_notas, 500), '')
+  )
+  on conflict (stripe_session_id) do nothing
+  returning id into v_id;
+
+  if v_id is null then
+    select id into v_id from public.amway_pedidos where stripe_session_id = p_stripe_session_id;
+  end if;
+  return v_id;
+end;
+$$;
+
+-- Pago en efectivo al recoger: el servidor Next.js (que recalcula los
+-- precios) registra el pedido como 'pendiente' de pago. Mismo token que
+-- los pagos con tarjeta, más un freno anti-spam.
+create or replace function public.amway_registrar_pedido_recogida(
+  p_token text,
+  p_items jsonb,
+  p_total_eur numeric,
+  p_cliente_nombre text,
+  p_cliente_telefono text,
+  p_recogida_fecha date,
+  p_recogida_hora text,
+  p_notas text default null
+)
+returns jsonb
+language plpgsql security definer set search_path = public
+as $$
+declare
+  v_hash text;
+  v_id uuid;
+  v_numero bigint;
+begin
+  select valor into v_hash from public.amway_config where clave = 'pedidos_token_sha256';
+  if v_hash is null or v_hash <> encode(sha256(convert_to(coalesce(p_token, ''), 'UTF8')), 'hex') then
+    raise exception 'no autorizado';
+  end if;
+  if jsonb_typeof(p_items) <> 'array' or jsonb_array_length(p_items) = 0 or p_recogida_fecha is null then
+    raise exception 'pedido inválido';
+  end if;
+  if char_length(coalesce(trim(p_cliente_nombre), '')) not between 1 and 100
+     or char_length(coalesce(trim(p_cliente_telefono), '')) not between 6 and 30 then
+    raise exception 'datos de contacto inválidos';
+  end if;
+  if (select count(*) from public.amway_pedidos
+      where origen = 'web' and stripe_session_id is null and created_at > now() - interval '1 hour') >= 30 then
+    raise exception 'demasiados pedidos';
+  end if;
+
+  insert into public.amway_pedidos (
+    origen, metodo_pago, estado, items, total_eur, cliente_nombre, cliente_telefono,
+    recogida_fecha, recogida_hora, notas
+  ) values (
+    'web', 'efectivo', 'pendiente', p_items, p_total_eur, trim(p_cliente_nombre), trim(p_cliente_telefono),
+    p_recogida_fecha, p_recogida_hora, nullif(left(trim(coalesce(p_notas, '')), 500), '')
+  )
+  returning id, numero into v_id, v_numero;
+  return jsonb_build_object('id', v_id, 'numero', v_numero);
+end;
+$$;

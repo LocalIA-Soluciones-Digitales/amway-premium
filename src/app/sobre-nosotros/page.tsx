@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ImageIcon, MessageCircle, Plane, MapPin, ShieldCheck } from "lucide-react";
+import { MessageCircle, Plane, MapPin, ShieldCheck } from "lucide-react";
 import { waLink, WA_PRESETS, SITE } from "@/data/site-config";
 
 export const metadata: Metadata = {
@@ -46,18 +46,8 @@ export default function SobreNosotrosPage() {
       </section>
 
       <section className="bg-linen">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-24 sm:px-8 sm:py-32 lg:grid-cols-12 lg:gap-16">
-          <div
-            className="relative order-2 flex aspect-[4/5] items-center justify-center rounded-sm border border-dashed border-carbon/25 bg-cream-soft lg:order-1 lg:col-span-5"
-            aria-label="Fotografía pendiente"
-          >
-            <div className="flex flex-col items-center gap-3 px-8 text-center text-stone">
-              <ImageIcon size={28} strokeWidth={1.5} />
-              <p className="text-xs uppercase tracking-wider">Añade tu fotografía aquí</p>
-            </div>
-          </div>
-
-          <div className="order-1 lg:order-2 lg:col-span-7">
+        <div className="mx-auto max-w-4xl px-6 py-24 text-center sm:px-8 sm:py-32">
+          <div>
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-forest">
               Quién te atiende
             </p>
@@ -66,7 +56,7 @@ export default function SobreNosotrosPage() {
               <br />
               no un centro de atención.
             </h2>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-stone sm:text-lg">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-stone sm:text-lg">
               Detrás de {SITE.name} hay una sola persona en {SITE.city} que responde cada
               mensaje, prepara cada pedido y conoce el catálogo de memoria. Si tienes dudas
               sobre qué producto elegir, la cantidad recomendada o el envío, hablas
