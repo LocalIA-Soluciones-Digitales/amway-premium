@@ -1,28 +1,63 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowRight, ChevronDown, Search } from "lucide-react";
-import type { Product } from "@/data/types";
+import Image from "next/image";
+import { ArrowRight, ChevronDown, Search, X } from "lucide-react";
+import type { CategorySlug, Product } from "@/data/types";
+import { CATEGORY_META } from "@/data/products";
 import { ProductCard } from "./ProductCard";
 import { cn } from "@/lib/utils";
 import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
 import { SolicitudModal } from "@/components/catalog/SolicitudModal";
 
+const CATEGORY_TILES: { slug: CategorySlug; image: string }[] = [
+  { slug: "nutricion", image: "/images/editorial/nutricion-botanico.webp" },
+  { slug: "xs-energy", image: "/images/editorial/xs-energy-tenista.webp" },
+  { slug: "belleza", image: "/images/editorial/belleza-editorial.webp" },
+  { slug: "hogar", image: "/images/editorial/hogar-familia.webp" },
+];
+
+// Lowercase and strip accents so "vitamina c" matches "Vitamina C" and "nutricion" matches "Nutrición".
+const normalize = (s: string) =>
+  s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+
 export function ProductExplorer({
   products,
   subcategories,
   brands,
+  showCategories = false,
 }: {
   products: Product[];
   subcategories: string[];
   brands: string[];
+  showCategories?: boolean;
 }) {
   const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<CategorySlug | null>(null);
   const [subcategory, setSubcategory] = useState<string | null>(null);
   const [brand, setBrand] = useState<string | null>(null);
   const [sort, setSort] = useState<"relevancia" | "precio-asc" | "precio-desc">("relevancia");
   const [solicitudOpen, setSolicitudOpen] = useState(false);
   const catalog = useCatalogState();
+
+  const visible = useMemo(
+    () => products.filter((p) => !catalog.oculto(p.id)),
+    [products, catalog]
+  );
+
+  const categoryCounts = useMemo(() => {
+    const counts: Partial<Record<CategorySlug, number>> = {};
+    for (const p of visible) counts[p.category] = (counts[p.category] ?? 0) + 1;
+    return counts;
+  }, [visible]);
+
+  // Subcategory chips follow the selected category, each with its product count.
+  const chips = useMemo(() => {
+    const inCategory = category ? visible.filter((p) => p.category === category) : visible;
+    return subcategories
+      .map((s) => ({ name: s, count: inCategory.filter((p) => p.subcategory === s).length }))
+      .filter((c) => c.count > 0);
+  }, [visible, category, subcategories]);
 
   const filtered = useMemo(() => {
     // Cheapest selling price, including any price set in the admin panel.
@@ -30,17 +65,18 @@ export function ProductExplorer({
       const prices = p.variants.map((_, i) => catalog.precio(p, i)).filter((x): x is number => x != null);
       return prices.length ? Math.min(...prices) : null;
     };
-    let list = products.filter((p) => !catalog.oculto(p.id));
+    let list = visible;
+    if (category) list = list.filter((p) => p.category === category);
     if (subcategory) list = list.filter((p) => p.subcategory === subcategory);
     if (brand) list = list.filter((p) => p.brand === brand);
-    if (query.trim()) {
-      const q = query.trim().toLowerCase();
-      list = list.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.description.toLowerCase().includes(q) ||
-          p.brand.toLowerCase().includes(q)
-      );
+    const words = normalize(query).split(/\s+/).filter(Boolean);
+    if (words.length) {
+      list = list.filter((p) => {
+        const haystack = normalize(
+          [p.name, p.description, p.brand, p.subcategory, CATEGORY_META[p.category].label].join(" ")
+        );
+        return words.every((w) => haystack.includes(w));
+      });
     }
     if (sort === "precio-asc") {
       list = [...list].sort((a, b) => (minPrice(a) ?? Infinity) - (minPrice(b) ?? Infinity));
@@ -48,83 +84,170 @@ export function ProductExplorer({
       list = [...list].sort((a, b) => (minPrice(b) ?? -Infinity) - (minPrice(a) ?? -Infinity));
     }
     return list;
-  }, [products, subcategory, brand, query, sort, catalog]);
+  }, [visible, category, subcategory, brand, query, sort, catalog]);
+
+  const hasFilters = Boolean(query.trim() || category || subcategory || brand || sort !== "relevancia");
+  const clearAll = () => {
+    setQuery("");
+    setCategory(null);
+    setSubcategory(null);
+    setBrand(null);
+    setSort("relevancia");
+  };
+  const pickCategory = (slug: CategorySlug) => {
+    setCategory((current) => (current === slug ? null : slug));
+    setSubcategory(null);
+  };
 
   const selectClass =
-    "w-full min-w-0 cursor-pointer appearance-none truncate rounded-none border-0 border-b border-carbon/15 bg-transparent py-2.5 pr-6 text-base text-carbon focus:border-forest focus:outline-none sm:text-sm";
+    "h-12 w-full min-w-0 cursor-pointer appearance-none truncate rounded-full border border-carbon/10 bg-cream-soft pl-5 pr-10 text-base text-carbon transition hover:border-carbon/25 focus:border-forest focus:outline-none sm:text-sm";
   const chevron = (
-    <ChevronDown size={14} className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-stone" />
+    <ChevronDown size={15} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-stone" />
   );
+  const chipClass = (active: boolean) =>
+    cn(
+      "flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm transition",
+      active
+        ? "border-carbon bg-carbon text-cream"
+        : "border-carbon/10 bg-cream-soft text-carbon hover:border-carbon/30"
+    );
 
   return (
     <div>
-      <div className="flex flex-col gap-5 border-b border-carbon/10 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
-        <div className="relative flex-1 sm:max-w-sm">
-          <Search size={16} className="absolute left-0 top-1/2 -translate-y-1/2 text-stone" />
+      {showCategories && (
+        <div className="mb-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {CATEGORY_TILES.map(({ slug, image }) => {
+            const active = category === slug;
+            return (
+              <button
+                key={slug}
+                type="button"
+                onClick={() => pickCategory(slug)}
+                aria-pressed={active}
+                className={cn(
+                  "group relative flex h-28 items-end overflow-hidden rounded-2xl p-4 text-left ring-offset-2 ring-offset-cream transition sm:h-36 sm:p-5",
+                  active ? "ring-2 ring-forest" : "ring-0"
+                )}
+              >
+                <Image
+                  src={image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+                <div
+                  className={cn(
+                    "absolute inset-0 bg-gradient-to-t transition",
+                    active ? "from-forest-dim/90 via-forest-dim/50 to-forest-dim/20" : "from-carbon/80 via-carbon/25 to-transparent"
+                  )}
+                />
+                <div className="relative">
+                  <p className="font-display text-lg leading-tight text-cream sm:text-2xl">
+                    {CATEGORY_META[slug].label}
+                  </p>
+                  <p className="mt-0.5 text-xs text-cream/75">
+                    {categoryCounts[slug] ?? 0} productos
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-[1fr_auto_auto] sm:gap-4">
+        <div className="relative col-span-2 sm:col-span-1">
+          <Search size={17} className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-stone" />
           <input
+            type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar producto, beneficio o marca…"
-            className="w-full border-b border-carbon/15 bg-transparent py-2.5 pl-6 pr-4 text-base text-carbon placeholder:text-stone/70 focus:border-forest focus:outline-none sm:text-sm"
+            placeholder="Busca un producto, necesidad o marca…"
+            aria-label="Buscar productos"
+            className="h-12 w-full rounded-full border border-carbon/10 bg-cream-soft pl-12 pr-11 text-base text-carbon placeholder:text-stone/70 transition hover:border-carbon/25 focus:border-forest focus:outline-none sm:text-sm [&::-webkit-search-cancel-button]:hidden"
           />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="Borrar búsqueda"
+              className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-stone transition hover:bg-carbon/5 hover:text-carbon"
+            >
+              <X size={15} />
+            </button>
+          )}
         </div>
 
-        {/* Two columns on phones (sort spans both), a single row from sm up. */}
-        <div className="grid grid-cols-2 gap-x-5 gap-y-3 sm:flex sm:items-center sm:gap-6">
-          <div className="relative min-w-0">
-            <select
-              value={subcategory ?? ""}
-              onChange={(e) => setSubcategory(e.target.value || null)}
-              aria-label="Categoría"
-              className={selectClass}
-            >
-              <option value="">Todas las categorías</option>
-              {subcategories.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-            {chevron}
-          </div>
+        <div className="relative min-w-0 sm:w-48">
+          <select
+            value={brand ?? ""}
+            onChange={(e) => setBrand(e.target.value || null)}
+            aria-label="Marca"
+            className={selectClass}
+          >
+            <option value="">Todas las marcas</option>
+            {brands.map((b) => (
+              <option key={b} value={b}>
+                {b}
+              </option>
+            ))}
+          </select>
+          {chevron}
+        </div>
 
-          <div className="relative min-w-0">
-            <select
-              value={brand ?? ""}
-              onChange={(e) => setBrand(e.target.value || null)}
-              aria-label="Marca"
-              className={selectClass}
-            >
-              <option value="">Todas las marcas</option>
-              {brands.map((b) => (
-                <option key={b} value={b}>
-                  {b}
-                </option>
-              ))}
-            </select>
-            {chevron}
-          </div>
-
-          <div className="relative col-span-2 min-w-0">
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as typeof sort)}
-              aria-label="Ordenar por"
-              className={selectClass}
-            >
-              <option value="relevancia">Relevancia</option>
-              <option value="precio-asc">Precio: menor a mayor</option>
-              <option value="precio-desc">Precio: mayor a menor</option>
-            </select>
-            {chevron}
-          </div>
+        <div className="relative min-w-0 sm:w-56">
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as typeof sort)}
+            aria-label="Ordenar por"
+            className={selectClass}
+          >
+            <option value="relevancia">Ordenar: relevancia</option>
+            <option value="precio-asc">Precio: menor a mayor</option>
+            <option value="precio-desc">Precio: mayor a menor</option>
+          </select>
+          {chevron}
         </div>
       </div>
 
-      <p className="mt-5 text-xs uppercase tracking-wider text-stone">
-        {filtered.length} producto{filtered.length === 1 ? "" : "s"} encontrado
-        {filtered.length === 1 ? "" : "s"}
-      </p>
+      {chips.length > 1 && (
+        <div className="-mx-6 mt-5 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
+          <button type="button" onClick={() => setSubcategory(null)} className={chipClass(subcategory === null)}>
+            Todo
+          </button>
+          {chips.map((c) => (
+            <button
+              key={c.name}
+              type="button"
+              onClick={() => setSubcategory(subcategory === c.name ? null : c.name)}
+              className={chipClass(subcategory === c.name)}
+            >
+              {c.name}
+              <span className={cn("text-xs", subcategory === c.name ? "text-cream/60" : "text-stone")}>
+                {c.count}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-8 flex items-center justify-between gap-4 border-t border-carbon/10 pt-5">
+        <p className="text-xs uppercase tracking-wider text-stone">
+          {filtered.length} producto{filtered.length === 1 ? "" : "s"}
+          {category && ` en ${CATEGORY_META[category].label}`}
+        </p>
+        {hasFilters && (
+          <button
+            type="button"
+            onClick={clearAll}
+            className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-forest transition hover:text-carbon"
+          >
+            <X size={13} />
+            Limpiar filtros
+          </button>
+        )}
+      </div>
 
       <div
         className={cn(
@@ -138,8 +261,18 @@ export function ProductExplorer({
       </div>
 
       {filtered.length === 0 && (
-        <div className="mt-12 border border-carbon/10 py-16 text-center text-stone">
-          No encontramos productos con esos filtros. Prueba con otra búsqueda.
+        <div className="mt-8 rounded-2xl border border-carbon/10 px-6 py-16 text-center">
+          <p className="font-display text-xl text-carbon">No hay productos con esos filtros.</p>
+          <p className="mt-2 text-sm text-stone">Prueba con otra palabra o quita algún filtro.</p>
+          {hasFilters && (
+            <button
+              type="button"
+              onClick={clearAll}
+              className="mt-6 rounded-full border border-carbon/15 px-5 py-2.5 text-sm font-medium text-carbon transition hover:border-carbon/40"
+            >
+              Limpiar filtros
+            </button>
+          )}
         </div>
       )}
 
