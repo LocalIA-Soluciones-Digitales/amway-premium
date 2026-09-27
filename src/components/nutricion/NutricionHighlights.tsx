@@ -1,26 +1,28 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import Link from "next/link";
 import type { Product } from "@/data/types";
 import { priceRangeLabel } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
-
-const NutriliteBotanical = dynamic(
-  () => import("@/components/animated/NutriliteBotanical").then((m) => m.NutriliteBotanical),
-  { ssr: false }
-);
+import { HighlightVideo } from "@/components/product/HighlightVideo";
 
 export function NutricionHighlights({
   items,
 }: {
-  items: { product: Product; image: string; tag: string }[];
+  items: {
+    product: Product;
+    video: string;
+    poster: string;
+    tag: string;
+    link?: { href: string; label: string };
+  }[];
 }) {
   return (
     // Swipeable row on phones (next card peeks in), three-column grid from sm up.
     <div className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0">
-      {items.map(({ product, image, tag }) => (
+      {items.map(({ product, video, poster, tag, link }) => (
         <div key={product.id} className="w-[82%] shrink-0 snap-start overflow-hidden rounded-3xl border border-white/10 bg-carbon sm:w-auto">
-          <NutriliteBotanical image={image} />
+          <HighlightVideo src={video} poster={poster} label={product.name} />
           <div className="p-5">
             <p className="text-[11px] uppercase tracking-wide text-forest-soft">{tag}</p>
             <h3 className="mt-2 font-display text-lg text-cream">{product.name}</h3>
@@ -35,6 +37,14 @@ export function NutricionHighlights({
                 Consultar
               </a>
             </div>
+            {link && (
+              <Link
+                href={link.href}
+                className="mt-3 inline-block text-xs text-forest-soft underline-offset-4 transition hover:underline"
+              >
+                {link.label}
+              </Link>
+            )}
           </div>
         </div>
       ))}

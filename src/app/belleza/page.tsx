@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 };
 
 const HIGHLIGHT_IDS = [
-  { id: "art-suero-desafiante", image: "p129_0_1234x1349.webp" },
-  { id: "longxevity-crema-enriquecida", image: "p129_0_1234x1349.webp" },
-  { id: "art-suero-vitamina-c", image: "p129_0_1234x1349.webp" },
+  { id: "art-suero-desafiante", media: "suero-desafiante" },
+  { id: "longxevity-crema-enriquecida", media: "longxevity-crema" },
+  { id: "art-suero-vitamina-c", media: "suero-vitamina-c" },
 ];
 
 export default function BellezaPage() {
@@ -22,7 +22,13 @@ export default function BellezaPage() {
   const brands = getBrands("belleza");
   const highlights = HIGHLIGHT_IDS.map((h) => {
     const product = getProductById(h.id);
-    return product ? { product, image: h.image } : null;
+    return product
+      ? {
+          product,
+          video: `/videos/belleza/${h.media}.mp4`,
+          poster: `/images/belleza/${h.media}-poster.webp`,
+        }
+      : null;
   }).filter((x): x is NonNullable<typeof x> => Boolean(x));
 
   return (

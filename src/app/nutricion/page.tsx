@@ -10,10 +10,12 @@ export const metadata: Metadata = {
     "Nutrilite™: vitaminas, proteínas, salud digestiva, inmunológica, huesos, corazón, control de peso y nutrición para hombres, mujeres y niños. Productos originales importados de EE. UU.",
 };
 
+const XS_LINK = { href: "/xs-energy", label: "Descubre XS™ →" };
+
 const HIGHLIGHT_IDS = [
-  { id: "double-x", image: "p027_0_1047x1242.webp", tag: "El multivitamínico insignia" },
-  { id: "omega-avanzado", image: "p027_0_1047x1242.webp", tag: "Salud celular y cardiovascular" },
-  { id: "begin", image: "p027_0_1047x1242.webp", tag: "Digestión y microbioma" },
+  { id: "double-x", media: "double-x", tag: "El multivitamínico insignia" },
+  { id: "xs-energy-drink", media: "xs-energy", tag: "Energía sin azúcar", link: XS_LINK },
+  { id: "xs-creatina", media: "creatina", tag: "Fuerza y recuperación", link: XS_LINK },
 ];
 
 export default function NutricionPage() {
@@ -22,7 +24,15 @@ export default function NutricionPage() {
   const brands = getBrands("nutricion");
   const highlights = HIGHLIGHT_IDS.map((h) => {
     const product = getProductById(h.id);
-    return product ? { product, image: h.image, tag: h.tag } : null;
+    return product
+      ? {
+          product,
+          video: `/videos/nutricion/${h.media}.mp4`,
+          poster: `/images/nutricion/${h.media}-poster.webp`,
+          tag: h.tag,
+          link: h.link,
+        }
+      : null;
   }).filter((x): x is NonNullable<typeof x> => Boolean(x));
 
   return (

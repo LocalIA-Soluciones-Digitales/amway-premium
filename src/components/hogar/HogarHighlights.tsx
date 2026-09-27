@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import type { Product } from "@/data/types";
 import { priceRangeLabel } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
+import { HighlightVideo } from "@/components/product/HighlightVideo";
 
 const ESpringScene = dynamic(
   () => import("@/components/animated/ESpringScene").then((m) => m.ESpringScene),
@@ -49,21 +50,8 @@ export function HogarHighlights({
             key={product.id}
             className="w-[82%] shrink-0 snap-start overflow-hidden rounded-3xl border border-white/10 bg-carbon sm:w-auto"
           >
-            {video ? (
-              <div className="relative aspect-square w-full overflow-hidden">
-                <video
-                  className="absolute inset-0 h-full w-full object-cover"
-                  style={videoPosition ? { objectPosition: videoPosition } : undefined}
-                  src={video}
-                  poster={poster}
-                  aria-label={product.name}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                />
-              </div>
+            {video && poster ? (
+              <HighlightVideo src={video} poster={poster} label={product.name} position={videoPosition} />
             ) : (
               <Scene image={image} />
             )}
