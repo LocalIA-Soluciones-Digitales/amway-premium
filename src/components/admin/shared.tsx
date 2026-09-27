@@ -37,6 +37,8 @@ export interface Pedido {
   notas: string | null;
   seguimiento: string | null;
   enviado_at: string | null;
+  recogida_fecha: string | null; // YYYY-MM-DD (recogida en mano)
+  recogida_hora: string | null; // HH:MM
   created_at: string;
 }
 
@@ -90,7 +92,7 @@ export interface Resena {
 
 export const ESTADO_PEDIDO: Record<PedidoEstado, { label: string; tone: Tone }> = {
   pendiente: { label: "Pendiente de pago", tone: "amber" },
-  pagado: { label: "Pagado · por enviar", tone: "blue" },
+  pagado: { label: "Pagado · por entregar", tone: "blue" },
   enviado: { label: "Enviado", tone: "violet" },
   entregado: { label: "Entregado", tone: "green" },
   cancelado: { label: "Cancelado", tone: "grey" },
@@ -117,6 +119,15 @@ export const CATEGORIA_GASTO: Record<Gasto["categoria"], string> = {
 // ---------- Utilidades ----------
 
 // `|| 0` also turns -0 into 0, so an empty period never shows "-0,00 €".
+// "mar 29 sep · 18:00"
+export function recogidaCorta(p: Pick<Pedido, "recogida_fecha" | "recogida_hora">): string | null {
+  if (!p.recogida_fecha) return null;
+  const f = new Date(`${p.recogida_fecha}T12:00:00Z`)
+    .toLocaleDateString("es-ES", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" })
+    .replace(/\./g, "");
+  return p.recogida_hora ? `${f} · ${p.recogida_hora}` : f;
+}
+
 export const eur = (n: number | null | undefined) => formatEUR(Number(n ?? 0) || 0);
 
 export const dec = (n: number, digits = 1) => n.toLocaleString("es-ES", { minimumFractionDigits: digits, maximumFractionDigits: digits });

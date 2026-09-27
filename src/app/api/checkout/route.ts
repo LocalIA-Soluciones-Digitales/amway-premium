@@ -2,94 +2,54 @@ import { NextRequest, NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { eurToCents } from "@/lib/currency";
-import { getProductById } from "@/data/products";
 import { productImageSrc } from "@/data/types";
-import { estaAgotado, estaOculto, fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
-
-const MAX_LINES = 50;
-const MAX_QUANTITY_PER_LINE = 20;
-
-interface RequestedLine {
-  productId?: unknown;
-  variantIndex?: unknown;
-  flavor?: unknown;
-  quantity?: unknown;
-}
+import { validarPedidoWeb } from "@/lib/pedido-web";
 
 export async function POST(request: NextRequest) {
   if (!stripe) {
     return NextResponse.json(
-      { error: "Los pagos online todavía no están activados en esta tienda." },
+      { error: "El pago con tarjeta todavía no está activado. Puedes elegir pagar en efectivo al recoger." },
       { status: 503 }
     );
   }
 
-  const body = await request.json().catch(() => null);
-  const requested: RequestedLine[] = Array.isArray(body?.items) ? body.items.slice(0, MAX_LINES) : [];
-  if (requested.length === 0) {
-    return NextResponse.json({ error: "La cesta está vacía." }, { status: 400 });
-  }
-
-  // Precios y agotados vigentes del panel, leídos al momento (sin caché).
-  const catalog = indexCatalogo(await fetchCatalogoPublico({ cache: "no-store" }));
+  const res = await validarPedidoWeb(await request.json().catch(() => null));
+  if (!res.ok) return NextResponse.json({ error: res.error }, { status: res.status });
+  const { lineas, recogida, nombre, telefono, notas } = res.pedido;
 
   const origin = request.nextUrl.origin;
-  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
-  const summary: string[] = [];
-
-  for (const line of requested) {
-    const product = typeof line.productId === "string" ? getProductById(line.productId) : undefined;
-    const variantIndex = Number.isInteger(line.variantIndex) ? (line.variantIndex as number) : 0;
-    const variant = product?.variants[variantIndex];
-    // Price is always recomputed here from the catalogue (plus any price set
-    // in the admin panel) — never trusted from the browser, which only says
-    // what and how many.
-    const eurPrice = product ? precioVenta(catalog, product, variantIndex) : null;
-    if (!product || !variant || eurPrice == null) {
-      return NextResponse.json(
-        { error: "Algún producto de la cesta ya no está disponible. Revísala e inténtalo de nuevo." },
-        { status: 422 }
-      );
-    }
-    // Optional flavour chosen on a per-flavour card (e.g. the XS™ grid), kept
-    // short so it can't be used to stuff arbitrary text into the Stripe session.
-    const flavor = typeof line.flavor === "string" && line.flavor.length <= 80 ? line.flavor.trim() : "";
-    const quantity = Number.isInteger(line.quantity)
-      ? Math.min(MAX_QUANTITY_PER_LINE, Math.max(1, line.quantity as number))
-      : 1;
-    if (estaAgotado(catalog, product.id) || estaOculto(catalog, product.id)) {
-      return NextResponse.json(
-        { error: `"${product.name}" se ha agotado. Quítalo de la cesta para continuar.` },
-        { status: 409 }
-      );
-    }
-    const image = productImageSrc(product);
-
-    lineItems.push({
-      quantity,
+  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = lineas.map((l) => {
+    const image = productImageSrc(l.product);
+    return {
+      quantity: l.quantity,
       price_data: {
         currency: "eur",
-        unit_amount: eurToCents(eurPrice),
+        unit_amount: eurToCents(l.eurPrice),
         product_data: {
-          name: product.name,
-          description: [product.brand, variant.size, flavor].filter(Boolean).join(" · "),
+          name: l.product.name,
+          description: [l.product.brand, l.variant.size, l.flavor].filter(Boolean).join(" · "),
           images: image ? [`${origin}${image}`] : undefined,
           // Read back when the payment is confirmed to record the order.
-          metadata: { product_id: product.id, variant_index: String(variantIndex), flavor },
+          metadata: { product_id: l.product.id, variant_index: String(l.variantIndex), flavor: l.flavor },
         },
       },
-    });
-    summary.push(`${quantity}x ${variant.sku ?? product.id}${flavor ? ` (${flavor})` : ""}`);
-  }
+    };
+  });
+  const summary = lineas.map((l) => `${l.quantity}x ${l.variant.sku ?? l.product.id}${l.flavor ? ` (${l.flavor})` : ""}`);
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     payment_method_types: ["card"],
     line_items: lineItems,
-    phone_number_collection: { enabled: true },
-    shipping_address_collection: { allowed_countries: ["ES"] },
     // Stripe caps each metadata value at 500 characters.
-    metadata: { items: summary.join(", ").slice(0, 500) },
+    metadata: {
+      items: summary.join(", ").slice(0, 500),
+      recogida_fecha: recogida.fecha,
+      recogida_hora: recogida.hora,
+      cliente_nombre: nombre,
+      cliente_telefono: telefono,
+      notas,
+    },
     success_url: `${origin}/checkout/exito?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/checkout/cancelado`,
   });

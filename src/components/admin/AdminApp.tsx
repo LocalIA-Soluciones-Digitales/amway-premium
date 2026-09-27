@@ -143,7 +143,7 @@ function Paneles({ session, rol, nombre }: { session: Session; rol: Rol; nombre:
   const refrescarPendientes = useCallback(async () => {
     const db = amwayDb();
     const [p, s, r] = await Promise.all([
-      db.from("amway_pedidos").select("id", { count: "exact", head: true }).eq("estado", "pagado"),
+      db.from("amway_pedidos").select("id", { count: "exact", head: true }).in("estado", ["pendiente", "pagado"]),
       db.from("amway_solicitudes").select("id", { count: "exact", head: true }).eq("estado", "pendiente"),
       db.from("amway_resenas").select("id", { count: "exact", head: true }).eq("estado", "pendiente"),
     ]);

@@ -53,11 +53,13 @@ export function indexCatalogo(data: CatalogoPublico): CatalogIndex {
 }
 
 // Precio de venta final: el fijado en el panel si existe, si no el de catálogo.
+// Redondeado a céntimos, que es lo que cobra Stripe por unidad: así la cesta,
+// el panel y el cargo suman exactamente lo mismo.
 export function precioVenta(index: CatalogIndex, product: Product, variantIndex: number): number | null {
   if (!product.variants[variantIndex]) return null;
   const override = index.ajuste(product.id)?.precios?.[String(variantIndex)];
-  if (typeof override === "number" && override >= 0) return override;
-  return variantPriceEur(product, variantIndex);
+  const precio = typeof override === "number" && override >= 0 ? override : variantPriceEur(product, variantIndex);
+  return precio == null ? null : Math.round(precio * 100) / 100;
 }
 
 export function estaAgotado(index: CatalogIndex, productId: string): boolean {

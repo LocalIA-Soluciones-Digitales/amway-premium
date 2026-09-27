@@ -76,7 +76,7 @@ export function HoyPanel({ onNavigate, pendientes, nombre }: { onNavigate: (v: G
   const pocoStock = productos.filter((p) => !p.agotado && p.stock != null && p.stock <= 3);
 
   const tareas = [
-    { tab: "pedidos" as const, n: pendientes.pedidos, label: "pedidos pagados por preparar y enviar", icon: Truck },
+    { tab: "pedidos" as const, n: pendientes.pedidos, label: "pedidos por preparar, entregar o cobrar", icon: Truck },
     { tab: "solicitudes" as const, n: pendientes.solicitudes, label: "solicitudes de clientes sin contestar", icon: ClipboardList },
     { tab: "resenas" as const, n: pendientes.resenas, label: "reseñas esperando revisión", icon: MessageSquareQuote },
   ];

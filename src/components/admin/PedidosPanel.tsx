@@ -18,6 +18,7 @@ import {
   eur,
   fecha,
   inputClass,
+  recogidaCorta,
   type MetodoPago,
   type Pedido,
   type PedidoEstado,
@@ -83,7 +84,7 @@ export function PedidosPanel({ onChange }: { onChange: () => void }) {
     <div>
       <PanelHeader
         title="Pedidos"
-        description="Pagos con tarjeta de la web (se registran solos) y ventas manuales por WhatsApp, Bizum o en mano."
+        description="Pedidos de la web (con tarjeta o en efectivo al recoger, se registran solos) y ventas manuales por WhatsApp, Bizum o en mano."
         actions={
           <button type="button" className={btnPrimary} onClick={() => setNuevo(true)}>
             <Plus size={15} /> Venta manual
@@ -106,7 +107,8 @@ export function PedidosPanel({ onChange }: { onChange: () => void }) {
           onChange={setFiltro}
           options={[
             { value: "activos", label: "En curso" },
-            { value: "pagado", label: "Por enviar", count: counts.pagado },
+            { value: "pendiente", label: "Por cobrar", count: counts.pendiente },
+            { value: "pagado", label: "Por entregar", count: counts.pagado },
             { value: "enviado", label: "Enviados" },
             { value: "entregado", label: "Entregados" },
             { value: "cancelado", label: "Cancelados" },
@@ -152,6 +154,9 @@ export function PedidosPanel({ onChange }: { onChange: () => void }) {
                       {p.origen === "manual" && " · manual"}
                     </span>
                   </span>
+                  {p.recogida_fecha && p.estado !== "entregado" && p.estado !== "cancelado" && (
+                    <Badge tone="amber">Recoge {recogidaCorta(p)}</Badge>
+                  )}
                   <span className="text-xs text-stone">{fecha(p.created_at, true)}</span>
                   <Badge tone={ESTADO_PEDIDO[p.estado].tone}>{ESTADO_PEDIDO[p.estado].label}</Badge>
                   <span className="w-24 text-right font-medium tabular-nums text-carbon">{eur(p.total_eur)}</span>

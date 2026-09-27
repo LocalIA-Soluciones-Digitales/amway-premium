@@ -1,33 +1,61 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ClipboardCopy, MessageCircle, PackageCheck, Printer, Send, Trash2, Truck, XCircle } from "lucide-react";
+import { CalendarClock, Check, ClipboardCopy, HandCoins, MessageCircle, PackageCheck, Printer, Send, Trash2, Truck, XCircle } from "lucide-react";
 import { SITE } from "@/data/site-config";
+import { fechaLarga } from "@/lib/recogida";
 import { cn } from "@/lib/utils";
 import { ESTADO_PEDIDO, METODO_PAGO, btnGhost, btnPrimary, eur, fecha, inputClass, waHref, type Pedido } from "./shared";
 
-const PASOS: { estado: Pedido["estado"]; label: string }[] = [
+const PASOS_ENVIO: { estado: Pedido["estado"]; label: string }[] = [
   { estado: "pagado", label: "Pagado" },
   { estado: "enviado", label: "Enviado" },
   { estado: "entregado", label: "Entregado" },
 ];
+const PASOS_RECOGIDA: { estado: Pedido["estado"]; label: string }[] = [
+  { estado: "pagado", label: "Pagado" },
+  { estado: "entregado", label: "Recogido" },
+];
+
+// "el martes 29 de septiembre a las 18:00 h"
+function cuandoRecoge(p: Pedido): string | null {
+  if (!p.recogida_fecha) return null;
+  return `el ${fechaLarga(p.recogida_fecha)}${p.recogida_hora ? ` a las ${p.recogida_hora} h` : ""}`;
+}
 
 function mensajes(p: Pedido) {
   const nombre = p.cliente_nombre?.split(" ")[0] ?? "";
   const lineas = p.items.map((i) => `• ${i.cantidad} × ${i.nombre}`).join("\n");
+  const cuando = cuandoRecoge(p);
+  const total =
+    p.estado === "pendiente" ? `Total a pagar al recoger: *${eur(p.total_eur)}*` : `Total: *${eur(p.total_eur)}* (pagado)`;
   return [
-    {
-      id: "confirmar",
-      label: "Confirmar pedido",
-      texto: `Hola ${nombre}, soy de ${SITE.name}. ¡Gracias por tu pedido #${p.numero}! 🙌\n\n${lineas}\n\nTotal: ${eur(p.total_eur)}. Te aviso en cuanto salga.`,
-    },
-    {
-      id: "enviado",
-      label: "Avisar del envío",
-      texto: `Hola ${nombre}, tu pedido #${p.numero} ya está en camino 📦${
-        p.seguimiento ? `\n\nNº de seguimiento: ${p.seguimiento}` : ""
-      }\n\nCualquier cosa, escríbeme por aquí.`,
-    },
+    cuando
+      ? {
+          id: "confirmar",
+          label: "Confirmar pedido y recogida",
+          texto: `Hola ${nombre}, soy de ${SITE.name}. Te confirmo tu pedido nº ${p.numero}:\n\n${lineas}\n\n${total}\n*Recogida:* ${cuando}\n\nTe paso por aquí la dirección exacta. ¡Gracias!`,
+        }
+      : {
+          id: "confirmar",
+          label: "Confirmar pedido",
+          texto: `Hola ${nombre}, soy de ${SITE.name}. ¡Gracias por tu pedido #${p.numero}! 🙌\n\n${lineas}\n\nTotal: ${eur(p.total_eur)}. Te aviso en cuanto salga.`,
+        },
+    cuando
+      ? {
+          id: "recordar",
+          label: "Recordar la recogida",
+          texto: `Hola ${nombre}, te recuerdo que tu pedido nº ${p.numero} está listo para recoger ${cuando}.${
+            p.estado === "pendiente" ? ` Son ${eur(p.total_eur)} en efectivo.` : ""
+          }\n\nSi te viene mal, dímelo y lo cambiamos sin problema.`,
+        }
+      : {
+          id: "enviado",
+          label: "Avisar del envío",
+          texto: `Hola ${nombre}, tu pedido #${p.numero} ya está en camino 📦${
+            p.seguimiento ? `\n\nNº de seguimiento: ${p.seguimiento}` : ""
+          }\n\nCualquier cosa, escríbeme por aquí.`,
+        },
     {
       id: "resena",
       label: "Pedir una reseña",
@@ -59,7 +87,10 @@ function imprimirAlbaran(p: Pedido) {
 <table><thead><tr><th>Uds.</th><th>Producto</th><th class="r">Importe</th></tr></thead><tbody>${filas}
 ${Number(p.envio_eur) > 0 ? `<tr><td></td><td>Envío</td><td class="r">${eur(p.envio_eur)}</td></tr>` : ""}
 <tr><td></td><td class="tot">Total</td><td class="r tot">${eur(p.total_eur)}</td></tr></tbody></table>
-<p class="muted" style="margin-top:32px">Pagado con ${METODO_PAGO[p.metodo_pago]}. ¡Gracias por tu compra!</p>
+${p.recogida_fecha ? `<p style="margin-top:24px"><strong>Recogida:</strong> ${esc(cuandoRecoge(p) ?? "")}</p>` : ""}
+<p class="muted" style="margin-top:32px">${
+    p.estado === "pendiente" ? `Pago en ${METODO_PAGO[p.metodo_pago].toLowerCase()} al recoger` : `Pagado con ${METODO_PAGO[p.metodo_pago]}`
+  }. ¡Gracias por tu compra!</p>
 <script>window.onload=()=>{window.print()}</script></body></html>`);
   w.document.close();
 }
@@ -75,6 +106,8 @@ export function PedidoDetalle({
 }) {
   const [seguimiento, setSeguimiento] = useState(p.seguimiento ?? "");
   const [copiado, setCopiado] = useState(false);
+  const recoge = p.recogida_fecha != null;
+  const PASOS = recoge ? PASOS_RECOGIDA : PASOS_ENVIO;
   const pasoActual = PASOS.findIndex((x) => x.estado === p.estado);
   const cancelado = p.estado === "cancelado";
 
@@ -153,6 +186,12 @@ export function PedidoDetalle({
           {p.cliente_telefono && <p className="text-stone">{p.cliente_telefono}</p>}
           {p.cliente_email && <p className="break-all text-stone">{p.cliente_email}</p>}
           {p.direccion && <p className="mt-1 text-stone">{p.direccion}</p>}
+          {recoge && (
+            <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-white px-2.5 py-2 text-carbon">
+              <CalendarClock size={14} className="mt-0.5 shrink-0 text-stone" />
+              <span>Recoge {cuandoRecoge(p)}</span>
+            </p>
+          )}
           <p className="mt-2 text-xs text-stone">
             {METODO_PAGO[p.metodo_pago]} · {p.origen === "web" ? "Pedido web" : "Venta manual"}
             {p.enviado_at && ` · enviado ${fecha(p.enviado_at)}`}
@@ -160,7 +199,17 @@ export function PedidoDetalle({
         </div>
 
         {/* Siguiente paso, en un clic */}
-        {p.estado === "pagado" && (
+        {recoge && p.estado === "pendiente" && (
+          <button type="button" className={btnPrimary} onClick={() => onUpdate({ estado: "entregado" })}>
+            <HandCoins size={15} /> Recogido y cobrado
+          </button>
+        )}
+        {recoge && p.estado === "pagado" && (
+          <button type="button" className={btnPrimary} onClick={() => onUpdate({ estado: "entregado" })}>
+            <PackageCheck size={15} /> Marcar como recogido
+          </button>
+        )}
+        {!recoge && p.estado === "pagado" && (
           <div className="flex flex-col gap-2 rounded-xl border border-carbon/[0.08] p-3">
             <input
               value={seguimiento}
@@ -184,7 +233,7 @@ export function PedidoDetalle({
           </button>
         )}
         {p.estado === "pendiente" && (
-          <button type="button" className={btnPrimary} onClick={() => onUpdate({ estado: "pagado" })}>
+          <button type="button" className={recoge ? btnGhost : btnPrimary} onClick={() => onUpdate({ estado: "pagado" })}>
             <Check size={15} /> Marcar como pagado
           </button>
         )}
