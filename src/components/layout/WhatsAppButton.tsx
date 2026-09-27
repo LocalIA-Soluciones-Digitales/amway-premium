@@ -1,29 +1,48 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUp, ArrowUpRight, MessageCircle, RotateCcw, ThumbsDown, ThumbsUp, X } from "lucide-react";
+import {
+  ArrowUp,
+  ArrowUpRight,
+  Check,
+  MessageCircle,
+  Plus,
+  RotateCcw,
+  ThumbsDown,
+  ThumbsUp,
+  X,
+} from "lucide-react";
 import { SITE, WA_PRESETS, waLink } from "@/data/site-config";
 import {
   INTENTOS,
   TEMAS_INICIO,
   buscarIntentos,
+  palabrasDe,
   waDuda,
   type AccionAsistente,
 } from "@/data/asistente";
+import { CATEGORY_META, getProductById } from "@/data/products";
+import { cheapestVariantIndex, productImageSrc, type CategorySlug } from "@/data/types";
+import { formatEUR } from "@/lib/currency";
+import { buscarProductos, consultaCatalogo } from "@/lib/asistente-productos";
 import { useCesta } from "@/components/cart/CartProvider";
+import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
 import { track } from "@/lib/analytics";
 
-type Mensaje = { id: number; de: "bot" | "cliente"; lineas: string[] };
+type Mensaje = { id: number; de: "bot" | "cliente"; lineas: string[]; productos?: string[] };
 
 // Qué opciones se ofrecen bajo el último mensaje del asistente.
 type Contexto =
   | { tipo: "inicio" }
   | { tipo: "respuesta"; id: string }
+  | { tipo: "productos"; texto: string; consulta: string }
   | { tipo: "sugerencias"; ids: string[]; texto: string }
   | { tipo: "sinRespuesta"; texto: string }
-  | { tipo: "ayuda"; id: string };
+  | { tipo: "ayuda"; mensaje: string };
 
 interface Conversacion {
   mensajes: Mensaje[];
@@ -31,7 +50,22 @@ interface Conversacion {
 }
 
 const STORAGE_KEY = "amway_asistente";
+const AVISO_KEY = "amway_asistente_aviso";
+const AVISO_MS = 40_000;
 const VACIA: Conversacion = { mensajes: [], contexto: { tipo: "inicio" } };
+
+// Intenciones en las que, si además se nombra un producto, lo útil es
+// enseñar el producto (precio y disponibilidad reales) y no la respuesta
+// genérica: «¿tenéis stock del purificador?», «precio del Double X».
+const INTENCIONES_DE_PRODUCTO = new Set([
+  "disponibilidad",
+  "precios",
+  "agotado",
+  "encargo",
+  "pedido",
+  "asesoramiento",
+  "asesorPersonal",
+]);
 
 function leerConversacion(): Conversacion {
   if (typeof window === "undefined") return VACIA;
@@ -49,18 +83,38 @@ function pausa(lineas: string[]): number {
   return Math.min(350 + lineas.join(" ").length * 2, 900);
 }
 
+// Identificador del contexto para la analítica (qué tema derivó a WhatsApp).
+function origenDe(contexto: Contexto): string {
+  if (contexto.tipo === "respuesta") return contexto.id;
+  return contexto.tipo === "sinRespuesta" ? "sin_respuesta" : contexto.tipo;
+}
+
+function registrar(label: string) {
+  track("asistente", label);
+}
+
+function categoriaDeRuta(pathname: string): CategorySlug | null {
+  const slug = pathname.split("/")[1];
+  return slug && slug in CATEGORY_META ? (slug as CategorySlug) : null;
+}
+
 export function WhatsAppButton() {
   const [open, setOpen] = useState(false);
   const [conv, setConv] = useState<Conversacion>(leerConversacion);
   const [escribiendo, setEscribiendo] = useState(false);
   const [texto, setTexto] = useState("");
+  const [aviso, setAviso] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { openCesta, totalUnits, isLoaded } = useCesta();
+  const pathname = usePathname();
+  const { openCesta, isOpen: cestaAbierta, totalUnits, isLoaded } = useCesta();
+  const catalog = useCatalogState();
 
   const { mensajes, contexto } = conv;
   const enCurso = mensajes.length > 0;
+  const conCesta = isLoaded && totalUnits > 0;
+  const categoria = categoriaDeRuta(pathname);
 
   useEffect(() => {
     try {
@@ -84,13 +138,34 @@ export function WhatsAppButton() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // Aviso discreto, una vez por sesión: quien lleva un rato con productos en
+  // la cesta sin terminar suele tener una duda (pago, recogida…).
+  useEffect(() => {
+    if (!conCesta || open || cestaAbierta || pathname.startsWith("/checkout")) return;
+    try {
+      if (sessionStorage.getItem(AVISO_KEY)) return;
+    } catch {
+      return;
+    }
+    const t = setTimeout(() => {
+      setAviso(true);
+      registrar("aviso");
+      try {
+        sessionStorage.setItem(AVISO_KEY, "1");
+      } catch {
+        // sin almacenamiento, el aviso puede repetirse en otra página
+      }
+    }, AVISO_MS);
+    return () => clearTimeout(t);
+  }, [conCesta, open, cestaAbierta, pathname]);
+
   // Al llegar una respuesta, se deja arriba la pregunta del cliente para que
   // la respuesta se lea desde el principio (no desde el final).
   useLayoutEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const ultimaPregunta = el.querySelectorAll<HTMLElement>("[data-de='cliente']");
-    const ancla = ultimaPregunta[ultimaPregunta.length - 1];
+    const preguntas = el.querySelectorAll<HTMLElement>("[data-de='cliente']");
+    const ancla = preguntas[preguntas.length - 1];
     if (escribiendo || !ancla) {
       el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
     } else {
@@ -98,7 +173,13 @@ export function WhatsAppButton() {
     }
   }, [mensajes.length, escribiendo, open]);
 
-  function responder(pregunta: string, respuesta: string[], siguiente: Contexto) {
+  function abrir() {
+    setAviso(false);
+    if (!open) registrar("abrir");
+    setOpen(!open);
+  }
+
+  function responder(pregunta: string, respuesta: string[], siguiente: Contexto, productos?: string[]) {
     if (timer.current) clearTimeout(timer.current);
     setConv((c) => ({
       mensajes: [...c.mensajes, { id: Date.now(), de: "cliente", lineas: [pregunta] }],
@@ -107,7 +188,7 @@ export function WhatsAppButton() {
     setEscribiendo(true);
     timer.current = setTimeout(() => {
       setConv((c) => ({
-        mensajes: [...c.mensajes, { id: Date.now() + 1, de: "bot", lineas: respuesta }],
+        mensajes: [...c.mensajes, { id: Date.now() + 1, de: "bot", lineas: respuesta, productos }],
         contexto: siguiente,
       }));
       setEscribiendo(false);
@@ -117,6 +198,7 @@ export function WhatsAppButton() {
   function abrirTema(id: string) {
     const intento = INTENTOS[id];
     if (!intento || escribiendo) return;
+    registrar(`tema:${id}`);
     responder(intento.pregunta, intento.respuesta, { tipo: "respuesta", id });
   }
 
@@ -126,20 +208,34 @@ export function WhatsAppButton() {
     if (!t || escribiendo) return;
     setTexto("");
 
-    const resultados = buscarIntentos(t);
-    const [mejor, segundo] = resultados;
-    // Respuesta directa solo si hay una intención claramente por delante;
-    // si no, se ofrecen las candidatas para que el cliente elija.
-    if (mejor && (!segundo || mejor.puntos > segundo.puntos)) {
-      const intento = INTENTOS[mejor.id];
-      responder(t, intento.respuesta, { tipo: "respuesta", id: mejor.id });
+    const intentos = buscarIntentos(t);
+    const [mejor, segundo] = intentos;
+    const encontrados = buscarProductos(t, (id) => !catalog.oculto(id)).map((r) => r.producto);
+    const productos = encontrados.map((p) => p.id);
+
+    if (productos.length > 0 && (!mejor || INTENCIONES_DE_PRODUCTO.has(mejor.id))) {
+      registrar("texto:productos");
+      responder(
+        t,
+        [productos.length === 1 ? "Esto es lo que tenemos:" : "Esto es lo que he encontrado:"],
+        { tipo: "productos", texto: t, consulta: consultaCatalogo(t, encontrados) },
+        productos
+      );
+    } else if (mejor && (!segundo || mejor.puntos > segundo.puntos) && (mejor.puntos >= 1.5 || (mejor.puntos >= 1 && palabrasDe(t).length <= 2))) {
+      // Una intención claramente por delante: respuesta directa. Si solo
+      // encaja por una errata, o por una palabra suelta en una frase larga,
+      // mejor preguntar «¿te refieres a…?».
+      registrar(`texto:${mejor.id}`);
+      responder(t, INTENTOS[mejor.id].respuesta, { tipo: "respuesta", id: mejor.id });
     } else if (mejor) {
+      registrar("texto:sugerencias");
       responder(t, ["Para darte la respuesta exacta, ¿te refieres a alguna de estas?"], {
         tipo: "sugerencias",
-        ids: resultados.slice(0, 3).map((r) => r.id),
+        ids: intentos.slice(0, 3).map((r) => r.id),
         texto: t,
       });
     } else {
+      registrar("texto:sin_respuesta");
       responder(
         t,
         [
@@ -152,8 +248,12 @@ export function WhatsAppButton() {
   }
 
   function valorar(util: boolean) {
-    if (contexto.tipo !== "respuesta") return;
-    const id = contexto.id;
+    if (contexto.tipo !== "respuesta" && contexto.tipo !== "productos") return;
+    registrar(`${util ? "util" : "no_util"}:${origenDe(contexto)}`);
+    const mensaje =
+      contexto.tipo === "productos"
+        ? `Hola, busco «${contexto.texto}» y no lo encuentro en la web. ¿Me podéis ayudar?`
+        : waDuda(`«${INTENTOS[contexto.id]?.pregunta ?? "un producto"}»`);
     setConv((c) => ({
       mensajes: [
         ...c.mensajes,
@@ -164,11 +264,11 @@ export function WhatsAppButton() {
             ? ["¡Me alegro! ¿Te ayudo con algo más?"]
             : [
                 "Vaya, gracias por decírmelo.",
-                "Escríbeme abajo tu duda con tus palabras, o pregúntala directamente a una persona:",
+                "Escríbeme abajo tu duda con otras palabras, o pregúntala directamente a una persona:",
               ],
         },
       ],
-      contexto: util ? { tipo: "inicio" } : { tipo: "ayuda", id },
+      contexto: util ? { tipo: "inicio" } : { tipo: "ayuda", mensaje },
     }));
     if (!util) inputRef.current?.focus();
   }
@@ -184,15 +284,20 @@ export function WhatsAppButton() {
   }
 
   const saludo = [`¡Hola! Soy el asistente de ${SITE.name}.`];
-  if (isLoaded && totalUnits > 0) {
+  if (conCesta) {
     saludo.push(
       `Veo que tienes ${totalUnits} ${totalUnits === 1 ? "producto" : "productos"} en la cesta. ¿Te ayudo a terminar el pedido o tienes alguna duda?`
     );
+  } else if (categoria) {
+    saludo.push(
+      `¿Buscas algo de ${CATEGORY_META[categoria].label}? Escríbeme el nombre del producto o lo que necesitas y te digo precio y disponibilidad.`
+    );
   } else {
-    saludo.push("Elige un tema o escríbeme tu pregunta.");
+    saludo.push("Pregúntame por cualquier producto (precio, stock) o elige un tema:");
   }
 
-  const acciones = accionesPara(contexto, isLoaded && totalUnits > 0);
+  const acciones = accionesPara(contexto, conCesta);
+  const valorable = (contexto.tipo === "respuesta" && contexto.id !== "gracias") || contexto.tipo === "productos";
 
   return (
     <div className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-50 flex flex-col items-end gap-3 sm:right-8 sm:bottom-[calc(2rem+env(safe-area-inset-bottom))]">
@@ -205,7 +310,7 @@ export function WhatsAppButton() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="flex h-[min(36rem,calc(100dvh-7.5rem))] w-[calc(100vw-2rem)] max-w-[23rem] origin-bottom-right flex-col overflow-hidden rounded-2xl border border-carbon/10 bg-cream-soft text-sm text-carbon shadow-2xl shadow-carbon/20"
+            className="flex h-[min(38rem,calc(100dvh-7.5rem))] w-[calc(100vw-2rem)] max-w-[23rem] origin-bottom-right flex-col overflow-hidden rounded-2xl border border-carbon/10 bg-cream-soft text-sm text-carbon shadow-2xl shadow-carbon/20"
           >
             <header className="flex items-center gap-2.5 border-b border-carbon/8 py-3 pr-2 pl-4">
               <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest text-cream">
@@ -245,7 +350,16 @@ export function WhatsAppButton() {
             >
               <Burbuja de="bot" lineas={saludo} />
               {mensajes.map((m) => (
-                <Burbuja key={m.id} de={m.de} lineas={m.lineas} />
+                <div key={m.id} data-de={m.de} className="flex flex-col gap-2">
+                  <Burbuja de={m.de} lineas={m.lineas} />
+                  {m.productos && m.productos.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                      {m.productos.map((id) => (
+                        <TarjetaProducto key={id} productId={id} onWhatsApp={alWhatsApp} />
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
               {escribiendo && <Escribiendo />}
 
@@ -269,13 +383,13 @@ export function WhatsAppButton() {
                             openCesta();
                           }}
                           onEnlace={() => setOpen(false)}
-                          onWhatsApp={alWhatsApp}
+                          onWhatsApp={() => alWhatsApp(origenDe(contexto))}
                         />
                       ))}
                     </div>
                   )}
 
-                  {contexto.tipo === "respuesta" && contexto.id !== "gracias" && (
+                  {valorable && (
                     <div className="flex items-center gap-1 text-xs text-stone">
                       <span className="mr-1">¿Te ha resuelto la duda?</span>
                       <IconoBoton label="Sí" onClick={() => valorar(true)} compacto>
@@ -307,8 +421,8 @@ export function WhatsAppButton() {
                 onChange={(e) => setTexto(e.target.value)}
                 maxLength={200}
                 enterKeyHint="send"
-                placeholder="Escribe tu pregunta…"
-                aria-label="Escribe tu pregunta"
+                placeholder="Pregunta o busca un producto…"
+                aria-label="Escribe tu pregunta o el producto que buscas"
                 className="h-11 min-w-0 flex-1 rounded-full border border-carbon/12 bg-white px-4 text-base text-carbon placeholder:text-stone focus:border-forest focus:outline-none sm:text-sm"
               />
               <button
@@ -324,8 +438,27 @@ export function WhatsAppButton() {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {aviso && !open && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 6, scale: 0.97 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="flex max-w-[16rem] items-start gap-1 rounded-2xl rounded-br-md border border-carbon/10 bg-cream-soft py-2.5 pr-1.5 pl-3.5 text-sm text-carbon shadow-xl shadow-carbon/15"
+          >
+            <button type="button" onClick={abrir} className="text-left leading-snug">
+              ¿Alguna duda con tu pedido? <span className="font-medium text-forest">Te ayudo</span>
+            </button>
+            <IconoBoton label="Cerrar aviso" onClick={() => setAviso(false)} compacto>
+              <X size={14} />
+            </IconoBoton>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.button
-        onClick={() => setOpen((v) => !v)}
+        onClick={abrir}
         whileHover={{ scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
         aria-label={open ? "Cerrar asistente" : "Abrir asistente y WhatsApp"}
@@ -361,6 +494,10 @@ export function WhatsAppButton() {
   );
 }
 
+function consultaWhatsApp(texto: string): string {
+  return `Hola, tengo una duda: «${texto}». ¿Me podéis ayudar? Gracias.`;
+}
+
 function accionesPara(contexto: Contexto, conCesta: boolean): AccionAsistente[] {
   switch (contexto.tipo) {
     case "inicio": {
@@ -369,34 +506,113 @@ function accionesPara(contexto: Contexto, conCesta: boolean): AccionAsistente[] 
     }
     case "respuesta":
       return INTENTOS[contexto.id]?.acciones ?? [];
+    case "productos":
+      return [
+        { tipo: "enlace", href: `/catalogo?q=${encodeURIComponent(contexto.consulta)}`, label: "Ver más en el catálogo" },
+        { tipo: "whatsapp", mensaje: consultaWhatsApp(contexto.texto), label: "Preguntar por WhatsApp" },
+      ];
     case "sugerencias":
       return [
         ...contexto.ids.map((id): AccionAsistente => ({ tipo: "tema", id })),
-        {
-          tipo: "whatsapp",
-          mensaje: `Hola, tengo una duda: «${contexto.texto}». ¿Me podéis ayudar? Gracias.`,
-          label: "Ninguna, preguntar por WhatsApp",
-        },
+        { tipo: "whatsapp", mensaje: consultaWhatsApp(contexto.texto), label: "Ninguna, preguntar por WhatsApp" },
       ];
     case "sinRespuesta":
-      return [
-        {
-          tipo: "whatsapp",
-          mensaje: `Hola, tengo una duda: «${contexto.texto}». ¿Me podéis ayudar? Gracias.`,
-          label: "Enviar mi pregunta",
-        },
-      ];
-    case "ayuda": {
-      const pregunta = INTENTOS[contexto.id]?.pregunta ?? "un producto";
-      return [
-        {
-          tipo: "whatsapp",
-          mensaje: waDuda(`«${pregunta}»`),
-          label: "Preguntar a una persona",
-        },
-      ];
-    }
+      return [{ tipo: "whatsapp", mensaje: consultaWhatsApp(contexto.texto), label: "Enviar mi pregunta" }];
+    case "ayuda":
+      return [{ tipo: "whatsapp", mensaje: contexto.mensaje, label: "Preguntar a una persona" }];
   }
+}
+
+// Producto con su precio y estado reales (los del panel de gestión) y la
+// acción que corresponde: añadir, elegir formato, pedir precio o avisar.
+function TarjetaProducto({ productId, onWhatsApp }: { productId: string; onWhatsApp: (origen: string) => void }) {
+  const catalog = useCatalogState();
+  const { addItem, items } = useCesta();
+  const product = getProductById(productId);
+  if (!product || catalog.oculto(productId)) return null;
+
+  const variante = cheapestVariantIndex(product);
+  const precio = catalog.precio(product, variante);
+  const agotado = catalog.agotado(productId);
+  const variasOpciones = product.variants.length > 1;
+  const enCesta = items.some((i) => i.productId === productId);
+  const img = productImageSrc(product);
+
+  const accionBase =
+    "inline-flex h-8 shrink-0 items-center justify-center gap-1 rounded-full px-3 text-xs font-medium transition";
+
+  let accion: ReactNode;
+  if (agotado) {
+    accion = (
+      <a
+        href={waLink(`Hola, me interesa «${product.name}», que aparece agotado. ¿Cuándo lo volveréis a tener?`)}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => onWhatsApp(`agotado:${productId}`)}
+        className={`${accionBase} bg-[#25D366] text-white hover:bg-[#1fbe5b]`}
+      >
+        Avisarme
+      </a>
+    );
+  } else if (precio == null) {
+    accion = (
+      <a
+        href={waLink(`Hola, ¿qué precio tiene «${product.name}»? Gracias.`)}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => onWhatsApp(`precio:${productId}`)}
+        className={`${accionBase} bg-[#25D366] text-white hover:bg-[#1fbe5b]`}
+      >
+        Pedir precio
+      </a>
+    );
+  } else if (variasOpciones) {
+    accion = (
+      <Link
+        href={`/catalogo?q=${encodeURIComponent(product.name)}`}
+        className={`${accionBase} border border-forest/25 text-forest hover:bg-forest hover:text-cream`}
+      >
+        Ver formatos
+      </Link>
+    );
+  } else {
+    accion = (
+      <button
+        type="button"
+        onClick={() => {
+          addItem(productId, variante);
+          track("add_to_cart", productId);
+          registrar(`anadir:${productId}`);
+        }}
+        className={`${accionBase} ${enCesta ? "bg-forest/10 text-forest" : "bg-carbon text-cream hover:bg-carbon-soft"}`}
+      >
+        {enCesta ? <Check size={13} /> : <Plus size={13} />}
+        {enCesta ? "En la cesta" : "Añadir"}
+      </button>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className="flex items-center gap-3 rounded-2xl border border-carbon/8 bg-white p-2.5"
+    >
+      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-linen">
+        {img && <Image src={img} alt="" fill sizes="48px" className="object-contain p-1" />}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="line-clamp-2 text-[13px] leading-snug font-medium">{product.name}</p>
+        <p className="mt-0.5 text-xs text-stone">
+          {precio != null ? `${variasOpciones ? "Desde " : ""}${formatEUR(precio)}` : "Precio a consultar"}
+          {" · "}
+          <span className={agotado ? "text-[#b4532a]" : "text-forest"}>{agotado ? "Agotado" : "Disponible"}</span>
+        </p>
+      </div>
+      {accion}
+    </motion.div>
+  );
 }
 
 function IconoBoton({
@@ -408,7 +624,7 @@ function IconoBoton({
   label: string;
   onClick: () => void;
   compacto?: boolean;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <button
@@ -427,7 +643,6 @@ function Burbuja({ de, lineas }: { de: Mensaje["de"]; lineas: string[] }) {
   const bot = de === "bot";
   return (
     <motion.div
-      data-de={de}
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
@@ -478,16 +693,15 @@ function Chip({
   onTema: (id: string) => void;
   onCesta: () => void;
   onEnlace: () => void;
-  onWhatsApp: (origen: string) => void;
+  onWhatsApp: () => void;
 }) {
   switch (accion.tipo) {
     case "tema": {
       const intento = INTENTOS[accion.id];
       if (!intento) return null;
-      const label = accion.label ?? intento.pregunta;
       return (
         <button type="button" onClick={() => onTema(accion.id)} className={chipClass}>
-          {label}
+          {accion.label ?? intento.pregunta}
         </button>
       );
     }
@@ -509,7 +723,7 @@ function Chip({
           href={waLink(accion.mensaje)}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={() => onWhatsApp(accion.label)}
+          onClick={onWhatsApp}
           className="inline-flex items-center gap-1 rounded-full bg-[#25D366] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-[#1fbe5b]"
         >
           {accion.label}

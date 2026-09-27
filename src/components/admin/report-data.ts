@@ -1,11 +1,20 @@
 import { getProductById } from "@/data/products";
+import { INTENTOS } from "@/data/asistente";
 import type { Pedido } from "./shared";
 
 // ---------- Visitas ----------
 
 export interface Visita {
   session_id: string;
-  event_type: "pageview" | "add_to_cart" | "cart_open" | "checkout_start" | "whatsapp_click" | "solicitud" | "resena";
+  event_type:
+    | "pageview"
+    | "add_to_cart"
+    | "cart_open"
+    | "checkout_start"
+    | "whatsapp_click"
+    | "solicitud"
+    | "resena"
+    | "asistente";
   path: string;
   label: string | null;
   referrer: string | null;
@@ -175,6 +184,98 @@ export function contactos(visitas: Visita[]) {
     whatsapp: visitas.filter((v) => v.event_type === "whatsapp_click").length,
     solicitudes: visitas.filter((v) => v.event_type === "solicitud").length,
     resenas: visitas.filter((v) => v.event_type === "resena").length,
+  };
+}
+
+// ---------- Asistente del botón de WhatsApp ----------
+//
+// Eventos «asistente» con etiqueta: abrir, aviso, tema:<id>, texto:<id> (o
+// texto:productos / texto:sugerencias / texto:sin_respuesta), util:<id>,
+// no_util:<id>, anadir:<producto>. Las derivaciones a WhatsApp son clics
+// «whatsapp_click» con etiqueta «asistente · <origen>».
+
+const ORIGENES_ASISTENTE: Record<string, string> = {
+  productos: "Búsqueda de productos",
+  sin_respuesta: "Pregunta sin respuesta",
+  sugerencias: "Pregunta ambigua",
+  ayuda: "Tras «no me ha ayudado»",
+  cabecera: "Botón WhatsApp del asistente",
+  inicio: "Menú inicial",
+};
+
+function nombreOrigen(origen: string): string {
+  const [tipo, productoId] = origen.split(":");
+  if (productoId && (tipo === "agotado" || tipo === "precio")) {
+    const nombre = getProductById(productoId)?.name ?? productoId;
+    return `${tipo === "agotado" ? "Agotado" : "Precio"} · ${nombre}`;
+  }
+  return INTENTOS[origen]?.pregunta ?? ORIGENES_ASISTENTE[origen] ?? origen;
+}
+
+function ranking(m: Map<string, number>, n: number) {
+  return Array.from(m.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, n)
+    .map(([id, value]) => ({ label: nombreOrigen(id), value }));
+}
+
+export function resumenAsistente(visitas: Visita[]) {
+  const sumar = (m: Map<string, number>, k: string) => m.set(k, (m.get(k) ?? 0) + 1);
+  const abiertas = new Set<string>();
+  const conDerivacion = new Set<string>();
+  const temas = new Map<string, number>();
+  const utiles = new Map<string, number>();
+  const noUtiles = new Map<string, number>();
+  const derivaciones = new Map<string, number>();
+  let preguntas = 0;
+  let escritas = 0;
+  let sinRespuesta = 0;
+  let anadidos = 0;
+
+  for (const v of visitas) {
+    if (v.event_type === "whatsapp_click" && v.label?.startsWith("asistente · ")) {
+      sumar(derivaciones, v.label.slice("asistente · ".length));
+      conDerivacion.add(v.session_id);
+      continue;
+    }
+    if (v.event_type !== "asistente" || !v.label) continue;
+    const [tipo, ...resto] = v.label.split(":");
+    const id = resto.join(":");
+    if (tipo === "abrir") abiertas.add(v.session_id);
+    else if (tipo === "tema" || tipo === "texto") {
+      preguntas++;
+      if (tipo === "texto") escritas++;
+      if (id === "sin_respuesta") sinRespuesta++;
+      sumar(temas, id);
+    } else if (tipo === "util") sumar(utiles, id);
+    else if (tipo === "no_util") sumar(noUtiles, id);
+    else if (tipo === "anadir") anadidos++;
+  }
+
+  const totalUtil = Array.from(utiles.values()).reduce((a, b) => a + b, 0);
+  const totalNoUtil = Array.from(noUtiles.values()).reduce((a, b) => a + b, 0);
+  const valoradas = totalUtil + totalNoUtil;
+
+  return {
+    conversaciones: abiertas.size,
+    preguntas,
+    escritas,
+    sinRespuesta,
+    anadidos,
+    derivaciones: Array.from(derivaciones.values()).reduce((a, b) => a + b, 0),
+    // Conversaciones que acabaron hablando con una persona.
+    tasaDerivacion: abiertas.size ? conDerivacion.size / abiertas.size : null,
+    satisfaccion: valoradas ? totalUtil / valoradas : null,
+    temas: ranking(temas, 8),
+    peorValorados: Array.from(noUtiles.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6)
+      .map(([id, value]) => ({
+        label: nombreOrigen(id),
+        value,
+        hint: `${utiles.get(id) ?? 0} útil · ${value} no útil`,
+      })),
+    derivacionesPorOrigen: ranking(derivaciones, 8),
   };
 }
 

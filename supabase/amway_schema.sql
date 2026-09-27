@@ -598,3 +598,11 @@ begin
   return jsonb_build_object('id', v_id, 'numero', v_numero);
 end;
 $$;
+
+-- ============================================================
+-- Asistente del botón de WhatsApp: eventos propios en la analítica
+-- (abrir, temas consultados, valoraciones, productos añadidos…).
+-- ============================================================
+alter table public.amway_visitas drop constraint if exists amway_visitas_event_type_check;
+alter table public.amway_visitas add constraint amway_visitas_event_type_check
+  check (event_type in ('pageview', 'add_to_cart', 'cart_open', 'checkout_start', 'whatsapp_click', 'solicitud', 'resena', 'asistente'));

@@ -1,4 +1,3 @@
-import { RECOGIDA } from "@/lib/recogida";
 import { SITE, WA_PRESETS } from "@/data/site-config";
 
 // Base de conocimiento del asistente del botón de WhatsApp.
@@ -22,9 +21,6 @@ export interface Intento {
   acciones: AccionAsistente[];
 }
 
-const primeraHora = RECOGIDA.horas[0];
-const ultimaHora = RECOGIDA.horas[RECOGIDA.horas.length - 1];
-const antelacionH = RECOGIDA.antelacionMin / 60;
 
 export function waDuda(tema: string): string {
   return `Hola, tengo una duda sobre ${tema} que no he podido resolver en la web. `;
@@ -49,7 +45,7 @@ export const INTENTOS: Record<string, Intento> = {
       `2. Elige el día y la hora a la que pasarás a recogerlo en ${SITE.city}.`,
       "3. Paga con tarjeta en la web o en efectivo al recoger.",
     ],
-    claves: ["pedido", "pedir", "comprar", "compra", "encarg", "cesta", "carrito", "como hago", "como se hace"],
+    claves: ["pedir", "comprar", "compra", "encarg", "cesta", "carrito", "hacer un pedido", "hago un pedido", "realizar un pedido", "hacer el pedido", "como se compra"],
     acciones: [
       { tipo: "tema", id: "registro" },
       { tipo: "tema", id: "modificar" },
@@ -88,9 +84,9 @@ export const INTENTOS: Record<string, Intento> = {
     pregunta: "¿Cuándo estará listo?",
     respuesta: [
       "Todo lo que puedes añadir a la cesta está disponible, así que lo tendrás preparado para el día y la hora que elijas.",
-      `Puedes reservar desde ${antelacionH} h después de hacer el pedido.`,
+      "Tú eliges el día y la hora de recogida al hacer el pedido en la cesta.",
     ],
-    claves: ["cuando", "tarda", "plazo", "listo", "preparad", "rapido", "urgente", "hoy", "manana"],
+    claves: ["tarda", "plazo", "listo", "preparad", "urgente", "cuando estara", "cuando lo tengo", "para hoy", "para manana"],
     acciones: [
       { tipo: "tema", id: "recogida" },
       { tipo: "cesta", label: "Elegir día de recogida" },
@@ -198,10 +194,10 @@ export const INTENTOS: Record<string, Intento> = {
   recogida: {
     pregunta: "Recogida y entrega",
     respuesta: [
-      `Recogida en mano en ${SITE.city}, de lunes a sábado.`,
-      `Eliges la hora en la cesta, entre las ${primeraHora} y las ${ultimaHora}.`,
+      `Recogida en mano en ${SITE.city}, el día y a la hora que elijas al hacer el pedido en la cesta.`,
+      "Si te surge un imprevisto, avísanos y lo cambiamos sin problema.",
     ],
-    claves: ["recog", "entreg", "horario", "hora", "dia", "cuando paso"],
+    claves: ["recog", "entreg", "horario", "hora", "dia", "cuando paso", "recoger el pedido", "recoger mi pedido"],
     acciones: [
       { tipo: "tema", id: "direccion" },
       { tipo: "tema", id: "cambiarHora" },
@@ -325,8 +321,12 @@ export const INTENTOS: Record<string, Intento> = {
 // hora") de los temas generales ("hora"), y por lo mismo las preguntas
 // concretas puntúan un 50 % más que los temas de inicio: «cancelar mi
 // pedido» es «¿Puedo cancelar?», no «¿Cómo hago un pedido?».
+//
+// Las faltas de ortografía se toleran con distancia de edición 1 sobre raíces
+// de 4+ letras («vizum», «recojer», «tarjta»), puntuando algo menos que la
+// coincidencia exacta para que esta gane en caso de duda.
 
-const VACIAS = new Set(
+export const VACIAS = new Set(
   "el la los las un una unos unas de del al que en y o a me mi mis se su sus por para con sin es lo le les como muy mas pero si no yo tu te vosotros os este esta esto eso".split(" ")
 );
 
@@ -334,10 +334,51 @@ export function normalizar(texto: string): string {
   return texto
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+export function palabrasDe(texto: string): string[] {
+  return normalizar(texto)
+    .split(" ")
+    .filter((p) => p.length > 1 && !VACIAS.has(p));
+}
+
+// Distancia de Levenshtein con corte: en cuanto supera `max` deja de contar.
+export function distancia(a: string, b: string, max = 2): number {
+  if (Math.abs(a.length - b.length) > max) return max + 1;
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    let minFila = i;
+    for (let j = 1; j <= b.length; j++) {
+      const v = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      cur.push(v);
+      if (v < minFila) minFila = v;
+    }
+    if (minFila > max) return max + 1;
+    prev = cur;
+  }
+  return prev[b.length];
+}
+
+const mismaInicial = (a: string, b: string) =>
+  a[0] === b[0] || (a[0] === "b" && b[0] === "v") || (a[0] === "v" && b[0] === "b");
+
+/**
+ * 1 si la palabra empieza por la raíz, 0,8 si lo hace con una errata, 0 si no.
+ * La errata se admite en raíces de `minErrata`+ letras y con la misma
+ * inicial (salvo b/v), que es donde casi nunca se equivoca nadie.
+ */
+export function encajaRaiz(palabra: string, raiz: string, minErrata = 4): number {
+  if (palabra.startsWith(raiz)) return 1;
+  if (raiz.length < minErrata || palabra.length < raiz.length - 1 || !mismaInicial(palabra, raiz)) return 0;
+  for (const largo of [raiz.length - 1, raiz.length, raiz.length + 1]) {
+    if (distancia(palabra.slice(0, largo), raiz, 1) <= 1) return 0.8;
+  }
+  return 0;
 }
 
 export interface Coincidencia {
@@ -347,20 +388,22 @@ export interface Coincidencia {
 
 export function buscarIntentos(texto: string): Coincidencia[] {
   const frase = ` ${normalizar(texto)} `;
-  const palabras = frase.trim().split(" ").filter((p) => p.length > 1 && !VACIAS.has(p));
+  const palabras = palabrasDe(texto);
   if (palabras.length === 0) return [];
 
   return Object.entries(INTENTOS)
     .map(([id, intento]) => {
+      // Frases enteras: 3 puntos cada una.
       let puntos = 0;
+      const raices: string[] = [];
       for (const clave of intento.claves) {
         const c = normalizar(clave);
-        if (c.includes(" ")) {
-          if (frase.includes(` ${c}`)) puntos += 3;
-        } else if (palabras.some((p) => p.startsWith(c))) {
-          puntos += 1;
-        }
+        if (!c.includes(" ")) raices.push(c);
+        else if (frase.includes(` ${c}`)) puntos += 3;
       }
+      // Raíces: cada palabra del cliente cuenta una sola vez, con su mejor
+      // coincidencia (así «pedido» no suma por «pedido» y por «pedir»).
+      for (const p of palabras) puntos += Math.max(0, ...raices.map((c) => encajaRaiz(p, c)));
       // asesorPersonal reconoce productos («vitaminas», «purificador»), que
       // son el tema de la pregunta y no la intención: no lleva el extra.
       const general = TEMAS_INICIO.includes(id) || id === "asesorPersonal";

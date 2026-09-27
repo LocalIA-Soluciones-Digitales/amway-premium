@@ -11,7 +11,8 @@ export type EventType =
   | "checkout_start"
   | "whatsapp_click"
   | "solicitud"
-  | "resena";
+  | "resena"
+  | "asistente";
 export type SourceCategory = "google_ads" | "google_organic" | "social" | "referral" | "direct" | "other";
 export type DeviceType = "mobile" | "tablet" | "desktop";
 

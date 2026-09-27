@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Activity, Eye, MessageCircle, MousePointerClick, Repeat, Trash2, Users } from "lucide-react";
+import { Activity, Bot, Eye, MessageCircle, MousePointerClick, Repeat, Trash2, Users } from "lucide-react";
 import { amwayDb } from "@/lib/amway-db";
 import { BarList, ColumnChart, Funnel, TrendChart } from "../charts";
 import {
@@ -13,6 +13,7 @@ import {
   porDispositivo,
   porFuente,
   productosEnCesta,
+  resumenAsistente,
   resumenVisitas,
   serie,
   type Rango,
@@ -82,6 +83,7 @@ export function InformesPanel() {
       embudo: embudo(visitas, pedidosWeb),
       cesta: productosEnCesta(visitas),
       contactos: contactos(visitas),
+      asistente: resumenAsistente(visitas),
       campanas: (() => {
         const m = new Map<string, Set<string>>();
         for (const v of visitas) {
@@ -196,6 +198,8 @@ export function InformesPanel() {
             </Card>
           </div>
 
+          <AsistenteCard datos={data.asistente} />
+
           <div className="flex justify-end">
             <button type="button" onClick={borrarVisitas} className={`${btnGhost} text-xs text-stone`}>
               <Trash2 size={13} /> Borrar histórico de visitas
@@ -204,5 +208,54 @@ export function InformesPanel() {
         </div>
       )}
     </div>
+  );
+}
+
+const pct = (x: number | null) => (x == null ? "—" : `${(x * 100).toFixed(0)} %`);
+
+function AsistenteCard({ datos }: { datos: ReturnType<typeof resumenAsistente> }) {
+  const sinDatos = datos.conversaciones === 0 && datos.derivaciones === 0;
+  return (
+    <Card>
+      <CardTitle>
+        <span className="inline-flex items-center gap-1.5">
+          <Bot size={13} /> Asistente del botón de WhatsApp
+        </span>
+      </CardTitle>
+      {sinDatos ? (
+        <p className="text-sm text-stone">
+          Todavía no hay conversaciones en este periodo. Se registran cuando el visitante acepta las cookies.
+        </p>
+      ) : (
+        <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+            <Stat label="Conversaciones" value={datos.conversaciones} icon={<Bot size={15} />} hint={`${datos.preguntas} preguntas`} />
+            <Stat label="Escritas a mano" value={datos.escritas} hint={`${datos.sinRespuesta} sin respuesta`} />
+            <Stat label="Le fue útil" value={pct(datos.satisfaccion)} hint="De quienes valoraron la respuesta" />
+            <Stat
+              label="Pasan a WhatsApp"
+              value={pct(datos.tasaDerivacion)}
+              icon={<MessageCircle size={15} />}
+              hint={`${datos.derivaciones} clics`}
+            />
+            <Stat label="Añadidos a la cesta" value={datos.anadidos} hint="Desde el asistente" />
+          </div>
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div>
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">Lo que más se pregunta</p>
+              <BarList items={datos.temas} empty="Aún no hay preguntas." />
+            </div>
+            <div>
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">Respuestas a mejorar</p>
+              <BarList items={datos.peorValorados} empty="Nadie ha marcado una respuesta como no útil." />
+            </div>
+            <div>
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">Desde dónde pasan a WhatsApp</p>
+              <BarList items={datos.derivacionesPorOrigen} empty="Nadie ha pasado a WhatsApp desde el asistente." />
+            </div>
+          </div>
+        </div>
+      )}
+    </Card>
   );
 }

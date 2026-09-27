@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { ArrowRight, ChevronDown, Search, X } from "lucide-react";
 import type { CategorySlug, Product } from "@/data/types";
@@ -39,6 +39,14 @@ export function ProductExplorer({
   const [sort, setSort] = useState<"relevancia" | "precio-asc" | "precio-desc">("relevancia");
   const [solicitudOpen, setSolicitudOpen] = useState(false);
   const catalog = useCatalogState();
+
+  // /catalogo?q=… llega ya filtrado (enlaces del asistente). Se lee al montar
+  // y no con useSearchParams para no obligar a la página a renderizarse en
+  // el cliente.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get("q");
+    if (q) setQuery(q.slice(0, 80));
+  }, []);
 
   const visible = useMemo(
     () => products.filter((p) => !catalog.oculto(p.id)),
