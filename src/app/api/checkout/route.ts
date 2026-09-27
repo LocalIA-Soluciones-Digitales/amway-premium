@@ -40,6 +40,7 @@ export async function POST(request: NextRequest) {
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     payment_method_types: ["card"],
+    locale: "es",
     line_items: lineItems,
     // Stripe caps each metadata value at 500 characters.
     metadata: {
