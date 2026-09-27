@@ -740,3 +740,68 @@ begin
     alter publication supabase_realtime add table public.amway_pedidos;
   end if;
 end $$;
+
+-- ============================================================
+-- Asistente: «¿Cómo va mi pedido?». Solo responde si el número de pedido y
+-- los últimos 9 dígitos del teléfono coinciden; no devuelve datos
+-- personales. Freno: 5 fallos por pedido y hora, 300 fallos globales/hora.
+-- La tabla de intentos no tiene políticas: solo la usa la función.
+-- ============================================================
+create table if not exists public.amway_consultas_pedido (
+  id bigint generated always as identity primary key,
+  numero bigint not null,
+  acierto boolean not null,
+  created_at timestamptz not null default now()
+);
+alter table public.amway_consultas_pedido enable row level security;
+create index if not exists idx_amway_consultas_pedido on public.amway_consultas_pedido (numero, created_at desc);
+create index if not exists idx_amway_consultas_pedido_fecha on public.amway_consultas_pedido (created_at);
+
+create or replace function public.amway_estado_pedido(p_numero bigint, p_telefono text)
+returns jsonb
+language plpgsql security definer set search_path = public
+as $$
+declare
+  v_tel text := right(regexp_replace(coalesce(p_telefono, ''), '\D', '', 'g'), 9);
+  v record;
+  v_ok boolean;
+begin
+  if p_numero is null or length(v_tel) < 9 then
+    return null;
+  end if;
+
+  delete from public.amway_consultas_pedido where created_at < now() - interval '1 day';
+  if (select count(*) from public.amway_consultas_pedido
+        where numero = p_numero and not acierto and created_at > now() - interval '1 hour') >= 5
+     or (select count(*) from public.amway_consultas_pedido
+        where not acierto and created_at > now() - interval '1 hour') >= 300 then
+    return jsonb_build_object('bloqueado', true);
+  end if;
+
+  select numero, estado, metodo_pago, total_eur, recogida_fecha, recogida_hora, preparado_at, seguimiento
+    into v
+    from public.amway_pedidos
+   where numero = p_numero
+     and right(regexp_replace(coalesce(cliente_telefono, ''), '\D', '', 'g'), 9) = v_tel;
+  v_ok := found;
+
+  insert into public.amway_consultas_pedido (numero, acierto) values (p_numero, v_ok);
+  if not v_ok then
+    return null;
+  end if;
+
+  return jsonb_build_object(
+    'numero', v.numero,
+    'estado', v.estado,
+    'metodo_pago', v.metodo_pago,
+    'total_eur', v.total_eur,
+    'recogida_fecha', v.recogida_fecha,
+    'recogida_hora', v.recogida_hora,
+    'preparado', v.preparado_at is not null,
+    'seguimiento', v.seguimiento
+  );
+end;
+$$;
+
+revoke all on function public.amway_estado_pedido(bigint, text) from public;
+grant execute on function public.amway_estado_pedido(bigint, text) to anon, authenticated;

@@ -32,6 +32,7 @@ import { buscarProductos, consultaCatalogo } from "@/lib/asistente-productos";
 import { useCesta } from "@/components/cart/CartProvider";
 import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
 import { track } from "@/lib/analytics";
+import { consultarPedido, describirPedido } from "@/lib/estado-pedido";
 
 type Mensaje = { id: number; de: "bot" | "cliente"; lineas: string[]; productos?: string[] };
 
@@ -42,7 +43,9 @@ type Contexto =
   | { tipo: "productos"; texto: string; consulta: string }
   | { tipo: "sugerencias"; ids: string[]; texto: string }
   | { tipo: "sinRespuesta"; texto: string }
-  | { tipo: "ayuda"; mensaje: string };
+  | { tipo: "ayuda"; mensaje: string }
+  | { tipo: "consultaPedido"; fallo?: boolean }
+  | { tipo: "pedidoConsultado"; numero: number };
 
 interface Conversacion {
   mensajes: Mensaje[];
@@ -86,11 +89,17 @@ function pausa(lineas: string[]): number {
 // Identificador del contexto para la analítica (qué tema derivó a WhatsApp).
 function origenDe(contexto: Contexto): string {
   if (contexto.tipo === "respuesta") return contexto.id;
+  if (contexto.tipo === "consultaPedido" || contexto.tipo === "pedidoConsultado") return "estadoPedido";
   return contexto.tipo === "sinRespuesta" ? "sin_respuesta" : contexto.tipo;
 }
 
 function registrar(label: string) {
   track("asistente", label);
+}
+
+// Tras mostrar un tema: sus acciones, o su formulario si lo tiene.
+function contextoDeTema(id: string): Contexto {
+  return INTENTOS[id]?.formulario === "pedido" ? { tipo: "consultaPedido" } : { tipo: "respuesta", id };
 }
 
 function categoriaDeRuta(pathname: string): CategorySlug | null {
@@ -199,7 +208,7 @@ export function WhatsAppButton() {
     const intento = INTENTOS[id];
     if (!intento || escribiendo) return;
     registrar(`tema:${id}`);
-    responder(intento.pregunta, intento.respuesta, { tipo: "respuesta", id });
+    responder(intento.pregunta, intento.respuesta, contextoDeTema(id));
   }
 
   function enviarTexto(e: FormEvent) {
@@ -226,7 +235,7 @@ export function WhatsAppButton() {
       // encaja por una errata, o por una palabra suelta en una frase larga,
       // mejor preguntar «¿te refieres a…?».
       registrar(`texto:${mejor.id}`);
-      responder(t, INTENTOS[mejor.id].respuesta, { tipo: "respuesta", id: mejor.id });
+      responder(t, INTENTOS[mejor.id].respuesta, contextoDeTema(mejor.id));
     } else if (mejor) {
       registrar("texto:sugerencias");
       responder(t, ["Para darte la respuesta exacta, ¿te refieres a alguna de estas?"], {
@@ -245,6 +254,44 @@ export function WhatsAppButton() {
         { tipo: "sinRespuesta", texto: t }
       );
     }
+  }
+
+  async function consultar(numero: number, telefono: string) {
+    if (escribiendo) return;
+    if (timer.current) clearTimeout(timer.current);
+    setConv((c) => ({
+      mensajes: [...c.mensajes, { id: Date.now(), de: "cliente", lineas: [`Pedido nº ${numero}`] }],
+      contexto: c.contexto,
+    }));
+    setEscribiendo(true);
+    const r = await consultarPedido(numero, telefono);
+    registrar(`pedido:${r.tipo}`);
+
+    let lineas: string[];
+    let siguiente: Contexto;
+    if (r.tipo === "encontrado") {
+      lineas = describirPedido(r.pedido);
+      siguiente = { tipo: "pedidoConsultado", numero };
+    } else if (r.tipo === "noEncontrado") {
+      lineas = [
+        "No encuentro ningún pedido con ese número y teléfono.",
+        "Revisa los datos (el número viene en la confirmación del pedido) o pregúntanos directamente:",
+      ];
+      siguiente = { tipo: "consultaPedido", fallo: true };
+    } else {
+      lineas = [
+        r.tipo === "bloqueado"
+          ? "Por seguridad he pausado las consultas de este pedido un rato."
+          : "Ahora mismo no puedo consultarlo.",
+        "Escríbenos por WhatsApp y te lo miramos al momento:",
+      ];
+      siguiente = { tipo: "ayuda", mensaje: `Hola, quería saber cómo va mi pedido nº ${numero}.` };
+    }
+    setConv((c) => ({
+      mensajes: [...c.mensajes, { id: Date.now() + 1, de: "bot", lineas }],
+      contexto: siguiente,
+    }));
+    setEscribiendo(false);
   }
 
   function valorar(util: boolean) {
@@ -371,6 +418,8 @@ export function WhatsAppButton() {
                   transition={{ duration: 0.2, delay: 0.05 }}
                   className="flex flex-col gap-2.5"
                 >
+                  {contexto.tipo === "consultaPedido" && <FormularioPedido onConsultar={consultar} />}
+
                   {acciones.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
                       {acciones.map((a, i) => (
@@ -520,7 +569,72 @@ function accionesPara(contexto: Contexto, conCesta: boolean): AccionAsistente[] 
       return [{ tipo: "whatsapp", mensaje: consultaWhatsApp(contexto.texto), label: "Enviar mi pregunta" }];
     case "ayuda":
       return [{ tipo: "whatsapp", mensaje: contexto.mensaje, label: "Preguntar a una persona" }];
+    case "consultaPedido":
+      return contexto.fallo
+        ? [{ tipo: "whatsapp", mensaje: "Hola, quería saber cómo va mi pedido. Mi nombre es ", label: "Preguntar por WhatsApp" }]
+        : [];
+    case "pedidoConsultado":
+      return [
+        {
+          tipo: "whatsapp",
+          mensaje: `Hola, os escribo por mi pedido nº ${contexto.numero}. `,
+          label: "Escribir sobre este pedido",
+        },
+        { tipo: "tema", id: "cambiarHora" },
+        { tipo: "tema", id: "direccion" },
+      ];
   }
+}
+
+// Número de pedido + teléfono, dentro del chat. El teléfono no se guarda en
+// la conversación ni en la analítica: solo viaja a la consulta.
+function FormularioPedido({ onConsultar }: { onConsultar: (numero: number, telefono: string) => void }) {
+  const [numero, setNumero] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const n = Number(numero.replace(/\D/g, ""));
+  const valido = n > 0 && telefono.replace(/\D/g, "").length >= 9;
+  const campo =
+    "h-10 w-full rounded-xl border border-carbon/12 bg-white px-3 text-base text-carbon placeholder:text-stone focus:border-forest focus:outline-none sm:text-sm";
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (valido) onConsultar(n, telefono);
+      }}
+      className="flex flex-col gap-2 rounded-2xl border border-carbon/8 bg-white/70 p-3"
+    >
+      <div className="grid grid-cols-[2fr_3fr] gap-2">
+        <input
+          value={numero}
+          onChange={(e) => setNumero(e.target.value)}
+          inputMode="numeric"
+          placeholder="Nº pedido"
+          aria-label="Número de pedido"
+          maxLength={10}
+          className={campo}
+        />
+        <input
+          value={telefono}
+          onChange={(e) => setTelefono(e.target.value)}
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="Teléfono"
+          aria-label="Teléfono del pedido"
+          maxLength={20}
+          className={campo}
+        />
+      </div>
+      <button
+        type="submit"
+        disabled={!valido}
+        className="h-10 rounded-xl bg-forest text-sm font-medium text-cream transition hover:bg-forest-dim disabled:opacity-40"
+      >
+        Consultar mi pedido
+      </button>
+    </form>
+  );
 }
 
 // Producto con su precio y estado reales (los del panel de gestión) y la

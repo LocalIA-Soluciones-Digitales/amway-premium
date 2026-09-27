@@ -19,6 +19,8 @@ export interface Intento {
   /** Palabras (raíces) o frases que identifican la intención al escribir. */
   claves: string[];
   acciones: AccionAsistente[];
+  /** Abre un formulario dentro del chat en vez de ofrecer acciones. */
+  formulario?: "pedido";
 }
 
 
@@ -28,6 +30,7 @@ export function waDuda(tema: string): string {
 
 export const TEMAS_INICIO = [
   "pedido",
+  "estadoPedido",
   "disponibilidad",
   "pagos",
   "recogida",
@@ -52,6 +55,23 @@ export const INTENTOS: Record<string, Intento> = {
       { tipo: "tema", id: "listo" },
       { tipo: "enlace", href: "/catalogo", label: "Ver catálogo" },
     ],
+  },
+  estadoPedido: {
+    pregunta: "¿Cómo va mi pedido?",
+    respuesta: ["Te lo miro al momento. Escribe el número de pedido y el teléfono que diste al hacerlo:"],
+    claves: [
+      "estado",
+      "seguimiento",
+      "como va",
+      "va mi pedido",
+      "esta mi pedido",
+      "numero de pedido",
+      "ya esta listo",
+      "esta preparado",
+      "ha llegado",
+    ],
+    acciones: [],
+    formulario: "pedido",
   },
   registro: {
     pregunta: "¿Tengo que registrarme?",
