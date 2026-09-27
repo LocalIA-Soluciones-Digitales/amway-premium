@@ -108,21 +108,14 @@ export function Header() {
             dark ? "text-cream" : "text-carbon"
           )}
         >
-          <span
-            className={cn(
-              "flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors sm:h-9 sm:w-9",
-              dark && "bg-cream"
-            )}
-          >
-            <Image
-              src="/brand/logo-mark.png"
-              alt=""
-              width={36}
-              height={36}
-              priority
-              className={cn("h-full w-full object-contain", dark && "p-1")}
-            />
-          </span>
+          <Image
+            src={dark ? "/brand/logo-mark-light.png" : "/brand/logo-mark.png"}
+            alt=""
+            width={36}
+            height={36}
+            priority
+            className="h-8 w-8 shrink-0 object-contain sm:h-9 sm:w-9"
+          />
           {SITE.name}
         </Link>
 

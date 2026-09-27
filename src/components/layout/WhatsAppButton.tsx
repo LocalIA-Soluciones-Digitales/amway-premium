@@ -2,14 +2,48 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { MessageCircle, X } from "lucide-react";
-import { WA_PRESETS, waLink } from "@/data/site-config";
+import {
+  ChevronRight,
+  Info,
+  MessageCircle,
+  PackageSearch,
+  ShoppingBag,
+  Sparkles,
+  X,
+  type LucideIcon,
+} from "lucide-react";
+import { SITE, WA_PRESETS, waLink } from "@/data/site-config";
 
-const PRESET_LABELS: { key: keyof typeof WA_PRESETS; label: string }[] = [
-  { key: "general", label: "Hola, estoy interesado en vuestros productos." },
-  { key: "info", label: "Quiero recibir más información." },
-  { key: "order", label: "Quiero realizar un pedido." },
-  { key: "availability", label: "¿Está disponible este producto?" },
+const PRESETS: {
+  key: keyof typeof WA_PRESETS;
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}[] = [
+  {
+    key: "general",
+    icon: Sparkles,
+    title: "Asesoramiento personalizado",
+    description: "Te ayudamos a elegir los productos que mejor encajan contigo.",
+  },
+  {
+    key: "info",
+    icon: Info,
+    title: "Información detallada",
+    description: "Características, modo de uso, precios y condiciones de entrega.",
+  },
+  {
+    key: "order",
+    icon: ShoppingBag,
+    title: "Realizar un pedido",
+    description: "Te guiamos en el proceso, formas de pago y plazos de envío.",
+  },
+  {
+    key: "availability",
+    icon: PackageSearch,
+    title: "Consultar disponibilidad",
+    description: "Comprobamos el stock y el plazo de entrega en tu zona.",
+  },
 ];
 
 export function WhatsAppButton() {
@@ -24,23 +58,58 @@ export function WhatsAppButton() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="glass-dark w-72 overflow-hidden rounded-2xl p-4 text-sm shadow-2xl shadow-black/30 sm:w-80"
+            className="glass-dark w-[calc(100vw-2rem)] max-w-[22rem] origin-bottom-right overflow-hidden rounded-2xl text-sm shadow-2xl shadow-black/30"
           >
-            <p className="mb-3 font-display text-base text-cream">
-              ¿Hablamos por WhatsApp?
-            </p>
-            <div className="flex flex-col gap-2">
-              {PRESET_LABELS.map((preset) => (
-                <a
-                  key={preset.key}
-                  href={waLink(WA_PRESETS[preset.key])}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-cream/60 transition hover:border-[#25D366]/40 hover:bg-[#25D366]/10 hover:text-cream"
-                >
-                  {preset.label}
-                </a>
-              ))}
+            <div className="flex items-center gap-3 border-b border-white/10 bg-[#25D366]/10 px-4 py-3.5">
+              <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white">
+                <MessageCircle size={20} />
+                <span className="absolute right-0 bottom-0 h-2.5 w-2.5 rounded-full border-2 border-[#1c1c1c] bg-[#25D366]" />
+              </span>
+              <div className="min-w-0">
+                <p className="font-display text-base leading-tight text-cream">
+                  {SITE.name}
+                </p>
+                <p className="text-xs text-cream/55">
+                  Atención personalizada · Te respondemos lo antes posible
+                </p>
+              </div>
+            </div>
+
+            <div className="p-4">
+              <p className="mb-3 text-[13px] leading-relaxed text-cream/70">
+                Hola 👋 ¿En qué podemos ayudarte? Elige una opción y te
+                abriremos WhatsApp con el mensaje ya preparado.
+              </p>
+              <div className="flex flex-col gap-2">
+                {PRESETS.map(({ key, icon: Icon, title, description }) => (
+                  <a
+                    key={key}
+                    href={waLink(WA_PRESETS[key])}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 transition hover:border-[#25D366]/40 hover:bg-[#25D366]/10"
+                  >
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[#25D366] transition group-hover:bg-[#25D366]/15">
+                      <Icon size={16} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-medium text-cream/90 group-hover:text-cream">
+                        {title}
+                      </span>
+                      <span className="block text-xs leading-snug text-cream/50">
+                        {description}
+                      </span>
+                    </span>
+                    <ChevronRight
+                      size={16}
+                      className="shrink-0 text-cream/30 transition group-hover:translate-x-0.5 group-hover:text-[#25D366]"
+                    />
+                  </a>
+                ))}
+              </div>
+              <p className="mt-3 text-center text-[11px] text-cream/40">
+                {SITE.legalNote}
+              </p>
             </div>
           </motion.div>
         )}

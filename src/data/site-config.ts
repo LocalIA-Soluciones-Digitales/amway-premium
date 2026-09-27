@@ -18,12 +18,23 @@ export function waLink(message: string): string {
 }
 
 export const WA_PRESETS = {
-  general: "Hola, estoy interesado en vuestros productos Amway.",
-  info: "Hola, quiero recibir más información sobre este producto.",
-  order: "Hola, quiero realizar un pedido.",
-  availability: "Hola, ¿está disponible este producto?",
+  general:
+    "Hola, buenos días. He visitado vuestra web y me gustaría conocer mejor los productos Amway que ofrecéis. " +
+    "¿Podríais orientarme sobre cuáles se adaptan mejor a lo que busco? Muchas gracias.",
+  info:
+    "Hola, me gustaría recibir información más detallada: características, modo de uso, precios " +
+    "y condiciones de entrega. ¿Me podéis ayudar? Gracias.",
+  order:
+    "Hola, me gustaría realizar un pedido. ¿Podríais indicarme los pasos a seguir, las formas de pago " +
+    "disponibles y el plazo de entrega en mi zona? Gracias.",
+  availability:
+    "Hola, quería consultar la disponibilidad actual de un producto y el plazo aproximado de entrega. " +
+    "¿Me podéis confirmar si lo tenéis en stock? Gracias.",
 } as const;
 
 export function waProductLink(productName: string): string {
-  return waLink(`Hola, estoy interesado en "${productName}". ¿Me dais más información?`);
+  return waLink(
+    `Hola, estoy interesado/a en "${productName}". ¿Podríais darme más información sobre ` +
+      `sus beneficios, modo de uso, precio y disponibilidad? Muchas gracias.`,
+  );
 }
