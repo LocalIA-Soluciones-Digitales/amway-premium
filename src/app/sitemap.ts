@@ -14,7 +14,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/opiniones",
     "/sobre-nosotros",
     "/faq",
-    "/contacto",
   ];
 
   return routes.map((route) => ({

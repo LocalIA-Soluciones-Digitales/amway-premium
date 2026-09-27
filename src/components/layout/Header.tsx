@@ -221,23 +221,19 @@ export function Header() {
           </Link>
           <Link
             href="/sobre-nosotros"
-            className={cn(
-              "text-sm transition-colors",
-              dark ? "text-cream/70 hover:text-cream" : "text-stone hover:text-carbon"
-            )}
-          >
-            Nosotros
-          </Link>
-          <Link
-            href="/contacto"
+            aria-current={pathname === "/sobre-nosotros" ? "page" : undefined}
             className={cn(
               "rounded-full border px-5 py-2 text-sm transition",
-              dark
-                ? "border-cream/30 text-cream hover:bg-cream/10"
-                : "border-carbon/15 text-carbon hover:bg-carbon/5"
+              pathname === "/sobre-nosotros"
+                ? dark
+                  ? "border-cream bg-cream text-carbon"
+                  : "border-carbon bg-carbon text-cream"
+                : dark
+                  ? "border-cream/30 text-cream hover:bg-cream/10"
+                  : "border-carbon/15 text-carbon hover:bg-carbon/5"
             )}
           >
-            Contacto
+            Nosotros y contacto
           </Link>
           <CartButton dark={dark} />
         </div>
@@ -309,7 +305,7 @@ export function Header() {
               <p className="mb-1 mt-6 text-xs font-medium uppercase tracking-[0.2em] text-stone">
                 Explorar
               </p>
-              {[...TOP_LINKS, { href: "/sobre-nosotros", label: "Nosotros" }, { href: "/contacto", label: "Contacto" }].map(
+              {[...TOP_LINKS, { href: "/sobre-nosotros", label: "Nosotros y contacto" }].map(
                 (link, i) => {
                   const active = pathname === link.href;
                   return (

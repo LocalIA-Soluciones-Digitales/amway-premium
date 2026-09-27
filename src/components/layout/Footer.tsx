@@ -16,11 +16,10 @@ const COLUMNS: { title: string; links: { href: string; label: string }[] }[] = [
   {
     title: "Empresa",
     links: [
-      { href: "/sobre-nosotros", label: "Sobre nosotros" },
+      { href: "/sobre-nosotros", label: "Nosotros y contacto" },
       { href: "/ofertas", label: "Ofertas destacadas" },
       { href: "/opiniones", label: "Opiniones de clientes" },
       { href: "/faq", label: "Preguntas frecuentes" },
-      { href: "/contacto", label: "Contacto" },
     ],
   },
 ];
