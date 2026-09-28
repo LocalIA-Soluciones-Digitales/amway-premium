@@ -86,6 +86,24 @@ export function useInstalarApp() {
   return { instalada, puedeInstalar: !!promptInstalar, instalar };
 }
 
+// Una suscripción hecha con otra clave pública (p. ej. antes de cambiarla)
+// no puede recibir nada: se da de baja y se vuelve a crear con la actual.
+async function suscribir(reg: ServiceWorkerRegistration, clave: string): Promise<PushSubscription> {
+  const actual = base64AUint8(clave);
+  const sub = await reg.pushManager.getSubscription();
+  if (sub) {
+    const suya = sub.options.applicationServerKey;
+    const igual =
+      !!suya &&
+      suya.byteLength === actual.byteLength &&
+      new Uint8Array(suya).every((b, i) => b === actual[i]);
+    if (igual) return sub;
+    await amwayDb().from("amway_push_suscripciones").delete().eq("endpoint", sub.endpoint);
+    await sub.unsubscribe();
+  }
+  return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: actual });
+}
+
 async function guardar(sub: PushSubscription) {
   const json = sub.toJSON();
   const { error } = await amwayDb().rpc("amway_guardar_suscripcion_push", {
@@ -105,14 +123,18 @@ export function useAvisosPush() {
 
   useEffect(() => {
     let cancelado = false;
-    fetch("/api/push")
+    const servidor = fetch("/api/push")
       .then((r) => r.json())
       .then((d: { publicKey: string; configurado: boolean }) => {
-        if (cancelado) return;
+        if (cancelado) return null;
         setClave(d.publicKey);
         setServidorListo(d.configurado);
+        return d.publicKey;
       })
-      .catch(() => !cancelado && setServidorListo(false));
+      .catch(() => {
+        if (!cancelado) setServidorListo(false);
+        return null;
+      });
 
     (async () => {
       if (!("Notification" in window) || !("PushManager" in window) || !("serviceWorker" in navigator)) {
@@ -127,9 +149,12 @@ export function useAvisosPush() {
       if (cancelado) return;
       if (sub && Notification.permission === "granted") {
         setEstado("activado");
-        // Se vuelve a guardar en cada carga: si se borró por caducada, este
-        // dispositivo vuelve a recibir.
-        guardar(sub).catch(() => {});
+        // Se vuelve a guardar en cada carga: si se borró por caducada (o era
+        // de una clave anterior), este dispositivo vuelve a recibir.
+        servidor
+          .then((clave) => (clave ? suscribir(reg, clave) : sub))
+          .then(guardar)
+          .catch(() => {});
       } else {
         setEstado("desactivado");
       }
@@ -153,10 +178,7 @@ export function useAvisosPush() {
         setEstado("no_soportado");
         return false;
       }
-      const sub =
-        (await reg.pushManager.getSubscription()) ??
-        (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: base64AUint8(clave) }));
-      await guardar(sub);
+      await guardar(await suscribir(reg, clave));
       setEstado("activado");
       return true;
     } catch (e) {

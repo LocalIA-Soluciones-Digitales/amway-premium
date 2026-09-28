@@ -8,7 +8,7 @@ import { amwayRpc } from "@/lib/amway-db";
 // funciona igual.
 export const VAPID_PUBLIC_KEY =
   process.env.NEXT_PUBLIC_AMWAY_VAPID_PUBLIC_KEY ??
-  "BJ_dQ4fh_xa_P3RiDT0JwHXmcuJexFNlpoIcpQKb97eTr8avkDOg8H2uCNHll_PYrsjLqGKWv9pZBL4oK0m0oVU";
+  "BLKbkJc1YGPikos3R24_N9WIvXzjPXhSPNejYoILrjvrW4w1M0w5EdKy5r-eFphbdMNwipqSNUsdNttMvV3mauU";
 
 export const pushConfigurado = () => !!process.env.AMWAY_VAPID_PRIVATE_KEY;
 
