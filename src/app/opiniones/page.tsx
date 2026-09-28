@@ -38,8 +38,8 @@ export default function OpinionesPage() {
           </>
         }
         description="Opiniones reales de quienes ya compran con nosotros en Barakaldo. Si ya has probado algo, tu experiencia ayuda a otros a elegir."
-        photo="/images/editorial/nutricion-familia.webp"
-        photoPosition="center 20%"
+        photo="/images/xs-energy/lifestyle/park-portrait.webp"
+        photoPosition="70% 30%"
         actions={
           <>
             <a href="#opinar" className={heroPrimaryClass}>

@@ -30,22 +30,22 @@ const HIGHLIGHTS = [
 
 const POINTS = [
   {
-    image: "/images/editorial/nutricion-campo.webp",
-    alt: "Cultivos de Nutrilite en campo abierto",
+    image: "/images/nosotros/origen-natural.webp",
+    alt: "Cápsulas de suplemento junto a naranjas y limas cortadas",
     eyebrow: "Origen",
     title: "Importación desde Estados Unidos",
     text: "Traemos el catálogo oficial de Amway US: Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook.",
   },
   {
-    image: "/images/editorial/hogar-familia.webp",
-    alt: "Madre con su bebé haciendo la colada en casa",
+    image: "/images/nosotros/bizkaia-ria.webp",
+    alt: "La ría de Bilbao con el museo Guggenheim y el puente de La Salve",
     eyebrow: "Cercanía",
     title: "Servicio local en Barakaldo",
     text: "Asesoramos en persona o por WhatsApp y preparamos cada pedido a mano para que lo recojas en nuestro local.",
   },
   {
-    image: "/images/editorial/belleza-flores.webp",
-    alt: "Sérum Artistry rodeado de flores",
+    image: "/images/nosotros/garantia-capsulas.webp",
+    alt: "Bote abierto con cápsulas sobre una mesa blanca",
     eyebrow: "Garantía",
     title: "Productos genuinos",
     text: "Sin imitaciones ni reenvasados: cada producto llega sellado y con la garantía de satisfacción Amway.",
@@ -113,19 +113,19 @@ export default function SobreNosotrosPage() {
           <div className="relative">
             <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-linen sm:aspect-[5/4]">
               <Image
-                src="/images/editorial/hero-bienestar.webp"
-                alt="Mujer sonriente en un entorno luminoso"
+                src="/images/nosotros/tienda-atencion.webp"
+                alt="Dependiente sonriendo mientras atiende a una clienta en el mostrador"
                 fill
                 priority
                 sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-cover object-[60%_30%]"
+                className="object-cover object-[55%_center]"
               />
             </div>
             <div className="absolute -bottom-8 -left-2 hidden w-40 overflow-hidden rounded-2xl border-4 border-cream shadow-[0_20px_50px_rgba(28,26,22,0.18)] sm:block lg:-left-10 lg:w-48">
               <div className="relative aspect-[4/5]">
                 <Image
-                  src="/images/editorial/nutricion-familia.webp"
-                  alt="Padre con su hijo a hombros sujetando un bote de Nutrilite"
+                  src="/images/nosotros/pedido-a-mano.webp"
+                  alt="Manos envolviendo un pedido en papel kraft"
                   fill
                   sizes="12rem"
                   className="object-cover"
@@ -159,11 +159,11 @@ export default function SobreNosotrosPage() {
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-8 sm:py-28 lg:grid-cols-2 lg:gap-20">
           <div className="relative order-2 aspect-square overflow-hidden rounded-[2rem] lg:order-1">
             <Image
-              src="/images/editorial/nutricion-botanico.webp"
-              alt="Mano acariciando plantas de albahaca"
+              src="/images/nosotros/quien-te-atiende.webp"
+              alt="Mujer sonriente sentada junto a una ventana"
               fill
               sizes="(min-width: 1024px) 45vw, 100vw"
-              className="origin-right scale-110 object-cover object-right"
+              className="object-cover object-[48%_center]"
             />
           </div>
           <div className="order-1 lg:order-2">

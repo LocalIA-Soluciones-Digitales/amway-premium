@@ -58,8 +58,8 @@ export default function OfertasPage() {
           </>
         }
         description="Los lanzamientos más recientes y los productos más solicitados, tal y como aparecen en el catálogo oficial de Estados Unidos."
-        photo="/images/editorial/belleza-editorial.webp"
-        photoPosition="60% center"
+        photo="/images/xs-energy/lifestyle/sky-drink.webp"
+        photoPosition="75% center"
         actions={
           <>
             <a href="#novedades" className={heroPrimaryClass}>
