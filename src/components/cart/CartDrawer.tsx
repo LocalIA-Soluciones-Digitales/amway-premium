@@ -10,7 +10,6 @@ import {
   Banknote,
   CalendarDays,
   CheckCircle2,
-  Clock,
   CreditCard,
   Loader2,
   MessageCircle,
@@ -29,19 +28,16 @@ import { track } from "@/lib/analytics";
 import { mensajePedido } from "@/lib/mensaje-pedido";
 import {
   diasRecogida,
-  etiquetaRelativa,
-  fechaCorta,
   fechaLarga,
   horasDisponibles,
-  rangoFechas,
   recogidaValida,
-  RECOGIDA,
   type MetodoPagoWeb,
 } from "@/lib/recogida";
 import { cn } from "@/lib/utils";
 import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
 import { cabeceraSesion, useCliente } from "@/components/cuenta/ClienteProvider";
 import { cestaItemKey, MAX_QUANTITY_PER_LINE, useCesta, type CestaItem } from "./CartProvider";
+import { RecogidaPicker } from "./RecogidaPicker";
 
 type PriceOf = (product: Product, variantIndex: number) => number | null;
 type Paso = "cesta" | "datos" | "hecho";
@@ -90,11 +86,7 @@ export function CartDrawer() {
 
   // Recalculado en cada apertura: los huecos de hoy caducan con la hora.
   const dias = useMemo(() => (isOpen ? diasRecogida() : []), [isOpen]);
-  const rango = useMemo(() => rangoFechas(), [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
   const horas = useMemo(() => (fecha ? horasDisponibles(fecha) : []), [fecha]);
-  // Lo que el cliente ha escrito a mano ("Otro día" / "Otra hora").
-  const fechaLibre = fecha && !dias.includes(fecha) ? fecha : "";
-  const horaLibre = hora && !horas.includes(hora) ? hora : "";
 
   useEffect(() => {
     if (!isOpen) return;
@@ -132,10 +124,14 @@ export function CartDrawer() {
     if (perfil?.telefono) setTelefono(perfil.telefono);
   }, [perfil?.nombre, perfil?.telefono]);
 
-  // Un día ya pasado (la cesta abierta de un día para otro) se vuelve a elegir.
+  // Un día que ya no vale (la cesta abierta de un día para otro) se vuelve a
+  // elegir, y lo mismo una hora que no existe en el día nuevo.
   useEffect(() => {
-    if (fecha && fecha < rango.min) setFecha(null);
-  }, [rango, fecha]);
+    if (fecha && dias.length > 0 && !dias.includes(fecha)) setFecha(null);
+  }, [dias, fecha]);
+  useEffect(() => {
+    if (hora && !horas.includes(hora)) setHora(null);
+  }, [horas, hora]);
 
   const lineasValidas = items.flatMap((item) => {
     const d = lineDetails(item, catalog.precio);
@@ -149,13 +145,7 @@ export function CartDrawer() {
       return;
     }
     if (!recogidaValida({ fecha, hora })) {
-      setError(
-        fecha > rango.max
-          ? `Solo podemos apartarlo hasta el ${fechaLarga(rango.max)}.`
-          : `Elige una hora entre las ${RECOGIDA.horaMin} y las ${RECOGIDA.horaMax}${
-              fecha === rango.min ? ", con al menos una hora de margen" : ""
-            }.`
-      );
+      setError("Esa hora ya no está disponible. Elige otra, por favor.");
       return;
     }
     setLoading(true);
@@ -430,104 +420,16 @@ export function CartDrawer() {
             ) : (
               <form onSubmit={enviar} className="flex min-h-0 flex-1 flex-col">
                 <div data-lenis-prevent className="flex-1 divide-y divide-carbon/8 overflow-y-auto overscroll-contain px-6">
-                  <Seccion titulo="¿Qué día pasas a recogerlo?">
-                    <div className="grid grid-cols-5 gap-2">
-                      {dias.map((d) => {
-                        const c = fechaCorta(d);
-                        const activo = d === fecha;
-                        return (
-                          <button
-                            key={d}
-                            type="button"
-                            onClick={() => setFecha(d)}
-                            aria-pressed={activo}
-                            aria-label={fechaLarga(d)}
-                            className={cn(
-                              "flex flex-col items-center rounded-2xl border py-2 transition",
-                              activo
-                                ? "border-carbon bg-carbon text-cream"
-                                : "border-carbon/15 bg-white text-carbon hover:border-carbon/35"
-                            )}
-                          >
-                            <span className={cn("text-[10px] uppercase tracking-wider", activo ? "text-cream/70" : "text-stone")}>
-                              {etiquetaRelativa(d) ?? c.dia}
-                            </span>
-                            <span className="font-display text-xl leading-tight">{c.num}</span>
-                            <span className={cn("text-[10px]", activo ? "text-cream/70" : "text-stone")}>{c.mes}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                    <label
-                      className={cn(
-                        "mt-2 flex h-12 items-center gap-3 rounded-2xl border bg-white pl-3.5 pr-2 transition",
-                        fechaLibre ? "border-carbon ring-1 ring-carbon" : "border-carbon/15"
-                      )}
-                    >
-                      <CalendarDays size={16} className="shrink-0 text-stone" />
-                      <span className="shrink-0 text-sm text-carbon">Otro día</span>
-                      <input
-                        type="date"
-                        value={fechaLibre}
-                        min={rango.min}
-                        max={rango.max}
-                        onChange={(e) => setFecha(e.target.value || null)}
-                        aria-label="Elegir otro día de recogida"
-                        className="h-full min-w-0 flex-1 bg-transparent text-right text-base text-carbon outline-none"
-                      />
-                    </label>
-                  </Seccion>
-
-                  <Seccion titulo="¿A qué hora?">
-                    {fecha ? (
-                      <>
-                        {horas.length > 0 && (
-                          <div className="grid grid-cols-4 gap-2">
-                            {horas.map((h) => (
-                              <button
-                                key={h}
-                                type="button"
-                                onClick={() => setHora(h)}
-                                aria-pressed={h === hora}
-                                className={cn(
-                                  "h-10 rounded-xl border text-sm tabular-nums transition",
-                                  h === hora
-                                    ? "border-carbon bg-carbon text-cream"
-                                    : "border-carbon/15 bg-white text-carbon hover:border-carbon/35"
-                                )}
-                              >
-                                {h}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                        <label
-                          className={cn(
-                            "mt-2 flex h-12 items-center gap-3 rounded-2xl border bg-white pl-3.5 pr-2 transition",
-                            horaLibre ? "border-carbon ring-1 ring-carbon" : "border-carbon/15"
-                          )}
-                        >
-                          <Clock size={16} className="shrink-0 text-stone" />
-                          <span className="shrink-0 text-sm text-carbon">Otra hora</span>
-                          <input
-                            type="time"
-                            value={horaLibre}
-                            min={RECOGIDA.horaMin}
-                            max={RECOGIDA.horaMax}
-                            step={300}
-                            onChange={(e) => setHora(e.target.value || null)}
-                            aria-label="Elegir otra hora de recogida"
-                            className="h-full min-w-0 flex-1 bg-transparent text-right text-base tabular-nums text-carbon outline-none"
-                          />
-                        </label>
-                        <p className="mt-2 text-xs text-stone">
-                          Puedes proponer cualquier hora entre las {RECOGIDA.horaMin} y las {RECOGIDA.horaMax}; te la
-                          confirmamos por WhatsApp.
-                        </p>
-                      </>
-                    ) : (
-                      <p className="text-sm text-stone">Elige primero el día.</p>
-                    )}
+                  <Seccion titulo="¿Cuándo pasas a recogerlo?">
+                    <RecogidaPicker
+                      dias={dias}
+                      horas={horas}
+                      fecha={fecha}
+                      hora={hora}
+                      onFecha={setFecha}
+                      onHora={setHora}
+                    />
+                    <p className="mt-2 text-xs text-stone">Abrimos {SITE.horario.texto}.</p>
                   </Seccion>
 
                   <Seccion titulo="¿Cómo quieres pagar?">

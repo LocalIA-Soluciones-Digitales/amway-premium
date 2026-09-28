@@ -6,16 +6,13 @@ import { SITE } from "@/data/site-config";
 
 export const RECOGIDA = {
   zona: "Europe/Madrid",
-  diasVista: 10, // días hábiles que se ofrecen
   cerrado: SITE.horario.cerrado,
-  horas: ["10:00", "11:00", "12:00", "13:00", "17:00", "18:00", "19:00"],
-  antelacionMin: 120, // la primera hora de hoy tiene que quedar a 2 h vista
-  // Día y hora a elección del cliente ("Otro día" / "Otra hora").
-  maxDias: 60,
-  // Solo dentro del horario del local.
+  // Solo dentro del horario del local, en huecos de media hora.
   horaMin: SITE.horario.apertura,
   horaMax: SITE.horario.cierre,
-  antelacionLibreMin: 60,
+  intervaloMin: 30,
+  antelacionMin: 60, // si es hoy, la hora tiene que quedar a 1 h vista
+  maxDias: 60, // hasta cuándo se puede apartar
 } as const;
 
 export type MetodoPagoWeb = "tarjeta" | "efectivo";
@@ -58,20 +55,27 @@ export function sumarDias(fecha: string, n: number): string {
 const diaSemana = (fecha: string) => new Date(`${fecha}T12:00:00Z`).getUTCDay();
 const aMinutos = (hora: string) => Number(hora.slice(0, 2)) * 60 + Number(hora.slice(3, 5));
 
-// Horas sugeridas para una fecha (las de hoy, solo las que quedan a tiempo).
+const cerradoEse = (fecha: string) => (RECOGIDA.cerrado as readonly number[]).includes(diaSemana(fecha));
+
+// Horas que se ofrecen para una fecha: huecos de media hora dentro del
+// horario, ninguno si ese día cierra, y hoy solo los que aún llegan a tiempo.
 export function horasDisponibles(fecha: string, now = new Date()): string[] {
   const hoy = ahoraMadrid(now);
-  if (fecha < hoy.fecha) return [];
-  if (fecha > hoy.fecha) return [...RECOGIDA.horas];
-  return RECOGIDA.horas.filter((h) => aMinutos(h) >= hoy.minutos + RECOGIDA.antelacionMin);
+  if (fecha < hoy.fecha || cerradoEse(fecha)) return [];
+  const out: string[] = [];
+  for (let m = aMinutos(RECOGIDA.horaMin); m <= aMinutos(RECOGIDA.horaMax); m += RECOGIDA.intervaloMin) {
+    if (fecha === hoy.fecha && m < hoy.minutos + RECOGIDA.antelacionMin) continue;
+    out.push(`${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`);
+  }
+  return out;
 }
 
+// Días en los que se puede recoger: abiertos y con alguna hora libre.
 export function diasRecogida(now = new Date()): string[] {
+  const { min, max } = rangoFechas(now);
   const out: string[] = [];
-  let fecha = ahoraMadrid(now).fecha;
-  for (let i = 0; out.length < RECOGIDA.diasVista && i < 31; i++, fecha = sumarDias(fecha, 1)) {
-    const cerrado = (RECOGIDA.cerrado as readonly number[]).includes(diaSemana(fecha));
-    if (!cerrado && horasDisponibles(fecha, now).length > 0) out.push(fecha);
+  for (let fecha = min; fecha <= max; fecha = sumarDias(fecha, 1)) {
+    if (horasDisponibles(fecha, now).length > 0) out.push(fecha);
   }
   return out;
 }
@@ -87,16 +91,15 @@ export function horaValida(fecha: string, hora: string, now = new Date()): boole
   if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(hora)) return false;
   if (hora < RECOGIDA.horaMin || hora > RECOGIDA.horaMax) return false;
   const hoy = ahoraMadrid(now);
-  return fecha !== hoy.fecha || aMinutos(hora) >= hoy.minutos + RECOGIDA.antelacionLibreMin;
+  return fecha !== hoy.fecha || aMinutos(hora) >= hoy.minutos + RECOGIDA.antelacionMin;
 }
 
-// Cualquier día de hoy a +60 días (también los que no se sugieren) y
-// cualquier hora dentro del horario: el cliente puede proponer la suya.
+// Un día abierto de hoy a +60 días y una hora dentro del horario.
 export function recogidaValida(r: Partial<Recogida> | null | undefined, now = new Date()): r is Recogida {
   if (!r || typeof r.fecha !== "string" || typeof r.hora !== "string") return false;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(r.fecha) || Number.isNaN(Date.parse(`${r.fecha}T12:00:00Z`))) return false;
   const { min, max } = rangoFechas(now);
-  return r.fecha >= min && r.fecha <= max && horaValida(r.fecha, r.hora, now);
+  return r.fecha >= min && r.fecha <= max && !cerradoEse(r.fecha) && horaValida(r.fecha, r.hora, now);
 }
 
 // "martes 29 de septiembre"
