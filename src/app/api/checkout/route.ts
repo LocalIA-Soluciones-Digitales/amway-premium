@@ -39,7 +39,8 @@ export async function POST(request: NextRequest) {
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
-    payment_method_types: ["card"],
+    // Sin payment_method_types: Stripe ofrece los métodos activados en el
+    // Dashboard (tarjeta, Apple Pay, Google Pay, Bizum…) según el cliente.
     locale: "es",
     line_items: lineItems,
     // Stripe caps each metadata value at 500 characters.
