@@ -37,8 +37,8 @@ export default function CatalogoPage() {
             Más de {Math.floor(PRODUCTS.length / 10) * 10} productos originales de Estados Unidos.
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-stone sm:text-lg">
-            Elige una categoría o busca directamente lo que necesitas en Nutrición, XS Energy,
-            Belleza y Hogar.
+            Elige una categoría o busca directamente lo que necesitas en Nutrición, Belleza
+            y Hogar.
           </p>
         </div>
       </section>

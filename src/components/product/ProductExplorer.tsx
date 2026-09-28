@@ -12,10 +12,12 @@ import { SolicitudModal } from "@/components/catalog/SolicitudModal";
 
 const CATEGORY_TILES: { slug: CategorySlug; image: string }[] = [
   { slug: "nutricion", image: "/images/editorial/nutricion-botanico.webp" },
-  { slug: "xs-energy", image: "/images/editorial/xs-energy-tenista.webp" },
   { slug: "belleza", image: "/images/editorial/belleza-editorial.webp" },
   { slug: "hogar", image: "/images/editorial/hogar-familia.webp" },
 ];
+
+// XS Energy se filtra dentro de Nutrición: en el catálogo solo hay tres bloques.
+const groupOf = (c: CategorySlug): CategorySlug => (c === "xs-energy" ? "nutricion" : c);
 
 // Lowercase and strip accents so "vitamina c" matches "Vitamina C" and "nutricion" matches "Nutrición".
 const normalize = (s: string) =>
@@ -55,17 +57,29 @@ export function ProductExplorer({
 
   const categoryCounts = useMemo(() => {
     const counts: Partial<Record<CategorySlug, number>> = {};
-    for (const p of visible) counts[p.category] = (counts[p.category] ?? 0) + 1;
+    for (const p of visible) counts[groupOf(p.category)] = (counts[groupOf(p.category)] ?? 0) + 1;
     return counts;
   }, [visible]);
 
-  // Subcategory chips follow the selected category, each with its product count.
+  const inCategory = useMemo(
+    () => (category ? visible.filter((p) => groupOf(p.category) === category) : visible),
+    [visible, category]
+  );
+
+  // Marcas del bloque elegido; en las páginas de categoría, todas las recibidas.
+  const brandOptions = useMemo(() => {
+    if (!category) return brands;
+    const present = new Set(inCategory.map((p) => p.brand));
+    return brands.filter((b) => present.has(b));
+  }, [brands, category, inCategory]);
+
+  // Subcategory chips (solo en las páginas de categoría), each with its product count.
   const chips = useMemo(() => {
-    const inCategory = category ? visible.filter((p) => p.category === category) : visible;
+    if (showCategories) return [];
     return subcategories
       .map((s) => ({ name: s, count: inCategory.filter((p) => p.subcategory === s).length }))
       .filter((c) => c.count > 0);
-  }, [visible, category, subcategories]);
+  }, [inCategory, showCategories, subcategories]);
 
   const filtered = useMemo(() => {
     // Cheapest selling price, including any price set in the admin panel.
@@ -73,8 +87,7 @@ export function ProductExplorer({
       const prices = p.variants.map((_, i) => catalog.precio(p, i)).filter((x): x is number => x != null);
       return prices.length ? Math.min(...prices) : null;
     };
-    let list = visible;
-    if (category) list = list.filter((p) => p.category === category);
+    let list = inCategory;
     if (subcategory) list = list.filter((p) => p.subcategory === subcategory);
     if (brand) list = list.filter((p) => p.brand === brand);
     const words = normalize(query).split(/\s+/).filter(Boolean);
@@ -92,7 +105,7 @@ export function ProductExplorer({
       list = [...list].sort((a, b) => (minPrice(b) ?? -Infinity) - (minPrice(a) ?? -Infinity));
     }
     return list;
-  }, [visible, category, subcategory, brand, query, sort, catalog]);
+  }, [inCategory, subcategory, brand, query, sort, catalog]);
 
   const hasFilters = Boolean(query.trim() || category || subcategory || brand || sort !== "relevancia");
   const clearAll = () => {
@@ -105,6 +118,7 @@ export function ProductExplorer({
   const pickCategory = (slug: CategorySlug) => {
     setCategory((current) => (current === slug ? null : slug));
     setSubcategory(null);
+    setBrand(null);
   };
 
   const selectClass =
@@ -123,7 +137,7 @@ export function ProductExplorer({
   return (
     <div>
       {showCategories && (
-        <div className="mb-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <div className="mb-10 grid grid-cols-3 gap-3 sm:gap-4">
           {CATEGORY_TILES.map(({ slug, image }) => {
             const active = category === slug;
             return (
@@ -141,7 +155,7 @@ export function ProductExplorer({
                   src={image}
                   alt=""
                   fill
-                  sizes="(max-width: 1024px) 50vw, 25vw"
+                  sizes="(max-width: 1024px) 33vw, 30vw"
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
                 <div
@@ -195,7 +209,7 @@ export function ProductExplorer({
             className={selectClass}
           >
             <option value="">Todas las marcas</option>
-            {brands.map((b) => (
+            {brandOptions.map((b) => (
               <option key={b} value={b}>
                 {b}
               </option>
