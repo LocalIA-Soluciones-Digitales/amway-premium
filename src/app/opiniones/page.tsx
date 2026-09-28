@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { ArrowDown, MessageSquareReply, PenLine, ShieldCheck } from "lucide-react";
 import { ResenasSection } from "@/components/catalog/ResenasSection";
+import { PageHero, heroPrimaryClass, heroSecondaryClass } from "@/components/layout/PageHero";
 
 export const metadata: Metadata = {
   title: "Opiniones de clientes",
@@ -7,25 +9,70 @@ export const metadata: Metadata = {
     "Lo que opinan nuestros clientes de la tienda y de los productos Amway: Nutrilite, XS Energy, Artistry, eSpring y más.",
 };
 
+const PROMISES = [
+  {
+    icon: ShieldCheck,
+    title: "Revisadas una a una",
+    text: "Leemos cada opinión antes de publicarla para que solo veas experiencias reales.",
+  },
+  {
+    icon: MessageSquareReply,
+    title: "Respondemos en persona",
+    text: "Quien te atiende en la tienda es quien contesta a cada comentario.",
+  },
+  {
+    icon: PenLine,
+    title: "De la tienda o de un producto",
+    text: "Valora tu experiencia general o cuéntanos qué tal te ha ido un producto concreto.",
+  },
+];
+
 export default function OpinionesPage() {
   return (
-    <div className="pt-32">
-      <section className="border-b border-carbon/10 bg-linen">
-        <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 sm:py-20">
-          <p className="text-sm font-medium uppercase tracking-[0.2em] text-forest">Opiniones</p>
-          <h1 className="mt-5 max-w-2xl font-display text-5xl leading-[1.05] text-carbon sm:text-6xl">
-            Lo que dicen nuestros clientes.
-          </h1>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-stone sm:text-lg">
-            Opiniones reales de quienes ya compran con nosotros. Revisamos cada una antes de
-            publicarla.
-          </p>
-        </div>
+    <>
+      <PageHero
+        eyebrow="Opiniones de clientes"
+        title={
+          <>
+            Lo que dicen <span className="italic text-gold-soft">nuestros clientes.</span>
+          </>
+        }
+        description="Opiniones reales de quienes ya compran con nosotros en Barakaldo. Si ya has probado algo, tu experiencia ayuda a otros a elegir."
+        photo="/images/editorial/nutricion-familia.webp"
+        photoPosition="center 20%"
+        actions={
+          <>
+            <a href="#opinar" className={heroPrimaryClass}>
+              <PenLine size={16} />
+              Dejar mi opinión
+            </a>
+            <a href="#opiniones" className={heroSecondaryClass}>
+              Leer opiniones
+              <ArrowDown size={16} />
+            </a>
+          </>
+        }
+      />
+
+      <section className="border-b border-carbon/10">
+        <ul className="mx-auto grid max-w-7xl gap-px px-6 sm:px-8 md:grid-cols-3">
+          {PROMISES.map((p) => (
+            <li key={p.title} className="flex gap-4 py-8 md:px-6 md:first:pl-0">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest/10 text-forest">
+                <p.icon size={20} strokeWidth={1.7} />
+              </span>
+              <div>
+                <p className="font-display text-lg text-carbon">{p.title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-stone">{p.text}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:px-8">
+      <section id="opiniones" className="scroll-mt-24 mx-auto max-w-7xl px-6 py-16 sm:px-8 sm:py-20">
         <ResenasSection />
       </section>
-    </div>
+    </>
   );
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Menu, ShieldUser, X } from "lucide-react";
+import { ChevronDown, Menu, MessageCircle, ShieldUser, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/data/site-config";
 import { CartButton } from "@/components/cart/CartButton";
@@ -23,13 +23,25 @@ const TOP_LINKS = [
   { href: "/catalogo", label: "Catálogo" },
   { href: "/ofertas", label: "Ofertas" },
   { href: "/opiniones", label: "Opiniones" },
+  { href: "/sobre-nosotros", label: "Nosotros" },
 ];
+
+const CONTACT_HREF = "/sobre-nosotros#contacto";
 
 const CATEGORY_HREFS = new Set(CATEGORY_LINKS.map((l) => l.href));
 
 // Routes that open on a full-bleed photographic hero dark enough for light
 // header text; everywhere else the header starts directly in its light state.
-const DARK_HERO_ROUTES = new Set(["/", "/nutricion", "/belleza", "/hogar", "/espring", "/xs-energy"]);
+const DARK_HERO_ROUTES = new Set([
+  "/",
+  "/nutricion",
+  "/belleza",
+  "/hogar",
+  "/espring",
+  "/xs-energy",
+  "/ofertas",
+  "/opiniones",
+]);
 
 export function Header() {
   const pathname = usePathname();
@@ -221,20 +233,14 @@ export function Header() {
             Panel
           </Link>
           <Link
-            href="/sobre-nosotros"
-            aria-current={pathname === "/sobre-nosotros" ? "page" : undefined}
+            href={CONTACT_HREF}
             className={cn(
-              "rounded-full border px-5 py-2 text-sm transition",
-              pathname === "/sobre-nosotros"
-                ? dark
-                  ? "border-cream bg-cream text-carbon"
-                  : "border-carbon bg-carbon text-cream"
-                : dark
-                  ? "border-cream/30 text-cream hover:bg-cream/10"
-                  : "border-carbon/15 text-carbon hover:bg-carbon/5"
+              "inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition",
+              dark ? "bg-cream text-carbon hover:bg-white" : "bg-carbon text-cream hover:bg-carbon-soft"
             )}
           >
-            Nosotros y contacto
+            <MessageCircle size={15} />
+            Contacto
           </Link>
           <CuentaButton dark={dark} />
           <CartButton dark={dark} />
@@ -308,7 +314,7 @@ export function Header() {
               <p className="mb-1 mt-6 text-xs font-medium uppercase tracking-[0.2em] text-stone">
                 Explorar
               </p>
-              {[...TOP_LINKS, { href: "/sobre-nosotros", label: "Nosotros y contacto" }, { href: "/cuenta", label: "Mi cuenta" }].map(
+              {[...TOP_LINKS, { href: CONTACT_HREF, label: "Contacto" }, { href: "/cuenta", label: "Mi cuenta" }].map(
                 (link, i) => {
                   const active = pathname === link.href;
                   return (
