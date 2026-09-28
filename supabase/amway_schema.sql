@@ -1052,3 +1052,98 @@ grant execute on function public.amway_mis_pedidos() to authenticated;
 grant execute on function public.amway_cancelar_mi_pedido(bigint) to authenticated;
 grant execute on function public.amway_vincular_pedido(bigint, text) to authenticated;
 grant execute on function public.amway_borrar_mis_datos() to authenticated;
+
+-- ============================================================
+-- Datos de venta por línea y aviso de reposición.
+-- amway_pedido_lineas: una fila por producto vendido (los pedidos guardan
+-- las líneas en items jsonb). security_invoker: respeta el RLS de
+-- amway_pedidos, así que solo la ve el panel.
+-- dias_duracion: cuánto dura una unidad del producto; se usa para estimar
+-- la reposición de quien solo lo ha comprado una vez.
+-- ============================================================
+alter table public.amway_productos add column if not exists dias_duracion integer
+  check (dias_duracion is null or dias_duracion between 1 and 365);
+
+create or replace view public.amway_pedido_lineas
+with (security_invoker = true) as
+select
+  p.id as pedido_id,
+  p.numero,
+  p.cliente_id,
+  p.created_at,
+  (p.created_at at time zone 'Europe/Madrid')::date as dia,
+  p.estado,
+  p.origen,
+  p.metodo_pago,
+  t.ord::int as linea,
+  nullif(t.i ->> 'product_id', '') as product_id,
+  case when jsonb_typeof(t.i -> 'variant_index') = 'number' then (t.i ->> 'variant_index')::numeric::int else 0 end as variant_index,
+  t.i ->> 'nombre' as nombre,
+  nullif(t.i ->> 'formato', '') as formato,
+  nullif(t.i ->> 'sabor', '') as sabor,
+  case when jsonb_typeof(t.i -> 'cantidad') = 'number' then (t.i ->> 'cantidad')::numeric::int else 1 end as cantidad,
+  case when jsonb_typeof(t.i -> 'precio_eur') = 'number' then (t.i ->> 'precio_eur')::numeric end as precio_eur,
+  case when jsonb_typeof(t.i -> 'coste_eur') = 'number' then (t.i ->> 'coste_eur')::numeric end as coste_eur
+from public.amway_pedidos p
+cross join lateral jsonb_array_elements(case when jsonb_typeof(p.items) = 'array' then p.items else '[]'::jsonb end)
+  with ordinality as t(i, ord);
+
+revoke all on public.amway_pedido_lineas from public, anon;
+grant select on public.amway_pedido_lineas to authenticated;
+
+-- Productos que al cliente le toca reponer: ciclo = mediana de días entre
+-- compras (con 2+ compras) o dias_duracion × unidades de la última compra.
+-- Devuelve los que vencen en 14 días o están vencidos desde hace menos de
+-- un ciclo (más allá, probablemente ya no lo usa).
+create or replace function public.amway_mis_reposiciones()
+returns jsonb
+language sql stable security definer set search_path = public
+as $$
+  with lineas as (
+    select l.product_id, l.variant_index, l.sabor, l.cantidad, l.dia, l.created_at, l.linea
+    from public.amway_pedido_lineas l
+    where auth.uid() is not null and l.cliente_id = auth.uid()
+      and l.estado <> 'cancelado' and l.product_id is not null
+  ),
+  compras as (
+    select product_id, dia, sum(cantidad) as unidades from lineas group by product_id, dia
+  ),
+  intervalos as (
+    select product_id, dia, unidades, dia - lag(dia) over (partition by product_id order by dia) as dias
+    from compras
+  ),
+  resumen as (
+    select product_id,
+      count(*)::int as compras,
+      max(dia) as ultima,
+      (array_agg(unidades order by dia desc))[1] as unidades_ultima,
+      percentile_cont(0.5) within group (order by dias) filter (where dias is not null) as mediana
+    from intervalos
+    group by product_id
+  ),
+  ultima_linea as (
+    select distinct on (product_id) product_id, variant_index, sabor
+    from lineas
+    order by product_id, created_at desc, linea
+  ),
+  estimado as (
+    select r.product_id, u.variant_index, u.sabor, r.compras, r.ultima,
+      case when r.mediana is not null then 'historial' else 'duracion' end as base,
+      greatest(7, round(coalesce(r.mediana, pr.dias_duracion * r.unidades_ultima)))::int as ciclo
+    from resumen r
+    join ultima_linea u using (product_id)
+    left join public.amway_productos pr on pr.product_id = r.product_id
+    where coalesce(r.mediana, pr.dias_duracion * r.unidades_ultima) is not null
+  ),
+  avisos as (
+    select e.*, e.ultima + e.ciclo as proxima,
+      (e.ultima + e.ciclo) - (now() at time zone 'Europe/Madrid')::date as dias_restantes
+    from estimado e
+  )
+  select coalesce(jsonb_agg(to_jsonb(a) order by a.dias_restantes), '[]'::jsonb)
+  from avisos a
+  where a.dias_restantes <= 14 and a.dias_restantes >= -a.ciclo;
+$$;
+
+revoke all on function public.amway_mis_reposiciones() from public, anon;
+grant execute on function public.amway_mis_reposiciones() to authenticated;

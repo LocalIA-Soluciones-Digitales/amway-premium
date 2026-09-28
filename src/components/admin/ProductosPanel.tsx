@@ -143,6 +143,7 @@ export function ProductosPanel({ session }: { session: Session }) {
             agotado: r.agotado,
             oculto: r.oculto,
             stock: r.stock,
+            ...(r.dias_duracion !== undefined && { dias_duracion: r.dias_duracion }),
           }))
         )
         .select();
@@ -714,6 +715,7 @@ function EditorProducto({
   const [precios, setPrecios] = useState(product.variants.map((_, i) => fmtNum(row.precios_eur[String(i)])));
   const [costes, setCostes] = useState(product.variants.map((_, i) => fmtNum(row.costes_eur[String(i)])));
   const [stock, setStock] = useState(row.stock?.toString() ?? "");
+  const [dias, setDias] = useState(row.dias_duracion?.toString() ?? "");
   const [saving, setSaving] = useState(false);
 
   async function save() {
@@ -729,7 +731,15 @@ function EditorProducto({
       if (n != null) costes_eur[String(i)] = n;
     });
     const s = stock.trim() === "" ? null : Math.max(0, Math.floor(Number(stock)));
-    await onSave({ ...row, precios_eur, costes_eur, stock: Number.isFinite(s as number) ? s : null });
+    const d = dias.trim() === "" ? null : Math.min(365, Math.max(1, Math.floor(Number(dias))));
+    const dias_duracion = Number.isFinite(d as number) ? d : null;
+    await onSave({
+      ...row,
+      precios_eur,
+      costes_eur,
+      stock: Number.isFinite(s as number) ? s : null,
+      ...((row.dias_duracion !== undefined || dias_duracion != null) && { dias_duracion }),
+    });
     setSaving(false);
   }
 
@@ -808,6 +818,27 @@ function EditorProducto({
           aria-label="Stock"
           className={cn(inputClass, "w-36 tabular-nums")}
         />
+      </div>
+
+      <div className="mt-3 grid gap-3 rounded-2xl bg-white p-4 sm:grid-cols-[1fr_auto] sm:items-center">
+        <div>
+          <p className="text-sm font-medium text-carbon">Duración de una unidad</p>
+          <p className="text-xs text-stone">
+            Días que le dura a un cliente (p. ej. 30 para un bote mensual). Con esto su cuenta le avisa cuando le toca
+            reponer. Vacío = no es un producto de reposición.
+          </p>
+        </div>
+        <div className="relative">
+          <input
+            inputMode="numeric"
+            value={dias}
+            onChange={(e) => setDias(e.target.value.replace(/\D/g, "").slice(0, 3))}
+            placeholder="—"
+            aria-label="Duración en días"
+            className={cn(inputClass, "w-36 pr-12 tabular-nums")}
+          />
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-stone">días</span>
+        </div>
       </div>
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3">

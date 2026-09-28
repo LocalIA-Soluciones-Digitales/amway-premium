@@ -15,6 +15,7 @@ import {
   MessageCircle,
   Package,
   Plus,
+  RefreshCw,
   Repeat,
   ShoppingBag,
   Trash2,
@@ -305,6 +306,7 @@ function PedidosCliente({
       </div>
 
       <aside className="space-y-6">
+        <Reposiciones pedidos={pedidos} />
         <Habituales pedidos={pedidos} />
         <VincularPedido recargar={recargar} />
       </aside>
@@ -484,6 +486,101 @@ function PedidoTarjeta({
         </div>
       )}
     </li>
+  );
+}
+
+interface Reposicion {
+  product_id: string;
+  variant_index: number;
+  sabor: string | null;
+  compras: number;
+  ultima: string;
+  ciclo: number;
+  base: "historial" | "duracion";
+  proxima: string;
+  dias_restantes: number;
+}
+
+function cuandoToca(dias: number): string {
+  if (dias < -1) return `desde hace ${-dias} días`;
+  if (dias === -1) return "desde ayer";
+  if (dias === 0) return "hoy";
+  if (dias === 1) return "mañana";
+  return `en ${dias} días`;
+}
+
+// Productos que se le están acabando, según cada cuánto los pide (o lo que
+// dura una unidad si solo los ha comprado una vez). Lo calcula
+// amway_mis_reposiciones; si falla, el bloque no se muestra.
+function Reposiciones({ pedidos }: { pedidos: MiPedido[] }) {
+  const { addItem } = useCesta();
+  const catalog = useCatalogState();
+  const [lista, setLista] = useState<Reposicion[]>([]);
+  const [anadido, setAnadido] = useState<string | null>(null);
+
+  useEffect(() => {
+    let vivo = true;
+    clienteDb()
+      .rpc("amway_mis_reposiciones")
+      .then(({ data, error }) => {
+        if (vivo) setLista(error ? [] : ((data as Reposicion[] | null) ?? []));
+      });
+    return () => {
+      vivo = false;
+    };
+  }, [pedidos]);
+
+  const visibles = lista
+    .map((r) => ({ ...r, product: getProductById(r.product_id) }))
+    .filter((r) => r.product && r.product.variants[r.variant_index] && !catalog.oculto(r.product_id))
+    .slice(0, 4);
+
+  if (visibles.length === 0) return null;
+
+  return (
+    <section className="rounded-2xl border border-forest/20 bg-forest/[0.04] p-5">
+      <h2 className="flex items-center gap-2 font-display text-xl text-carbon">
+        <RefreshCw size={16} className="text-forest" /> Te toca reponer
+      </h2>
+      <p className="mt-1 text-xs text-stone">Calculado con tus pedidos anteriores.</p>
+      <ul className="mt-4 space-y-3">
+        {visibles.map((r) => {
+          const product = r.product!;
+          const src = productImageSrc(product);
+          const key = `${r.product_id}|${r.variant_index}|${r.sabor ?? ""}`;
+          const disponible = !catalog.agotado(product.id) && catalog.precio(product, r.variant_index) != null;
+          const vencido = r.dias_restantes <= 0;
+          return (
+            <li key={key} className="flex items-center gap-3">
+              <div className="relative h-12 w-10 shrink-0 overflow-hidden rounded-md bg-linen">
+                {src && <Image src={src} alt="" fill sizes="40px" className="object-contain p-1" />}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm text-carbon">{product.name}</p>
+                <p className={cn("text-xs", vencido ? "text-amber-800" : "text-stone")}>
+                  Te toca {cuandoToca(r.dias_restantes)}
+                  {r.base === "historial" ? ` · sueles pedirlo cada ${r.ciclo} días` : ""}
+                </p>
+              </div>
+              <button
+                type="button"
+                disabled={!disponible}
+                onClick={() => {
+                  addItem(product.id, r.variant_index, r.sabor ?? "");
+                  setAnadido(key);
+                  setTimeout(() => setAnadido((k) => (k === key ? null : k)), 1500);
+                }}
+                aria-label={`Añadir ${product.name} a la cesta`}
+                title={disponible ? "Añadir a la cesta" : "Agotado"}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-carbon text-cream transition hover:bg-carbon-soft disabled:opacity-30"
+              >
+                {anadido === key ? <CheckCircle2 size={15} /> : <Plus size={15} />}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
 

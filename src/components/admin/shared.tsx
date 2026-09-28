@@ -51,6 +51,9 @@ export interface ProductoAjusteRow {
   agotado: boolean;
   oculto: boolean;
   stock: number | null;
+  // Días que dura una unidad (aviso de reposición). Ausente si la columna
+  // aún no existe en la base de datos.
+  dias_duracion?: number | null;
   updated_at?: string;
 }
 
