@@ -96,6 +96,7 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
                 flavor={flavorLabel}
                 ariaLabel={`Añadir ${flavorLabel} a la cesta`}
                 className="bg-cream font-semibold text-carbon hover:bg-white"
+                stepperClassName="w-28 border border-cream/40 bg-transparent text-cream hover:bg-transparent"
               />
             )}
             <a

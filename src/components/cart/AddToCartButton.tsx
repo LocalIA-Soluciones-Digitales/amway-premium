@@ -1,17 +1,18 @@
 "use client";
 
-import { Check, Minus, Plus, ShoppingBag } from "lucide-react";
+import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { cestaItemKey, MAX_QUANTITY_PER_LINE, useCesta } from "./CartProvider";
 import { track } from "@/lib/analytics";
 
-// Once the line is in the basket the button stays as a stepper showing how
-// many units there are, so the shopper never has to open the basket to know.
+// Once the line is in the basket the button turns into an outlined stepper
+// with the unit count, so the shopper sees at a glance what they already have.
 export function AddToCartButton({
   productId,
   variantIndex = 0,
   flavor = "",
   className,
+  stepperClassName,
   label = "Añadir",
   ariaLabel,
 }: {
@@ -19,31 +20,39 @@ export function AddToCartButton({
   variantIndex?: number;
   flavor?: string;
   className?: string;
+  /** Colores del selector de cantidad, que se distingue del botón de añadir. */
+  stepperClassName?: string;
   label?: string;
   ariaLabel?: string;
 }) {
-  const { items, addItem, increase, decrease, removeItem, justAddedKey } = useCesta();
+  const { items, addItem, increase, decrease, removeItem } = useCesta();
   const key = cestaItemKey({ productId, variantIndex, flavor });
   const quantity = items.find((i) => cestaItemKey(i) === key)?.quantity ?? 0;
-  const flash = justAddedKey === key;
   const base = "flex h-9 items-center rounded-full text-xs font-medium transition";
   const colors = className ?? "bg-carbon text-cream hover:bg-carbon-soft";
 
   if (quantity > 0) {
+    const stepBtn =
+      "flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition disabled:opacity-30";
     return (
-      <div className={cn(base, "justify-between gap-1 px-1", colors)}>
+      <div
+        className={cn(
+          base,
+          "justify-between px-1",
+          className,
+          stepperClassName ?? "border border-carbon/20 bg-white text-carbon hover:bg-white"
+        )}
+      >
         <button
           type="button"
           onClick={() => (quantity > 1 ? decrease(key) : removeItem(key))}
           aria-label={quantity > 1 ? "Quitar una unidad" : "Quitar de la cesta"}
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition hover:bg-current/15"
+          className={cn(stepBtn, "hover:bg-current/10")}
         >
-          <Minus size={14} />
+          {quantity > 1 ? <Minus size={14} /> : <Trash2 size={13} />}
         </button>
-        <span aria-live="polite" className="flex min-w-0 items-center gap-1 truncate">
-          {flash && <Check size={13} className="shrink-0" />}
-          <span className="tabular-nums">{quantity}</span>
-          <span className="truncate">en la cesta</span>
+        <span aria-live="polite" aria-label={`${quantity} en la cesta`} className="text-sm font-semibold tabular-nums">
+          {quantity}
         </span>
         <button
           type="button"
@@ -53,7 +62,7 @@ export function AddToCartButton({
           }}
           disabled={quantity >= MAX_QUANTITY_PER_LINE}
           aria-label="Añadir una unidad"
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition hover:bg-current/15 disabled:opacity-40"
+          className={cn(stepBtn, "hover:bg-current/10")}
         >
           <Plus size={14} />
         </button>
