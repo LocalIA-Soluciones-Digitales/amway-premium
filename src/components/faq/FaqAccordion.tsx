@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { SITE } from "@/data/site-config";
 
 const FAQS = [
   {
@@ -11,15 +12,15 @@ const FAQS = [
   },
   {
     q: "¿Cómo hago un pedido?",
-    a: "Escríbenos por WhatsApp indicando el producto que te interesa. Te confirmamos disponibilidad, precio en euros y plazo de entrega antes de formalizar el pedido.",
+    a: "Añade los productos a la cesta, elige el día y la hora de recogida en nuestro local y paga con tarjeta en la web o en efectivo al recoger. Si lo prefieres, también puedes pedirlo por WhatsApp.",
   },
   {
-    q: "¿Hacéis envíos a toda España?",
-    a: "Sí, realizamos envíos a toda la península. Si estás en Barakaldo o alrededores, también podemos coordinar la entrega en persona.",
+    q: "¿Hacéis envíos a domicilio?",
+    a: `No. Todos los pedidos se recogen en nuestro local de ${SITE.city}, ${SITE.horario.texto}. Eliges el día y la hora al hacer el pedido.`,
   },
   {
     q: "¿Los precios están en dólares o en euros?",
-    a: "Todos los precios que ves en la web ya están en euros, convertidos al cambio oficial desde el catálogo original de Estados Unidos. No incluyen gastos de envío, que te confirmamos según destino.",
+    a: "Todos los precios que ves en la web ya están en euros, convertidos al cambio oficial desde el catálogo original de Estados Unidos. No hay gastos de envío: los pedidos se recogen en nuestro local.",
   },
   {
     q: "¿Qué pasa si un producto no está disponible?",

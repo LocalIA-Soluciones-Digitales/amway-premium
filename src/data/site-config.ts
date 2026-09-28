@@ -11,7 +11,35 @@ export const SITE = {
   // business line before going to production.
   whatsapp: "34628409781",
   email: "hola@amwaybarakaldo.es",
+  // Atención por WhatsApp y recogida en el local (hora de Madrid). No hay
+  // envíos a domicilio: todos los pedidos se recogen en el local.
+  horario: {
+    apertura: "09:00",
+    cierre: "19:00",
+    cerrado: [0], // 0 = domingo
+    texto: "de lunes a sábado, de 9:00 a 19:00",
+  },
 } as const;
+
+// ¿Estamos atendiendo ahora mismo? (hora de Madrid, sea cual sea la del
+// visitante).
+export function atendiendoAhora(now = new Date()): boolean {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Madrid",
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    })
+      .formatToParts(now)
+      .map((x) => [x.type, x.value])
+  );
+  const dia = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(p.weekday);
+  const hora = `${p.hour}:${p.minute}`;
+  const { apertura, cierre, cerrado } = SITE.horario;
+  return !(cerrado as readonly number[]).includes(dia) && hora >= apertura && hora < cierre;
+}
 
 export function waLink(message: string): string {
   return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;

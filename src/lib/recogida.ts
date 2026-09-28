@@ -2,16 +2,19 @@
 // el navegador (para pintar las opciones) como el servidor (para validar lo
 // que llega), siempre en hora de Madrid aunque el servidor esté en UTC.
 
+import { SITE } from "@/data/site-config";
+
 export const RECOGIDA = {
   zona: "Europe/Madrid",
   diasVista: 10, // días hábiles que se ofrecen
-  cerrado: [0], // 0 = domingo
-  horas: ["10:00", "11:00", "12:00", "13:00", "17:00", "18:00", "19:00", "20:00"],
+  cerrado: SITE.horario.cerrado,
+  horas: ["10:00", "11:00", "12:00", "13:00", "17:00", "18:00", "19:00"],
   antelacionMin: 120, // la primera hora de hoy tiene que quedar a 2 h vista
   // Día y hora a elección del cliente ("Otro día" / "Otra hora").
   maxDias: 60,
-  horaMin: "08:00",
-  horaMax: "22:00",
+  // Solo dentro del horario del local.
+  horaMin: SITE.horario.apertura,
+  horaMax: SITE.horario.cierre,
   antelacionLibreMin: 60,
 } as const;
 

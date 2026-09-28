@@ -201,7 +201,7 @@ export const INTENTOS: Record<string, Intento> = {
     pregunta: "¿Qué incluyen los precios?",
     respuesta: [
       "Todos los precios están en euros, convertidos al cambio oficial desde el catálogo original de Estados Unidos.",
-      "La recogida en mano no tiene coste. Si necesitas envío, te confirmamos su coste según destino antes de cerrar el pedido.",
+      "No hay gastos de envío: todos los pedidos se recogen en nuestro local.",
     ],
     claves: ["precio", "cuest", "cuanto vale", "caro", "euro", "dolar", "iva", "descuento", "oferta", "gastos"],
     acciones: [
@@ -214,7 +214,8 @@ export const INTENTOS: Record<string, Intento> = {
   recogida: {
     pregunta: "Recogida y entrega",
     respuesta: [
-      `Recogida en mano en ${SITE.city}, el día y a la hora que elijas al hacer el pedido en la cesta.`,
+      `Recogida en nuestro local de ${SITE.city}, ${SITE.horario.texto}.`,
+      "Eliges el día y la hora al hacer el pedido en la cesta.",
       "Si te surge un imprevisto, avísanos y lo cambiamos sin problema.",
     ],
     claves: ["recog", "entreg", "horario", "hora", "dia", "cuando paso", "recoger el pedido", "recoger mi pedido"],
@@ -227,7 +228,8 @@ export const INTENTOS: Record<string, Intento> = {
   direccion: {
     pregunta: "¿Dónde se recoge?",
     respuesta: [
-      `En ${SITE.city} (${SITE.region}). Al confirmar el pedido te enviamos por WhatsApp la dirección exacta de recogida.`,
+      `En nuestro local de ${SITE.city} (${SITE.region}), ${SITE.horario.texto}.`,
+      "Al confirmar el pedido te enviamos por WhatsApp la dirección exacta.",
     ],
     claves: ["donde", "direccion", "ubicacion", "tienda fisica", "local", "barakaldo", "mapa"],
     acciones: [
@@ -250,17 +252,15 @@ export const INTENTOS: Record<string, Intento> = {
     ],
   },
   envios: {
-    pregunta: "¿Hacéis envíos?",
+    pregunta: "¿Hacéis envíos a domicilio?",
     respuesta: [
-      `Lo habitual es la recogida en ${SITE.city}. Si estás en otra zona, escríbenos con tu código postal y te confirmamos si podemos enviarlo, el coste y el plazo.`,
+      `No, no hacemos envíos. Todos los pedidos se recogen en nuestro local de ${SITE.city}, ${SITE.horario.texto}.`,
+      "Así te lo entregamos en mano, revisado y con el asesoramiento que necesites.",
     ],
-    claves: ["envi", "mandar", "domicilio", "correo", "mensajer", "casa", "bilbao", "madrid", "fuera", "peninsula", "espana"],
+    claves: ["envi", "mandar", "domicilio", "correo", "mensajer", "casa", "a mi zona", "fuera", "peninsula", "espana", "llevar"],
     acciones: [
-      {
-        tipo: "whatsapp",
-        mensaje: "Hola, ¿hacéis envíos a mi zona? Mi código postal es ",
-        label: "Consultar envío",
-      },
+      { tipo: "tema", id: "direccion" },
+      { tipo: "cesta", label: "Elegir día de recogida" },
     ],
   },
 
@@ -322,7 +322,10 @@ export const INTENTOS: Record<string, Intento> = {
   // ── Conversación ──────────────────────────────────────────────────────
   persona: {
     pregunta: "Hablar con una persona",
-    respuesta: ["Por supuesto. Te atendemos personalmente por WhatsApp."],
+    respuesta: [
+      "Por supuesto. Te atendemos personalmente por WhatsApp.",
+      `Horario: ${SITE.horario.texto}. Si escribes fuera de ese horario, te respondemos a primera hora.`,
+    ],
     claves: ["persona", "humano", "hablar con", "llamar", "telefono", "contacto", "whatsapp", "agente"],
     acciones: [{ tipo: "whatsapp", mensaje: WA_PRESETS.general, label: "Abrir WhatsApp" }],
   },

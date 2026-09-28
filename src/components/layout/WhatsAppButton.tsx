@@ -16,7 +16,7 @@ import {
   ThumbsUp,
   X,
 } from "lucide-react";
-import { SITE, WA_PRESETS, waLink } from "@/data/site-config";
+import { SITE, WA_PRESETS, atendiendoAhora, waLink } from "@/data/site-config";
 import {
   INTENTOS,
   TEMAS_INICIO,
@@ -344,6 +344,9 @@ export function WhatsAppButton() {
   }
 
   const acciones = accionesPara(contexto, conCesta);
+  // Solo se pinta con el panel abierto (en el cliente), así que no hay
+  // diferencia entre el HTML del servidor y el del navegador.
+  const abierto = atendiendoAhora();
   const valorable = (contexto.tipo === "respuesta" && contexto.id !== "gracias") || contexto.tipo === "productos";
 
   return (
@@ -362,11 +365,17 @@ export function WhatsAppButton() {
             <header className="flex items-center gap-2.5 border-b border-carbon/8 py-3 pr-2 pl-4">
               <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest text-cream">
                 <MessageCircle size={17} />
-                <span className="absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full border-2 border-cream-soft bg-[#25D366]" />
+                <span
+                  className={`absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full border-2 border-cream-soft ${abierto ? "bg-[#25D366]" : "bg-stone-soft"}`}
+                />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="truncate font-display text-[15px] leading-tight">{SITE.name}</p>
-                <p className="truncate text-xs text-stone">Respuestas al momento</p>
+                <p className="truncate text-xs text-stone">
+                  {abierto
+                    ? `En línea · hasta las ${SITE.horario.cierre.replace(/^0/, "")}`
+                    : `Fuera de horario · atendemos de ${SITE.horario.apertura.replace(/^0/, "")} a ${SITE.horario.cierre}`}
+                </p>
               </div>
               <a
                 href={waLink(WA_PRESETS.general)}

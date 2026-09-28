@@ -23,8 +23,8 @@ export function FinalCta() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mx-auto mt-5 max-w-xl text-base text-stone sm:text-lg"
         >
-          Escríbenos y te asesoramos sin compromiso, con entrega directa en{" "}
-          {SITE.city} y toda España.
+          Escríbenos y te asesoramos sin compromiso, con recogida en nuestro local de{" "}
+          {SITE.city}.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 16 }}

@@ -17,14 +17,14 @@ import { waLink, WA_PRESETS, SITE } from "@/data/site-config";
 export const metadata: Metadata = {
   title: "Nosotros y contacto",
   description:
-    "Distribuidores independientes de Amway en Barakaldo, Bizkaia. Productos originales de Estados Unidos, atención personal por WhatsApp y envíos a toda España.",
+    "Distribuidores independientes de Amway en Barakaldo, Bizkaia. Productos originales de Estados Unidos, atención personal por WhatsApp y recogida en nuestro local.",
   alternates: { canonical: "/sobre-nosotros" },
 };
 
 const HIGHLIGHTS = [
   { icon: ShieldCheck, label: "100% originales" },
   { icon: Plane, label: "Importado de EE. UU." },
-  { icon: PackageCheck, label: "Envíos a toda España" },
+  { icon: PackageCheck, label: "Recogida en Barakaldo" },
   { icon: MessageCircle, label: "Atención por WhatsApp" },
 ];
 
@@ -41,7 +41,7 @@ const POINTS = [
     alt: "Madre con su bebé haciendo la colada en casa",
     eyebrow: "Cercanía",
     title: "Servicio local en Barakaldo",
-    text: "Asesoramos en persona o por WhatsApp y preparamos cada pedido a mano, para clientes de toda España.",
+    text: "Asesoramos en persona o por WhatsApp y preparamos cada pedido a mano para que lo recojas en nuestro local.",
   },
   {
     image: "/images/editorial/belleza-flores.webp",
@@ -65,8 +65,8 @@ const STEPS = [
   },
   {
     n: "03",
-    title: "Lo recibes",
-    text: "Recógelo en Barakaldo el día que prefieras o te lo enviamos a casa.",
+    title: "Lo recoges",
+    text: `Pasa por nuestro local de Barakaldo el día y la hora que elijas, ${SITE.horario.texto}.`,
   },
 ];
 
@@ -87,7 +87,7 @@ export default function SobreNosotrosPage() {
             </h1>
             <p className="mt-7 max-w-xl text-base leading-relaxed text-stone sm:text-lg">
               {SITE.name} nace en {SITE.city}, {SITE.region}, con una misión sencilla: acercar la
-              calidad de los productos Amway de Estados Unidos a cada hogar de España, con un trato
+              calidad de los productos Amway de Estados Unidos a cada hogar, con un trato
               cercano y honesto.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -180,7 +180,7 @@ export default function SobreNosotrosPage() {
               prepara cada pedido y conoce el catálogo de memoria.
             </p>
             <blockquote className="mt-8 border-l-2 border-gold pl-5 font-display text-xl leading-snug text-carbon sm:text-2xl">
-              “Si tienes dudas sobre qué producto elegir, la cantidad recomendada o el envío,
+              “Si tienes dudas sobre qué producto elegir, la cantidad recomendada o la recogida,
               hablas directamente conmigo.”
             </blockquote>
           </div>
@@ -302,7 +302,7 @@ export default function SobreNosotrosPage() {
                 <div>
                   <p className="font-display text-lg text-carbon">Ubicación</p>
                   <p className="text-sm text-stone">
-                    {SITE.city}, {SITE.region}, {SITE.country} · Recogida en mano y envíos
+                    {SITE.city}, {SITE.region} · Recogida en el local, {SITE.horario.texto}
                   </p>
                 </div>
               </div>

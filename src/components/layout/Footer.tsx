@@ -38,7 +38,7 @@ export function Footer() {
             </p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/55">
               {SITE.legalNote} Servicio local en {SITE.city}, {SITE.region}, con atención
-              personalizada y envíos a toda España.
+              personalizada y recogida en nuestro local, {SITE.horario.texto}.
             </p>
             <a
               href={waLink(WA_PRESETS.general)}
