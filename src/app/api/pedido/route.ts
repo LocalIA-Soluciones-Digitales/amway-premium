@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { amwayRpc } from "@/lib/amway-db";
+import { amwayRpc, clienteDeRequest } from "@/lib/amway-db";
 import { validarPedidoWeb } from "@/lib/pedido-web";
 import { avisarPedidoNuevo } from "@/lib/push";
 
@@ -14,6 +14,8 @@ export async function POST(request: NextRequest) {
   const res = await validarPedidoWeb(await request.json().catch(() => null));
   if (!res.ok) return NextResponse.json({ error: res.error }, { status: res.status });
   const { lineas, total, recogida, nombre, telefono, notas } = res.pedido;
+  // Con sesión iniciada, el pedido queda en el historial de su cuenta.
+  const cliente = await clienteDeRequest(request);
 
   try {
     const pedido = await amwayRpc<{ id: string; numero: number }>(
@@ -35,6 +37,8 @@ export async function POST(request: NextRequest) {
         p_recogida_fecha: recogida.fecha,
         p_recogida_hora: recogida.hora,
         p_notas: notas,
+        p_cliente_id: cliente?.id ?? null,
+        p_cliente_email: cliente?.email ?? null,
       },
       { cache: "no-store" }
     );

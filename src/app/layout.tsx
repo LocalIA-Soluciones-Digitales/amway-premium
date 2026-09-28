@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { CartProvider } from "@/components/cart/CartProvider";
+import { ClienteProvider } from "@/components/cuenta/ClienteProvider";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { CatalogStateProvider } from "@/components/catalog/CatalogStateProvider";
 import { StoreOnly } from "@/components/layout/StoreOnly";
@@ -90,20 +91,22 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <SmoothScroll>
           <CatalogStateProvider initial={catalogo}>
-            <CartProvider>
-              <StoreOnly>
-                <Header />
-              </StoreOnly>
-              <main id="main-content" className="flex-1">
-                {children}
-              </main>
-              <StoreOnly>
-                <Footer />
-                <WhatsAppButton />
-              </StoreOnly>
-              <CartDrawer />
-              <Analytics />
-            </CartProvider>
+            <ClienteProvider>
+              <CartProvider>
+                <StoreOnly>
+                  <Header />
+                </StoreOnly>
+                <main id="main-content" className="flex-1">
+                  {children}
+                </main>
+                <StoreOnly>
+                  <Footer />
+                  <WhatsAppButton />
+                </StoreOnly>
+                <CartDrawer />
+                <Analytics />
+              </CartProvider>
+            </ClienteProvider>
           </CatalogStateProvider>
         </SmoothScroll>
       </body>

@@ -77,6 +77,7 @@ export async function registrarPedidoStripe(sessionId: string): Promise<PedidoPa
     p_recogida_fecha: pagado.recogidaFecha,
     p_recogida_hora: pagado.recogidaHora,
     p_notas: meta.notas || null,
+    p_cliente_id: meta.cliente_id || null,
   }, { cache: "no-store" });
   await avisarPedidoNuevo(pedidoId);
   return pagado;

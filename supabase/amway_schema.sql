@@ -805,3 +805,250 @@ $$;
 
 revoke all on function public.amway_estado_pedido(bigint, text) from public;
 grant execute on function public.amway_estado_pedido(bigint, text) to anon, authenticated;
+
+-- ============================================================
+-- Cuentas de cliente (opcionales). Se puede pedir sin cuenta igual que
+-- siempre; quien se registra ve su historial, repite pedidos, cancela los
+-- pendientes en efectivo y vincula pedidos antiguos (nº + teléfono).
+-- Supabase Auth es compartido con otras webs: aquí solo existe el perfil
+-- amway_clientes, y "borrar mis datos" nunca borra el usuario de Auth.
+-- ============================================================
+create table if not exists public.amway_clientes (
+  user_id uuid primary key references auth.users (id) on delete cascade,
+  nombre text check (nombre is null or char_length(nombre) <= 100),
+  telefono text check (telefono is null or char_length(telefono) <= 30),
+  novedades boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+alter table public.amway_clientes enable row level security;
+
+drop trigger if exists amway_clientes_updated_at on public.amway_clientes;
+create trigger amway_clientes_updated_at before update on public.amway_clientes
+  for each row execute function public.amway_set_updated_at();
+
+drop policy if exists "amway_clientes_select" on public.amway_clientes;
+create policy "amway_clientes_select" on public.amway_clientes for select to authenticated
+  using (user_id = auth.uid() or public.amway_es_admin());
+drop policy if exists "amway_clientes_insert_propio" on public.amway_clientes;
+create policy "amway_clientes_insert_propio" on public.amway_clientes for insert to authenticated
+  with check (user_id = auth.uid());
+drop policy if exists "amway_clientes_update_propio" on public.amway_clientes;
+create policy "amway_clientes_update_propio" on public.amway_clientes for update to authenticated
+  using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+alter table public.amway_pedidos add column if not exists cliente_id uuid
+  references auth.users (id) on delete set null;
+create index if not exists idx_amway_pedidos_cliente on public.amway_pedidos (cliente_id, created_at desc)
+  where cliente_id is not null;
+
+-- Registro de pedidos web: igual que antes, más la cuenta del cliente (el
+-- servidor Next.js la comprueba con el token de sesión antes de pasarla).
+drop function if exists public.amway_registrar_pedido_web(text, text, jsonb, numeric, numeric, text, text, text, text, text, date, text, text);
+create or replace function public.amway_registrar_pedido_web(
+  p_token text,
+  p_stripe_session_id text,
+  p_items jsonb,
+  p_total_eur numeric,
+  p_envio_eur numeric,
+  p_metodo_pago text,
+  p_cliente_nombre text,
+  p_cliente_email text,
+  p_cliente_telefono text,
+  p_direccion text,
+  p_recogida_fecha date default null,
+  p_recogida_hora text default null,
+  p_notas text default null,
+  p_cliente_id uuid default null
+)
+returns uuid
+language plpgsql security definer set search_path = public
+as $$
+declare
+  v_id uuid;
+begin
+  if not public.amway_token_servidor_valido(p_token) then
+    raise exception 'no autorizado';
+  end if;
+  if p_stripe_session_id is null or jsonb_typeof(p_items) <> 'array' then
+    raise exception 'pedido inválido';
+  end if;
+
+  select id into v_id from public.amway_pedidos where stripe_session_id = p_stripe_session_id;
+  if v_id is not null then
+    return v_id;
+  end if;
+
+  insert into public.amway_pedidos (
+    origen, metodo_pago, estado, stripe_session_id, items, total_eur, envio_eur,
+    cliente_nombre, cliente_email, cliente_telefono, direccion, recogida_fecha, recogida_hora, notas, cliente_id
+  ) values (
+    'web', coalesce(nullif(p_metodo_pago, ''), 'tarjeta'), 'pagado', p_stripe_session_id, p_items,
+    p_total_eur, coalesce(p_envio_eur, 0),
+    nullif(p_cliente_nombre, ''), nullif(p_cliente_email, ''), nullif(p_cliente_telefono, ''), nullif(p_direccion, ''),
+    p_recogida_fecha, nullif(p_recogida_hora, ''), nullif(left(p_notas, 500), ''),
+    (select u.id from auth.users u where u.id = p_cliente_id)
+  )
+  on conflict (stripe_session_id) do nothing
+  returning id into v_id;
+
+  if v_id is null then
+    select id into v_id from public.amway_pedidos where stripe_session_id = p_stripe_session_id;
+  end if;
+  return v_id;
+end;
+$$;
+
+drop function if exists public.amway_registrar_pedido_recogida(text, jsonb, numeric, text, text, date, text, text);
+create or replace function public.amway_registrar_pedido_recogida(
+  p_token text,
+  p_items jsonb,
+  p_total_eur numeric,
+  p_cliente_nombre text,
+  p_cliente_telefono text,
+  p_recogida_fecha date,
+  p_recogida_hora text,
+  p_notas text default null,
+  p_cliente_id uuid default null,
+  p_cliente_email text default null
+)
+returns jsonb
+language plpgsql security definer set search_path = public
+as $$
+declare
+  v_id uuid;
+  v_numero bigint;
+begin
+  if not public.amway_token_servidor_valido(p_token) then
+    raise exception 'no autorizado';
+  end if;
+  if jsonb_typeof(p_items) <> 'array' or jsonb_array_length(p_items) = 0 or p_recogida_fecha is null then
+    raise exception 'pedido inválido';
+  end if;
+  if char_length(coalesce(trim(p_cliente_nombre), '')) not between 1 and 100
+     or char_length(coalesce(trim(p_cliente_telefono), '')) not between 6 and 30 then
+    raise exception 'datos de contacto inválidos';
+  end if;
+  if (select count(*) from public.amway_pedidos
+      where origen = 'web' and stripe_session_id is null and created_at > now() - interval '1 hour') >= 30 then
+    raise exception 'demasiados pedidos';
+  end if;
+
+  insert into public.amway_pedidos (
+    origen, metodo_pago, estado, items, total_eur, cliente_nombre, cliente_telefono, cliente_email,
+    recogida_fecha, recogida_hora, notas, cliente_id
+  ) values (
+    'web', 'efectivo', 'pendiente', p_items, p_total_eur, trim(p_cliente_nombre), trim(p_cliente_telefono),
+    nullif(left(trim(coalesce(p_cliente_email, '')), 200), ''),
+    p_recogida_fecha, p_recogida_hora, nullif(left(trim(coalesce(p_notas, '')), 500), ''),
+    (select u.id from auth.users u where u.id = p_cliente_id)
+  )
+  returning id, numero into v_id, v_numero;
+  return jsonb_build_object('id', v_id, 'numero', v_numero);
+end;
+$$;
+
+-- Historial del cliente: sin costes internos ni campos del panel.
+create or replace function public.amway_mis_pedidos()
+returns jsonb
+language sql stable security definer set search_path = public
+as $$
+  select coalesce(jsonb_agg(jsonb_build_object(
+    'numero', p.numero,
+    'created_at', p.created_at,
+    'estado', p.estado,
+    'metodo_pago', p.metodo_pago,
+    'total_eur', p.total_eur,
+    'recogida_fecha', p.recogida_fecha,
+    'recogida_hora', p.recogida_hora,
+    'preparado', p.preparado_at is not null,
+    'seguimiento', p.seguimiento,
+    'notas', p.notas,
+    'items', (
+      select coalesce(jsonb_agg(i - 'coste_eur' order by ord), '[]'::jsonb)
+      from jsonb_array_elements(p.items) with ordinality as t(i, ord)
+    ),
+    'puede_cancelar', p.estado = 'pendiente' and p.metodo_pago = 'efectivo' and p.preparado_at is null
+  ) order by p.created_at desc), '[]'::jsonb)
+  from public.amway_pedidos p
+  where auth.uid() is not null and p.cliente_id = auth.uid();
+$$;
+
+-- El cliente cancela un pedido en efectivo que aún no está preparado (el
+-- trigger de stock repone las unidades).
+create or replace function public.amway_cancelar_mi_pedido(p_numero bigint)
+returns boolean
+language plpgsql security definer set search_path = public
+as $$
+begin
+  if auth.uid() is null then
+    raise exception 'no autorizado';
+  end if;
+  update public.amway_pedidos
+     set estado = 'cancelado',
+         notas = left(concat_ws(chr(10), notas, 'Cancelado por el cliente desde su cuenta.'), 1000)
+   where numero = p_numero and cliente_id = auth.uid()
+     and estado = 'pendiente' and metodo_pago = 'efectivo' and preparado_at is null;
+  return found;
+end;
+$$;
+
+-- Vincula a la cuenta un pedido hecho sin sesión: mismo nº + teléfono y
+-- mismo freno de intentos que la consulta del asistente.
+create or replace function public.amway_vincular_pedido(p_numero bigint, p_telefono text)
+returns text
+language plpgsql security definer set search_path = public
+as $$
+declare
+  v_tel text := right(regexp_replace(coalesce(p_telefono, ''), '\D', '', 'g'), 9);
+  v_ok boolean;
+begin
+  if auth.uid() is null then
+    raise exception 'no autorizado';
+  end if;
+  if p_numero is null or length(v_tel) < 9 then
+    return 'no';
+  end if;
+
+  delete from public.amway_consultas_pedido where created_at < now() - interval '1 day';
+  if (select count(*) from public.amway_consultas_pedido
+        where numero = p_numero and not acierto and created_at > now() - interval '1 hour') >= 5
+     or (select count(*) from public.amway_consultas_pedido
+        where not acierto and created_at > now() - interval '1 hour') >= 300 then
+    return 'bloqueado';
+  end if;
+
+  update public.amway_pedidos set cliente_id = auth.uid()
+   where numero = p_numero
+     and (cliente_id is null or cliente_id = auth.uid())
+     and right(regexp_replace(coalesce(cliente_telefono, ''), '\D', '', 'g'), 9) = v_tel;
+  v_ok := found;
+
+  insert into public.amway_consultas_pedido (numero, acierto) values (p_numero, v_ok);
+  return case when v_ok then 'ok' else 'no' end;
+end;
+$$;
+
+-- Borra el perfil y desvincula los pedidos (quedan en la contabilidad de la
+-- tienda, sin cuenta). El usuario de Auth se conserva: es compartido.
+create or replace function public.amway_borrar_mis_datos()
+returns void
+language plpgsql security definer set search_path = public
+as $$
+begin
+  if auth.uid() is null then
+    raise exception 'no autorizado';
+  end if;
+  update public.amway_pedidos set cliente_id = null where cliente_id = auth.uid();
+  delete from public.amway_clientes where user_id = auth.uid();
+end;
+$$;
+
+revoke all on function public.amway_mis_pedidos() from public, anon;
+revoke all on function public.amway_cancelar_mi_pedido(bigint) from public, anon;
+revoke all on function public.amway_vincular_pedido(bigint, text) from public, anon;
+revoke all on function public.amway_borrar_mis_datos() from public, anon;
+grant execute on function public.amway_mis_pedidos() to authenticated;
+grant execute on function public.amway_cancelar_mi_pedido(bigint) to authenticated;
+grant execute on function public.amway_vincular_pedido(bigint, text) to authenticated;
+grant execute on function public.amway_borrar_mis_datos() to authenticated;

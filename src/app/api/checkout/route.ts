@@ -4,6 +4,7 @@ import { stripe } from "@/lib/stripe";
 import { eurToCents } from "@/lib/currency";
 import { productImageSrc } from "@/data/types";
 import { validarPedidoWeb } from "@/lib/pedido-web";
+import { clienteDeRequest } from "@/lib/amway-db";
 
 export async function POST(request: NextRequest) {
   if (!stripe) {
@@ -16,6 +17,7 @@ export async function POST(request: NextRequest) {
   const res = await validarPedidoWeb(await request.json().catch(() => null));
   if (!res.ok) return NextResponse.json({ error: res.error }, { status: res.status });
   const { lineas, recogida, nombre, telefono, notas } = res.pedido;
+  const cliente = await clienteDeRequest(request);
 
   const origin = request.nextUrl.origin;
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = lineas.map((l) => {
@@ -51,7 +53,10 @@ export async function POST(request: NextRequest) {
       cliente_nombre: nombre,
       cliente_telefono: telefono,
       notas,
+      // Lo pone el servidor tras comprobar la sesión: se puede fiar al registrar.
+      cliente_id: cliente?.id ?? "",
     },
+    customer_email: cliente?.email ?? undefined,
     success_url: `${origin}/checkout/exito?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/checkout/cancelado`,
   });

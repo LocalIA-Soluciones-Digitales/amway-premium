@@ -72,6 +72,9 @@ export default async function CheckoutExitoPage({
           Seguir comprando
         </Link>
       </div>
+      <Link href="/cuenta" className="mt-6 text-sm text-stone underline-offset-4 transition hover:text-carbon hover:underline">
+        Ver mis pedidos
+      </Link>
     </div>
   );
 }

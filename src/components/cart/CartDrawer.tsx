@@ -18,6 +18,7 @@ import {
   Plus,
   ShoppingBag,
   Trash2,
+  UserRound,
   X,
 } from "lucide-react";
 import { getProductById } from "@/data/products";
@@ -39,6 +40,7 @@ import {
 } from "@/lib/recogida";
 import { cn } from "@/lib/utils";
 import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
+import { cabeceraSesion, useCliente } from "@/components/cuenta/ClienteProvider";
 import { cestaItemKey, MAX_QUANTITY_PER_LINE, useCesta, type CestaItem } from "./CartProvider";
 
 type PriceOf = (product: Product, variantIndex: number) => number | null;
@@ -71,6 +73,7 @@ export function CartDrawer() {
   const { items, isOpen, closeCesta, increase, decrease, removeItem, clearCesta, totalUnits, subtotal, unavailableKeys } =
     useCesta();
   const catalog = useCatalogState();
+  const { session, perfil, guardarPerfil } = useCliente();
   const hasUnavailable = unavailableKeys.size > 0;
   const lenis = useLenis();
   const [paso, setPaso] = useState<Paso>("cesta");
@@ -123,6 +126,12 @@ export function CartDrawer() {
     } catch {}
   }, []);
 
+  // Con sesión, los datos del perfil mandan sobre lo recordado en el navegador.
+  useEffect(() => {
+    if (perfil?.nombre) setNombre(perfil.nombre);
+    if (perfil?.telefono) setTelefono(perfil.telefono);
+  }, [perfil?.nombre, perfil?.telefono]);
+
   // Un día ya pasado (la cesta abierta de un día para otro) se vuelve a elegir.
   useEffect(() => {
     if (fecha && fecha < rango.min) setFecha(null);
@@ -154,6 +163,10 @@ export function CartDrawer() {
     try {
       localStorage.setItem(CONTACTO_KEY, JSON.stringify({ nombre: nombre.trim(), telefono: telefono.trim() }));
     } catch {}
+    // Completa el perfil con lo que falte, para el próximo pedido.
+    if (session && perfil && (!perfil.nombre || !perfil.telefono)) {
+      void guardarPerfil({ nombre: perfil.nombre || nombre, telefono: perfil.telefono || telefono });
+    }
 
     const body = JSON.stringify({
       items: items.map(({ productId, variantIndex, flavor, quantity }) => ({ productId, variantIndex, flavor, quantity })),
@@ -169,7 +182,7 @@ export function CartDrawer() {
     try {
       const res = await fetch(metodo === "tarjeta" ? "/api/checkout" : "/api/pedido", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...cabeceraSesion(session) },
         body,
       });
       const data = await res.json();
@@ -291,6 +304,14 @@ export function CartDrawer() {
                   <MessageCircle size={16} />
                   Enviar pedido por WhatsApp
                 </a>
+                <Link
+                  href={session ? "/cuenta" : `/cuenta?registro=1&pedido=${hecho.numero}`}
+                  onClick={closeCesta}
+                  className="mt-2.5 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-carbon/15 text-sm font-medium text-carbon transition hover:bg-carbon/5"
+                >
+                  <UserRound size={16} />
+                  {session ? "Ver en mis pedidos" : "Crear cuenta y guardar este pedido"}
+                </Link>
                 <button
                   type="button"
                   onClick={closeCesta}
@@ -538,6 +559,30 @@ export function CartDrawer() {
                   </Seccion>
 
                   <Seccion titulo="Tus datos">
+                    {session ? (
+                      <p className="mb-3 flex items-center gap-2 rounded-xl bg-forest/10 px-3 py-2.5 text-xs text-forest">
+                        <UserRound size={14} className="shrink-0" />
+                        <span className="min-w-0 truncate">
+                          Se guardará en tu cuenta ({session.user.email})
+                        </span>
+                      </p>
+                    ) : (
+                      <p className="mb-3 text-xs leading-relaxed text-stone">
+                        Puedes pedir sin cuenta.{" "}
+                        <Link href="/cuenta" onClick={closeCesta} className="font-medium text-carbon underline underline-offset-2">
+                          Entra
+                        </Link>{" "}
+                        o{" "}
+                        <Link
+                          href="/cuenta?registro=1"
+                          onClick={closeCesta}
+                          className="font-medium text-carbon underline underline-offset-2"
+                        >
+                          crea una cuenta
+                        </Link>{" "}
+                        para ver tus pedidos y repetirlos. La cesta se mantiene.
+                      </p>
+                    )}
                     <div className="flex flex-col gap-2.5">
                       <input
                         value={nombre}

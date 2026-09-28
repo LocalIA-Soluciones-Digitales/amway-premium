@@ -24,6 +24,38 @@ export function amwayDb(): SupabaseClient {
   return browserClient;
 }
 
+let clienteClient: SupabaseClient | null = null;
+
+// Cuentas de cliente de la tienda: otra clave de sesión, para que entrar
+// como cliente nunca pise (ni muestre) la sesión del panel de gestión.
+export function clienteDb(): SupabaseClient {
+  if (!clienteClient) {
+    clienteClient = createClient(AMWAY_DB_URL, AMWAY_DB_KEY, {
+      auth: { storageKey: "amway-premium-cliente-auth", persistSession: true, autoRefreshToken: true },
+    });
+  }
+  return clienteClient;
+}
+
+// Usuario de la cuenta de cliente que viene en la petición (Authorization:
+// Bearer <token de sesión>), comprobado contra Supabase Auth. Sin token o
+// con uno caducado devuelve null y el pedido sigue adelante como invitado.
+export async function clienteDeRequest(request: Request): Promise<{ id: string; email: string | null } | null> {
+  const auth = request.headers.get("authorization");
+  if (!auth?.startsWith("Bearer ")) return null;
+  try {
+    const res = await fetch(`${AMWAY_DB_URL}/auth/v1/user`, {
+      headers: { apikey: AMWAY_DB_KEY, Authorization: auth },
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const u = (await res.json()) as { id?: unknown; email?: unknown };
+    return typeof u.id === "string" ? { id: u.id, email: typeof u.email === "string" ? u.email : null } : null;
+  } catch {
+    return null;
+  }
+}
+
 // Llamada RPC directa por REST (sin cliente ni sesión), para el servidor.
 export async function amwayRpc<T>(
   fn: string,

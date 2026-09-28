@@ -9,6 +9,7 @@ import { ChevronDown, Menu, ShieldUser, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/data/site-config";
 import { CartButton } from "@/components/cart/CartButton";
+import { CuentaButton } from "@/components/cuenta/CuentaButton";
 
 const CATEGORY_LINKS = [
   { href: "/nutricion", label: "Nutrición", tagline: "Vitaminas y bienestar diario" },
@@ -235,10 +236,12 @@ export function Header() {
           >
             Nosotros y contacto
           </Link>
+          <CuentaButton dark={dark} />
           <CartButton dark={dark} />
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
+          <CuentaButton dark={dark} />
           <CartButton dark={dark} />
           <button
             onClick={() => setOpen(true)}
@@ -305,7 +308,7 @@ export function Header() {
               <p className="mb-1 mt-6 text-xs font-medium uppercase tracking-[0.2em] text-stone">
                 Explorar
               </p>
-              {[...TOP_LINKS, { href: "/sobre-nosotros", label: "Nosotros y contacto" }].map(
+              {[...TOP_LINKS, { href: "/sobre-nosotros", label: "Nosotros y contacto" }, { href: "/cuenta", label: "Mi cuenta" }].map(
                 (link, i) => {
                   const active = pathname === link.href;
                   return (

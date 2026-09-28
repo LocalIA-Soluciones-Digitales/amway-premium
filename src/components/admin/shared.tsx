@@ -40,6 +40,7 @@ export interface Pedido {
   recogida_fecha: string | null; // YYYY-MM-DD (recogida en mano)
   recogida_hora: string | null; // HH:MM
   preparado_at: string | null; // bolsa preparada para la recogida
+  cliente_id?: string | null; // pedido hecho con la cuenta de cliente iniciada
   created_at: string;
 }
 

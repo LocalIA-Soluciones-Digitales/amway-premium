@@ -35,6 +35,7 @@ interface Cliente {
   pedidos: Pedido[];
   total: number;
   ultimo: string;
+  conCuenta: boolean;
 }
 
 interface Recompra {
@@ -93,12 +94,14 @@ export function ClientesPanel() {
         pedidos: [],
         total: 0,
         ultimo: p.created_at,
+        conCuenta: false,
       };
       c.pedidos.push(p);
       c.total += Number(p.total_eur);
       if (p.created_at > c.ultimo) c.ultimo = p.created_at;
       c.telefono ??= p.cliente_telefono;
       c.email ??= p.cliente_email;
+      if (p.cliente_id) c.conCuenta = true;
       m.set(k, c);
     }
     const clientes = Array.from(m.values());
@@ -171,7 +174,12 @@ export function ClientesPanel() {
       ) : (
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            <Stat label="Clientes" value={clientes.length} icon={<UsersRound size={15} />} />
+            <Stat
+              label="Clientes"
+              value={clientes.length}
+              icon={<UsersRound size={15} />}
+              hint={`${clientes.filter((c) => c.conCuenta).length} con cuenta en la web`}
+            />
             <Stat
               label="Repiten"
               value={`${Math.round((recurrentes / clientes.length) * 100)} %`}
@@ -276,6 +284,7 @@ export function ClientesPanel() {
                       <span className="flex items-center gap-1.5 text-sm font-medium text-carbon">
                         {c.nombre}
                         {top.includes(c.key) && c.total > 0 && <Crown size={13} className="text-gold" aria-label="Mejor cliente" />}
+                        {c.conCuenta && <Badge tone="green">Con cuenta</Badge>}
                       </span>
                       <span className="block truncate text-xs text-stone">{[c.telefono, c.email].filter(Boolean).join(" · ")}</span>
                     </span>
