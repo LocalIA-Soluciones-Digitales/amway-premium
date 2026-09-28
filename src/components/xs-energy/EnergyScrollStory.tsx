@@ -137,7 +137,6 @@ export function EnergyScrollStory() {
               src={`/images/xs-energy/lifestyle/${CHAPTER_BG[i]}`}
               alt=""
               fill
-              priority={i === 0}
               sizes="100vw"
               className="scale-110 object-cover"
             />

@@ -10,7 +10,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Una nueva generación de bebidas de energía premium con cafeína de origen natural y una megadosis de vitaminas B, rhodiola rosea, vitamina C y electrolitos. Mango durazno.",
     variants: [{ sku: "266673", size: "Doce latas de 355 ml", price: 50.75 }],
-    image: "xs-energy/catalog/elite-focus.png",
+    image: "xs-energy/catalog/elite-focus.webp",
     flagship: "xs-energy",
     badge: "¡Nuevo!",
     page: 88,
@@ -24,7 +24,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Una explosión de energía sin azúcar. Contiene 114 mg de cafeína, megadosis de vitaminas B y sabores naturales. Limonada, Cítrico, Arándano-Uva, Tamarindo, Tropical, Cereza negra, Root Beer, Clásico, Naranja, Summit, Watermelon Lemonade y más.",
     variants: [{ size: "Doce latas de 355 ml", price: 44.0 }],
-    image: "xs-energy/catalog/power-drink.png",
+    image: "xs-energy/catalog/power-drink.webp",
     flagship: "xs-energy",
     page: 89,
   },
@@ -41,7 +41,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "126984", size: "Mango, piña y guayaba sin cafeína · 12 latas de 355 ml", price: 44.0 },
       { sku: "126987", size: "Toronja rosada · 12 latas de 355 ml", price: 44.0 },
     ],
-    image: "xs-energy/catalog/jugos-burbujeantes.png",
+    image: "xs-energy/catalog/jugos-burbujeantes.webp",
     page: 89,
   },
   {
@@ -57,7 +57,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "127936", size: "Kiwi y fresa · 12 latas de 355 ml", price: 48.25 },
       { sku: "27071", size: "Caja surtida Juiced and Burn", price: 47.25 },
     ],
-    image: "xs-energy/catalog/energy-burn.png",
+    image: "xs-energy/catalog/energy-burn.webp",
     page: 89,
   },
   {
@@ -74,7 +74,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "316377", size: "Frambuesa azul · 12 sobres", price: 40.5 },
       { sku: "316378", size: "Manzana verde · 12 sobres", price: 40.5 },
     ],
-    image: "xs-energy/catalog/pre-entrenamiento.png",
+    image: "xs-energy/catalog/pre-entrenamiento.webp",
     page: 90,
   },
   {
@@ -89,7 +89,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "101593", size: "60 tabletas", price: 48.25 },
       { sku: "107846", size: "30 tabletas", price: 36.0 },
     ],
-    image: "xs-energy/catalog/enfoque-energia.png",
+    image: "xs-energy/catalog/enfoque-energia.webp",
     page: 91,
   },
   {
@@ -102,7 +102,7 @@ export const xsEnergyProducts: Product[] = [
       "Fórmula de rendimiento con 5 g de monohidrato de creatina y 2 g de calcio HMB para maximizar fuerza, poder y recuperación muscular.",
     variants: [{ sku: "128463", size: "30 porciones · sin sabor", price: 62.0 }],
     badge: "¡Nuevo!",
-    image: "xs-energy/catalog/creatina.png",
+    image: "xs-energy/catalog/creatina.webp",
     page: 92,
   },
   {
@@ -117,7 +117,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "126753", size: "Explosión de mora · 30 porciones", price: 56.25 },
       { sku: "126754", size: "Sandía · 30 porciones", price: 56.25 },
     ],
-    image: "xs-energy/catalog/muscle-multiplier.png",
+    image: "xs-energy/catalog/muscle-multiplier.webp",
     page: 93,
   },
   {
@@ -136,7 +136,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "128168", size: "Fresa · 10 sobres", price: 60.75 },
       { sku: "128169", size: "Vainilla · 10 sobres", price: 60.75 },
     ],
-    image: "xs-energy/catalog/proteina-suero.png",
+    image: "xs-energy/catalog/proteina-suero.webp",
     page: 94,
   },
   {
@@ -151,7 +151,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "110369", size: "Chocolate intenso · 12 batidos de 325 ml", price: 60.75 },
       { sku: "110370", size: "Crema de vainilla · 12 batidos de 325 ml", price: 60.75 },
     ],
-    image: "xs-energy/catalog/batidos-proteina.png",
+    image: "xs-energy/catalog/batidos-proteina.webp",
     page: 94,
   },
   {
@@ -166,7 +166,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "110385", size: "Chocolate y peanut butter · 12 barras", price: 48.25 },
       { sku: "110386", size: "Chocolate y mora · 12 barras", price: 48.25 },
     ],
-    image: "xs-energy/catalog/barras-proteina.png",
+    image: "xs-energy/catalog/barras-proteina.webp",
     page: 94,
   },
   {
@@ -181,7 +181,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "110627", size: "Barbacoa · 12 envases", price: 47.25 },
       { sku: "110628", size: "Lima y sriracha · 12 envases", price: 47.25 },
     ],
-    image: "xs-energy/catalog/hojuelas-proteina.png",
+    image: "xs-energy/catalog/hojuelas-proteina.webp",
     page: 95,
   },
   {
@@ -193,7 +193,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Dosis clínicamente estudiada de extracto de naranja sanguina Moro Morosil™ para apoyar metabolismo y control de peso.",
     variants: [{ sku: "127811", size: "30 sobres individuales", price: 51.75 }],
-    image: "xs-energy/catalog/impulso-polvo.png",
+    image: "xs-energy/catalog/impulso-polvo.webp",
     page: 96,
   },
   {
@@ -208,7 +208,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "110390", size: "Ponche de frutas · 20 tubitos", price: 27.0 },
       { sku: "305555", size: "Limonada de frambuesa · 20 tubitos", price: 27.0 },
     ],
-    image: "xs-energy/catalog/tubitos-deportivos.png",
+    image: "xs-energy/catalog/tubitos-deportivos.webp",
     page: 96,
   },
   {
@@ -220,7 +220,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "400 mg de CBD de extracto de cáñamo de alto espectro para la recuperación activa, con sensación de alivio hasta 2 horas.",
     variants: [{ sku: "300323", size: "56.69 g", price: 80.0 }],
-    image: "xs-energy/catalog/crema-cbd-pro.png",
+    image: "xs-energy/catalog/crema-cbd-pro.webp",
     page: 96,
   },
   {
@@ -232,7 +232,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "300 mg de CBD con árnica montana, aloe vera y mentol para calmar y nutrir la piel cansada.",
     variants: [{ sku: "296753", size: "56.69 g", price: 68.75 }],
-    image: "xs-energy/catalog/crema-cbd.png",
+    image: "xs-energy/catalog/crema-cbd.webp",
     page: 96,
   },
   {
@@ -247,7 +247,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "110601", size: "Fresa y sandía · 12 paquetes", price: 33.75 },
       { sku: "110631", size: "Piña y coco · 12 paquetes", price: 33.75 },
     ],
-    image: "xs-energy/catalog/agua-coco-fresa-sandia.png",
+    image: "xs-energy/catalog/agua-coco-fresa-sandia.webp",
     page: 96,
   },
   {
@@ -262,7 +262,7 @@ export const xsEnergyProducts: Product[] = [
       { sku: "316379", size: "Ponche de frutas · 30 porciones", price: 65.25 },
       { sku: "316380", size: "Ponche de frutas · 12 sobres", price: 40.5 },
     ],
-    image: "xs-energy/catalog/recuperacion-pos.png",
+    image: "xs-energy/catalog/recuperacion-pos.webp",
     page: 96,
   },
   {
@@ -274,7 +274,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Apoyo fundacional para el rendimiento muscular, energía y nutrición diaria antes, durante y después del entrenamiento.",
     variants: [{ size: "Stack completo", price: null }],
-    image: "xs-energy/catalog/stack-inicial.png",
+    image: "xs-energy/catalog/stack-inicial.webp",
     page: 98,
   },
   {
@@ -286,7 +286,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Aumenta tu energía, apoya un metabolismo saludable, ayuda a reducir la grasa corporal y desarrolla masa muscular.",
     variants: [{ sku: "USS0004", size: "Stack completo", price: 362.25 }],
-    image: "xs-energy/catalog/stack-tonificacion.png",
+    image: "xs-energy/catalog/stack-tonificacion.webp",
     page: 98,
   },
   {
@@ -297,7 +297,7 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Stacks XS",
     description: "Creado para usuarios comprometidos de nutrición deportiva con la meta de obtener masa muscular.",
     variants: [{ sku: "USS0003", size: "Stack completo", price: 343.0 }],
-    image: "xs-energy/catalog/stack-muscular.png",
+    image: "xs-energy/catalog/stack-muscular.webp",
     page: 99,
   },
   {
@@ -308,7 +308,7 @@ export const xsEnergyProducts: Product[] = [
     subcategory: "Stacks XS",
     description: "Diseñado para apoyar tu control de peso y metas de fitness de varias maneras.",
     variants: [{ sku: "USS0032", size: "Stack completo", price: 351.0 }],
-    image: "xs-energy/catalog/stack-reduccion.png",
+    image: "xs-energy/catalog/stack-reduccion.webp",
     page: 99,
   },
   // ---- Añadidos desde amway.com (EE. UU.) ----

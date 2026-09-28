@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { usePlayWhenVisible } from "@/hooks/usePlayWhenVisible";
 
 /**
  * Square looping card video that only plays while it is on screen, so a row of
@@ -19,22 +20,7 @@ export function HighlightVideo({
   position?: string;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = ref.current;
-    if (!video) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, []);
+  usePlayWhenVisible(ref);
 
   return (
     <div className="relative aspect-square w-full overflow-hidden">
@@ -48,7 +34,7 @@ export function HighlightVideo({
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="none"
       />
     </div>
   );

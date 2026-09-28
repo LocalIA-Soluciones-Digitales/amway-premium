@@ -1,26 +1,33 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { priceRangeLabel } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
 import { PRODUCTS } from "@/data/products";
+import { usePlayWhenVisible } from "@/hooks/usePlayWhenVisible";
 
 const ESPRING = PRODUCTS.find((p) => p.id === "espring-mesón")!;
 
 export function FlagshipShowcase() {
+  // Sin autoPlay: el vídeo está muy abajo en la home y autoPlay lo descargaba
+  // entero al entrar. Solo se pide cuando la sección asoma.
+  const videoRef = useRef<HTMLVideoElement>(null);
+  usePlayWhenVisible(videoRef, 0.25);
+
   return (
     <section className="relative isolate overflow-hidden bg-carbon lg:flex lg:min-h-[88vh] lg:items-end">
       <div className="relative aspect-video w-full lg:absolute lg:inset-0 lg:-z-10 lg:aspect-auto">
         <video
+          ref={videoRef}
           className="absolute inset-0 h-full w-full object-cover"
           src="/videos/espring/purifier-loop.mp4"
           poster="/images/espring/purifier-loop-poster.webp"
           aria-label={`${ESPRING.name} filtrando agua`}
-          autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
         />
         <div
           aria-hidden

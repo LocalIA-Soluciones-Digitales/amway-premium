@@ -17,7 +17,7 @@ export const hogarProducts: Product[] = [
     description:
       "Se ajusta a la mayoría de los grifos de cocina estándar mediante un dispositivo que se enrosca en tu grifo. Reduce eficazmente más de 170 contaminantes, incluidos microplásticos, PFOA y PFOS.",
     variants: [{ sku: "22940", size: "1 purificador de agua", price: 1508.0 }],
-    image: "espring/catalog/encima-meson.png",
+    image: "espring/catalog/encima-meson.webp",
     flagship: "espring",
     page: 188,
   },
@@ -31,7 +31,7 @@ export const hogarProducts: Product[] = [
       "Instalación bajo el mesón para disfrutar de agua más limpia, saludable y sabrosa sin tubos visibles.",
     variants: [{ sku: "22941", size: "1 purificador de agua", price: 1508.0 }],
     flagship: "espring",
-    image: "espring/catalog/bajo-meson-grifo-auxiliar.png",
+    image: "espring/catalog/bajo-meson-grifo-auxiliar.webp",
     page: 188,
   },
   {
@@ -42,7 +42,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Conéctalo directamente al grifo o a la máquina de hielo para instalaciones personalizadas.",
     variants: [{ sku: "22942", size: "1 purificador de agua", price: 1508.0 }],
-    image: "espring/catalog/bajo-meson-linea-simple.png",
+    image: "espring/catalog/bajo-meson-linea-simple.webp",
     page: 188,
   },
   {
@@ -53,7 +53,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Grifo de diseño en níquel, negro o cromo para dar estilo moderno a tu cocina.",
     variants: [{ sku: "28212UC", size: "Níquel / Negro / Cromo", price: 1620.0 }],
-    image: "espring/catalog/grifo-diseno.png",
+    image: "espring/catalog/grifo-diseno.webp",
     page: 189,
   },
   {
@@ -64,7 +64,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Filtro de reemplazo para el purificador de agua eSpring.",
     variants: [{ sku: "22943", size: "1 filtro", price: 293.0 }],
-    image: "espring/catalog/filtro-carbon.png",
+    image: "espring/catalog/filtro-carbon.webp",
     page: 189,
   },
   {
@@ -75,7 +75,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Cartucho de reemplazo con tecnología UV para el purificador de agua eSpring.",
     variants: [{ sku: "00186", size: "1 filtro", price: 336.0 }],
-    image: "espring/catalog/filtro-uv.png",
+    image: "espring/catalog/filtro-uv.webp",
     page: 189,
   },
   {
@@ -87,7 +87,7 @@ export const hogarProducts: Product[] = [
     description:
       "Para uso con el sistema de tratamiento de agua eSpring con instalación bajo el mesón.",
     variants: [{ sku: "125627", size: "1 kit", price: fromEur(186.80) }],
-    image: "espring/catalog/kit-grifo-auxiliar.png",
+    image: "espring/catalog/kit-grifo-auxiliar.webp",
     page: 35,
   },
   {
@@ -99,7 +99,7 @@ export const hogarProducts: Product[] = [
     description:
       "Para uso con el sistema de tratamiento de agua eSpring con instalación encima del mesón. Se ajusta a tu grifo existente sin herramientas especiales.",
     variants: [{ sku: "127065", size: "1 kit", price: fromEur(129.59) }],
-    image: "espring/catalog/kit-grifo-existente.png",
+    image: "espring/catalog/kit-grifo-existente.webp",
     page: 35,
   },
   {
@@ -111,7 +111,7 @@ export const hogarProducts: Product[] = [
     description:
       "Botella de acero inoxidable con compartimento incorporado para tus complementos Nutrilite™ y/o XS™ diarios. Duradera, a prueba de fugas y perfecta para un estilo de vida activo.",
     variants: [{ sku: "329780", size: "1 botella", price: fromEur(53.38) }],
-    image: "espring/catalog/botella.png",
+    image: "espring/catalog/botella.webp",
     page: 35,
   },
   {
@@ -123,7 +123,7 @@ export const hogarProducts: Product[] = [
     description:
       "Permite fijar la unidad eSpring de forma segura en una pared de yeso, madera u hormigón para liberar espacio en el mesón. Solo para sistemas con instalación para grifo existente.",
     variants: [{ sku: "127068", size: "1 kit", price: fromEur(53.38) }],
-    image: "espring/catalog/kit-pared.png",
+    image: "espring/catalog/kit-pared.webp",
     page: 36,
   },
   {
@@ -135,7 +135,7 @@ export const hogarProducts: Product[] = [
     description:
       "Para uso con el sistema de tratamiento de agua eSpring con instalación encima del mesón. Compatible con el sistema eSpring anterior y con el nuevo.",
     variants: [{ sku: "127064", size: "1 conjunto", price: fromEur(28.02) }],
-    image: "espring/catalog/tubos-recambio.png",
+    image: "espring/catalog/tubos-recambio.webp",
     page: 36,
   },
   {
@@ -147,7 +147,7 @@ export const hogarProducts: Product[] = [
     description:
       "Sustituyendo de forma sencilla el pre-filtro de tu unidad, mantienes tu sistema eSpring funcionando de forma óptima.",
     variants: [{ sku: "127063", size: "1 pre-filtro", price: fromEur(24.01) }],
-    image: "espring/catalog/prefiltro.png",
+    image: "espring/catalog/prefiltro.webp",
     page: 36,
   },
 
