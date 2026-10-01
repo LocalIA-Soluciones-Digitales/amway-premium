@@ -4,15 +4,15 @@ export const nutricionProducts: Product[] = [
   // ---- Nutrición diaria ----
   {
     id: "double-x",
-    name: "Multivitamina Double X™ de Nutrilite™",
+    name: "Multivitaminas / Multiminerales / Fitonutrientes Nutrilite™ Double X™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Nutrición diaria",
     description:
       "Nuestro multivitamínico basado en plantas más poderoso, elaborado con 22 vitaminas, minerales y nutrientes de 22 frutas, verduras y hierbas para apoyar 10 beneficios saludables. Con antioxidantes que ayudan a combatir el estrés oxidativo y proteger contra los radicales libres.",
     variants: [
-      { sku: "121576", size: "186 comprimidos · 31 días", price: 86.87 },
-      { sku: "292409", size: "Repuesto 372 comprimidos", price: 159.32 },
+      { sku: "121576", size: "186 comprimidos", price: 86.87 },
+      { sku: "292409", size: "Repuesto · 372 comprimidos", price: 159.32 },
     ],
     image: "nutrilite/catalog/double-x.webp",
     flagship: "nutrilite",
@@ -68,7 +68,7 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "concentrado-frutas-verduras",
-    name: "Concentrado de frutas y verduras Nutrilite™",
+    name: "Concentrado de Frutas y Vegetales Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Nutrición diaria",
@@ -136,13 +136,13 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "omega-nutrilite",
-    name: "Omega Nutrilite™",
+    name: "Omega-3 Triple Strength Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Nutrición diaria",
     description:
       "Proporciona más de 500 mg de ácidos grasos omega 3 en un conveniente formato de una cápsula blanda al día, con regusto reducido a pescado.",
-    variants: [{ sku: "126132", size: "30 cápsulas blandas", price: 27.98 }],
+    variants: [{ sku: "126132", size: "30 cápsulas", price: 27.98 }],
     image: "nutrilite/catalog/omega-nutrilite.webp",
     page: 26,
   },
@@ -160,13 +160,13 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "balance-within",
-    name: "Probiótico Balance Within™ de Nutrilite™",
+    name: "Probiotics Nutrilite™ Balance Within™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Nutrición diaria",
     description:
       "Contiene 6.3 mil millones de UFC de bacterias buenas clínicamente respaldadas para ayudar a mantener una digestión saludable.",
-    variants: [{ sku: "120571", size: "30 sobres individuales", price: 49.72 }],
+    variants: [{ sku: "120571", size: "30 sobres", price: 49.72 }],
     image: "nutrilite/catalog/balance-within.webp",
     page: 30,
   },
@@ -395,7 +395,7 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "vitamina-c",
-    name: "Vitamina C de acción prolongada Nutrilite™",
+    name: "Vitamina C Plus Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Salud inmunológica",
@@ -434,7 +434,7 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "salud-articulaciones",
-    name: "Salud de las articulaciones Nutrilite™",
+    name: "Glucosamina con Boswellia Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Huesos y articulaciones",
@@ -446,7 +446,7 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "cal-mag-d",
-    name: "Cal Mag D Nutrilite™",
+    name: "Cal mag D Plus Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Huesos y articulaciones",
@@ -522,7 +522,7 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "coq10",
-    name: "Salud del corazón CoQ10 Nutrilite™",
+    name: "Coenzima Q10 Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Salud del corazón",
@@ -560,7 +560,7 @@ export const nutricionProducts: Product[] = [
   // ---- Hombres ----
   {
     id: "salud-prostata",
-    name: "Salud de la próstata Nutrilite™",
+    name: "Saw Palmetto y Raíz de Ortiga Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Hombres",
@@ -622,7 +622,7 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "hierro-folico",
-    name: "Hierro fólico Nutrilite™",
+    name: "Hierro Fólico Plus Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Mujeres",
@@ -685,13 +685,13 @@ export const nutricionProducts: Product[] = [
   // ---- Niños ----
   {
     id: "multivitaminico-ninos",
-    name: "Multivitamínico masticable diario para niños Nutrilite™",
+    name: "Multivitaminas Masticable Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Niños",
     description:
       "18 vitaminas y minerales para apoyar la salud inmunológica, de huesos y visión de los niños en crecimiento.",
-    variants: [{ sku: "100930", size: "120 comprimidos masticables", price: 33.18 }],
+    variants: [{ sku: "100930", size: "120 comprimidos", price: 33.18 }],
     image: "nutrilite/catalog/multivitaminico-ninos.webp",
     page: 76,
   },
@@ -709,12 +709,12 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "inmunidad-ninos-polvo",
-    name: "Inmunidad total en polvo de fusión rápida para niños Nutrilite™",
+    name: "Apoyo Inmunitario Plus Nutrilite™ Kids",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Niños",
     description: "Apoyo inmunológico cuatro en uno con vitaminas C y D, probióticos y zinc.",
-    variants: [{ sku: "123046", size: "30 sobres individuales", price: 47.47 }],
+    variants: [{ sku: "123046", size: "30 sobres", price: 47.47 }],
     image: "nutrilite/catalog/inmunidad-ninos-polvo.webp",
     page: 76,
   },
@@ -809,13 +809,13 @@ export const nutricionProducts: Product[] = [
   // ---- Control de peso ----
   {
     id: "masa-magra",
-    name: "Masa magra Nutrilite™",
+    name: "CLA 500 Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Control de peso",
     description:
       "Ácido linoleico conjugado (ALC) para ayudar a reducir la grasa corporal y apoyar la retención de masa muscular magra.",
-    variants: [{ sku: "100280", size: "180 cápsulas blandas", price: 80.56 }],
+    variants: [{ sku: "100280", size: "180 cápsulas", price: 80.56 }],
     image: "nutrilite/catalog/masa-magra.webp",
     page: 84,
   },
@@ -845,7 +845,7 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "pre-postbiotico",
-    name: "Pre y postbiótico metabólico Nutrilite™",
+    name: "Nutrilite™ Metabolism* plus",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Control de peso",

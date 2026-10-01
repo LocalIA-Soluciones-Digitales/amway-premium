@@ -12,7 +12,8 @@ export interface EnergyFlavor {
   /** Product line this can belongs to. */
   line: string;
   tag?: string;
-  /** Catalog product this can is sold as (price + Stripe checkout). */
+  /** Catalog product this can is sold as (price + Stripe checkout); empty when
+   *  the flavour is not in the Spanish price list (WhatsApp only). */
   productId: string;
   /** One real, verbatim-sourced benefit line for this specific can. */
   benefit: string;
@@ -27,7 +28,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Power Water+",
     flavorEs: "Limón-Melocotón",
     line: "XS™ Power Water+",
-    productId: "xs-energy-drink",
+    productId: "xs-power-water",
     tag: "Sin gas · Colágeno",
     benefit: "Contribuye a revitalizar el cabello y la piel desde el interior.",
     image: "lemon-peach.webp",
@@ -39,7 +40,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Power Drink+",
     flavorEs: "Jengibre y Maracuyá",
     line: "XS™ Power Drink+",
-    productId: "xs-energy-drink",
+    productId: "xs-power-drink-ginger",
     tag: "Vitamina C + Zinc",
     benefit: "Aporta energía y ayuda a mantener las defensas inmunitarias.",
     image: "ginger-passion-fruit.webp",
@@ -84,7 +85,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Tropical Blast",
     flavorEs: "Sabor Tropical",
     line: "XS™ Power Drink",
-    productId: "xs-energy-drink",
+    productId: "",
     benefit: "Favorece la agilidad mental y combate el cansancio.",
     image: "tropical.webp",
     accent: "#0c3054",

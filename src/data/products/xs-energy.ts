@@ -17,7 +17,7 @@ export const xsEnergyProducts: Product[] = [
   },
   {
     id: "xs-energy-drink",
-    name: "Bebidas de energía XS™",
+    name: "XS™ Power Drink",
     brand: "XS",
     category: "xs-energy",
     subcategory: "Bebidas de energía",
@@ -79,7 +79,7 @@ export const xsEnergyProducts: Product[] = [
   },
   {
     id: "xs-enfoque-energia",
-    name: "Enfoque y energía XS™ – Suplemento nutricional",
+    name: "Rhodiola Plus XS™",
     brand: "XS",
     category: "xs-energy",
     subcategory: "Nutrición deportiva",
@@ -104,7 +104,7 @@ export const xsEnergyProducts: Product[] = [
   },
   {
     id: "xs-muscle-multiplier",
-    name: "Suplemento de aminoácidos esenciales XS™ Muscle Multiplier",
+    name: "XS™ Amino Advantage+",
     brand: "XS",
     category: "xs-energy",
     subcategory: "Nutrición deportiva",
