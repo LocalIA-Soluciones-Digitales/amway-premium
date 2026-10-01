@@ -1,4 +1,4 @@
-import { usdToEur, formatEUR } from "@/lib/currency";
+import { formatEUR } from "@/lib/currency";
 
 export type CategorySlug = "nutricion" | "xs-energy" | "belleza" | "hogar";
 
@@ -13,6 +13,8 @@ export type FlagshipKey =
 export interface ProductVariant {
   sku?: string;
   size: string;
+  // Precio al cliente en euros con IVA (lista de precios de Amway España);
+  // null = no disponible en España, se consulta por WhatsApp.
   price: number | null;
 }
 
@@ -40,8 +42,8 @@ export function priceFrom(p: Product): number | null {
 export function priceRangeLabel(p: Product): string {
   const prices = p.variants.map((v) => v.price).filter((x): x is number => x != null);
   if (prices.length === 0) return "Consultar precio";
-  const min = usdToEur(Math.min(...prices));
-  const max = usdToEur(Math.max(...prices));
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
   return min === max ? formatEUR(min) : `Desde ${formatEUR(min)}`;
 }
 
@@ -49,7 +51,7 @@ export function priceRangeLabel(p: Product): string {
 // has no published price and has to be quoted by WhatsApp.
 export function variantPriceEur(p: Product, variantIndex: number): number | null {
   const price = p.variants[variantIndex]?.price;
-  return price == null ? null : usdToEur(price);
+  return price ?? null;
 }
 
 // Index of the cheapest priced variant — the one a card preselects so the
@@ -74,6 +76,5 @@ export function productImageSrc(p: Product): string | null {
 export function directCheckoutPrice(p: Product): number | null {
   if (p.variants.length !== 1) return null;
   const price = p.variants[0].price;
-  if (price == null) return null;
-  return usdToEur(price);
+  return price ?? null;
 }

@@ -200,7 +200,7 @@ export const INTENTOS: Record<string, Intento> = {
   precios: {
     pregunta: "¿Qué incluyen los precios?",
     respuesta: [
-      "Todos los precios están en euros, convertidos al cambio oficial desde el catálogo original de Estados Unidos.",
+      "Todos los precios están en euros, con IVA incluido, según la lista de precios oficial de Amway España.",
       "No hay gastos de envío: todos los pedidos se recogen en nuestro local.",
     ],
     claves: ["precio", "cuest", "cuanto vale", "caro", "euro", "dolar", "iva", "descuento", "oferta", "gastos"],

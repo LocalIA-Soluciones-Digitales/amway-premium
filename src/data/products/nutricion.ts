@@ -11,9 +11,8 @@ export const nutricionProducts: Product[] = [
     description:
       "Nuestro multivitamínico basado en plantas más poderoso, elaborado con 22 vitaminas, minerales y nutrientes de 22 frutas, verduras y hierbas para apoyar 10 beneficios saludables. Con antioxidantes que ayudan a combatir el estrés oxidativo y proteger contra los radicales libres.",
     variants: [
-      { sku: "A4300", size: "Suministro 31 días · bandeja/186 tabletas", price: 77.75 },
-      { sku: "A0244", size: "Reemplazo 31 días · 186 tabletas", price: 74.25 },
-      { sku: "23364", size: "Suministro 10 días · 20 paquetes", price: 28.25 },
+      { sku: "121576", size: "186 comprimidos · 31 días", price: 86.87 },
+      { sku: "292409", size: "Repuesto 372 comprimidos", price: 159.32 },
     ],
     image: "nutrilite/catalog/double-x.webp",
     flagship: "nutrilite",
@@ -27,7 +26,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Apoyo para salud inmunológica, energía, músculos y salud del corazón en una tableta al día. Incluye 22 vitaminas y minerales esenciales, además de 200 mg de nutrientes de plantas.",
-    variants: [{ sku: "125557", size: "90 tabletas", price: 40.5 }],
+    variants: [{ sku: "125557", size: "90 tabletas", price: null }],
     image: "nutrilite/catalog/multivitaminico-hombres.webp",
     page: 22,
   },
@@ -39,7 +38,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Apoyo para salud inmunológica, energía, músculos y salud del corazón en deliciosas gomitas USDA Organic. Incluye 13 vitaminas y minerales, además de 75 mg de nutrientes orgánicos de plantas.",
-    variants: [{ sku: "125561", size: "120 gomitas", price: 41.5 }],
+    variants: [{ sku: "125561", size: "120 gomitas", price: null }],
     image: "nutrilite/catalog/multigomitas-hombres.webp",
     page: 22,
   },
@@ -51,7 +50,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Apoyo para salud inmunológica, energía, huesos y salud de los ojos en una tableta al día. Incluye 23 vitaminas y minerales esenciales, además de 200 mg de nutrientes de plantas.",
-    variants: [{ sku: "125559", size: "90 tabletas", price: 40.5 }],
+    variants: [{ sku: "125559", size: "90 tabletas", price: null }],
     image: "nutrilite/catalog/multivitaminico-mujeres.webp",
     page: 22,
   },
@@ -63,7 +62,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Nutrientes que ayudan a satisfacer las principales necesidades de las mujeres: salud inmunológica, metabolismo energético, salud ósea y de ojos, en deliciosas gomitas USDA Organic.",
-    variants: [{ sku: "125562", size: "120 gomitas", price: 41.5 }],
+    variants: [{ sku: "125562", size: "120 gomitas", price: null }],
     image: "nutrilite/catalog/multigomitas-mujeres.webp",
     page: 22,
   },
@@ -75,7 +74,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Fitonutrientes equivalentes a más de 5 porciones de frutas y verduras en una tableta conveniente. Contiene 13 extractos ricos en antioxidantes para apoyar la salud de ojos, corazón y circulación.",
-    variants: [{ sku: "00648", size: "60 tabletas", price: 54.0 }],
+    variants: [{ sku: "100296", size: "60 comprimidos", price: 38.71 }],
     image: "nutrilite/catalog/concentrado-frutas-verduras.webp",
     page: 23,
   },
@@ -87,7 +86,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Creado para desarrollar una base nutricional sólida. Cada porción diaria contiene Multivitamina Double X, Concentrado de frutas y verduras, Omega avanzado y Vitamina D (30 de mañana y 30 de noche).",
-    variants: [{ sku: "23377", size: "60 paquetes", price: 195.0 }],
+    variants: [{ sku: "23377", size: "60 paquetes", price: null }],
     image: "nutrilite/catalog/paquete-perfecto.webp",
     page: 23,
   },
@@ -100,9 +99,9 @@ export const nutricionProducts: Product[] = [
     description:
       "Contiene los 9 aminoácidos esenciales y 21 g de proteína de plantas de arroz integral, guisantes y chía, cultivados en granjas orgánicas certificadas. Chocolate · Vainilla · Sin sabor.",
     variants: [
-      { sku: "125921", size: "Chocolate · 15 porciones", price: 49.5 },
-      { sku: "125923", size: "Vainilla · 15 porciones", price: 49.5 },
-      { sku: "125925", size: "Sin sabor · 15 porciones", price: 49.5 },
+      { sku: "125921", size: "Chocolate · 15 porciones", price: null },
+      { sku: "125923", size: "Vainilla · 15 porciones", price: null },
+      { sku: "125925", size: "Sin sabor · 15 porciones", price: null },
     ],
     image: "nutrilite/catalog/proteina-vegetal-polvo.webp",
     page: 25,
@@ -116,8 +115,8 @@ export const nutricionProducts: Product[] = [
     description:
       "Batidos listos para beber con 20 g de proteína basada en plantas, 25 vitaminas y minerales, 5 g de fibra y frutas y verduras enteras. Chocolate · Vainilla.",
     variants: [
-      { sku: "318668", size: "Chocolate · 12 batidos de 325 ml", price: 83.25 },
-      { sku: "318669", size: "Vainilla · 12 batidos de 325 ml", price: 83.25 },
+      { sku: "318668", size: "Chocolate · 12 batidos de 325 ml", price: null },
+      { sku: "318669", size: "Vainilla · 12 batidos de 325 ml", price: null },
     ],
     image: "nutrilite/catalog/batidos-todo-en-uno.webp",
     page: 25,
@@ -130,7 +129,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Brinda más de 1,000 mg de ácidos grasos omega 3 esenciales. Clínicamente probado con tres veces mayor absorción de los omega 3 EPA, DHA y ALA que el aceite de pescado normal.",
-    variants: [{ sku: "26136", size: "60 cápsulas blandas", price: 47.25 }],
+    variants: [{ sku: "26136", size: "60 cápsulas blandas", price: null }],
     image: "nutrilite/catalog/omega-avanzado.webp",
     flagship: "nutrilite",
     page: 26,
@@ -143,7 +142,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Proporciona más de 500 mg de ácidos grasos omega 3 en un conveniente formato de una cápsula blanda al día, con regusto reducido a pescado.",
-    variants: [{ sku: "26132", size: "30 cápsulas blandas", price: 28.25 }],
+    variants: [{ sku: "126132", size: "30 cápsulas blandas", price: 27.98 }],
     image: "nutrilite/catalog/omega-nutrilite.webp",
     page: 26,
   },
@@ -155,7 +154,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Apoyo integral seis en uno para una digestión saludable, salud inmunológica, salud del hígado y la piel, energía y metabolismo.",
-    variants: [{ sku: "27725", size: "30 porciones", price: 91.0 }],
+    variants: [{ sku: "27725", size: "30 porciones", price: null }],
     image: "nutrilite/catalog/begin.webp",
     page: 30,
   },
@@ -167,7 +166,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Contiene 6.3 mil millones de UFC de bacterias buenas clínicamente respaldadas para ayudar a mantener una digestión saludable.",
-    variants: [{ sku: "20571", size: "30 sobres individuales", price: 50.75 }],
+    variants: [{ sku: "120571", size: "30 sobres individuales", price: 49.72 }],
     image: "nutrilite/catalog/balance-within.webp",
     page: 30,
   },
@@ -179,7 +178,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Fibra soluble basada en plantas para apoyar digestión, regularidad, microbioma intestinal y niveles de azúcar en sangre ya saludables. Con dextrina resistente de tapioca y fibra de acacia.",
-    variants: [{ sku: "127444", size: "30 sobres individuales", price: 49.5 }],
+    variants: [{ sku: "127444", size: "30 sobres individuales", price: null }],
     badge: "¡Nuevo!",
     image: "nutrilite/catalog/fibra-prebiotica.webp",
     page: 32,
@@ -191,7 +190,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Nutrición diaria",
     description: "Apoya la digestión de carbohidratos, proteína, grasa y lácteos.",
-    variants: [{ sku: "A8903", size: "90 cápsulas", price: 45.0 }],
+    variants: [{ sku: "A8903", size: "90 cápsulas", price: null }],
     image: "nutrilite/catalog/enzimas-digestivas.webp",
     page: 32,
   },
@@ -202,7 +201,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Nutrición diaria",
     description: "Apoya la digestión con menta y jengibre certificados USDA Organic.",
-    variants: [{ sku: "308635", size: "20 bolsitas de té", price: 20.25 }],
+    variants: [{ sku: "308635", size: "20 bolsitas de té", price: null }],
     image: "nutrilite/catalog/te-menta-jengibre.webp",
     page: 32,
   },
@@ -214,7 +213,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Mezcla triple de magnesio de origen marino para ayudar a apoyar sueño, estrés, corazón, nervios, músculos, energía y salud cerebral. Absorbe el doble con dos formas protegidas de magnesio.",
-    variants: [{ sku: "28032", size: "60 cápsulas", price: 39.5 }],
+    variants: [{ sku: "28032", size: "60 cápsulas", price: null }],
     image: "nutrilite/catalog/magnesio.webp",
     page: 35,
   },
@@ -228,7 +227,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Salud celular",
     description:
       "Suplemento 3 en 1 basado en plantas que apoya los procesos normales de reciclaje celular, energía y metabolismo celular, así como protección antioxidante.",
-    variants: [{ sku: "27813", size: "120 cápsulas · 30 días", price: 87.75 }],
+    variants: [{ sku: "27813", size: "120 cápsulas · 30 días", price: null }],
     badge: "¡Nuevo!",
     image: "nutrilite/catalog/salud-celular.webp",
     page: 38,
@@ -244,8 +243,8 @@ export const nutricionProducts: Product[] = [
     description:
       "Brinda 8 vitaminas B esenciales de liberación instantánea y constante para un apoyo energético durante todo el día.",
     variants: [
-      { sku: "10171", size: "120 tabletas", price: 44.0 },
-      { sku: "122971", size: "30 tabletas", price: 14.25 },
+      { sku: "10171", size: "120 tabletas", price: null },
+      { sku: "122971", size: "30 tabletas", price: null },
     ],
     image: "nutrilite/catalog/vitamina-b-doble.webp",
     page: 44,
@@ -258,7 +257,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Energía y enfoque",
     description:
       "Paquete de suplementos para maximizar el enfoque, con ginkgo biloba, extracto de té verde y rhodiola rosea.",
-    variants: [{ sku: "123842", size: "20 paquetes", price: 49.5 }],
+    variants: [{ sku: "123842", size: "20 paquetes", price: null }],
     image: "nutrilite/catalog/ultra-enfoque-energia.webp",
     page: 44,
   },
@@ -270,7 +269,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Energía y enfoque",
     description:
       "Apoyo para energía y bienestar general con 6 vitaminas B esenciales y nutrientes de 10 verduras y hierbas, incluidos brócoli, espinaca y col rizada.",
-    variants: [{ sku: "25937", size: "30 porciones", price: 52.75 }],
+    variants: [{ sku: "25937", size: "30 porciones", price: null }],
     image: "nutrilite/catalog/superalimento-verde.webp",
     page: 44,
   },
@@ -284,7 +283,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Sueño y estrés",
     description:
       "Con 3 mg de melatonina basada en plantas de tomates para conciliar el sueño más rápido, más tiempo y sin somnolencia. Incluye extracto de flor de manzanilla de granjas propias.",
-    variants: [{ sku: "27940", size: "30 cápsulas", price: 32.5 }],
+    variants: [{ sku: "27940", size: "30 cápsulas", price: null }],
     badge: "¡Nuevo!",
     image: "nutrilite/catalog/salud-sueno.webp",
     page: 48,
@@ -297,7 +296,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Sueño y estrés",
     description:
       "Gomitas sabor a moras azules y lavanda con 3 mg de melatonina y 5 mg de pasionaria para fomentar un buen descanso.",
-    variants: [{ sku: "24506", size: "30 porciones", price: 24.75 }],
+    variants: [{ sku: "24506", size: "30 porciones", price: null }],
     image: "nutrilite/catalog/dulces-suenos.webp",
     page: 48,
   },
@@ -309,7 +308,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Sueño y estrés",
     description:
       "890 mg de ashwagandha de granjas orgánicas certificadas por porción, equivalente a 7,000 mg de raíz, para estrés ocasional, sueño reparador y estado de ánimo equilibrado.",
-    variants: [{ sku: "308641", size: "60 cápsulas", price: 51.75 }],
+    variants: [{ sku: "308641", size: "60 cápsulas", price: null }],
     image: "nutrilite/catalog/ashwagandha.webp",
     page: 49,
   },
@@ -321,7 +320,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Sueño y estrés",
     description:
       "Ayuda a reducir el estrés ocasional, fortalece la salud inmunológica, combate la fatiga mental y ayuda a una digestión saludable.",
-    variants: [{ sku: "25514", size: "30 cápsulas", price: 56.25 }],
+    variants: [{ sku: "25514", size: "30 cápsulas", price: null }],
     image: "nutrilite/catalog/probiotico-estres.webp",
     page: 50,
   },
@@ -332,7 +331,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Sueño y estrés",
     description: "Mezcla sin cafeína de hierbas y flores USDA Organic que calma y relaja.",
-    variants: [{ sku: "308636", size: "20 bolsitas de té", price: 20.25 }],
+    variants: [{ sku: "308636", size: "20 bolsitas de té", price: null }],
     image: "nutrilite/catalog/te-manzanilla.webp",
     page: 50,
   },
@@ -346,7 +345,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Salud inmunológica",
     description:
       "50 mcg de vitamina D de champiñones ayudan a apoyar huesos fuertes y el funcionamiento inmunológico saludable, con vitamina K2 para optimizar la absorción.",
-    variants: [{ sku: "119346", size: "90 tabletas", price: 33.75 }],
+    variants: [{ sku: "119797", size: "90 comprimidos", price: 22.97 }],
     image: "nutrilite/catalog/vitamina-d.webp",
     page: 54,
   },
@@ -357,7 +356,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Salud inmunológica",
     description: "Brinda apoyo a tus sistemas inmunológico y respiratorio.",
-    variants: [{ sku: "124692", size: "60 tabletas", price: 20.25 }],
+    variants: [{ sku: "124692", size: "60 tabletas", price: null }],
     image: "nutrilite/catalog/defensa-inmunologica.webp",
     page: 56,
   },
@@ -368,7 +367,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Salud inmunológica",
     description: "Clínicamente probado que apoya el funcionamiento inmunológico.",
-    variants: [{ sku: "A5986", size: "120 tabletas", price: 46.0 }],
+    variants: [{ sku: "A5986", size: "120 tabletas", price: null }],
     image: "nutrilite/catalog/equinacea.webp",
     page: 56,
   },
@@ -379,7 +378,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Salud inmunológica",
     description: "Beneficios que apoyan tu sistema inmunológico en un delicioso formato de gomita.",
-    variants: [{ sku: "124555", size: "30 porciones", price: 27.0 }],
+    variants: [{ sku: "124555", size: "30 porciones", price: null }],
     image: "nutrilite/catalog/protegete-gomitas.webp",
     page: 56,
   },
@@ -390,7 +389,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Salud inmunológica",
     description: "Ayuda a despejar tus fosas nasales naturalmente en 3 días o menos.",
-    variants: [{ sku: "102735", size: "180 tabletas", price: 31.5 }],
+    variants: [{ sku: "102735", size: "180 tabletas", price: null }],
     image: "nutrilite/catalog/clearguard.webp",
     page: 56,
   },
@@ -402,8 +401,8 @@ export const nutricionProducts: Product[] = [
     subcategory: "Salud inmunológica",
     description: "Fórmula de liberación lenta y constante para apoyo durante todo el día.",
     variants: [
-      { sku: "109745", size: "60 tabletas", price: 23.5 },
-      { sku: "109747", size: "180 tabletas", price: 63.0 },
+      { sku: "109741", size: "60 comprimidos", price: 23.98 },
+      { sku: "109743", size: "Tamaño familiar · 180 comprimidos", price: 59.04 },
     ],
     image: "nutrilite/catalog/vitamina-c.webp",
     page: 56,
@@ -415,7 +414,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Salud inmunológica",
     description: "Apoyo inmunológico natural con 10 frutas orgánicas.",
-    variants: [{ sku: "125936", size: "30 porciones", price: 52.75 }],
+    variants: [{ sku: "125936", size: "30 porciones", price: null }],
     image: "nutrilite/catalog/superalimento-inmunidad.webp",
     page: 56,
   },
@@ -429,7 +428,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Huesos y articulaciones",
     description:
       "Apoyo 3 en 1 para la salud de las articulaciones con extracto de cúrcuma 45 veces más absorbible que el estándar: cada porción equivale a 6,000 mg de extracto estándar.",
-    variants: [{ sku: "308642", size: "60 cápsulas", price: 40.5 }],
+    variants: [{ sku: "308642", size: "60 cápsulas", price: null }],
     image: "nutrilite/catalog/curcuma.webp",
     page: 61,
   },
@@ -441,10 +440,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Huesos y articulaciones",
     description:
       "Mezcla única de siete ingredientes con niveles importantes de glucosamina y condroitina para apoyar articulaciones saludables.",
-    variants: [
-      { sku: "04664", size: "120 tabletas", price: 41.5 },
-      { sku: "06964", size: "240 tabletas", price: 74.25 },
-    ],
+    variants: [{ sku: "100108", size: "150 comprimidos", price: 29.40 }],
     image: "nutrilite/catalog/salud-articulaciones.webp",
     page: 62,
   },
@@ -456,7 +452,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Huesos y articulaciones",
     description:
       "600 mg de calcio y 200 mg de magnesio de algas calcificadas de Islandia, más vitamina D para optimizar la absorción.",
-    variants: [{ sku: "10610", size: "180 tabletas", price: 50.75 }],
+    variants: [{ sku: "110606", size: "180 comprimidos", price: 29.71 }],
     image: "nutrilite/catalog/cal-mag-d.webp",
     page: 62,
   },
@@ -468,7 +464,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Huesos y articulaciones",
     description:
       "Ayuda a desarrollar, apoyar y mantener huesos saludables. Cada porción diaria contiene Cal Mag D, vitamina D y Bone Guard.",
-    variants: [{ sku: "23362", size: "60 paquetes", price: 120.0 }],
+    variants: [{ sku: "23362", size: "60 paquetes", price: null }],
     image: "nutrilite/catalog/paquete-salud-osea.webp",
     page: 63,
   },
@@ -482,7 +478,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Memoria y vista",
     description:
       "Apoya la salud cerebral, el funcionamiento cognitivo y nervioso con 20 veces más extracto de melena de león, equivalente a 10,800 mg de polvo seco.",
-    variants: [{ sku: "308639", size: "60 cápsulas", price: 39.5 }],
+    variants: [{ sku: "308639", size: "60 cápsulas", price: null }],
     image: "nutrilite/catalog/melena-de-leon.webp",
     page: 64,
   },
@@ -494,7 +490,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Memoria y vista",
     description:
       "Ayuda a los ojos a filtrar la luz azul y apoya la adaptación visual a la luz, incluida la visión nocturna.",
-    variants: [{ sku: "124708", size: "60 cápsulas blandas", price: 40.5 }],
+    variants: [{ sku: "124708", size: "60 cápsulas blandas", price: null }],
     image: "nutrilite/catalog/salud-vision.webp",
     page: 64,
   },
@@ -506,7 +502,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Memoria y vista",
     description:
       "Apoya la memoria a corto y largo plazo, y un flujo sanguíneo óptimo para nutrir el cerebro, con cistanche tubulosa y ginkgo biloba.",
-    variants: [{ sku: "11106", size: "60 tabletas", price: 49.5 }],
+    variants: [{ sku: "11106", size: "60 tabletas", price: null }],
     image: "nutrilite/catalog/memory-builder.webp",
     page: 64,
   },
@@ -520,7 +516,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Salud del corazón",
     description:
       "Apoya la salud del corazón y ayuda a mantener presión arterial y colesterol ya normales, con 6 mg de alicina por porción.",
-    variants: [{ sku: "A5923", size: "120 tabletas", price: 41.5 }],
+    variants: [{ sku: "A5923", size: "120 tabletas", price: null }],
     image: "nutrilite/catalog/cuidado-corazon-ajo.webp",
     page: 65,
   },
@@ -532,7 +528,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Salud del corazón",
     description:
       "Ayuda a mantener los niveles necesarios de CoQ10 para producir energía y apoyar la salud del corazón, hígado, riñones y todas las células.",
-    variants: [{ sku: "A8601", size: "60 cápsulas blandas", price: 23.5 }],
+    variants: [{ sku: "0191", size: "60 cápsulas", price: 53.94 }],
     image: "nutrilite/catalog/coq10.webp",
     page: 65,
   },
@@ -544,7 +540,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Salud del corazón",
     description:
       "Ayuda a mantener niveles de colesterol ya normales con fitonutrientes y antioxidantes.",
-    variants: [{ sku: "100070", size: "60 cápsulas blandas", price: 40.5 }],
+    variants: [{ sku: "100070", size: "60 cápsulas blandas", price: null }],
     image: "nutrilite/catalog/salud-colesterol.webp",
     page: 66,
   },
@@ -556,7 +552,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Salud del corazón",
     description:
       "Cada porción diaria contiene Omega avanzado, CoQ10 y Salud del colesterol para un corazón saludable.",
-    variants: [{ sku: "123367", size: "60 paquetes", price: 152.0 }],
+    variants: [{ sku: "123367", size: "60 paquetes", price: null }],
     image: "nutrilite/catalog/paquete-salud-corazon.webp",
     page: 66,
   },
@@ -570,7 +566,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Hombres",
     description:
       "Apoya el funcionamiento normal de la próstata y la fluidez urinaria con una mezcla única de ingredientes basados en plantas, incluido serenoa.",
-    variants: [{ sku: "A8004", size: "100 cápsulas blandas", price: 54.0 }],
+    variants: [{ sku: "8004", size: "100 cápsulas", price: 67.14 }],
     image: "nutrilite/catalog/salud-prostata.webp",
     page: 70,
   },
@@ -582,7 +578,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Hombres",
     description:
       "Apoya la salud sexual y libido saludable con tribulus estandarizado al 85 % de saponinas, de granjas orgánicas certificadas.",
-    variants: [{ sku: "308640", size: "60 cápsulas", price: 52.75 }],
+    variants: [{ sku: "308640", size: "60 cápsulas", price: null }],
     image: "nutrilite/catalog/epimedium-tribulus.webp",
     page: 70,
   },
@@ -594,7 +590,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Hombres",
     description:
       "Cada porción diaria contiene Multivitamínico para hombres, concentrado de frutas y verduras, omega y vitamina C de acción prolongada.",
-    variants: [{ sku: "23365", size: "30 paquetes", price: 87.75 }],
+    variants: [{ sku: "23365", size: "30 paquetes", price: null }],
     image: "nutrilite/catalog/paquete-hombres.webp",
     page: 70,
   },
@@ -608,7 +604,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Mujeres",
     description:
       "Con ruibarbo siberiano, clínicamente probado para aliviar bochornos, sudoración nocturna y cambios del estado de ánimo.",
-    variants: [{ sku: "26154", size: "30 tabletas", price: 45.0 }],
+    variants: [{ sku: "26154", size: "30 tabletas", price: null }],
     image: "nutrilite/catalog/menopausia.webp",
     page: 72,
   },
@@ -620,7 +616,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Mujeres",
     description:
       "Sauzgatillo y azafrán clínicamente estudiados que ayudan a aliviar los síntomas comunes del ciclo menstrual.",
-    variants: [{ sku: "126161", size: "30 cápsulas", price: 44.0 }],
+    variants: [{ sku: "126161", size: "30 cápsulas", price: null }],
     image: "nutrilite/catalog/apoyo-ciclo.webp",
     page: 73,
   },
@@ -631,7 +627,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Mujeres",
     description: "Tres fuentes de hierro con ácido fólico, de nutrientes de plantas ricas en hierro.",
-    variants: [{ sku: "102046", size: "90 tabletas", price: 20.25 }],
+    variants: [{ sku: "100295", size: "120 comprimidos", price: 16.54 }],
     image: "nutrilite/catalog/hierro-folico.webp",
     page: 73,
   },
@@ -643,7 +639,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Mujeres",
     description:
       "Cada paquete contiene Multivitamínico para mujeres, concentrado de frutas y verduras, Cal Mag D y Salud del cabello, piel y uñas.",
-    variants: [{ sku: "23372", size: "30 paquetes", price: 73.25 }],
+    variants: [{ sku: "23372", size: "30 paquetes", price: null }],
     image: "nutrilite/catalog/paquete-mujeres.webp",
     page: 73,
   },
@@ -657,7 +653,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description:
       "13 g de colágeno que nutre la piel y extracto de aloe para protección antioxidante. Mézclalo en tus bebidas favoritas.",
-    variants: [{ sku: "25553", size: "15 sobres 13.5 g", price: 37.25 }],
+    variants: [{ sku: "25553", size: "15 sobres 13.5 g", price: null }],
     image: "nutrilite/catalog/peptidos-colageno.webp",
     page: 74,
   },
@@ -669,7 +665,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description:
       "Shot con sabor a cereza y mora, con 7 g de colágeno, 60 mg de ácido hialurónico y 25 mg de extracto de acerola.",
-    variants: [{ sku: "24936", size: "9 shots de 89 ml", price: 51.75 }],
+    variants: [{ sku: "24936", size: "9 shots de 89 ml", price: null }],
     image: "nutrilite/catalog/shots-colageno.webp",
     page: 74,
   },
@@ -681,7 +677,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description:
       "Combina 1,000 mcg de biotina, 500 mg de colágeno y nutrientes de plantas de granjas propias para cabello, piel y uñas saludables.",
-    variants: [{ sku: "A7553", size: "60 tabletas", price: 30.25 }],
+    variants: [{ sku: "A7553", size: "60 tabletas", price: null }],
     image: "nutrilite/catalog/cabello-piel-unas.webp",
     page: 74,
   },
@@ -695,7 +691,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Niños",
     description:
       "18 vitaminas y minerales para apoyar la salud inmunológica, de huesos y visión de los niños en crecimiento.",
-    variants: [{ sku: "23043", size: "60 tabletas", price: 22.5 }],
+    variants: [{ sku: "100930", size: "120 comprimidos masticables", price: 33.18 }],
     image: "nutrilite/catalog/multivitaminico-ninos.webp",
     page: 76,
   },
@@ -707,7 +703,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Niños",
     description:
       "Jelly splat sabor fresa y cítricos sin azúcar, con 360 mg de omega 3 de pescado sostenible y chía, para la salud cerebral.",
-    variants: [{ sku: "305554", size: "30 jelly splats", price: 30.25 }],
+    variants: [{ sku: "305554", size: "30 jelly splats", price: null }],
     image: "nutrilite/catalog/brainiums-dha.webp",
     page: 76,
   },
@@ -718,7 +714,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Niños",
     description: "Apoyo inmunológico cuatro en uno con vitaminas C y D, probióticos y zinc.",
-    variants: [{ sku: "23046", size: "30 sobres individuales", price: 33.75 }],
+    variants: [{ sku: "123046", size: "30 sobres individuales", price: 47.47 }],
     image: "nutrilite/catalog/inmunidad-ninos-polvo.webp",
     page: 76,
   },
@@ -730,7 +726,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Niños",
     description:
       "Apoyo inmunológico cuatro en uno para niños de 1 a 3 años: vitaminas C y D, zinc, bayas del saúco y acerolas.",
-    variants: [{ sku: "26185", size: "30 ml", price: 28.25 }],
+    variants: [{ sku: "26185", size: "30 ml", price: null }],
     image: "nutrilite/catalog/gotas-inmunidad-ninos.webp",
     page: 76,
   },
@@ -745,9 +741,9 @@ export const nutricionProducts: Product[] = [
     description:
       "20 g de proteína basada en plantas, 25 vitaminas y minerales y 6 g de fibra. Chocolate · Vainilla · Mora.",
     variants: [
-      { sku: "318670", size: "Chocolate · 15 porciones", price: 82.25 },
-      { sku: "318671", size: "Vainilla · 15 porciones", price: 82.25 },
-      { sku: "318672", size: "Moras · 15 porciones", price: 82.25 },
+      { sku: "318670", size: "Chocolate · 15 porciones", price: null },
+      { sku: "318671", size: "Vainilla · 15 porciones", price: null },
+      { sku: "318672", size: "Moras · 15 porciones", price: null },
     ],
     image: "nutrilite/catalog/comida-completa-polvo.webp",
     page: 81,
@@ -761,9 +757,9 @@ export const nutricionProducts: Product[] = [
     description:
       "12 g de proteína basada en plantas, 25 vitaminas y minerales, 8 g de fibra y frutas y verduras enteras.",
     variants: [
-      { sku: "316302", size: "Peanut butter · 12 barras", price: 66.25 },
-      { sku: "316303", size: "Doble chocolate · 12 barras", price: 66.25 },
-      { sku: "316305", size: "Moras y semillas · 12 barras", price: 66.25 },
+      { sku: "316302", size: "Peanut butter · 12 barras", price: null },
+      { sku: "316303", size: "Doble chocolate · 12 barras", price: null },
+      { sku: "316305", size: "Moras y semillas · 12 barras", price: null },
     ],
     image: "nutrilite/catalog/barras-todo-en-uno.webp",
     page: 81,
@@ -777,10 +773,10 @@ export const nutricionProducts: Product[] = [
     description:
       "Refuerza tu agua con nutrientes: apoyo inmunológico, antioxidante o de articulaciones en formato refrescante y bajo en calorías.",
     variants: [
-      { sku: "110922", size: "Paquete surtido · 20 tubitos", price: 28.25 },
-      { sku: "110538", size: "Salud antioxidante, mango cítrico · 20 tubitos", price: 28.25 },
-      { sku: "110855", size: "Salud inmunológica, fresa y kiwi · 20 tubitos", price: 28.25 },
-      { sku: "110857", size: "Salud de las articulaciones, frambuesa · 20 tubitos", price: 28.25 },
+      { sku: "110922", size: "Paquete surtido · 20 tubitos", price: null },
+      { sku: "110538", size: "Salud antioxidante, mango cítrico · 20 tubitos", price: null },
+      { sku: "110855", size: "Salud inmunológica, fresa y kiwi · 20 tubitos", price: null },
+      { sku: "110857", size: "Salud de las articulaciones, frambuesa · 20 tubitos", price: null },
     ],
     image: "nutrilite/catalog/tubitos-2go.webp",
     page: 81,
@@ -793,7 +789,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description:
       "Agua purificada, remineralizada, ionizada y micro estructurada con oxígeno de ligación molecular (MBO®) para optimizar la hidratación.",
-    variants: [{ sku: "285375", size: "24 botellas de 500 ml", price: 58.5 }],
+    variants: [{ sku: "285375", size: "24 botellas de 500 ml", price: null }],
     image: "nutrilite/catalog/perfect-water.webp",
     page: 82,
   },
@@ -805,7 +801,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description:
       "8 g de proteína e ingredientes saludables sin saborizantes, colorantes ni conservantes artificiales. Chocolate oscuro con nueces.",
-    variants: [{ sku: "111045", size: "2 barras", price: 33.75 }],
+    variants: [{ sku: "111045", size: "2 barras", price: null }],
     image: "nutrilite/catalog/barras-bienestar.webp",
     page: 82,
   },
@@ -819,7 +815,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Control de peso",
     description:
       "Ácido linoleico conjugado (ALC) para ayudar a reducir la grasa corporal y apoyar la retención de masa muscular magra.",
-    variants: [{ sku: "00280", size: "180 cápsulas blandas", price: 60.75 }],
+    variants: [{ sku: "100280", size: "180 cápsulas blandas", price: 80.56 }],
     image: "nutrilite/catalog/masa-magra.webp",
     page: 84,
   },
@@ -831,7 +827,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Control de peso",
     description:
       "Extracto de té verde sin cafeína diseñado para mejorar la pérdida de peso combinado con plan de alimentación y ejercicio.",
-    variants: [{ sku: "17085", size: "60 tabletas", price: 38.25 }],
+    variants: [{ sku: "17085", size: "60 tabletas", price: null }],
     image: "nutrilite/catalog/slimmetry.webp",
     page: 84,
   },
@@ -843,7 +839,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Control de peso",
     description:
       "Bloquea los carbohidratos sin privar a tu cuerpo de vitaminas, minerales y fibras.",
-    variants: [{ sku: "00193", size: "90 tabletas", price: 42.75 }],
+    variants: [{ sku: "00193", size: "90 tabletas", price: null }],
     image: "nutrilite/catalog/bloqueador-carbohidratos.webp",
     page: 84,
   },
@@ -855,7 +851,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Control de peso",
     description:
       "Prebióticos y un postbiótico clínicamente estudiado que apoyan un peso saludable y el funcionamiento metabólico normal.",
-    variants: [{ sku: "27620", size: "60 cápsulas", price: 47.25 }],
+    variants: [{ sku: "127620", size: "60 cápsulas", price: 41.62 }],
     image: "nutrilite/catalog/pre-postbiotico.webp",
     page: 84,
   },
@@ -868,7 +864,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Mezcla de cardo mariano, cúrcuma y raíz de diente de león que apoya la función normal del hígado y su actividad metabólica.",
-    variants: [{ sku: "A8084", size: "60 tabletas", price: 40.5 }],
+    variants: [{ sku: "A8084", size: "60 tabletas", price: null }],
     image: "nutrilite/catalog/apoyo-higado.webp",
   },
   {
@@ -879,7 +875,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Tabletas masticables de vitamina E con lecitina, un antioxidante que ayuda a proteger las células.",
-    variants: [{ sku: "A4042", size: "270 tabletas", price: 50.75 }],
+    variants: [{ sku: "A4042", size: "270 tabletas", price: null }],
     image: "nutrilite/catalog/vitamina-e-masticable.webp",
   },
   {
@@ -890,7 +886,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Huesos y articulaciones",
     description:
       "Gomitas orgánicas de cúrcuma con sabor a mandarina y jengibre que apoyan la salud de las articulaciones.",
-    variants: [{ sku: "308638", size: "120 gomitas", price: 45.0 }],
+    variants: [{ sku: "308638", size: "120 gomitas", price: null }],
     image: "nutrilite/catalog/gomitas-curcuma.webp",
   },
   {
@@ -901,7 +897,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description:
       "Gomitas de colágeno que ayudan a revelar el brillo saludable de tu piel.",
-    variants: [{ sku: "125545", size: "15 porciones", price: 25.75 }],
+    variants: [{ sku: "125545", size: "15 porciones", price: null }],
     image: "nutrilite/catalog/gomitas-colageno.webp",
   },
   {
@@ -912,7 +908,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Memoria y vista",
     description:
       "Gomitas que ayudan a proteger los ojos expuestos a diario a la luz azul de las pantallas.",
-    variants: [{ sku: "125544", size: "30 porciones", price: 24.75 }],
+    variants: [{ sku: "125544", size: "30 porciones", price: null }],
     image: "nutrilite/catalog/mojo-vision.webp",
   },
   {
@@ -924,12 +920,12 @@ export const nutricionProducts: Product[] = [
     description:
       "Paquete de tres productos para la salud intestinal que acompaña los cuatro pilares de bienestar del programa Begin 30.",
     variants: [
-      { sku: "326780", size: "Chocolate/Chocolate", price: 240.75 },
-      { sku: "326783", size: "Chocolate/Sin sabor", price: 240.75 },
-      { sku: "326779", size: "Vainilla/Vainilla", price: 240.75 },
-      { sku: "326778", size: "Vainilla/Chocolate", price: 240.75 },
-      { sku: "326782", size: "Vainilla/Sin sabor", price: 240.75 },
-      { sku: "326781", size: "Sin sabor/Sin sabor", price: 240.75 },
+      { sku: "326780", size: "Chocolate/Chocolate", price: null },
+      { sku: "326783", size: "Chocolate/Sin sabor", price: null },
+      { sku: "326779", size: "Vainilla/Vainilla", price: null },
+      { sku: "326778", size: "Vainilla/Chocolate", price: null },
+      { sku: "326782", size: "Vainilla/Sin sabor", price: null },
+      { sku: "326781", size: "Sin sabor/Sin sabor", price: null },
     ],
     image: "nutrilite/catalog/begin-30.webp",
   },
@@ -941,7 +937,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Energía y enfoque",
     description:
       "Selección de productos Nutrilite™ y XS™ para mantener la energía y el enfoque durante el día.",
-    variants: [{ sku: "321549", size: "1 paquete", price: 180.0 }],
+    variants: [{ sku: "321549", size: "1 paquete", price: null }],
     image: "nutrilite/catalog/solucion-energia.webp",
   },
   {
@@ -952,7 +948,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description:
       "Selección de suplementos Nutrilite™ para apoyar un envejecimiento saludable.",
-    variants: [{ sku: "321548", size: "1 paquete", price: 173.25 }],
+    variants: [{ sku: "321548", size: "1 paquete", price: null }],
     image: "nutrilite/catalog/solucion-envejecimiento.webp",
   },
   {
@@ -964,9 +960,9 @@ export const nutricionProducts: Product[] = [
     description:
       "Selección de productos Nutrilite™ para cubrir las bases de la nutrición diaria, con batido de proteína en el sabor que elijas.",
     variants: [
-      { sku: "318781", size: "Vainilla", price: 174.5 },
-      { sku: "322021", size: "Chocolate", price: 174.5 },
-      { sku: "322022", size: "Sin sabor", price: 174.5 },
+      { sku: "318781", size: "Vainilla", price: null },
+      { sku: "322021", size: "Chocolate", price: null },
+      { sku: "322022", size: "Sin sabor", price: null },
     ],
     image: "nutrilite/catalog/solucion-nutricion-diaria.webp",
   },
@@ -978,7 +974,7 @@ export const nutricionProducts: Product[] = [
     subcategory: "Sueño y estrés",
     description:
       "Productos Nutrilite™ para apoyar un sueño saludable y controlar el estrés ocasional.",
-    variants: [{ sku: "321893", size: "1 paquete", price: 220.5 }],
+    variants: [{ sku: "321893", size: "1 paquete", price: null }],
     image: "nutrilite/catalog/solucion-sueno-estres.webp",
   },
 ];

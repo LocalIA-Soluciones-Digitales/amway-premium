@@ -24,6 +24,7 @@ const BRAND_INITIALS: Record<string, string> = {
   Atmosphere: "At",
   iCook: "iC",
   "Amway Home": "AH",
+  Amway: "A",
 };
 
 export function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {

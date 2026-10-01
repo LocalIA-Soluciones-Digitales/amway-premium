@@ -1,10 +1,4 @@
 import type { Product } from "../types";
-import { USD_TO_EUR_RATE } from "@/lib/currency";
-
-// Accessories that only exist in the Spanish catalog (Amway España, April
-// 2026) carry an official EUR price; prices here are stored in USD, so we
-// divide by the rate to make the displayed EUR match the catalog exactly.
-const fromEur = (eur: number) => eur / USD_TO_EUR_RATE;
 
 export const hogarProducts: Product[] = [
   // ---- eSpring ----
@@ -16,7 +10,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Se ajusta a la mayoría de los grifos de cocina estándar mediante un dispositivo que se enrosca en tu grifo. Reduce eficazmente más de 170 contaminantes, incluidos microplásticos, PFOA y PFOS.",
-    variants: [{ sku: "22940", size: "1 purificador de agua", price: 1508.0 }],
+    variants: [{ sku: "122940", size: "1 purificador de agua", price: 1534.42 }],
     image: "espring/catalog/encima-meson.webp",
     flagship: "espring",
     page: 188,
@@ -29,7 +23,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Instalación bajo el mesón para disfrutar de agua más limpia, saludable y sabrosa sin tubos visibles.",
-    variants: [{ sku: "22941", size: "1 purificador de agua", price: 1508.0 }],
+    variants: [{ sku: "122941", size: "1 purificador de agua", price: 1534.42 }],
     flagship: "espring",
     image: "espring/catalog/bajo-meson-grifo-auxiliar.webp",
     page: 188,
@@ -41,7 +35,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Agua y aire limpios",
     description: "Conéctalo directamente al grifo o a la máquina de hielo para instalaciones personalizadas.",
-    variants: [{ sku: "22942", size: "1 purificador de agua", price: 1508.0 }],
+    variants: [{ sku: "22942", size: "1 purificador de agua", price: null }],
     image: "espring/catalog/bajo-meson-linea-simple.webp",
     page: 188,
   },
@@ -52,7 +46,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Agua y aire limpios",
     description: "Grifo de diseño en níquel, negro o cromo para dar estilo moderno a tu cocina.",
-    variants: [{ sku: "28212UC", size: "Níquel / Negro / Cromo", price: 1620.0 }],
+    variants: [{ sku: "28212UC", size: "Níquel / Negro / Cromo", price: null }],
     image: "espring/catalog/grifo-diseno.webp",
     page: 189,
   },
@@ -63,7 +57,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Agua y aire limpios",
     description: "Filtro de reemplazo para el purificador de agua eSpring.",
-    variants: [{ sku: "22943", size: "1 filtro", price: 293.0 }],
+    variants: [{ sku: "122943", size: "1 filtro", price: 286.86 }],
     image: "espring/catalog/filtro-carbon.webp",
     page: 189,
   },
@@ -74,7 +68,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Agua y aire limpios",
     description: "Cartucho de reemplazo con tecnología UV para el purificador de agua eSpring.",
-    variants: [{ sku: "00186", size: "1 filtro", price: 336.0 }],
+    variants: [{ sku: "100186", size: "1 filtro", price: 289.45 }],
     image: "espring/catalog/filtro-uv.webp",
     page: 189,
   },
@@ -86,7 +80,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Para uso con el sistema de tratamiento de agua eSpring con instalación bajo el mesón.",
-    variants: [{ sku: "125627", size: "1 kit", price: fromEur(186.80) }],
+    variants: [{ sku: "125627", size: "1 kit", price: 186.80 }],
     image: "espring/catalog/kit-grifo-auxiliar.webp",
     page: 35,
   },
@@ -98,7 +92,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Para uso con el sistema de tratamiento de agua eSpring con instalación encima del mesón. Se ajusta a tu grifo existente sin herramientas especiales.",
-    variants: [{ sku: "127065", size: "1 kit", price: fromEur(129.59) }],
+    variants: [{ sku: "127065", size: "1 kit", price: 129.59 }],
     image: "espring/catalog/kit-grifo-existente.webp",
     page: 35,
   },
@@ -110,7 +104,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Botella de acero inoxidable con compartimento incorporado para tus complementos Nutrilite™ y/o XS™ diarios. Duradera, a prueba de fugas y perfecta para un estilo de vida activo.",
-    variants: [{ sku: "329780", size: "1 botella", price: fromEur(53.38) }],
+    variants: [{ sku: "329780", size: "1 botella", price: 53.38 }],
     image: "espring/catalog/botella.webp",
     page: 35,
   },
@@ -122,7 +116,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Permite fijar la unidad eSpring de forma segura en una pared de yeso, madera u hormigón para liberar espacio en el mesón. Solo para sistemas con instalación para grifo existente.",
-    variants: [{ sku: "127068", size: "1 kit", price: fromEur(53.38) }],
+    variants: [{ sku: "127068", size: "1 kit", price: 53.38 }],
     image: "espring/catalog/kit-pared.webp",
     page: 36,
   },
@@ -134,7 +128,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Para uso con el sistema de tratamiento de agua eSpring con instalación encima del mesón. Compatible con el sistema eSpring anterior y con el nuevo.",
-    variants: [{ sku: "127064", size: "1 conjunto", price: fromEur(28.02) }],
+    variants: [{ sku: "127064", size: "1 conjunto", price: 28.02 }],
     image: "espring/catalog/tubos-recambio.webp",
     page: 36,
   },
@@ -146,7 +140,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Sustituyendo de forma sencilla el pre-filtro de tu unidad, mantienes tu sistema eSpring funcionando de forma óptima.",
-    variants: [{ sku: "127063", size: "1 pre-filtro", price: fromEur(24.01) }],
+    variants: [{ sku: "127063", size: "1 pre-filtro", price: 24.01 }],
     image: "espring/catalog/prefiltro.webp",
     page: 36,
   },
@@ -160,7 +154,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Sistema de filtración de 3 niveles que captura 99.99 % de los contaminantes transportados por aire. Diseñado para habitaciones de hasta 465 pies cuadrados.",
-    variants: [{ sku: "20539", size: "1 unidad", price: 1969.0 }],
+    variants: [{ sku: "120539", size: "1 unidad", price: 2007.19 }],
     image: "hq_20539.webp",
     flagship: "atmosphere",
     page: 194,
@@ -172,7 +166,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Agua y aire limpios",
     description: "Filtro HEPA de reemplazo, dura de 1 a 3 años según el uso.",
-    variants: [{ sku: "20540", size: "1 filtro", price: 216.0 }],
+    variants: [{ sku: "120540", size: "1 filtro", price: 308.03 }],
     image: "hq_20540.webp",
     page: 194,
   },
@@ -183,7 +177,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Agua y aire limpios",
     description: "Filtro de carbón contra olores, dura de 4 a 12 meses según el uso.",
-    variants: [{ sku: "20541", size: "1 filtro", price: 158.0 }],
+    variants: [{ sku: "120541", size: "1 filtro", price: 211.39 }],
     image: "hq_20541.webp",
     page: 194,
   },
@@ -195,7 +189,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Sistema de filtrado 3 en 1 que filtra 99.99 % de las partículas contaminantes y elimina más de 300 contaminantes. Para habitaciones de hasta 200 pies cuadrados.",
-    variants: [{ sku: "24746", size: "1 unidad", price: 1069.0 }],
+    variants: [{ sku: "24746", size: "1 unidad", price: null }],
     image: "hq_24746.webp",
     flagship: "atmosphere",
     page: 194,
@@ -207,7 +201,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Agua y aire limpios",
     description: "Filtro de reemplazo para Atmosphere Mini, dura de 6 a 10 meses.",
-    variants: [{ sku: "123322", size: "1 filtro", price: 203.0 }],
+    variants: [{ sku: "123322", size: "1 filtro", price: null }],
     image: "hq_123322.webp",
     page: 194,
   },
@@ -218,7 +212,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Agua y aire limpios",
     description: "Elimina el 99.99 % de las impurezas y contaminantes transportados por aire.",
-    variants: [{ sku: "101078", size: "1 filtro", price: 197.0 }],
+    variants: [{ sku: "101078", size: "1 filtro", price: null }],
     image: "hq_101078.webp",
     page: 195,
   },
@@ -229,7 +223,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Agua y aire limpios",
     description: "Carbón de alta eficiencia para óptima reducción de olores y compuestos químicos.",
-    variants: [{ sku: "118040", size: "1 filtro", price: 141.0 }],
+    variants: [{ sku: "118040", size: "1 filtro", price: null }],
     image: "hq_118040.webp",
     page: 195,
   },
@@ -243,7 +237,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description:
       "Cacerolas, sartenes, olla, horno holandés, colador, vaporeras y accesorios de acero inoxidable de alta gama, certificados por NSF International.",
-    variants: [{ sku: "120231", size: "Set de 19 piezas", price: 1729.0 }],
+    variants: [{ sku: "120231", size: "Set de 19 piezas", price: null }],
     image: "hq_120231.webp",
     flagship: "icook",
     page: 196,
@@ -255,7 +249,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Utensilios de cocina",
     description: "Sartenes de 2 y 3 cuartos de galón con sus tapas y una tapa domo pequeña.",
-    variants: [{ sku: "01084", size: "5 piezas", price: 528.0 }],
+    variants: [{ sku: "101084", size: "5 piezas", price: 440.60 }],
     image: "flip_icooksaute.webp",
     page: 197,
   },
@@ -266,7 +260,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Utensilios de cocina",
     description: "Cacerolas de acero inoxidable de 2 y 3 cuartos de galón con sus tapas correspondientes.",
-    variants: [{ sku: "01082", size: "4 piezas", price: 348.0 }],
+    variants: [{ sku: "101082", size: "4 piezas", price: 411.22 }],
     image: "hq_01082.webp",
     page: 197,
   },
@@ -278,8 +272,8 @@ export const hogarProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Recubrimiento antiadherente Duramic™ de tres capas, resistente a la abrasión.",
     variants: [
-      { sku: "24694", size: "9.5 pulgadas", price: 258.0 },
-      { sku: "24695", size: "11 pulgadas", price: 314.0 },
+      { sku: "124694", size: "9.5 pulgadas", price: 197.89 },
+      { sku: "124695", size: "11 pulgadas", price: 251.29 },
     ],
     image: "flip_icooknonstick.webp",
     page: 197,
@@ -291,7 +285,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Utensilios de cocina",
     description: "Diseñado por el experto Ken Onion, acero inoxidable forjado de primer nivel.",
-    variants: [{ sku: "02709", size: "5 piezas", price: 619.0 }],
+    variants: [{ sku: "102709", size: "5 piezas", price: 477.61 }],
     image: "flip_icookknives.webp",
     page: 197,
   },
@@ -302,7 +296,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Utensilios de cocina",
     description: "Hojas de acero inoxidable forjadas y mangos de polipropileno para cortes cómodos.",
-    variants: [{ sku: "02715", size: "1 unidad", price: 84.5 }],
+    variants: [{ sku: "02715", size: "1 unidad", price: null }],
     image: "p197_1_258x258.webp",
     page: 197,
   },
@@ -315,7 +309,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Limpiador concentrado que combate la suciedad diaria en múltiples superficies. Más de 1,000 usos.",
-    variants: [{ sku: "E0001", size: "1 L", price: 15.0 }],
+    variants: [{ sku: "0001", size: "1 l", price: 12.54 }],
     image: "hq_E0001.webp",
     page: 198,
   },
@@ -326,7 +320,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Cuatro paquetes de 24 toallitas para limpiar salpicaduras sobre la marcha.",
-    variants: [{ sku: "110485", size: "96 toallitas", price: 18.25 }],
+    variants: [{ sku: "110485", size: "96 toallitas", price: 26.41 }],
     image: "hq_110485.webp",
     page: 198,
   },
@@ -337,7 +331,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Reemplazo de líquido concentrado para la cocina.",
-    variants: [{ sku: "12536", size: "1 L", price: 20.5 }],
+    variants: [{ sku: "117079", size: "500 ml", price: 9.11 }],
     image: "flip_locclocina.webp",
     page: 198,
   },
@@ -348,7 +342,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Reemplazo de líquido concentrado para el baño.",
-    variants: [{ sku: "12546", size: "1 L", price: 20.5 }],
+    variants: [{ sku: "117078", size: "500 ml", price: 9.11 }],
     image: "hq_12546.webp",
     page: 198,
   },
@@ -359,7 +353,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Botella rociadora vacía de 500 ml para usar con los concentrados Amway Home.",
-    variants: [{ sku: "16798", size: "500 ml", price: 8.25 }],
+    variants: [{ sku: "16798", size: "500 ml", price: null }],
     image: "flip_botellarociadora.webp",
     page: 198,
   },
@@ -370,7 +364,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Reemplazo de líquido concentrado para vidrios.",
-    variants: [{ sku: "12537", size: "1 L", price: 20.5 }],
+    variants: [{ sku: "117080", size: "500 ml", price: 6.50 }],
     image: "hq_12537.webp",
     page: 198,
   },
@@ -381,7 +375,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Desinfectante concentrado de uso multiusos.",
-    variants: [{ sku: "E3878", size: "1 L", price: 21.75 }],
+    variants: [{ sku: "E3878", size: "1 L", price: null }],
     image: "hq_E3878.webp",
     page: 198,
   },
@@ -392,7 +386,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Desodorante desinfectante en formato aerosol.",
-    variants: [{ sku: "E0023", size: "470 g", price: 15.75 }],
+    variants: [{ sku: "E0023", size: "470 g", price: null }],
     image: "hq_E0023.webp",
     page: 198,
   },
@@ -403,7 +397,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Tabletas concentradas para el lavavajillas automático.",
-    variants: [{ sku: "09867", size: "60 tabletas", price: 31.25 }],
+    variants: [{ sku: "109867", size: "60 tabletas", price: 27.58 }],
     image: "flip_dishdrops.webp",
     page: 198,
   },
@@ -414,7 +408,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Almohadillas para una limpieza fácil de sartenes y utensilios.",
-    variants: [{ sku: "10490", size: "4 almohadillas", price: 9.75 }],
+    variants: [{ sku: "110490", size: "4 almohadillas", price: 10.45 }],
     image: "hq_10490.webp",
     page: 198,
   },
@@ -425,7 +419,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Botella dispensadora vacía de 500 ml para el líquido para vajilla concentrado.",
-    variants: [{ sku: "07890", size: "500 ml", price: 9.25 }],
+    variants: [{ sku: "07890", size: "500 ml", price: null }],
     image: "hq_07890.webp",
     page: 198,
   },
@@ -436,7 +430,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Hogar limpio",
     description: "Líquido concentrado para vajilla.",
-    variants: [{ sku: "10488", size: "1 L", price: 19.0 }],
+    variants: [{ sku: "110488", size: "1 L", price: 12.05 }],
     image: "hq_10488.webp",
     page: 198,
   },
@@ -449,7 +443,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Lavandería",
     description: "Detergente de disolución rápida que deja la ropa más blanca y brillante, sin residuos irritantes.",
-    variants: [{ sku: "10478", size: "4 L", price: 63.25 }],
+    variants: [{ sku: "110478", size: "4 L", price: 96.98 }],
     image: "flip_sa8liquido.webp",
     page: 200,
   },
@@ -460,7 +454,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Lavandería",
     description: "Triple concentración para eliminar manchas y reavivar blancos y colores.",
-    variants: [{ sku: "09849", size: "3 kg", price: 63.25 }],
+    variants: [{ sku: "109849", size: "3 kg", price: 57.46 }],
     image: "hq_09849.webp",
     page: 200,
   },
@@ -471,7 +465,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Lavandería",
     description: "Blanqueador activo de oxígeno que elimina las peores manchas a cualquier temperatura.",
-    variants: [{ sku: "24485", size: "1 kg", price: 21.0 }],
+    variants: [{ sku: "124485", size: "1 kg", price: 21.31 }],
     image: "flip_blanqueador.webp",
     page: 201,
   },
@@ -482,7 +476,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Lavandería",
     description: "Restituye naturalmente la sensación suave y esponjosa de prendas y ropa de cama.",
-    variants: [{ sku: "10480", size: "1 L", price: 17.0 }],
+    variants: [{ sku: "110480", size: "1 L", price: 14.52 }],
     image: "hq_10480.webp",
     page: 201,
   },
@@ -493,7 +487,7 @@ export const hogarProducts: Product[] = [
     category: "hogar",
     subcategory: "Lavandería",
     description: "Un solo rociado ayuda a eliminar las manchas más difíciles sin frotar ni remojar.",
-    variants: [{ sku: "10403", size: "350 g", price: 22.25 }],
+    variants: [{ sku: "110403", size: "350 g", price: 16.50 }],
     image: "hq_10403.webp",
     page: 201,
   },
@@ -506,7 +500,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Hogar limpio",
     description:
       "Bomba dosificadora para los envases de 1 L de los limpiadores concentrados Amway Home™.",
-    variants: [{ sku: "103972", size: "1 bomba", price: 6.5 }],
+    variants: [{ sku: "103972", size: "1 bomba", price: 2.86 }],
     image: "home-bomba-dispensadora.webp",
   },
   {
@@ -517,7 +511,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Lavandería",
     description:
       "Tapa dosificadora que mide la porción exacta de los concentrados Amway Home™.",
-    variants: [{ sku: "AD5113", size: "1 tapa de 15 mL", price: 5.25 }],
+    variants: [{ sku: "AD5113", size: "1 tapa de 15 mL", price: null }],
     image: "home-tapa-medidora.webp",
   },
   {
@@ -528,7 +522,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Grifo de cromo pulido para instalar tu purificador eSpring™ debajo del mesón con salida propia.",
-    variants: [{ sku: "109431", size: "1 grifo", price: 276.0 }],
+    variants: [{ sku: "109431", size: "1 grifo", price: null }],
     image: "espring/catalog/espring-grifo-tomlinson.webp",
   },
   {
@@ -539,7 +533,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Desviador de repuesto para los purificadores eSpring™ instalados sobre el grifo existente.",
-    variants: [{ sku: "127066", size: "1 kit", price: 225.0 }],
+    variants: [{ sku: "127066", size: "1 kit", price: null }],
     image: "espring/catalog/espring-kit-desviador.webp",
   },
   {
@@ -550,7 +544,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Conexión en T para la línea de agua fría al instalar el purificador eSpring™ debajo del mesón.",
-    variants: [{ sku: "WTI0894", size: "1 válvula", price: 31.0 }],
+    variants: [{ sku: "WTI0894", size: "1 válvula", price: null }],
     image: "espring/catalog/espring-valvula-adaptadora.webp",
   },
   {
@@ -561,7 +555,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Pieza de repuesto que asegura el cartucho de filtro dentro del purificador eSpring™.",
-    variants: [{ sku: "WTI0423Z", size: "1 anillo", price: 11.25 }],
+    variants: [{ sku: "WTI0423Z", size: "1 anillo", price: null }],
     image: "espring/catalog/espring-anillo-retencion.webp",
   },
   {
@@ -572,7 +566,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Módulo electrónico de repuesto para purificadores eSpring™ de 220 V.",
-    variants: [{ sku: "WTI0417Z", size: "1 módulo", price: 92.5 }],
+    variants: [{ sku: "WTI0417Z", size: "1 módulo", price: null }],
     image: "espring/catalog/espring-modulo-electronico.webp",
   },
   {
@@ -583,7 +577,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Soporte de repuesto para el cartucho del purificador eSpring™.",
-    variants: [{ sku: "WTI0706Z", size: "1 soporte", price: 29.0 }],
+    variants: [{ sku: "WTI0706Z", size: "1 soporte", price: null }],
     image: "espring/catalog/espring-soporte-filtro.webp",
   },
   {
@@ -594,7 +588,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Fuente de alimentación de repuesto para el sistema de tratamiento de agua eSpring™.",
-    variants: [{ sku: "WTI0420", size: "1 fuente de alimentación", price: 44.5 }],
+    variants: [{ sku: "WTI0420", size: "1 fuente de alimentación", price: null }],
     image: "espring/catalog/espring-suministro-energia.webp",
   },
   {
@@ -605,7 +599,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description:
       "Juego de conversión para llevar agua purificada eSpring™ a la máquina de hielo o a una salida de línea simple.",
-    variants: [{ sku: "101398", size: "1 juego", price: 206.0 }],
+    variants: [{ sku: "101398", size: "1 juego", price: null }],
     image: "espring/catalog/espring-grifo-hielera.webp",
   },
   {
@@ -617,8 +611,8 @@ export const hogarProducts: Product[] = [
     description:
       "Purificador eSpring™ con filtración multietapa y luz UV-C LED, con grifo de diseño en negro o niquelado y conexión a la app Hogar saludable de Amway.",
     variants: [
-      { sku: "128212UB", size: "Negro", price: 1620.0 },
-      { sku: "128212UN", size: "Niquelado", price: 1620.0 },
+      { sku: "128212UB", size: "Negro", price: null },
+      { sku: "128212UN", size: "Niquelado", price: null },
     ],
     image: "espring/catalog/espring-bajo-meson-grifo-diseno-color.webp",
   },
@@ -630,7 +624,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description:
       "Horno holandés de acero inoxidable de 8 L con tapa, ideal para guisos, sopas y asados.",
-    variants: [{ sku: "101086", size: "Juego de 6 piezas", price: 494.0 }],
+    variants: [{ sku: "101086", size: "Juego de 6 piezas", price: null }],
     image: "icook-horno-holandes.webp",
   },
   {
@@ -641,7 +635,7 @@ export const hogarProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description:
       "Olla de acero inoxidable de 4 L con tapa para cocinar a diario.",
-    variants: [{ sku: "101085", size: "Juego de 4 piezas", price: 359.0 }],
+    variants: [{ sku: "101085", size: "Juego de 4 piezas", price: 337.79 }],
     image: "icook-olla-4l.webp",
   },
   {
@@ -653,13 +647,10 @@ export const hogarProducts: Product[] = [
     description:
       "Piezas de repuesto originales para tus ollas, sartenes y tapas iCook™.",
     variants: [
-      { sku: "400138", size: "Mango de reemplazo largo para cacerola antiadherente", price: 6.0 },
-      { sku: "400139", size: "Mango de reemplazo lateral para utensilios grandes", price: 5.5 },
-      { sku: "400135", size: "Mango de reemplazo: Mango largo", price: 6.0 },
-      { sku: "400136", size: "Mango de reemplazo: Mango lateral", price: 5.25 },
-      { sku: "400140", size: "Mango lateral de reemplazo: Sartén antiadherente para freir 12 pulgadas", price: 5.5 },
-      { sku: "400137", size: "Perilla de reemplazo: Tapas de acero", price: 5.5 },
-      { sku: "400141", size: "Perilla de reemplazo: Tapas de vidrio", price: 7.25 },
+      { sku: "400135", size: "Mango para cacerolas (1 l, 2 l, 3 l)", price: 9.29 },
+      { sku: "400136", size: "Asa lateral (2 l, 3 l, 4 l)", price: 9.29 },
+      { sku: "400137", size: "Pomo para tapas de cacerolas", price: 9.29 },
+      { sku: "400141", size: "Pomo para tapas de sartenes antiadherentes", price: 13.01 },
     ],
     image: "icook-mangos-repuesto.webp",
   },

@@ -20,7 +20,7 @@ const FAQS = [
   },
   {
     q: "¿Los precios están en dólares o en euros?",
-    a: "Todos los precios que ves en la web ya están en euros, convertidos al cambio oficial desde el catálogo original de Estados Unidos. No hay gastos de envío: los pedidos se recogen en nuestro local.",
+    a: "Todos los precios que ves en la web están en euros, con IVA incluido, según la lista de precios oficial de Amway España. No hay gastos de envío: los pedidos se recogen en nuestro local.",
   },
   {
     q: "¿Qué pasa si un producto no está disponible?",

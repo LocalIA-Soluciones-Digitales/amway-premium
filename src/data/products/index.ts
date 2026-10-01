@@ -3,12 +3,14 @@ import { nutricionProducts } from "./nutricion";
 import { xsEnergyProducts } from "./xs-energy";
 import { bellezaProducts } from "./belleza";
 import { hogarProducts } from "./hogar";
+import { espanaProducts } from "./espana";
 
 export const PRODUCTS: Product[] = [
   ...nutricionProducts,
   ...xsEnergyProducts,
   ...bellezaProducts,
   ...hogarProducts,
+  ...espanaProducts,
 ];
 
 export function getProductsByCategory(category: CategorySlug): Product[] {
