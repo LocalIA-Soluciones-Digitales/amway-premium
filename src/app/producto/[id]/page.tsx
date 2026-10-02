@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { CATEGORY_META, PRODUCTS, getProductById } from "@/data/products";
 import { productHref, productImageSrc, priceFrom, type Product } from "@/data/types";
 import { SITE } from "@/data/site-config";
-import { ProductDetail } from "@/components/product/ProductDetail";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { ProductDetail, type ProductAccent } from "@/components/product/ProductDetail";
 import { ProductCard } from "@/components/product/ProductCard";
 
 // Una ficha por producto, generada al compilar. Precio, agotado y oculto
@@ -83,12 +85,29 @@ export default async function ProductPage({ params }: PageProps<"/producto/[id]"
     <div className="pt-28 sm:pt-32">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <ProductDetail product={product} categoryLabel={category.label} categoryHref={category.href} />
+      <ProductDetail
+        product={product}
+        categoryLabel={category.label}
+        categoryHref={category.href}
+        accent={category.accent as ProductAccent}
+      />
 
       {relatedProducts.length > 0 && (
-        <section className="mx-auto max-w-7xl border-t border-carbon/10 px-6 py-20 sm:px-8">
-          <h2 className="font-display text-2xl text-carbon sm:text-3xl">También te puede interesar</h2>
-          <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
+        <section className="mx-auto max-w-7xl px-6 py-24 sm:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.22em] text-stone">{category.label}</p>
+              <h2 className="mt-3 font-display text-3xl text-carbon sm:text-4xl">También te puede interesar</h2>
+            </div>
+            <Link
+              href={category.href}
+              className="group flex items-center gap-1.5 text-sm font-medium text-carbon underline-offset-4 hover:underline"
+            >
+              Ver todo
+              <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+          <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
             {relatedProducts.map((p, i) => (
               <ProductCard key={p.id} product={p} index={i} />
             ))}
