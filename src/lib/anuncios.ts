@@ -1,5 +1,5 @@
 import { AMWAY_DB_KEY, AMWAY_DB_URL } from "@/lib/amway-db";
-import { getProductById, productImageSrc } from "@/data/products";
+import { getProductById, productHref, productImageSrc } from "@/data/products";
 import { WA_PRESETS, waLink } from "@/data/site-config";
 
 // Anuncios que el panel publica como pop-up al entrar en la tienda: un
@@ -88,7 +88,7 @@ export function imagenAnuncio(a: Pick<Anuncio, "imagen_url" | "product_id">): st
 export function accionAnuncio(a: Anuncio): { texto: string; href: string; externo: boolean } | null {
   const p = a.product_id ? getProductById(a.product_id) : undefined;
   let href = a.enlace?.trim() || null;
-  if (!href && p) href = `/catalogo?q=${encodeURIComponent(p.name)}`;
+  if (!href && p) href = productHref(p);
   if (!href && a.tipo === "evento") {
     href = waLink(`Hola, me gustaría apuntarme al evento «${a.titulo}»${a.evento_fecha ? ` del ${fechaEvento(a.evento_fecha)}` : ""}. Gracias.`);
   }

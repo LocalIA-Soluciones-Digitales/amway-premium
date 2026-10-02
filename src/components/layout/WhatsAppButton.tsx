@@ -26,7 +26,7 @@ import {
   type AccionAsistente,
 } from "@/data/asistente";
 import { CATEGORY_META, getProductById } from "@/data/products";
-import { cheapestVariantIndex, productImageSrc, type CategorySlug } from "@/data/types";
+import { cheapestVariantIndex, productHref, productImageSrc, type CategorySlug } from "@/data/types";
 import { formatEUR } from "@/lib/currency";
 import { buscarProductos, consultaCatalogo } from "@/lib/asistente-productos";
 import { useCesta } from "@/components/cart/CartProvider";
@@ -692,7 +692,7 @@ function TarjetaProducto({ productId, onWhatsApp }: { productId: string; onWhats
   } else if (variasOpciones) {
     accion = (
       <Link
-        href={`/catalogo?q=${encodeURIComponent(product.name)}`}
+        href={productHref(product)}
         className={`${accionBase} border border-forest/25 text-forest hover:bg-forest hover:text-cream`}
       >
         Ver formatos

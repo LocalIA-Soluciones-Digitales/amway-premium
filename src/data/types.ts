@@ -78,3 +78,8 @@ export function directCheckoutPrice(p: Product): number | null {
   const price = p.variants[0].price;
   return price ?? null;
 }
+
+// Ficha propia del producto (/producto/[id]), como en amway.es.
+export function productHref(p: Pick<Product, "id">): string {
+  return `/producto/${encodeURIComponent(p.id)}`;
+}

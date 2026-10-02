@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Bell, ChevronDown, ClipboardList, MessageCircle, Star } from "lucide-react";
 import type { Product } from "@/data/types";
-import { cheapestVariantIndex, productImageSrc } from "@/data/types";
+import { cheapestVariantIndex, productHref, productImageSrc } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
 import { formatEUR } from "@/lib/currency";
 import { cn } from "@/lib/utils";
@@ -51,10 +52,9 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
       transition={{ duration: 0.55, delay: (index % 6) * 0.06, ease: [0.16, 1, 0.3, 1] }}
       className="group relative flex h-full flex-col"
     >
-      <a
-        href={waProductLink(product.name)}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={productHref(product)}
+        aria-label={`Ver ${product.name}`}
         className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-linen"
       >
         {product.badge && (
@@ -86,7 +86,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
         <span className="pointer-events-none absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-cream text-carbon opacity-0 shadow-sm transition-opacity duration-300 group-hover:opacity-100">
           <ArrowUpRight size={16} />
         </span>
-      </a>
+      </Link>
 
       <div className="flex flex-1 flex-col pt-4">
         <div className="flex items-center justify-between gap-2">
@@ -104,7 +104,9 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
         </div>
         {/* Always reserves two lines so price and buttons line up across a row. */}
         <h3 className="mt-1.5 line-clamp-2 min-h-[2.8em] font-display text-base leading-[1.4] text-carbon sm:text-lg">
-          {product.name}
+          <Link href={productHref(product)} className="transition-colors hover:text-forest">
+            {product.name}
+          </Link>
         </h3>
 
         <div className="mt-auto pt-3">

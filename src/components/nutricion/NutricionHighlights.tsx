@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import type { Product } from "@/data/types";
-import { priceRangeLabel } from "@/data/types";
-import { waProductLink } from "@/data/site-config";
+import { priceRangeLabel, productHref } from "@/data/types";
 import { HighlightVideo } from "@/components/product/HighlightVideo";
 
 export function NutricionHighlights({
@@ -28,14 +27,12 @@ export function NutricionHighlights({
             <h3 className="mt-2 font-display text-lg text-cream">{product.name}</h3>
             <div className="mt-3 flex items-center justify-between">
               <span className="text-sm text-cream">{priceRangeLabel(product)}</span>
-              <a
-                href={waProductLink(product.name)}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={productHref(product)}
                 className="rounded-full bg-white/5 px-4 py-2 text-xs text-cream/60 transition hover:bg-forest hover:text-cream"
               >
-                Consultar
-              </a>
+                Ver producto
+              </Link>
             </div>
             {link && (
               <Link
