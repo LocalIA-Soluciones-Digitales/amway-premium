@@ -1147,3 +1147,61 @@ $$;
 
 revoke all on function public.amway_mis_reposiciones() from public, anon;
 grant execute on function public.amway_mis_reposiciones() to authenticated;
+
+-- ============================================================
+-- Anuncios de la tienda (pop-up al entrar en la web)
+-- ============================================================
+-- Producto nuevo, evento en la tienda o aviso general. La web solo ve los
+-- activos y dentro de sus fechas; un evento deja de mostrarse solo cuando
+-- pasa su día. Las imágenes subidas van al bucket público amway-anuncios.
+
+create table if not exists public.amway_anuncios (
+  id uuid primary key default gen_random_uuid(),
+  tipo text not null default 'aviso' check (tipo in ('producto', 'evento', 'aviso')),
+  titulo text not null check (char_length(titulo) between 1 and 120),
+  texto text check (char_length(texto) <= 600),
+  product_id text check (char_length(product_id) <= 80),
+  imagen_url text check (char_length(imagen_url) <= 500),
+  boton_texto text check (char_length(boton_texto) <= 40),
+  enlace text check (char_length(enlace) <= 500),
+  evento_fecha date,
+  evento_hora text check (evento_hora ~ '^\d{2}:\d{2}$'),
+  evento_hora_fin text check (evento_hora_fin ~ '^\d{2}:\d{2}$'),
+  evento_lugar text check (char_length(evento_lugar) <= 160),
+  inicio timestamptz,
+  fin timestamptz,
+  activo boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+alter table public.amway_anuncios enable row level security;
+
+drop trigger if exists amway_anuncios_updated_at on public.amway_anuncios;
+create trigger amway_anuncios_updated_at before update on public.amway_anuncios
+  for each row execute function public.amway_set_updated_at();
+
+drop policy if exists "amway_anuncios_select_publico" on public.amway_anuncios;
+create policy "amway_anuncios_select_publico"
+  on public.amway_anuncios for select to anon, authenticated
+  using (
+    activo
+    and (inicio is null or inicio <= now())
+    and (fin is null or fin > now())
+    and (evento_fecha is null or evento_fecha >= (now() at time zone 'Europe/Madrid')::date)
+  );
+
+drop policy if exists "amway_anuncios_admin" on public.amway_anuncios;
+create policy "amway_anuncios_admin"
+  on public.amway_anuncios for all to authenticated
+  using (public.amway_es_admin()) with check (public.amway_es_admin());
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('amway-anuncios', 'amway-anuncios', true, 5242880, array['image/jpeg', 'image/png', 'image/webp', 'image/avif'])
+on conflict (id) do nothing;
+
+drop policy if exists "amway_anuncios_imagenes_admin_insert" on storage.objects;
+create policy "amway_anuncios_imagenes_admin_insert" on storage.objects for insert to authenticated
+  with check (bucket_id = 'amway-anuncios' and public.amway_es_admin());
+drop policy if exists "amway_anuncios_imagenes_admin_delete" on storage.objects;
+create policy "amway_anuncios_imagenes_admin_delete" on storage.objects for delete to authenticated
+  using (bucket_id = 'amway-anuncios' and public.amway_es_admin());

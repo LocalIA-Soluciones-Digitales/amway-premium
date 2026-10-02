@@ -9,6 +9,7 @@ import {
   Bug,
   ClipboardList,
   LayoutDashboard,
+  Megaphone,
   MessageSquareQuote,
   Package,
   Server,
@@ -30,6 +31,7 @@ import { ProductosPanel } from "./ProductosPanel";
 import { SolicitudesPanel } from "./SolicitudesPanel";
 import { ResenasPanel } from "./ResenasPanel";
 import { ContabilidadPanel } from "./ContabilidadPanel";
+import { AnunciosPanel } from "./AnunciosPanel";
 import { InformesPanel } from "./dev/InformesPanel";
 import { VentasInformePanel } from "./dev/VentasInformePanel";
 import { EstadoPanel } from "./dev/EstadoPanel";
@@ -92,7 +94,7 @@ function textoAlerta(u: UltimoPedido): string {
   }`;
 }
 
-const TABS_GESTION: GestionTab[] = ["hoy", "pedidos", "clientes", "productos", "solicitudes", "contabilidad", "resenas"];
+const TABS_GESTION: GestionTab[] = ["hoy", "pedidos", "clientes", "productos", "solicitudes", "contabilidad", "resenas", "anuncios"];
 
 export function AdminApp() {
   const [session, setSession] = useState<Session | null>(null);
@@ -369,6 +371,7 @@ function Paneles({ session, rol, nombre }: { session: Session; rol: Rol; nombre:
     { id: "solicitudes", label: "Solicitudes", icon: ClipboardList, badge: pendientes.solicitudes },
     { id: "contabilidad", label: "Contabilidad", icon: BarChart3 },
     { id: "resenas", label: "Reseñas", icon: MessageSquareQuote, badge: pendientes.resenas },
+    { id: "anuncios", label: "Anuncios", icon: Megaphone },
   ];
 
   return (
@@ -401,6 +404,7 @@ function Paneles({ session, rol, nombre }: { session: Session; rol: Rol; nombre:
       {gTab === "solicitudes" && <SolicitudesPanel onChange={refrescarPendientes} />}
       {gTab === "resenas" && <ResenasPanel session={session} onChange={refrescarPendientes} />}
       {gTab === "contabilidad" && <ContabilidadPanel />}
+      {gTab === "anuncios" && <AnunciosPanel />}
       {toast}
     </DashboardShell>
   );

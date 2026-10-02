@@ -5,6 +5,7 @@ import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
+import { AnuncioPopup } from "@/components/layout/AnuncioPopup";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { ClienteProvider } from "@/components/cuenta/ClienteProvider";
 import { CartDrawer } from "@/components/cart/CartDrawer";
@@ -102,6 +103,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 <StoreOnly>
                   <Footer />
                   <WhatsAppButton />
+                  <AnuncioPopup />
                 </StoreOnly>
                 <CartDrawer />
                 <Analytics />
