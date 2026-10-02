@@ -16,6 +16,7 @@ import {
   imagenAnuncio,
   type Anuncio,
 } from "@/lib/anuncios";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 const VISTOS_KEY = "amway-anuncios-vistos";
 const SESION_KEY = "amway-anuncio-sesion";
@@ -59,6 +60,7 @@ export function AnuncioPopup() {
   const [anuncio, setAnuncio] = useState<Anuncio | null>(null);
   const [open, setOpen] = useState(false);
   const lenis = useLenis();
+  const reducirMovimiento = usePrefersReducedMotion();
   const bloqueada = RUTAS_SIN_ANUNCIO.some((r) => pathname?.startsWith(r));
 
   useEffect(() => {
@@ -106,6 +108,7 @@ export function AnuncioPopup() {
   if (!anuncio) return null;
 
   const imagen = imagenAnuncio(anuncio);
+  const video = anuncio.video_url || null;
   const accion = accionAnuncio(anuncio);
   const calendario = calendarioEvento(anuncio);
   const horario = horarioEvento(anuncio);
@@ -144,19 +147,34 @@ export function AnuncioPopup() {
               <X size={18} />
             </button>
 
-            {imagen && (
-              <div className="relative h-56 shrink-0 bg-linen sm:h-auto sm:w-[44%]">
-                {/* Imágenes subidas al panel (Supabase) o de public/: <img> sirve para ambas. */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={imagen}
-                  alt=""
-                  className={
-                    anuncio.imagen_url
-                      ? "absolute inset-0 h-full w-full object-cover"
-                      : "absolute inset-0 h-full w-full object-contain p-8"
-                  }
-                />
+            {(imagen || video) && (
+              <div className="relative h-56 shrink-0 bg-linen sm:h-auto sm:min-h-[26rem] sm:w-[44%]">
+                {video ? (
+                  // Con «reducir movimiento» se queda quieto en la portada.
+                  <video
+                    src={video}
+                    poster={imagen ?? undefined}
+                    muted
+                    loop
+                    playsInline
+                    autoPlay={!reducirMovimiento}
+                    preload="auto"
+                    aria-hidden
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                ) : (
+                  // Imágenes subidas al panel (Supabase) o de public/: <img> sirve para ambas.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={imagen!}
+                    alt=""
+                    className={
+                      anuncio.imagen_url
+                        ? "absolute inset-0 h-full w-full object-cover"
+                        : "absolute inset-0 h-full w-full object-contain p-8"
+                    }
+                  />
+                )}
               </div>
             )}
 

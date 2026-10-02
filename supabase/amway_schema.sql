@@ -1205,3 +1205,11 @@ create policy "amway_anuncios_imagenes_admin_insert" on storage.objects for inse
 drop policy if exists "amway_anuncios_imagenes_admin_delete" on storage.objects;
 create policy "amway_anuncios_imagenes_admin_delete" on storage.objects for delete to authenticated
   using (bucket_id = 'amway-anuncios' and public.amway_es_admin());
+
+-- Vídeo opcional en el anuncio (MP4/WebM, se reproduce en bucle y sin
+-- sonido; la imagen hace de portada mientras carga).
+alter table public.amway_anuncios add column if not exists video_url text check (char_length(video_url) <= 500);
+update storage.buckets
+   set file_size_limit = 31457280,
+       allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'video/mp4', 'video/webm']
+ where id = 'amway-anuncios';

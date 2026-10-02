@@ -15,6 +15,7 @@ export interface Anuncio {
   texto: string | null;
   product_id: string | null;
   imagen_url: string | null;
+  video_url?: string | null; // ausente si la columna aún no existe
   boton_texto: string | null;
   enlace: string | null;
   evento_fecha: string | null; // YYYY-MM-DD
@@ -35,6 +36,31 @@ export const TIPO_ANUNCIO: Record<TipoAnuncio, { label: string; eyebrow: string 
 };
 
 export const ANUNCIOS_BUCKET = "amway-anuncios";
+export const VIDEO_MAX_MB = 30;
+
+// Reduce una foto antes de subirla (lado largo 1600 px, WebP o JPEG): una
+// foto de cámara de 10 MB queda en unos cientos de KB y carga al momento.
+// Si el navegador no sabe leerla (p. ej. HEIC fuera de Safari) devuelve null.
+export async function reducirImagen(file: File, ladoMax = 1600): Promise<Blob | null> {
+  let bitmap: ImageBitmap;
+  try {
+    bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+  } catch {
+    return null;
+  }
+  const escala = Math.min(1, ladoMax / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * escala);
+  canvas.height = Math.round(bitmap.height * escala);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close();
+  const aBlob = (tipo: string) => new Promise<Blob | null>((r) => canvas.toBlob(r, tipo, 0.85));
+  const webp = await aBlob("image/webp");
+  // Safari antiguo ignora WebP y devuelve PNG: entonces JPEG, que pesa menos.
+  return webp?.type === "image/webp" ? webp : aBlob("image/jpeg");
+}
 
 // Lectura pública por REST, sin sesión: así nunca arrastra la del panel.
 export async function fetchAnunciosActivos(): Promise<Anuncio[]> {

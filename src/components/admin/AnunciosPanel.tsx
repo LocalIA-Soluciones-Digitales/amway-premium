@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CalendarDays, ImagePlus, Loader2, Megaphone, Pencil, Plus, Trash2 } from "lucide-react";
+import { CalendarDays, Film, ImagePlus, Loader2, Megaphone, Pencil, Plus, Trash2 } from "lucide-react";
 import { amwayDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
 import { PRODUCTS } from "@/data/products";
@@ -9,6 +9,8 @@ import { Dialog } from "@/components/ui/Dialog";
 import {
   ANUNCIOS_BUCKET,
   TIPO_ANUNCIO,
+  VIDEO_MAX_MB,
+  reducirImagen,
   accionAnuncio,
   fechaEvento,
   horarioEvento,
@@ -146,8 +148,12 @@ function AnuncioCard({
   return (
     <div className="flex gap-4 rounded-2xl border border-carbon/8 bg-white p-4 sm:p-5">
       <div className="hidden h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-linen sm:block">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        {imagen && <img src={imagen} alt="" className={a.imagen_url ? "h-full w-full object-cover" : "h-full w-full object-contain p-2"} />}
+        {a.video_url ? (
+          <video src={a.video_url} poster={imagen ?? undefined} muted playsInline preload="metadata" className="h-full w-full object-cover" />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          imagen && <img src={imagen} alt="" className={a.imagen_url ? "h-full w-full object-cover" : "h-full w-full object-contain p-2"} />
+        )}
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
@@ -212,7 +218,8 @@ function AnuncioForm({ inicial, onSaved }: { inicial: Anuncio | null; onSaved: (
   const [inicio, setInicio] = useState(aInputFecha(inicial?.inicio ?? null));
   const [fin, setFin] = useState(aInputFecha(inicial?.fin ?? null));
   const [activo, setActivo] = useState(inicial?.activo ?? true);
-  const [subiendo, setSubiendo] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(inicial?.video_url ?? "");
+  const [subiendo, setSubiendo] = useState<"imagen" | "video" | null>(null);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -224,23 +231,44 @@ function AnuncioForm({ inicial, onSaved }: { inicial: Anuncio | null; onSaved: (
     if (p && !titulo.trim()) setTitulo(`Nuevo: ${p.name}`);
   }
 
-  async function subirImagen(file: File) {
-    setError(null);
-    if (file.size > 5 * 1024 * 1024) {
-      setError("La imagen pesa más de 5 MB. Prueba con una más ligera.");
-      return;
-    }
-    setSubiendo(true);
-    const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  async function subir(blob: Blob, ext: string): Promise<string | null> {
     const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
     const db = amwayDb();
-    const { error: e } = await db.storage.from(ANUNCIOS_BUCKET).upload(path, file, { contentType: file.type, upsert: false });
-    setSubiendo(false);
-    if (e) {
-      setError("No se pudo subir la imagen. Usa JPG, PNG o WebP de menos de 5 MB.");
+    const { error: e } = await db.storage.from(ANUNCIOS_BUCKET).upload(path, blob, { contentType: blob.type, upsert: false });
+    return e ? null : db.storage.from(ANUNCIOS_BUCKET).getPublicUrl(path).data.publicUrl;
+  }
+
+  // Cualquier foto vale: se reduce en el navegador antes de subirla.
+  async function subirImagen(file: File) {
+    setError(null);
+    setSubiendo("imagen");
+    const reducida = await reducirImagen(file);
+    if (!reducida) {
+      setSubiendo(null);
+      setError("No se puede leer esta foto. Si es del iPhone (HEIC), ábrela y guárdala como JPG, o súbela desde el propio iPhone.");
       return;
     }
-    setImagenUrl(db.storage.from(ANUNCIOS_BUCKET).getPublicUrl(path).data.publicUrl);
+    const url = await subir(reducida, reducida.type === "image/webp" ? "webp" : "jpg");
+    setSubiendo(null);
+    if (!url) return setError("No se pudo subir la imagen. Inténtalo de nuevo.");
+    setImagenUrl(url);
+  }
+
+  async function subirVideo(file: File) {
+    setError(null);
+    if (!["video/mp4", "video/webm"].includes(file.type)) {
+      setError("El vídeo tiene que ser MP4 (o WebM). Los .mov del iPhone se pueden exportar como MP4.");
+      return;
+    }
+    if (file.size > VIDEO_MAX_MB * 1024 * 1024) {
+      setError(`El vídeo pesa más de ${VIDEO_MAX_MB} MB. Recórtalo a unos segundos o expórtalo en menor calidad.`);
+      return;
+    }
+    setSubiendo("video");
+    const url = await subir(file, file.type === "video/webm" ? "webm" : "mp4");
+    setSubiendo(null);
+    if (!url) return setError("No se pudo subir el vídeo. Inténtalo de nuevo.");
+    setVideoUrl(url);
   }
 
   async function guardar(e: React.FormEvent) {
@@ -257,6 +285,7 @@ function AnuncioForm({ inicial, onSaved }: { inicial: Anuncio | null; onSaved: (
       texto: texto.trim() || null,
       product_id: tipo === "producto" && productId ? productId : null,
       imagen_url: imagenUrl || null,
+      video_url: videoUrl || null,
       boton_texto: botonTexto.trim() || null,
       enlace: enlace.trim() || null,
       evento_fecha: esEvento ? eventoFecha || null : null,
@@ -403,43 +432,83 @@ function AnuncioForm({ inicial, onSaved }: { inicial: Anuncio | null; onSaved: (
         </div>
       )}
 
-      <div>
-        <span className={label}>Imagen</span>
-        <div className="flex items-center gap-4">
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-linen">
-            {imagenPrevia ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={imagenPrevia} alt="" className={imagenUrl ? "h-full w-full object-cover" : "h-full w-full object-contain p-2"} />
-            ) : (
-              <ImagePlus size={20} className="text-stone" />
-            )}
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <span className={label}>Imagen</span>
+          <div className="flex items-center gap-4">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-linen">
+              {imagenPrevia ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={imagenPrevia} alt="" className={imagenUrl ? "h-full w-full object-cover" : "h-full w-full object-contain p-2"} />
+              ) : (
+                <ImagePlus size={20} className="text-stone" />
+              )}
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <label className={cn(btnGhost, "cursor-pointer", subiendo && "pointer-events-none opacity-50")}>
+                {subiendo === "imagen" ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
+                {subiendo === "imagen" ? "Subiendo…" : imagenUrl ? "Cambiar" : "Subir foto"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="sr-only"
+                  disabled={subiendo !== null}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) void subirImagen(f);
+                    e.target.value = "";
+                  }}
+                />
+              </label>
+              {imagenUrl && (
+                <button type="button" className="text-sm text-stone hover:text-carbon" onClick={() => setImagenUrl("")}>
+                  Quitar
+                </button>
+              )}
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <label className={cn(btnGhost, "cursor-pointer")}>
-              {subiendo ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
-              {imagenUrl ? "Cambiar imagen" : "Subir imagen"}
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/avif"
-                className="sr-only"
-                disabled={subiendo}
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) void subirImagen(f);
-                  e.target.value = "";
-                }}
-              />
-            </label>
-            {imagenUrl && (
-              <button type="button" className="text-sm text-stone hover:text-carbon" onClick={() => setImagenUrl("")}>
-                Quitar
-              </button>
-            )}
-          </div>
+          <p className="mt-1 text-xs text-stone">
+            {producto && !imagenUrl ? "Ahora se usa la foto del producto. " : ""}Cualquier foto vale: se ajusta sola. Mejor vertical o cuadrada.
+          </p>
         </div>
-        <p className="mt-1 text-xs text-stone">
-          {producto && !imagenUrl ? "Ahora se usa la foto del producto. " : ""}Mejor en vertical o cuadrada, de menos de 5 MB.
-        </p>
+
+        <div>
+          <span className={label}>Vídeo (opcional)</span>
+          <div className="flex items-center gap-4">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-linen">
+              {videoUrl ? (
+                <video src={videoUrl} muted loop autoPlay playsInline className="h-full w-full object-cover" />
+              ) : (
+                <Film size={20} className="text-stone" />
+              )}
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <label className={cn(btnGhost, "cursor-pointer", subiendo && "pointer-events-none opacity-50")}>
+                {subiendo === "video" ? <Loader2 size={14} className="animate-spin" /> : <Film size={14} />}
+                {subiendo === "video" ? "Subiendo…" : videoUrl ? "Cambiar" : "Subir vídeo"}
+                <input
+                  type="file"
+                  accept="video/mp4,video/webm"
+                  className="sr-only"
+                  disabled={subiendo !== null}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) void subirVideo(f);
+                    e.target.value = "";
+                  }}
+                />
+              </label>
+              {videoUrl && (
+                <button type="button" className="text-sm text-stone hover:text-carbon" onClick={() => setVideoUrl("")}>
+                  Quitar
+                </button>
+              )}
+            </div>
+          </div>
+          <p className="mt-1 text-xs text-stone">
+            MP4 de pocos segundos, hasta {VIDEO_MAX_MB} MB. Se ve en bucle y sin sonido, en lugar de la foto (que sale mientras carga).
+          </p>
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -501,7 +570,7 @@ function AnuncioForm({ inicial, onSaved }: { inicial: Anuncio | null; onSaved: (
       {error && <p className="rounded-xl bg-xs-red/10 px-4 py-3 text-sm text-xs-red">{error}</p>}
 
       <div className="flex justify-end">
-        <button type="submit" className={btnPrimary} disabled={guardando || subiendo}>
+        <button type="submit" className={btnPrimary} disabled={guardando || subiendo !== null}>
           {guardando && <Loader2 size={14} className="animate-spin" />}
           {inicial ? "Guardar cambios" : "Publicar anuncio"}
         </button>
