@@ -16,8 +16,6 @@ const CATEGORY_LINKS = [
   { href: "/belleza", label: "Belleza", tagline: "Artistry: piel y maquillaje" },
   { href: "/cuidado-personal", label: "Cuidado personal", tagline: "Satinique, g&h y glister" },
   { href: "/hogar", label: "Hogar", tagline: "Agua, aire y cocina" },
-  { href: "/espring", label: "eSpring", tagline: "Agua purificada al instante" },
-  { href: "/xs-energy", label: "XS Energy", tagline: "Power Drink y nutrición deportiva" },
 ];
 
 const TOP_LINKS = [
@@ -29,7 +27,9 @@ const TOP_LINKS = [
 
 const CONTACT_HREF = "/sobre-nosotros#contacto";
 
-const CATEGORY_HREFS = new Set(CATEGORY_LINKS.map((l) => l.href));
+// eSpring and XS Energy live inside Hogar and Nutrición, so they still count
+// as category routes even though the menu doesn't list them.
+const CATEGORY_HREFS = new Set([...CATEGORY_LINKS.map((l) => l.href), "/espring", "/xs-energy"]);
 
 // Routes that open on a full-bleed photographic hero dark enough for light
 // header text; everywhere else the header starts directly in its light state.
