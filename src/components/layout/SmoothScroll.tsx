@@ -1,7 +1,8 @@
 "use client";
 
 import { ReactLenis, useLenis } from "lenis/react";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 // Keeps GSAP ScrollTrigger in sync with Lenis's smoothed scroll position,
@@ -39,6 +40,43 @@ function LenisGsapBridge() {
   return null;
 }
 
+// Lenis keeps its own scroll target, so after a client-side navigation it
+// could carry the previous page's position over (e.g. arriving at the
+// bottom of /nutricion after scrolling down /belleza). Every new page opens
+// at the top, except back/forward (the browser restores where you were) and
+// links to an anchor (#contacto…), which scroll to it themselves.
+function ScrollToTopOnNavigate() {
+  const lenis = useLenis();
+  const pathname = usePathname();
+  const fromHistory = useRef(false);
+  const first = useRef(true);
+
+  useEffect(() => {
+    const onPopState = () => {
+      fromHistory.current = true;
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    if (fromHistory.current) {
+      fromHistory.current = false;
+      return;
+    }
+    if (window.location.hash) return;
+    lenis?.scrollTo(0, { immediate: true, force: true });
+    window.scrollTo(0, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on page change
+  }, [pathname]);
+
+  return null;
+}
+
 export function SmoothScroll({ children }: { children: ReactNode }) {
   return (
     <ReactLenis
@@ -59,6 +97,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       }}
     >
       <LenisGsapBridge />
+      <ScrollToTopOnNavigate />
       {children}
     </ReactLenis>
   );
