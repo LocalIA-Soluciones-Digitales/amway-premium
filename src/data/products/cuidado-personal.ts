@@ -7,6 +7,7 @@ export const cuidadoPersonalProducts: Product[] = [
     name: "Protector Solar Corporal UV FPS 50+ PA++++ g&h™ Protect",
     brand: "g&h",
     category: "cuidado-personal",
+    alsoIn: ["belleza"],
     subcategory: "Cuidado corporal",
     description:
       "Protector solar FPS 50+ PA++++ ligero y de absorción rápida con ingredientes naturales que ayudan a proteger a toda la familia de los dañinos rayos UVB/UVA y de los agresores externos.",

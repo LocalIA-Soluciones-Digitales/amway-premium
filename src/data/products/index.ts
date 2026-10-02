@@ -1,4 +1,4 @@
-import type { CategorySlug, Product } from "../types";
+import { inCategory, type CategorySlug, type Product } from "../types";
 import { nutricionProducts } from "./nutricion";
 import { xsEnergyProducts } from "./xs-energy";
 import { bellezaProducts } from "./belleza";
@@ -14,13 +14,13 @@ export const PRODUCTS: Product[] = [
 ];
 
 export function getProductsByCategory(category: CategorySlug): Product[] {
-  return PRODUCTS.filter((p) => p.category === category);
+  return PRODUCTS.filter((p) => inCategory(p, category));
 }
 
 export function getSubcategories(category: CategorySlug): string[] {
   const set = new Set<string>();
   for (const p of PRODUCTS) {
-    if (p.category === category) set.add(p.subcategory);
+    if (inCategory(p, category)) set.add(p.subcategory);
   }
   return Array.from(set);
 }
@@ -28,7 +28,7 @@ export function getSubcategories(category: CategorySlug): string[] {
 export function getBrands(category?: CategorySlug): string[] {
   const set = new Set<string>();
   for (const p of PRODUCTS) {
-    if (!category || p.category === category) set.add(p.brand);
+    if (!category || inCategory(p, category)) set.add(p.brand);
   }
   return Array.from(set);
 }

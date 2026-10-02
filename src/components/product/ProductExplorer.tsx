@@ -58,12 +58,17 @@ export function ProductExplorer({
 
   const categoryCounts = useMemo(() => {
     const counts: Partial<Record<CategorySlug, number>> = {};
-    for (const p of visible) counts[groupOf(p.category)] = (counts[groupOf(p.category)] ?? 0) + 1;
+    for (const p of visible) {
+      for (const c of new Set([p.category, ...(p.alsoIn ?? [])].map(groupOf))) counts[c] = (counts[c] ?? 0) + 1;
+    }
     return counts;
   }, [visible]);
 
   const inCategory = useMemo(
-    () => (category ? visible.filter((p) => groupOf(p.category) === category) : visible),
+    () =>
+      category
+        ? visible.filter((p) => [p.category, ...(p.alsoIn ?? [])].some((c) => groupOf(c) === category))
+        : visible,
     [visible, category]
   );
 

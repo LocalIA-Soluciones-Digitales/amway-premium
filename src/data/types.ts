@@ -23,6 +23,8 @@ export interface Product {
   name: string;
   brand: string;
   category: CategorySlug;
+  // Otras categorías en las que amway.es también lo muestra.
+  alsoIn?: CategorySlug[];
   subcategory: string;
   description: string;
   variants: ProductVariant[];
@@ -31,6 +33,10 @@ export interface Product {
   flagship?: FlagshipKey;
   // Page in the printed catalogue; absent for products added from amway.com.
   page?: number;
+}
+
+export function inCategory(p: Product, category: CategorySlug): boolean {
+  return p.category === category || (p.alsoIn?.includes(category) ?? false);
 }
 
 export function priceFrom(p: Product): number | null {
