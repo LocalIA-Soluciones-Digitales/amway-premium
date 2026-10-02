@@ -13,7 +13,7 @@ import { SolicitudModal } from "@/components/catalog/SolicitudModal";
 const CATEGORY_TILES: { slug: CategorySlug; image: string }[] = [
   { slug: "nutricion", image: "/images/editorial/nutricion-botanico.webp" },
   { slug: "belleza", image: "/images/editorial/belleza-editorial.webp" },
-  { slug: "cuidado-personal", image: "/images/editorial/cuidado-personal.webp" },
+  { slug: "cuidado-personal", image: "/images/editorial/cuidado-personal-gh.webp" },
   { slug: "hogar", image: "/images/espring/kitchen-lifestyle.webp" },
 ];
 

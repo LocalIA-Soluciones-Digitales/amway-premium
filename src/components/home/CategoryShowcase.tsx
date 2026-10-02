@@ -14,7 +14,7 @@ const TILES: {
 }[] = [
   { slug: "nutricion", image: "/images/editorial/nutricion-botanico.webp", span: "sm:col-span-7", position: "object-center" },
   { slug: "belleza", image: "/images/editorial/belleza-editorial.webp", span: "sm:col-span-5", position: "object-center" },
-  { slug: "cuidado-personal", image: "/images/editorial/cuidado-personal.webp", span: "sm:col-span-5", position: "object-center" },
+  { slug: "cuidado-personal", image: "/images/editorial/cuidado-personal-gh.webp", span: "sm:col-span-5", position: "object-center" },
   { slug: "hogar", image: "/images/espring/kitchen-lifestyle.webp", span: "sm:col-span-7", position: "object-[40%_65%]" },
 ];
 

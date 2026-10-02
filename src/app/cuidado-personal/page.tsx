@@ -20,7 +20,7 @@ export default function CuidadoPersonalPage() {
         eyebrow="Satinique™ · g&h™ · glister™"
         title="Cuidado diario, de pies a cabeza."
         description="Cabello, cuerpo e higiene bucal con fórmulas de origen vegetal: Satinique™ para el cabello, g&h™ para el cuerpo y glister™ para una sonrisa sana."
-        photo="/images/editorial/cuidado-personal.webp"
+        photo="/images/editorial/cuidado-personal-gh.webp"
         accent="gold"
         waMessage="Hola, quiero información sobre los productos de cuidado personal."
       />
