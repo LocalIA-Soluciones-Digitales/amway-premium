@@ -1,6 +1,22 @@
 "use client";
 
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  ComposedChart,
+  Line,
+  Pie,
+  PieChart,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { cn } from "@/lib/utils";
 
 // One brand hue for single-series magnitude charts (the title names the
@@ -163,5 +179,159 @@ export function Funnel({ steps }: { steps: { label: string; value: number }[] })
         );
       })}
     </ol>
+  );
+}
+
+// Mini tendencia sin ejes, para acompañar una cifra.
+export function Sparkline({ data, height = 36, color = CHART_COLOR }: { data: number[]; height?: number; color?: string }) {
+  const id = `spark-${color.replace(/\W/g, "")}`;
+  if (data.length < 2 || data.every((v) => v === 0)) return <div style={{ height }} />;
+  return (
+    <div style={{ height }} aria-hidden>
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data.map((value, i) => ({ i, value }))} margin={{ top: 2, right: 0, bottom: 2, left: 0 }}>
+          <defs>
+            <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={color} stopOpacity={0.2} />
+              <stop offset="100%" stopColor={color} stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <Area type="monotone" dataKey="value" stroke={color} strokeWidth={1.5} fill={`url(#${id})`} isAnimationActive={false} />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+export interface ForecastPoint {
+  label: string;
+  ventas: number | null;
+  beneficio: number | null;
+  prevision: number | null;
+}
+
+// Ventas reales (barras), beneficio (línea) y previsión (barras rayadas)
+// en la misma escala de euros.
+export function ForecastChart({
+  data,
+  format,
+  height = 280,
+}: {
+  data: ForecastPoint[];
+  format: (n: number) => string;
+  height?: number;
+}) {
+  const firstForecast = data.find((d) => d.prevision != null)?.label;
+  return (
+    <div style={{ height }} role="img" aria-label="Gráfica: ventas, beneficio y previsión por semana">
+      <ResponsiveContainer width="100%" height="100%">
+        <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -8 }} barCategoryGap="24%">
+          <defs>
+            <pattern id="rayas-prevision" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <rect width="6" height="6" fill="rgba(31,68,56,0.10)" />
+              <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(31,68,56,0.45)" strokeWidth="2" />
+            </pattern>
+          </defs>
+          <CartesianGrid stroke={GRID} vertical={false} />
+          <XAxis dataKey="label" tick={{ fill: AXIS, fontSize: 11 }} tickLine={false} axisLine={false} minTickGap={8} />
+          <YAxis tick={{ fill: AXIS, fontSize: 11 }} tickLine={false} axisLine={false} width={60} tickFormatter={format} allowDecimals={false} />
+          {firstForecast && <ReferenceLine x={firstForecast} stroke="rgba(28,26,22,0.18)" strokeDasharray="3 3" />}
+          <Tooltip
+            cursor={{ fill: "rgba(28,26,22,0.04)" }}
+            content={({ active, payload, label }) => {
+              if (!active || !payload?.length) return null;
+              const d = payload[0].payload as ForecastPoint;
+              return (
+                <div className="rounded-xl border border-carbon/[0.08] bg-white px-3 py-2 text-xs shadow-[0_10px_30px_rgba(28,26,22,0.12)]">
+                  <p className="text-stone">Semana del {String(label)}</p>
+                  {d.ventas != null && (
+                    <p className="mt-1 flex justify-between gap-4">
+                      <span className="text-stone">Ventas</span>
+                      <span className="font-semibold tabular-nums text-carbon">{format(d.ventas)}</span>
+                    </p>
+                  )}
+                  {d.beneficio != null && (
+                    <p className="flex justify-between gap-4">
+                      <span className="text-stone">Beneficio</span>
+                      <span className="font-semibold tabular-nums text-gold">{format(d.beneficio)}</span>
+                    </p>
+                  )}
+                  {d.prevision != null && (
+                    <p className="mt-1 flex justify-between gap-4">
+                      <span className="text-stone">Previsión</span>
+                      <span className="font-semibold tabular-nums text-forest">{format(d.prevision)}</span>
+                    </p>
+                  )}
+                </div>
+              );
+            }}
+          />
+          <Bar dataKey="ventas" name="Ventas" fill={CHART_COLOR} radius={[4, 4, 0, 0]} maxBarSize={36} />
+          <Bar dataKey="prevision" name="Previsión" fill="url(#rayas-prevision)" radius={[4, 4, 0, 0]} maxBarSize={36} />
+          <Line
+            type="monotone"
+            dataKey="beneficio"
+            name="Beneficio"
+            stroke="#b8905a"
+            strokeWidth={2}
+            dot={false}
+            activeDot={{ r: 4, stroke: "#fff", strokeWidth: 2, fill: "#b8905a" }}
+            connectNulls={false}
+          />
+        </ComposedChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+// Anillo de reparto (p. ej. a dónde va cada euro vendido).
+export function Donut({
+  items,
+  format,
+  center,
+  size = 180,
+}: {
+  items: { label: string; value: number; color: string }[];
+  format: (n: number) => string;
+  center?: { value: string; label: string };
+  size?: number;
+}) {
+  const data = items.filter((i) => i.value > 0);
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }} role="img" aria-label="Gráfica de reparto">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={data.length ? data : [{ label: "—", value: 1, color: "rgba(28,26,22,0.06)" }]}
+            dataKey="value"
+            nameKey="label"
+            innerRadius="70%"
+            outerRadius="100%"
+            paddingAngle={data.length > 1 ? 2 : 0}
+            stroke="none"
+            isAnimationActive={false}
+          >
+            {(data.length ? data : [{ color: "rgba(28,26,22,0.06)" }]).map((d, i) => (
+              <Cell key={i} fill={d.color} />
+            ))}
+          </Pie>
+          {data.length > 0 && (
+            <Tooltip
+              content={({ active, payload }) =>
+                active && payload?.length ? (
+                  <TooltipBox label={String(payload[0].name)} value={format(Number(payload[0].value))} />
+                ) : null
+              }
+            />
+          )}
+        </PieChart>
+      </ResponsiveContainer>
+      {center && (
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
+          <span className="font-display text-xl leading-none tabular-nums text-carbon">{center.value}</span>
+          <span className="mt-1 text-[10px] uppercase tracking-wider text-stone">{center.label}</span>
+        </div>
+      )}
+    </div>
   );
 }

@@ -175,10 +175,13 @@ export function PedidoDetalle({
   p,
   onUpdate,
   onDelete,
+  compact,
 }: {
   p: Pedido;
   onUpdate: (c: Partial<Pedido>) => void;
   onDelete: () => void;
+  /** Una sola columna, para el panel lateral. */
+  compact?: boolean;
 }) {
   const [seguimiento, setSeguimiento] = useState(p.seguimiento ?? "");
   const [copiado, setCopiado] = useState(false);
@@ -196,7 +199,12 @@ export function PedidoDetalle({
   }
 
   return (
-    <div className="grid gap-6 border-t border-carbon/[0.07] px-4 py-5 sm:px-5 lg:grid-cols-[1fr_20rem]">
+    <div
+      className={cn(
+        "grid gap-6 px-4 py-5 sm:px-5",
+        compact ? "gap-5" : "border-t border-carbon/[0.07] lg:grid-cols-[1fr_20rem]"
+      )}
+    >
       <div className="min-w-0">
         {/* Progreso del pedido */}
         {!cancelado && p.estado !== "pendiente" && (

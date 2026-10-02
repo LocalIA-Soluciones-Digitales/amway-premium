@@ -1,30 +1,32 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
 import type { Session } from "@supabase/supabase-js";
-import { Check, Loader2, PackageSearch, Pencil, RotateCcw, Search } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  ChevronsDownUp,
+  ChevronsUpDown,
+  EyeOff,
+  LayoutGrid,
+  List,
+  Loader2,
+  PackageSearch,
+  Pencil,
+  RotateCcw,
+  Search,
+  X,
+} from "lucide-react";
 import { PRODUCTS } from "@/data/products";
 import { productImageSrc, variantPriceEur, type Product } from "@/data/types";
 import { amwayDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
 import { Dialog } from "@/components/ui/Dialog";
 import { CATEGORIA_LABEL } from "./report-data";
-import {
-  Badge,
-  Empty,
-  Loading,
-  PanelHeader,
-  Segmented,
-  btnGhost,
-  btnPrimary,
-  eur,
-  inputClass,
-  revalidarTienda,
-  type ProductoAjusteRow,
-} from "./shared";
+import { Badge, Empty, Loading, btnGhost, btnPrimary, eur, inputClass, revalidarTienda, type ProductoAjusteRow } from "./shared";
 
-type Filtro = "todos" | "agotados" | "ocultos" | "ajustes" | "sin-coste";
+type Filtro = "todos" | "en-web" | "agotados" | "ocultos" | "poco-stock" | "sin-coste";
 
 function emptyRow(productId: string): ProductoAjusteRow {
   return { product_id: productId, precios_eur: {}, costes_eur: {}, agotado: false, oculto: false, stock: null };
@@ -53,6 +55,7 @@ function margen(p: Product, row: ProductoAjusteRow, i: number): number | null {
 type Vista = "lista" | "tarjetas";
 type Orden = "nombre" | "precio" | "margen" | "stock";
 const VISTA_KEY = "amway_premium_admin_vista_productos";
+const PLEGADOS_KEY = "amway_premium_admin_gamas_plegadas";
 
 function minPrecio(p: Product, r: ProductoAjusteRow) {
   const ps = p.variants.map((_, i) => precioFinal(p, r, i)).filter((x): x is number => x != null);
@@ -64,24 +67,54 @@ function minMargen(p: Product, r: ProductoAjusteRow) {
   return ms.length ? Math.min(...ms) : null;
 }
 
-type AccionBloque = "agotar" | "reponer" | "ocultar" | "mostrar" | "precio" | "margen";
+const sinCoste = (p: Product, r: ProductoAjusteRow) => p.variants.some((_, i) => r.costes_eur[String(i)] == null);
+const pocoStock = (r: ProductoAjusteRow) => !r.agotado && r.stock != null && r.stock <= 3;
 
-const ACCIONES_BLOQUE: [AccionBloque, string][] = [
-  ["agotar", "Marcar agotado"],
-  ["reponer", "Marcar disponible"],
-  ["ocultar", "Ocultar"],
-  ["mostrar", "Mostrar"],
-  ["precio", "Ajustar precio %"],
-  ["margen", "Fijar margen %"],
-];
+// Color de cada gama (solo un punto de referencia visual).
+const GAMA_COLOR: Record<string, string> = {
+  Nutrilite: "#1f4438",
+  XS: "#e8384f",
+  Artistry: "#b8905a",
+  Satinique: "#9b6a8c",
+  "g&h": "#5f8aa0",
+  Glister: "#3d9a8b",
+  eSpring: "#2fb2d9",
+  Atmosphere: "#7d93a6",
+  iCook: "#8a6a48",
+  "Amway Home": "#3f6b7d",
+  Amway: "#8a8271",
+};
+
+// Gamas ordenadas por nº de productos (las grandes primero).
+const GAMAS: { nombre: string; total: number }[] = (() => {
+  const m = new Map<string, number>();
+  for (const p of PRODUCTS) m.set(p.brand, (m.get(p.brand) ?? 0) + 1);
+  return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es")).map(([nombre, total]) => ({ nombre, total }));
+})();
+
+const CATEGORIAS = Array.from(new Set(PRODUCTS.map((p) => p.category)));
+
+type AccionBloque = "agotar" | "reponer" | "ocultar" | "mostrar";
+
+function leerPlegados(): Set<string> {
+  try {
+    const v = JSON.parse(localStorage.getItem(PLEGADOS_KEY) ?? "[]");
+    return new Set(Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : []);
+  } catch {
+    return new Set();
+  }
+}
 
 export function ProductosPanel({ session }: { session: Session }) {
   const [rows, setRows] = useState<Map<string, ProductoAjusteRow> | null>(null);
   const [query, setQuery] = useState("");
+  const [gama, setGama] = useState("");
   const [categoria, setCategoria] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todos");
   const [vista, setVista] = useState<Vista>("lista");
   const [orden, setOrden] = useState<Orden>("nombre");
+  const [agrupar, setAgrupar] = useState(true);
+  const [plegados, setPlegados] = useState<Set<string>>(new Set());
   const [seleccion, setSeleccion] = useState<Set<string>>(new Set());
   const [editando, setEditando] = useState<Product | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -94,12 +127,22 @@ export function ProductosPanel({ session }: { session: Session }) {
     } catch {
       // storage blocked: keep default
     }
+    setPlegados(leerPlegados());
   }, []);
 
   function cambiarVista(v: Vista) {
     setVista(v);
     try {
       localStorage.setItem(VISTA_KEY, v);
+    } catch {
+      // storage blocked
+    }
+  }
+
+  function guardarPlegados(next: Set<string>) {
+    setPlegados(next);
+    try {
+      localStorage.setItem(PLEGADOS_KEY, JSON.stringify([...next]));
     } catch {
       // storage blocked
     }
@@ -166,34 +209,55 @@ export function ProductosPanel({ session }: { session: Session }) {
 
   const guardar = useCallback((row: ProductoAjusteRow) => guardarVarios([row]), [guardarVarios]);
 
-  const categorias = useMemo(() => Array.from(new Set(PRODUCTS.map((p) => p.category))), []);
-
+  // Las cifras salen solo del catálogo actual: la base de datos conserva
+  // ajustes de productos antiguos que ya no existen y no deben contar.
   const resumen = useMemo(() => {
-    const all = rows ? Array.from(rows.values()) : [];
     const margenes = PRODUCTS.map((p) => minMargen(p, rowOf(p.id))).filter((x): x is number => x != null);
+    const cuenta = (f: (p: Product, r: ProductoAjusteRow) => boolean) => PRODUCTS.filter((p) => f(p, rowOf(p.id))).length;
     return {
-      agotados: all.filter((r) => r.agotado).length,
-      ocultos: all.filter((r) => r.oculto).length,
-      sinCoste: PRODUCTS.filter((p) => p.variants.some((_, i) => rowOf(p.id).costes_eur[String(i)] == null)).length,
-      pocoStock: all.filter((r) => !r.agotado && r.stock != null && r.stock <= 3).length,
+      total: PRODUCTS.length,
+      enWeb: cuenta((_, r) => !r.oculto && !r.agotado),
+      agotados: cuenta((_, r) => r.agotado),
+      ocultos: cuenta((_, r) => r.oculto),
+      pocoStock: cuenta((_, r) => pocoStock(r)),
+      sinCoste: cuenta(sinCoste),
       margenMedio: margenes.length ? margenes.reduce((a, b) => a + b, 0) / margenes.length : null,
     };
-  }, [rows, rowOf]);
+  }, [rowOf]);
+
+  const pasaFiltro = useCallback(
+    (p: Product) => {
+      const r = rowOf(p.id);
+      if (filtro === "en-web") return !r.oculto && !r.agotado;
+      if (filtro === "agotados") return r.agotado;
+      if (filtro === "ocultos") return r.oculto;
+      if (filtro === "poco-stock") return pocoStock(r);
+      if (filtro === "sin-coste") return sinCoste(p, r);
+      return true;
+    },
+    [rowOf, filtro]
+  );
+
+  const coincide = useCallback(
+    (p: Product) => {
+      const q = query.trim().toLowerCase();
+      if (categoria && p.category !== categoria) return false;
+      return !q || `${p.name} ${p.brand} ${p.subcategory} ${p.variants.map((v) => v.sku ?? "").join(" ")}`.toLowerCase().includes(q);
+    },
+    [query, categoria]
+  );
+
+  // Productos por gama con los filtros de búsqueda/estado (sin el de gama),
+  // para que los chips digan cuántos hay en cada una.
+  const porGama = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const p of PRODUCTS) if (coincide(p) && pasaFiltro(p)) m.set(p.brand, (m.get(p.brand) ?? 0) + 1);
+    return m;
+  }, [coincide, pasaFiltro]);
 
   const lista = useMemo(() => {
     if (!rows) return [];
-    const q = query.trim().toLowerCase();
-    const l = PRODUCTS.filter((p) => {
-      const r = rowOf(p.id);
-      if (categoria && p.category !== categoria) return false;
-      if (q && !`${p.name} ${p.brand} ${p.subcategory} ${p.variants.map((v) => v.sku ?? "").join(" ")}`.toLowerCase().includes(q))
-        return false;
-      if (filtro === "agotados") return r.agotado;
-      if (filtro === "ocultos") return r.oculto;
-      if (filtro === "ajustes") return Object.keys(r.precios_eur).length > 0 || r.stock != null;
-      if (filtro === "sin-coste") return p.variants.some((_, i) => r.costes_eur[String(i)] == null);
-      return true;
-    });
+    const l = PRODUCTS.filter((p) => (!gama || p.brand === gama) && coincide(p) && pasaFiltro(p));
     const num = (x: number | null, vacio: number) => (x == null ? vacio : x);
     return [...l].sort((a, b) => {
       const ra = rowOf(a.id);
@@ -203,64 +267,35 @@ export function ProductosPanel({ session }: { session: Session }) {
       if (orden === "stock") return num(ra.stock, Infinity) - num(rb.stock, Infinity);
       return a.name.localeCompare(b.name, "es");
     });
-  }, [rows, rowOf, query, categoria, filtro, orden]);
+  }, [rows, rowOf, gama, coincide, pasaFiltro, orden]);
+
+  const grupos = useMemo(() => {
+    if (!agrupar) return [{ nombre: "", productos: lista }];
+    return GAMAS.map((g) => ({ nombre: g.nombre, productos: lista.filter((p) => p.brand === g.nombre) })).filter((g) => g.productos.length);
+  }, [agrupar, lista]);
 
   const seleccionados = lista.filter((p) => seleccion.has(p.id));
-  const todosMarcados = lista.length > 0 && seleccionados.length === lista.length;
+  const hayBusqueda = !!(query || gama || categoria || filtro !== "todos");
 
-  function toggleSel(id: string) {
+  function toggleSel(ids: string[], on: boolean) {
     setSeleccion((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      for (const id of ids) {
+        if (on) next.add(id);
+        else next.delete(id);
+      }
       return next;
     });
   }
 
-  async function enBloque(accion: AccionBloque) {
-    let nuevas: ProductoAjusteRow[] = [];
-    let saltados = 0;
-    if (accion === "precio") {
-      const v = prompt("¿Cuánto quieres subir (+) o bajar (−) el precio de venta? En %, por ejemplo 5 o -10");
-      const pct = Number(v?.replace(",", "."));
-      if (!v || !Number.isFinite(pct) || pct <= -90 || pct > 300) return;
-      nuevas = seleccionados.map((p) => {
-        const r = rowOf(p.id);
-        const precios = { ...r.precios_eur };
-        p.variants.forEach((_, i) => {
-          const actual = precioFinal(p, r, i);
-          if (actual != null) precios[String(i)] = Math.round(actual * (1 + pct / 100) * 100) / 100;
-        });
-        return { ...r, precios_eur: precios };
-      });
-    } else if (accion === "margen") {
-      const v = prompt("Margen objetivo sobre el precio de venta, en % (por ejemplo 30). Solo cambia formatos con coste.");
-      const m = Number(v?.replace(",", "."));
-      if (!v || !Number.isFinite(m) || m <= 0 || m >= 95) return;
-      for (const p of seleccionados) {
-        const r = rowOf(p.id);
-        const precios = { ...r.precios_eur };
-        let cambiado = false;
-        p.variants.forEach((_, i) => {
-          const coste = r.costes_eur[String(i)];
-          if (coste == null) return;
-          precios[String(i)] = Math.round((coste / (1 - m / 100)) * 100) / 100;
-          cambiado = true;
-        });
-        if (cambiado) nuevas.push({ ...r, precios_eur: precios });
-        else saltados++;
-      }
-    } else {
-      const patch: Partial<ProductoAjusteRow> =
-        accion === "agotar"
-          ? { agotado: true }
-          : accion === "reponer"
-            ? { agotado: false }
-            : accion === "ocultar"
-              ? { oculto: true }
-              : { oculto: false };
-      nuevas = seleccionados.map((p) => ({ ...rowOf(p.id), ...patch }));
-    }
+  function togglePlegado(nombre: string) {
+    const next = new Set(plegados);
+    if (next.has(nombre)) next.delete(nombre);
+    else next.add(nombre);
+    guardarPlegados(next);
+  }
+
+  async function aplicar(nuevas: ProductoAjusteRow[], saltados = 0) {
     const ok = await guardarVarios(nuevas);
     if (ok) {
       const n = nuevas.length;
@@ -269,92 +304,216 @@ export function ProductosPanel({ session }: { session: Session }) {
     }
   }
 
-  const kpis: { label: string; value: number; f: Filtro; tone: string }[] = [
-    { label: "Agotados", value: resumen.agotados, f: "agotados", tone: resumen.agotados ? "text-red-600" : "text-carbon" },
-    { label: "Ocultos", value: resumen.ocultos, f: "ocultos", tone: "text-carbon" },
-    { label: "Poco stock (≤ 3)", value: resumen.pocoStock, f: "ajustes", tone: resumen.pocoStock ? "text-amber-700" : "text-carbon" },
-    { label: "Sin coste", value: resumen.sinCoste, f: "sin-coste", tone: "text-carbon" },
+  function enBloque(accion: AccionBloque) {
+    const patch: Partial<ProductoAjusteRow> =
+      accion === "agotar" ? { agotado: true } : accion === "reponer" ? { agotado: false } : accion === "ocultar" ? { oculto: true } : { oculto: false };
+    void aplicar(seleccionados.map((p) => ({ ...rowOf(p.id), ...patch })));
+  }
+
+  function ajustarPrecio(pct: number) {
+    void aplicar(
+      seleccionados.map((p) => {
+        const r = rowOf(p.id);
+        const precios = { ...r.precios_eur };
+        p.variants.forEach((_, i) => {
+          const actual = precioFinal(p, r, i);
+          if (actual != null) precios[String(i)] = Math.round(actual * (1 + pct / 100) * 100) / 100;
+        });
+        return { ...r, precios_eur: precios };
+      })
+    );
+  }
+
+  function fijarMargen(m: number) {
+    const nuevas: ProductoAjusteRow[] = [];
+    let saltados = 0;
+    for (const p of seleccionados) {
+      const r = rowOf(p.id);
+      const precios = { ...r.precios_eur };
+      let cambiado = false;
+      p.variants.forEach((_, i) => {
+        const coste = r.costes_eur[String(i)];
+        if (coste == null) return;
+        precios[String(i)] = Math.round((coste / (1 - m / 100)) * 100) / 100;
+        cambiado = true;
+      });
+      if (cambiado) nuevas.push({ ...r, precios_eur: precios });
+      else saltados++;
+    }
+    void aplicar(nuevas, saltados);
+  }
+
+  const kpis: { f: Filtro; label: string; value: ReactNode; tone?: string }[] = [
+    { f: "en-web", label: "A la venta en la web", value: resumen.enWeb },
+    { f: "agotados", label: "Agotados", value: resumen.agotados, tone: resumen.agotados ? "text-red-600" : undefined },
+    { f: "ocultos", label: "Ocultos en la web", value: resumen.ocultos },
+    { f: "poco-stock", label: "Poco stock (≤ 3)", value: resumen.pocoStock, tone: resumen.pocoStock ? "text-amber-700" : undefined },
+    { f: "sin-coste", label: "Sin coste", value: resumen.sinCoste, tone: resumen.sinCoste ? "text-amber-700" : undefined },
   ];
+  const pctWeb = resumen.total ? (resumen.enWeb / resumen.total) * 100 : 0;
+  const todoPlegado = grupos.length > 0 && grupos.every((g) => plegados.has(g.nombre));
 
   return (
-    <div className="pb-20">
-      <PanelHeader
-        title="Productos y precios"
-        description="Disponibilidad al instante, precios editables en la propia lista y cambios en bloque. La tienda se actualiza sola."
-        actions={
-          <Segmented
-            value={vista}
-            onChange={cambiarVista}
-            options={[
-              { value: "lista", label: "Lista" },
-              { value: "tarjetas", label: "Tarjetas" },
-            ]}
-          />
-        }
-      />
-
-      {rows && (
-        <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-5">
-          {kpis.map((k) => (
+    <div className="pb-24">
+      {/* Cabecera */}
+      <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div className="min-w-0">
+          <h2 className="font-display text-[1.75rem] leading-tight text-carbon">Productos</h2>
+          <p className="mt-1 text-sm text-stone">
+            <span className="font-medium text-carbon">{resumen.total} productos</span> en {GAMAS.length} gamas. Precio, coste y stock se
+            editan en la propia lista; la tienda se actualiza sola.
+          </p>
+        </div>
+        <div className="flex items-center gap-1 rounded-full border border-carbon/[0.07] bg-white p-1">
+          {(
+            [
+              ["lista", "Lista", List],
+              ["tarjetas", "Tarjetas", LayoutGrid],
+            ] as const
+          ).map(([v, l, Icon]) => (
             <button
-              key={k.label}
+              key={v}
               type="button"
-              onClick={() => setFiltro(filtro === k.f ? "todos" : k.f)}
+              onClick={() => cambiarVista(v)}
+              aria-pressed={vista === v}
               className={cn(
-                "rounded-2xl border bg-white px-4 py-3 text-left transition hover:border-carbon/20",
-                filtro === k.f ? "border-carbon/40" : "border-carbon/[0.07]"
+                "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition",
+                vista === v ? "bg-carbon text-cream" : "text-stone hover:text-carbon"
               )}
             >
-              <p className={cn("font-display text-2xl tabular-nums", k.tone)}>{k.value}</p>
-              <p className="text-xs text-stone">{k.label}</p>
+              <Icon size={13} /> {l}
             </button>
           ))}
-          <div className="col-span-2 rounded-2xl border border-carbon/[0.07] bg-white px-4 py-3 sm:col-span-1">
-            <p className="font-display text-2xl tabular-nums text-carbon">
+        </div>
+      </div>
+
+      {/* Cifras: cada una filtra la lista */}
+      {rows && (
+        <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+          {kpis.map((k, i) => {
+            const activo = filtro === k.f;
+            return (
+              <button
+                key={k.f}
+                type="button"
+                onClick={() => setFiltro(activo ? "todos" : k.f)}
+                aria-pressed={activo}
+                className={cn(
+                  "relative overflow-hidden rounded-2xl border px-4 py-3.5 text-left transition",
+                  activo ? "border-carbon bg-carbon text-cream" : "border-carbon/[0.07] bg-white hover:border-carbon/20",
+                  i === 0 && "col-span-2 sm:col-span-1"
+                )}
+              >
+                <p className={cn("font-display text-[1.65rem] leading-none tabular-nums", !activo && (k.tone ?? "text-carbon"))}>
+                  {k.value}
+                  {i === 0 && <span className={cn("ml-1 text-sm", activo ? "text-cream/60" : "text-stone")}>/ {resumen.total}</span>}
+                </p>
+                <p className={cn("mt-1.5 text-xs", activo ? "text-cream/70" : "text-stone")}>{k.label}</p>
+                {i === 0 && (
+                  <span className="absolute inset-x-0 bottom-0 h-1 bg-carbon/[0.05]">
+                    <span className="block h-full bg-forest" style={{ width: `${pctWeb}%` }} />
+                  </span>
+                )}
+              </button>
+            );
+          })}
+          <div className="col-span-2 rounded-2xl border border-carbon/[0.07] bg-white px-4 py-3.5 sm:col-span-1">
+            <p className="font-display text-[1.65rem] leading-none tabular-nums text-carbon">
               {resumen.margenMedio == null ? "—" : `${resumen.margenMedio.toFixed(0)} %`}
             </p>
-            <p className="text-xs text-stone">Margen medio (con coste)</p>
+            <p className="mt-1.5 text-xs text-stone">Margen medio</p>
           </div>
         </div>
       )}
 
-      <div className="mb-4 flex flex-col gap-3 xl:flex-row xl:items-center">
-        <div className="relative flex-1">
-          <Search size={15} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-stone" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar por nombre, marca o SKU…"
-            className={cn(inputClass, "w-full pl-10")}
-          />
+      {/* Búsqueda, orden y gamas */}
+      <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-carbon/[0.07] bg-white p-3">
+        <div className="flex flex-col gap-2 lg:flex-row">
+          <div className="relative flex-1">
+            <Search size={15} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-stone" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Buscar por nombre, gama o SKU…"
+              className={cn(inputClass, "w-full border-transparent bg-cream/60 pl-10 focus:bg-white")}
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="Borrar búsqueda"
+                className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-stone hover:bg-cream hover:text-carbon"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <select value={categoria} onChange={(e) => setCategoria(e.target.value)} className={cn(inputClass, "flex-1 lg:flex-none")} aria-label="Categoría">
+              <option value="">Todas las categorías</option>
+              {CATEGORIAS.map((c) => (
+                <option key={c} value={c}>
+                  {CATEGORIA_LABEL[c] ?? c}
+                </option>
+              ))}
+            </select>
+            <select value={orden} onChange={(e) => setOrden(e.target.value as Orden)} className={cn(inputClass, "flex-1 lg:flex-none")} aria-label="Ordenar">
+              <option value="nombre">Ordenar por nombre</option>
+              <option value="precio">Por precio</option>
+              <option value="margen">Por margen (menor primero)</option>
+              <option value="stock">Por stock (menor primero)</option>
+            </select>
+            <button
+              type="button"
+              onClick={() => setAgrupar((v) => !v)}
+              aria-pressed={agrupar}
+              className={cn(btnGhost, agrupar && "border-carbon/30 bg-cream")}
+            >
+              {agrupar ? <Check size={14} /> : <List size={14} />} Por gamas
+            </button>
+          </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <select value={categoria} onChange={(e) => setCategoria(e.target.value)} className={inputClass} aria-label="Categoría">
-            <option value="">Todas las categorías</option>
-            {categorias.map((c) => (
-              <option key={c} value={c}>
-                {CATEGORIA_LABEL[c] ?? c}
-              </option>
-            ))}
-          </select>
-          <select value={orden} onChange={(e) => setOrden(e.target.value as Orden)} className={inputClass} aria-label="Ordenar">
-            <option value="nombre">Orden: nombre</option>
-            <option value="precio">Orden: precio</option>
-            <option value="margen">Orden: margen (menor primero)</option>
-            <option value="stock">Orden: stock (menor primero)</option>
-          </select>
+
+        <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none]">
+          <GamaChip activo={!gama} onClick={() => setGama("")} n={[...porGama.values()].reduce((a, b) => a + b, 0)}>
+            Todas
+          </GamaChip>
+          {GAMAS.map((g) => (
+            <GamaChip key={g.nombre} activo={gama === g.nombre} onClick={() => setGama(gama === g.nombre ? "" : g.nombre)} n={porGama.get(g.nombre) ?? 0} color={GAMA_COLOR[g.nombre]}>
+              {g.nombre}
+            </GamaChip>
+          ))}
         </div>
-        <Segmented
-          value={filtro}
-          onChange={setFiltro}
-          options={[
-            { value: "todos", label: "Todos" },
-            { value: "agotados", label: "Agotados", count: resumen.agotados },
-            { value: "ocultos", label: "Ocultos" },
-            { value: "ajustes", label: "Con precio o stock propio" },
-            { value: "sin-coste", label: "Sin coste" },
-          ]}
-        />
+      </div>
+
+      <div className="mb-3 flex min-h-8 flex-wrap items-center gap-2 text-sm">
+        <span className="text-stone">
+          {lista.length === resumen.total ? `${lista.length} productos` : `${lista.length} de ${resumen.total} productos`}
+        </span>
+        {hayBusqueda && (
+          <button
+            type="button"
+            onClick={() => {
+              setQuery("");
+              setGama("");
+              setCategoria("");
+              setFiltro("todos");
+            }}
+            className="inline-flex items-center gap-1 rounded-full bg-carbon/[0.05] px-2.5 py-1 text-xs text-carbon hover:bg-carbon/10"
+          >
+            <X size={12} /> Quitar filtros
+          </button>
+        )}
+        {agrupar && grupos.length > 1 && (
+          <button
+            type="button"
+            onClick={() => guardarPlegados(todoPlegado ? new Set() : new Set(grupos.map((g) => g.nombre)))}
+            className="ml-auto inline-flex items-center gap-1.5 text-xs text-stone hover:text-carbon"
+          >
+            {todoPlegado ? <ChevronsUpDown size={14} /> : <ChevronsDownUp size={14} />}
+            {todoPlegado ? "Desplegar todas" : "Plegar todas"}
+          </button>
+        )}
       </div>
 
       {error && <p role="alert" className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
@@ -363,79 +522,106 @@ export function ProductosPanel({ session }: { session: Session }) {
         <Loading />
       ) : lista.length === 0 ? (
         <Empty icon={<PackageSearch size={18} />}>No hay productos con esos filtros.</Empty>
-      ) : vista === "lista" ? (
-        <div className="overflow-hidden rounded-2xl border border-carbon/[0.07] bg-white shadow-[0_1px_3px_rgba(28,26,22,0.04)]">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[60rem] text-sm">
-              <thead className="bg-cream-soft">
-                <tr className="border-b border-carbon/[0.07] text-left text-[11px] uppercase tracking-wider text-stone">
-                  <th className="w-10 py-3 pl-4">
+      ) : (
+        <div className="flex flex-col gap-3">
+          {vista === "lista" && (
+            <div className="hidden grid-cols-[2.25rem_minmax(0,1fr)_7.5rem_7.5rem_5rem_4.5rem_5.5rem_5.5rem_2.5rem] items-center gap-2 px-4 text-[10px] font-semibold uppercase tracking-[0.12em] text-stone lg:grid">
+              <span />
+              <span>Producto</span>
+              <span className="text-right">Precio venta</span>
+              <span className="text-right">Coste</span>
+              <span className="text-right">Margen</span>
+              <span className="text-center">Stock</span>
+              <span className="text-center">Disponible</span>
+              <span className="text-center">En la web</span>
+              <span />
+            </div>
+          )}
+          {grupos.map((g) => {
+            const plegado = agrupar && plegados.has(g.nombre);
+            const ids = g.productos.map((p) => p.id);
+            const marcados = ids.filter((id) => seleccion.has(id)).length;
+            const ocultosG = g.productos.filter((p) => rowOf(p.id).oculto).length;
+            const agotadosG = g.productos.filter((p) => rowOf(p.id).agotado).length;
+            const ms = g.productos.map((p) => minMargen(p, rowOf(p.id))).filter((x): x is number => x != null);
+            const mMedio = ms.length ? ms.reduce((a, b) => a + b, 0) / ms.length : null;
+            return (
+              <section
+                key={g.nombre || "todos"}
+                className="overflow-hidden rounded-2xl border border-carbon/[0.07] bg-white shadow-[0_1px_3px_rgba(28,26,22,0.04)]"
+              >
+                {agrupar && (
+                  <div className={cn("flex items-center gap-3 px-4 py-3", !plegado && "border-b border-carbon/[0.06]")}>
                     <input
                       type="checkbox"
-                      checked={todosMarcados}
-                      onChange={() => setSeleccion(todosMarcados ? new Set() : new Set(lista.map((p) => p.id)))}
-                      aria-label="Seleccionar todos"
+                      checked={marcados === ids.length}
+                      ref={(el) => {
+                        if (el) el.indeterminate = marcados > 0 && marcados < ids.length;
+                      }}
+                      onChange={() => toggleSel(ids, marcados !== ids.length)}
+                      aria-label={`Seleccionar toda la gama ${g.nombre}`}
                       className="h-4 w-4 accent-carbon"
                     />
-                  </th>
-                  <th className="py-3 pr-3 font-medium">Producto · {lista.length}</th>
-                  <th className="py-3 pr-3 font-medium">Precio venta</th>
-                  <th className="py-3 pr-3 font-medium">Coste</th>
-                  <th className="py-3 pr-3 font-medium">Margen</th>
-                  <th className="py-3 pr-3 font-medium">Stock</th>
-                  <th className="py-3 pr-3 font-medium">Disponible</th>
-                  <th className="py-3 pr-3 font-medium">Visible</th>
-                  <th className="py-3 pr-4" />
-                </tr>
-              </thead>
-              <tbody>
-                {lista.map((p) => (
-                  <FilaProducto
-                    key={p.id}
-                    product={p}
-                    row={rowOf(p.id)}
-                    selected={seleccion.has(p.id)}
-                    onSelect={() => toggleSel(p.id)}
-                    onPatch={(patch) => guardar({ ...rowOf(p.id), ...patch })}
-                    onEdit={() => setEditando(p)}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      ) : (
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          {lista.map((p) => (
-            <ProductoCard
-              key={p.id}
-              product={p}
-              row={rowOf(p.id)}
-              onPatch={(patch) => guardar({ ...rowOf(p.id), ...patch })}
-              onEdit={() => setEditando(p)}
-            />
-          ))}
+                    <button type="button" onClick={() => togglePlegado(g.nombre)} aria-expanded={!plegado} className="flex min-w-0 flex-1 items-center gap-3 text-left">
+                      <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: GAMA_COLOR[g.nombre] ?? "#8a8271" }} />
+                      <span className="font-display text-lg leading-tight text-carbon">{g.nombre}</span>
+                      <span className="text-xs tabular-nums text-stone">{g.productos.length}</span>
+                      <span className="hidden flex-wrap gap-1.5 sm:flex">
+                        {agotadosG > 0 && <Badge tone="red">{agotadosG} agotado{agotadosG === 1 ? "" : "s"}</Badge>}
+                        {ocultosG > 0 && <Badge>{ocultosG} oculto{ocultosG === 1 ? "" : "s"}</Badge>}
+                      </span>
+                      <span className="ml-auto flex items-center gap-3">
+                        {mMedio != null && <span className="hidden text-xs text-stone sm:inline">Margen {mMedio.toFixed(0)} %</span>}
+                        <ChevronDown size={16} className={cn("text-stone transition", plegado && "-rotate-90")} />
+                      </span>
+                    </button>
+                  </div>
+                )}
+                {!plegado &&
+                  (vista === "lista" ? (
+                    <div className="divide-y divide-carbon/[0.05]">
+                      {g.productos.map((p) => (
+                        <FilaProducto
+                          key={p.id}
+                          product={p}
+                          row={rowOf(p.id)}
+                          selected={seleccion.has(p.id)}
+                          onSelect={() => toggleSel([p.id], !seleccion.has(p.id))}
+                          onPatch={(patch) => guardar({ ...rowOf(p.id), ...patch })}
+                          onEdit={() => setEditando(p)}
+                          mostrarGama={!agrupar}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid gap-3 bg-cream-soft/60 p-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                      {g.productos.map((p) => (
+                        <ProductoCard
+                          key={p.id}
+                          product={p}
+                          row={rowOf(p.id)}
+                          selected={seleccion.has(p.id)}
+                          onSelect={() => toggleSel([p.id], !seleccion.has(p.id))}
+                          onPatch={(patch) => guardar({ ...rowOf(p.id), ...patch })}
+                          onEdit={() => setEditando(p)}
+                        />
+                      ))}
+                    </div>
+                  ))}
+              </section>
+            );
+          })}
         </div>
       )}
 
-      {/* Barra de acciones en bloque */}
       {seleccionados.length > 0 && (
-        <div className="fixed inset-x-3 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-4xl flex-wrap items-center gap-2 rounded-2xl bg-carbon px-4 py-3 text-cream shadow-[0_20px_50px_rgba(28,26,22,0.35)]">
-          <span className="mr-2 text-sm font-medium tabular-nums">{seleccionados.length} seleccionados</span>
-          {ACCIONES_BLOQUE.map(([a, l]) => (
-            <button
-              key={a}
-              type="button"
-              onClick={() => enBloque(a)}
-              className="rounded-full bg-cream/10 px-3 py-1.5 text-xs font-medium transition hover:bg-cream/20"
-            >
-              {l}
-            </button>
-          ))}
-          <button type="button" onClick={() => setSeleccion(new Set())} className="ml-auto text-xs text-cream/60 hover:text-cream">
-            Deseleccionar
-          </button>
-        </div>
+        <BarraBloque
+          n={seleccionados.length}
+          onAccion={enBloque}
+          onPrecio={ajustarPrecio}
+          onMargen={fijarMargen}
+          onLimpiar={() => setSeleccion(new Set())}
+        />
       )}
 
       {aviso && (
@@ -459,6 +645,149 @@ export function ProductosPanel({ session }: { session: Session }) {
   );
 }
 
+function GamaChip({
+  activo,
+  onClick,
+  n,
+  color,
+  children,
+}: {
+  activo: boolean;
+  onClick: () => void;
+  n: number;
+  color?: string;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={activo}
+      disabled={!activo && n === 0}
+      className={cn(
+        "inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-medium transition disabled:opacity-35",
+        activo ? "border-carbon bg-carbon text-cream" : "border-carbon/[0.08] bg-white text-carbon hover:border-carbon/25"
+      )}
+    >
+      {color && <span className="h-2 w-2 rounded-full" style={{ background: color }} />}
+      {children}
+      <span className={cn("tabular-nums", activo ? "text-cream/60" : "text-stone")}>{n}</span>
+    </button>
+  );
+}
+
+// Barra flotante para cambiar varios productos a la vez. Los ajustes de
+// precio y margen piden el % en la propia barra.
+function BarraBloque({
+  n,
+  onAccion,
+  onPrecio,
+  onMargen,
+  onLimpiar,
+}: {
+  n: number;
+  onAccion: (a: AccionBloque) => void;
+  onPrecio: (pct: number) => void;
+  onMargen: (m: number) => void;
+  onLimpiar: () => void;
+}) {
+  const [modo, setModo] = useState<"precio" | "margen" | null>(null);
+  const [valor, setValor] = useState("");
+  const num = Number(valor.replace(",", "."));
+  const valido = valor.trim() !== "" && Number.isFinite(num) && (modo === "precio" ? num > -90 && num <= 300 && num !== 0 : num > 0 && num < 95);
+
+  function confirmar() {
+    if (!valido) return;
+    if (modo === "precio") onPrecio(num);
+    else onMargen(num);
+    setModo(null);
+    setValor("");
+  }
+
+  const btn = "rounded-full bg-cream/10 px-3 py-1.5 text-xs font-medium transition hover:bg-cream/20";
+  return (
+    <div className="fixed inset-x-3 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-4xl flex-wrap items-center gap-2 rounded-2xl bg-carbon px-4 py-3 text-cream shadow-[0_20px_50px_rgba(28,26,22,0.35)]">
+      <span className="mr-1 inline-flex items-center gap-2 text-sm font-medium tabular-nums">
+        <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-cream px-1.5 text-xs text-carbon">{n}</span>
+        seleccionado{n === 1 ? "" : "s"}
+      </span>
+      {modo ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            confirmar();
+          }}
+          className="flex flex-1 flex-wrap items-center gap-2"
+        >
+          <span className="text-xs text-cream/70">
+            {modo === "precio" ? "Subir (+) o bajar (−) el precio un" : "Fijar un margen sobre el precio de venta del"}
+          </span>
+          <span className="relative">
+            <input
+              autoFocus
+              inputMode="decimal"
+              value={valor}
+              onChange={(e) => setValor(e.target.value)}
+              placeholder={modo === "precio" ? "5" : "30"}
+              aria-label="Porcentaje"
+              className="h-8 w-20 rounded-lg bg-cream/10 px-2 pr-6 text-right text-sm tabular-nums text-cream placeholder:text-cream/40 focus:bg-cream/20 focus:outline-none"
+            />
+            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-cream/60">%</span>
+          </span>
+          <button type="submit" disabled={!valido} className="rounded-full bg-cream px-3 py-1.5 text-xs font-medium text-carbon disabled:opacity-40">
+            Aplicar
+          </button>
+          <button type="button" onClick={() => setModo(null)} className="text-xs text-cream/60 hover:text-cream">
+            Cancelar
+          </button>
+        </form>
+      ) : (
+        <>
+          <button type="button" onClick={() => onAccion("reponer")} className={btn}>
+            Disponible
+          </button>
+          <button type="button" onClick={() => onAccion("agotar")} className={btn}>
+            Agotado
+          </button>
+          <button type="button" onClick={() => onAccion("mostrar")} className={btn}>
+            Mostrar en web
+          </button>
+          <button type="button" onClick={() => onAccion("ocultar")} className={btn}>
+            Ocultar
+          </button>
+          <span className="mx-1 hidden h-5 w-px bg-cream/15 sm:block" />
+          <button type="button" onClick={() => setModo("precio")} className={btn}>
+            Ajustar precio %
+          </button>
+          <button type="button" onClick={() => setModo("margen")} className={btn}>
+            Fijar margen %
+          </button>
+          <button type="button" onClick={onLimpiar} className="ml-auto text-xs text-cream/60 hover:text-cream">
+            Deseleccionar
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
+function EstadoPunto({ row }: { row: ProductoAjusteRow }) {
+  if (row.oculto)
+    return (
+      <span className="inline-flex items-center gap-1 text-[11px] text-stone">
+        <EyeOff size={11} /> Oculto
+      </span>
+    );
+  if (row.agotado) return <span className="inline-flex items-center gap-1 text-[11px] font-medium text-red-600">● Agotado</span>;
+  return null;
+}
+
+function MargenPill({ m }: { m: number | null }) {
+  if (m == null) return <span className="text-xs text-stone">—</span>;
+  const tono = m < 10 ? "bg-red-50 text-red-700" : m < 20 ? "bg-amber-50 text-amber-800" : "bg-emerald-50 text-emerald-800";
+  return <span className={cn("inline-flex rounded-full px-2 py-0.5 text-xs font-medium tabular-nums", tono)}>{m.toFixed(0)} %</span>;
+}
+
 function FilaProducto({
   product,
   row,
@@ -466,6 +795,7 @@ function FilaProducto({
   onSelect,
   onPatch,
   onEdit,
+  mostrarGama,
 }: {
   product: Product;
   row: ProductoAjusteRow;
@@ -473,6 +803,7 @@ function FilaProducto({
   onSelect: () => void;
   onPatch: (patch: Partial<ProductoAjusteRow>) => void;
   onEdit: () => void;
+  mostrarGama?: boolean;
 }) {
   const src = productImageSrc(product);
   const unico = product.variants.length === 1;
@@ -480,32 +811,43 @@ function FilaProducto({
   const precio = minPrecio(product, row);
 
   return (
-    <tr
+    <div
       className={cn(
-        "border-b border-carbon/[0.05] transition last:border-0 hover:bg-cream/40",
+        "grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-2 px-4 py-2 transition hover:bg-cream/40 lg:grid-cols-[2.25rem_minmax(0,1fr)_7.5rem_7.5rem_5rem_4.5rem_5.5rem_5.5rem_2.5rem]",
         selected && "bg-cream/70",
-        row.oculto && "opacity-60"
+        row.oculto && "bg-carbon/[0.015]"
       )}
     >
-      <td className="py-2.5 pl-4">
-        <input type="checkbox" checked={selected} onChange={onSelect} aria-label={`Seleccionar ${product.name}`} className="h-4 w-4 accent-carbon" />
-      </td>
-      <td className="py-2.5 pr-3">
-        <div className="flex items-center gap-3">
-          <div className="relative h-11 w-9 shrink-0 overflow-hidden rounded-lg bg-linen">
-            {src && <Image src={src} alt="" fill sizes="36px" className="object-contain p-0.5" />}
-          </div>
-          <div className="min-w-0">
-            <p className="max-w-[22rem] truncate font-medium text-carbon" title={product.name}>
-              {product.name}
-            </p>
-            <p className="truncate text-xs text-stone">
-              {product.brand} · {unico ? product.variants[0].size : `${product.variants.length} formatos`}
-            </p>
-          </div>
-        </div>
-      </td>
-      <td className="py-2.5 pr-3">
+      <input type="checkbox" checked={selected} onChange={onSelect} aria-label={`Seleccionar ${product.name}`} className="h-4 w-4 accent-carbon" />
+
+      <button type="button" onClick={onEdit} className="flex min-w-0 items-center gap-3 text-left">
+        <span className={cn("relative h-11 w-10 shrink-0 overflow-hidden rounded-xl bg-linen", row.oculto && "opacity-50")}>
+          {src && <Image src={src} alt="" fill sizes="40px" className="object-contain p-1" />}
+        </span>
+        <span className="min-w-0">
+          <span className={cn("block truncate text-sm font-medium", row.oculto ? "text-stone" : "text-carbon")} title={product.name}>
+            {product.name}
+          </span>
+          <span className="flex items-center gap-2 truncate text-xs text-stone">
+            <span className="truncate">
+              {mostrarGama && `${product.brand} · `}
+              {product.subcategory} · {unico ? product.variants[0].size : `${product.variants.length} formatos`}
+            </span>
+            <EstadoPunto row={row} />
+          </span>
+        </span>
+      </button>
+
+      {/* Móvil: precio y margen a la derecha del nombre */}
+      <span className="flex flex-col items-end gap-1 lg:hidden">
+        <span className="text-sm font-medium tabular-nums text-carbon">
+          {!unico && <span className="text-[10px] font-normal text-stone">desde </span>}
+          {precio != null ? eur(precio) : "—"}
+        </span>
+        <MargenPill m={m} />
+      </span>
+
+      <div className="hidden justify-end lg:flex">
         {unico ? (
           <InlineEur
             value={row.precios_eur["0"]}
@@ -519,13 +861,13 @@ function FilaProducto({
             }}
           />
         ) : (
-          <button type="button" onClick={onEdit} className="text-left text-carbon hover:underline">
-            <span className="text-xs text-stone">desde </span>
+          <button type="button" onClick={onEdit} className="pr-2 text-right text-sm text-carbon hover:underline">
+            <span className="text-[10px] text-stone">desde </span>
             <span className="tabular-nums">{precio != null ? eur(precio) : "—"}</span>
           </button>
         )}
-      </td>
-      <td className="py-2.5 pr-3">
+      </div>
+      <div className="hidden justify-end lg:flex">
         {unico ? (
           <InlineEur
             value={row.costes_eur["0"]}
@@ -539,28 +881,46 @@ function FilaProducto({
             }}
           />
         ) : (
-          <button type="button" onClick={onEdit} className="text-xs text-stone hover:text-carbon hover:underline">
+          <button type="button" onClick={onEdit} className="pr-2 text-xs text-stone hover:text-carbon hover:underline">
             Por formato
           </button>
         )}
-      </td>
-      <td className={cn("py-2.5 pr-3 tabular-nums", m == null ? "text-stone" : m < 10 ? "text-red-600" : "text-forest")}>
-        {m == null ? "—" : `${m.toFixed(0)} %`}
-      </td>
-      <td className="py-2.5 pr-3">
+      </div>
+      <div className="hidden justify-end lg:flex">
+        <MargenPill m={m} />
+      </div>
+      <div className="hidden justify-center lg:flex">
         {row.stock == null ? (
-          <span className="text-xs text-stone">—</span>
+          <span className="text-xs text-stone/60">—</span>
         ) : (
           <Badge tone={row.stock === 0 ? "red" : row.stock <= 3 ? "amber" : "green"}>{row.stock}</Badge>
         )}
-      </td>
-      <td className="py-2.5 pr-3">
-        <Switch label="" checked={!row.agotado} onChange={(v) => onPatch({ agotado: !v })} />
-      </td>
-      <td className="py-2.5 pr-3">
+      </div>
+
+      {/* Interruptores: en el móvil, en una segunda línea */}
+      <div className="col-span-3 flex items-center justify-end gap-4 pl-[3.25rem] lg:col-span-1 lg:justify-center lg:pl-0">
+        <span className="lg:hidden">
+          <Switch label="Disponible" checked={!row.agotado} onChange={(v) => onPatch({ agotado: !v })} />
+        </span>
+        <span className="hidden lg:inline-flex">
+          <Switch label="" checked={!row.agotado} onChange={(v) => onPatch({ agotado: !v })} />
+        </span>
+        <span className="lg:hidden">
+          <Switch label="En la web" checked={!row.oculto} onChange={(v) => onPatch({ oculto: !v })} />
+        </span>
+        <button
+          type="button"
+          onClick={onEdit}
+          aria-label={`Editar ${product.name}`}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-full text-stone transition hover:bg-carbon/[0.05] hover:text-carbon lg:hidden"
+        >
+          <Pencil size={14} />
+        </button>
+      </div>
+      <div className="hidden justify-center lg:flex">
         <Switch label="" checked={!row.oculto} onChange={(v) => onPatch({ oculto: !v })} />
-      </td>
-      <td className="py-2.5 pr-4 text-right">
+      </div>
+      <div className="hidden justify-end lg:flex">
         <button
           type="button"
           onClick={onEdit}
@@ -569,8 +929,8 @@ function FilaProducto({
         >
           <Pencil size={14} />
         </button>
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 }
 
@@ -630,39 +990,53 @@ function InlineEur({
 function ProductoCard({
   product,
   row,
+  selected,
+  onSelect,
   onPatch,
   onEdit,
 }: {
   product: Product;
   row: ProductoAjusteRow;
+  selected: boolean;
+  onSelect: () => void;
   onPatch: (patch: Partial<ProductoAjusteRow>) => void;
   onEdit: () => void;
 }) {
   const src = productImageSrc(product);
-  const precios = product.variants.map((_, i) => precioFinal(product, row, i)).filter((x): x is number => x != null);
-  const desde = precios.length ? Math.min(...precios) : null;
+  const desde = minPrecio(product, row);
   const tienePrecioPropio = Object.keys(row.precios_eur).length > 0;
-  const margenes = product.variants.map((_, i) => margen(product, row, i)).filter((x): x is number => x != null);
-  const margenMin = margenes.length ? Math.min(...margenes) : null;
+  const margenMin = minMargen(product, row);
 
   return (
     <div
       className={cn(
-        "flex flex-col rounded-2xl border bg-white p-4 shadow-[0_1px_3px_rgba(28,26,22,0.04)] transition",
-        row.agotado ? "border-red-200" : "border-carbon/[0.07]",
-        row.oculto && "opacity-60"
+        "group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-[0_1px_3px_rgba(28,26,22,0.04)] transition hover:shadow-[0_8px_24px_rgba(28,26,22,0.08)]",
+        selected ? "border-carbon/40 ring-2 ring-carbon/10" : row.agotado ? "border-red-200" : "border-carbon/[0.07]"
       )}
     >
-      <div className="flex gap-3.5">
-        <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-xl bg-linen">
-          {src && <Image src={src} alt="" fill sizes="64px" className="object-contain p-1.5" />}
+      <div className={cn("relative aspect-[4/3] bg-linen/70", row.oculto && "opacity-50")}>
+        {src && <Image src={src} alt="" fill sizes="(min-width:1536px) 20vw, (min-width:1280px) 25vw, (min-width:640px) 45vw, 90vw" className="object-contain p-4" />}
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={onSelect}
+          aria-label={`Seleccionar ${product.name}`}
+          className={cn("absolute left-3 top-3 h-4 w-4 accent-carbon transition", !selected && "opacity-0 group-hover:opacity-100 focus:opacity-100")}
+        />
+        <div className="absolute right-3 top-3 flex flex-wrap justify-end gap-1">
+          {row.agotado && <Badge tone="red">Agotado</Badge>}
+          {row.oculto && <Badge>Oculto</Badge>}
+          {row.stock != null && <Badge tone={row.stock <= 3 ? "amber" : "green"}>Stock {row.stock}</Badge>}
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-[10px] uppercase tracking-wider text-stone">
-            {product.brand} · {product.subcategory}
-          </p>
-          <p className="mt-0.5 line-clamp-2 text-sm font-medium leading-snug text-carbon">{product.name}</p>
-          <p className="mt-1.5 text-sm tabular-nums text-carbon">
+      </div>
+
+      <div className="flex flex-1 flex-col p-4">
+        <p className="truncate text-[10px] uppercase tracking-wider text-stone">{product.subcategory}</p>
+        <button type="button" onClick={onEdit} className="mt-0.5 line-clamp-2 text-left text-sm font-medium leading-snug text-carbon hover:underline">
+          {product.name}
+        </button>
+        <div className="mb-3 mt-2 flex items-center justify-between gap-2">
+          <p className="text-sm tabular-nums text-carbon">
             {desde == null ? (
               <span className="text-stone">Sin precio</span>
             ) : (
@@ -671,31 +1045,20 @@ function ProductoCard({
                 <span className="font-semibold">{eur(desde)}</span>
               </>
             )}
-            {tienePrecioPropio && <span className="ml-1.5 text-[10px] uppercase tracking-wide text-gold">precio propio</span>}
+            {tienePrecioPropio && <span className="ml-1.5 text-[10px] uppercase tracking-wide text-gold">propio</span>}
           </p>
+          <MargenPill m={margenMin} />
         </div>
-      </div>
 
-      <div className="mb-4 mt-3 flex flex-wrap gap-1.5">
-        {row.agotado && <Badge tone="red">Agotado</Badge>}
-        {row.oculto && <Badge>Oculto</Badge>}
-        {row.stock != null && <Badge tone={row.stock <= 3 ? "amber" : "green"}>Stock {row.stock}</Badge>}
-        {margenMin != null ? (
-          <Badge tone={margenMin < 10 ? "red" : "grey"}>Margen {margenMin.toFixed(0)} %</Badge>
-        ) : (
-          <Badge>Sin coste</Badge>
-        )}
-        {product.variants.length > 1 && <Badge>{product.variants.length} formatos</Badge>}
-      </div>
-
-      <div className="mt-auto flex items-center justify-between gap-2 border-t border-carbon/[0.06] pt-3">
-        <div className="flex flex-col gap-2">
-          <Switch label="Disponible" checked={!row.agotado} onChange={(v) => onPatch({ agotado: !v })} />
-          <Switch label="Visible en tienda" checked={!row.oculto} onChange={(v) => onPatch({ oculto: !v })} />
+        <div className="mt-auto flex items-center justify-between gap-2 border-t border-carbon/[0.06] pt-3">
+          <div className="flex flex-col gap-2">
+            <Switch label="Disponible" checked={!row.agotado} onChange={(v) => onPatch({ agotado: !v })} />
+            <Switch label="En la web" checked={!row.oculto} onChange={(v) => onPatch({ oculto: !v })} />
+          </div>
+          <button type="button" onClick={onEdit} className={cn(btnGhost, "h-9 px-3 text-xs")}>
+            <Pencil size={13} /> Editar
+          </button>
         </div>
-        <button type="button" onClick={onEdit} className={cn(btnGhost, "h-9 px-3 text-xs")}>
-          <Pencil size={13} /> Editar
-        </button>
       </div>
     </div>
   );

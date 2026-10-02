@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
-import { CalendarDays, ChevronDown, Loader2, Plus, Search, Trash2, X } from "lucide-react";
-import { PedidoDetalle } from "./PedidoDetalle";
+import { CalendarDays, ChevronRight, Loader2, Plus, Search, Trash2, X } from "lucide-react";
+import { PedidoDrawer } from "./PedidoDrawer";
 import { PRODUCTS, getProductById } from "@/data/products";
 import { amwayDb } from "@/lib/amway-db";
 import { fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
 import { cn } from "@/lib/utils";
-import { APreparar, CabeceraGrupo, FilaRecogida, agruparPorDia, esActivo, proximosDias } from "./recogidas";
+import { APreparar, CabeceraGrupo, FilaRecogida, Miniaturas, agruparPorDia, esActivo, proximosDias } from "./recogidas";
 import {
   Badge,
   ESTADO_PEDIDO,
@@ -74,7 +74,6 @@ export function PedidosPanel({
     setDia(null);
     setQuery("");
     setAbierto(foco);
-    requestAnimationFrame(() => document.getElementById(`pedido-${foco}`)?.scrollIntoView({ behavior: "smooth", block: "start" }));
     onFocoVisto?.();
   }, [foco, pedidos, onFocoVisto]);
 
@@ -87,6 +86,7 @@ export function PedidosPanel({
   async function borrar(p: Pedido) {
     if (!confirm(`¿Borrar definitivamente el pedido #${p.numero}? Si solo quieres anularlo, márcalo como cancelado.`)) return;
     await amwayDb().from("amway_pedidos").delete().eq("id", p.id);
+    setAbierto(null);
     setPedidos((prev) => prev?.filter((x) => x.id !== p.id) ?? null);
     onChange();
   }
@@ -127,9 +127,7 @@ export function PedidosPanel({
   }, [pedidos, coincide, dia]);
   const atrasados = useMemo(() => agruparPorDia(pedidos ?? []).find((g) => g.key === "atrasados")?.pedidos.length ?? 0, [pedidos]);
 
-  const detalle = (p: Pedido) => (
-    <PedidoDetalle p={p} onUpdate={(c) => actualizar(p.id, c)} onDelete={() => borrar(p)} />
-  );
+  const pedidoAbierto = (abierto && pedidos?.find((p) => p.id === abierto)) || null;
 
   return (
     <div>
@@ -279,12 +277,9 @@ export function PedidosPanel({
                             key={p.id}
                             p={p}
                             mostrarFecha={g.key === "atrasados"}
-                            abierto={abierto === p.id}
-                            onAbrir={() => setAbierto(abierto === p.id ? null : p.id)}
+                            onAbrir={() => setAbierto(p.id)}
                             onUpdate={(c) => void actualizar(p.id, c)}
-                          >
-                            {detalle(p)}
-                          </FilaRecogida>
+                          />
                         ))}
                       </div>
                     )}
@@ -299,16 +294,23 @@ export function PedidosPanel({
       ) : (
         <div className="flex flex-col gap-2">
           {lista.map((p) => {
-            const open = abierto === p.id;
             const unidades = p.items.reduce((s, i) => s + i.cantidad, 0);
             return (
-              <div key={p.id} id={`pedido-${p.id}`} className="scroll-mt-40 rounded-2xl border border-carbon/8 bg-white">
+              <div
+                key={p.id}
+                id={`pedido-${p.id}`}
+                className={cn(
+                  "group rounded-2xl border bg-white transition hover:border-carbon/15 hover:shadow-[0_6px_20px_rgba(28,26,22,0.06)]",
+                  abierto === p.id ? "border-carbon/30" : "border-carbon/8"
+                )}
+              >
                 <button
                   type="button"
-                  onClick={() => setAbierto(open ? null : p.id)}
-                  className="flex w-full flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3.5 text-left sm:px-5"
+                  onClick={() => setAbierto(p.id)}
+                  className="flex w-full flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 text-left sm:px-5"
                 >
-                  <span className="font-display text-lg tabular-nums text-carbon">#{p.numero}</span>
+                  <span className="w-12 font-display text-lg tabular-nums text-carbon">#{p.numero}</span>
+                  <Miniaturas p={p} size={34} />
                   <span className="min-w-0 flex-1 truncate text-sm text-carbon">
                     {p.cliente_nombre || "Sin nombre"}
                     <span className="ml-2 text-stone">
@@ -322,15 +324,20 @@ export function PedidosPanel({
                   <span className="text-xs text-stone">{fecha(p.created_at, true)}</span>
                   <Badge tone={ESTADO_PEDIDO[p.estado].tone}>{ESTADO_PEDIDO[p.estado].label}</Badge>
                   <span className="w-24 text-right font-medium tabular-nums text-carbon">{eur(p.total_eur)}</span>
-                  <ChevronDown size={16} className={cn("text-stone transition", open && "rotate-180")} />
+                  <ChevronRight size={16} className="text-stone/60 transition group-hover:translate-x-0.5 group-hover:text-carbon" />
                 </button>
-
-                {open && detalle(p)}
               </div>
             );
           })}
         </div>
       )}
+
+      <PedidoDrawer
+        pedido={pedidoAbierto}
+        onClose={() => setAbierto(null)}
+        onUpdate={(id, c) => void actualizar(id, c)}
+        onDelete={(p) => void borrar(p)}
+      />
     </div>
   );
 }

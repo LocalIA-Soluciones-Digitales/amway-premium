@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import { Check, ChevronDown, HandCoins, MessageCircle, PackageCheck, PackageOpen, Phone, Undo2 } from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
+import { Check, ChevronDown, ChevronRight, HandCoins, MessageCircle, PackageCheck, PackageOpen, Phone, Undo2 } from "lucide-react";
+import { getProductById } from "@/data/products";
+import { productImageSrc } from "@/data/types";
 import { fechaLarga, hoyMadrid, sumarDias } from "@/lib/recogida";
 import { cn } from "@/lib/utils";
 import { Badge, METODO_PAGO, eur, waHref, type Pedido } from "./shared";
@@ -105,6 +108,11 @@ export function proximosDias(pedidos: Pedido[], n = 7, hoy = hoyMadrid()) {
   });
 }
 
+const NOTA_GRUPO: Record<string, string> = {
+  atrasados: "Tenían que pasar antes de hoy. Escríbeles para cambiar el día o márcalos como recogidos.",
+  "sin-fecha": "Envíos y ventas sin día de recogida.",
+};
+
 export function CabeceraGrupo({
   g,
   plegado,
@@ -116,28 +124,49 @@ export function CabeceraGrupo({
 }) {
   const r = resumenGrupo(g.pedidos);
   const acento = { red: "bg-xs-red", amber: "bg-amber-500", blue: "bg-forest", grey: "bg-carbon/30" }[g.tono];
-  return (
-    <button type="button" onClick={onToggle} className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 px-1 py-1 text-left">
-      <span className={cn("h-8 w-1.5 shrink-0 rounded-full", acento)} />
-      <span className="min-w-0 flex-1">
-        <span className="flex flex-wrap items-center gap-2">
-          <span className="font-display text-lg leading-tight text-carbon">{g.titulo}</span>
-          {g.etiqueta && <Badge tone={g.tono === "blue" ? "blue" : g.tono === "red" ? "red" : "amber"}>{g.etiqueta}</Badge>}
-        </span>
-        <span className="mt-0.5 block text-xs text-stone">
-          {r.activos} por recoger
-          {r.recogidos > 0 && ` · ${r.recogidos} recogido${r.recogidos === 1 ? "" : "s"}`}
-          {r.activos > 0 && ` · ${r.preparados}/${r.activos} preparados`}
-          {r.porCobrar > 0 && (
-            <>
-              {" · "}
-              <span className="font-medium text-amber-700">{eur(r.porCobrar)} por cobrar</span>
-            </>
-          )}
+  const pct = r.activos ? (r.preparados / r.activos) * 100 : 100;
+  const contenido = (
+    <>
+      <span className="flex min-w-0 flex-1 items-center gap-3">
+        <span className={cn("h-9 w-1.5 shrink-0 rounded-full", acento)} />
+        <span className="min-w-0">
+          <span className="flex flex-wrap items-center gap-2">
+            <span className="font-display text-lg leading-tight text-carbon">{g.titulo}</span>
+            {g.etiqueta && <Badge tone={g.tono === "blue" ? "blue" : g.tono === "red" ? "red" : "amber"}>{g.etiqueta}</Badge>}
+          </span>
+          <span className="mt-0.5 block text-xs text-stone">
+            {NOTA_GRUPO[g.key] ??
+              `${r.activos} por recoger${r.recogidos ? ` · ${r.recogidos} recogido${r.recogidos === 1 ? "" : "s"}` : ""}`}
+          </span>
         </span>
       </span>
-      {onToggle && <ChevronDown size={16} className={cn("text-stone transition", plegado && "-rotate-90")} />}
+      <span className="flex items-center gap-4 text-xs">
+        {r.activos > 0 && (
+          <span className="flex items-center gap-2" title="Bolsas preparadas">
+            <span className="h-1.5 w-16 overflow-hidden rounded-full bg-carbon/[0.08]">
+              <span className="block h-full rounded-full bg-forest transition-all" style={{ width: `${pct}%` }} />
+            </span>
+            <span className="tabular-nums text-stone">
+              <span className="font-semibold text-carbon">{r.preparados}</span>/{r.activos} preparados
+            </span>
+          </span>
+        )}
+        {r.porCobrar > 0 && (
+          <span className="rounded-full bg-amber-50 px-2 py-0.5 font-medium tabular-nums text-amber-800 ring-1 ring-inset ring-amber-200/70">
+            {eur(r.porCobrar)} por cobrar
+          </span>
+        )}
+        {onToggle && <ChevronDown size={16} className={cn("text-stone transition", plegado && "-rotate-90")} />}
+      </span>
+    </>
+  );
+  const cls = "flex w-full flex-wrap items-center gap-x-4 gap-y-2 px-1 py-1 text-left";
+  return onToggle ? (
+    <button type="button" onClick={onToggle} aria-expanded={!plegado} className={cls}>
+      {contenido}
     </button>
+  ) : (
+    <div className={cls}>{contenido}</div>
   );
 }
 
@@ -147,10 +176,11 @@ export function APreparar({ pedidos }: { pedidos: Pedido[] }) {
   if (lista.length === 0) return null;
   const total = lista.reduce((s, l) => s + l.cantidad, 0);
   return (
-    <div className="rounded-xl bg-cream/70 px-3 py-2">
+    <div className="rounded-xl border border-dashed border-carbon/[0.12] px-3 py-2">
       <button type="button" onClick={() => setOpen((v) => !v)} className="flex w-full items-center justify-between gap-2 text-left text-xs">
         <span className="flex items-center gap-1.5 font-medium text-carbon">
-          <PackageOpen size={14} className="text-stone" /> Qué preparar · {total} ud. de {lista.length} producto{lista.length === 1 ? "" : "s"}
+          <PackageOpen size={14} className="text-stone" /> Lista para preparar · {total} ud. de {lista.length} producto
+          {lista.length === 1 ? "" : "s"}
         </span>
         <ChevronDown size={14} className={cn("text-stone transition", open && "rotate-180")} />
       </button>
@@ -171,25 +201,63 @@ export function APreparar({ pedidos }: { pedidos: Pedido[] }) {
   );
 }
 
+// Miniaturas de lo que se lleva (hasta 3 y "+n").
+export function Miniaturas({ p, size = 40 }: { p: Pick<Pedido, "items">; size?: number }) {
+  const imgs = p.items.slice(0, 3).map((i) => {
+    const prod = i.product_id ? getProductById(i.product_id) : undefined;
+    return { src: prod ? productImageSrc(prod) : null, nombre: i.nombre, n: i.cantidad };
+  });
+  const resto = p.items.length - imgs.length;
+  return (
+    <span className="flex shrink-0 -space-x-2">
+      {imgs.map((m, k) => (
+        <span
+          key={k}
+          title={`${m.n}× ${m.nombre}`}
+          style={{ width: size, height: size }}
+          className="relative flex items-center justify-center overflow-hidden rounded-xl bg-linen ring-2 ring-white"
+        >
+          {m.src ? (
+            <Image src={m.src} alt="" fill sizes={`${size}px`} className="object-contain p-1" />
+          ) : (
+            <PackageOpen size={14} className="text-stone" />
+          )}
+          {m.n > 1 && (
+            <span className="absolute bottom-0 right-0 rounded-tl-md bg-carbon px-1 text-[9px] font-semibold leading-tight text-cream">
+              {m.n}
+            </span>
+          )}
+        </span>
+      ))}
+      {resto > 0 && (
+        <span
+          style={{ width: size, height: size }}
+          className="flex items-center justify-center rounded-xl bg-cream text-[11px] font-semibold text-stone ring-2 ring-white"
+        >
+          +{resto}
+        </span>
+      )}
+    </span>
+  );
+}
+
 // Una recogida en la agenda: hora, cliente, qué se lleva, cómo paga y las
-// acciones de un toque (preparado, recogido, WhatsApp, llamar).
+// acciones de un toque (preparado, recogido, WhatsApp, llamar). Pulsar la
+// fila abre la ficha completa en el panel lateral.
 export function FilaRecogida({
   p,
-  abierto,
   onAbrir,
   onUpdate,
   mostrarFecha,
-  children,
 }: {
   p: Pedido;
-  abierto: boolean;
   onAbrir: () => void;
   onUpdate: (c: Partial<Pedido>) => void;
   mostrarFecha?: boolean;
-  children?: ReactNode;
 }) {
   const hecho = p.estado === "entregado";
-  const efectivo = p.estado === "pendiente";
+  const cobrar = p.estado === "pendiente";
+  const preparado = !!p.preparado_at;
   const unidades = p.items.reduce((s, i) => s + i.cantidad, 0);
   const resumen = p.items.map((i) => `${i.cantidad}× ${i.nombre}`).join(", ");
   const fechaCorta = p.recogida_fecha
@@ -197,44 +265,57 @@ export function FilaRecogida({
         .toLocaleDateString("es-ES", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" })
         .replace(/\./g, "")
     : null;
+  const estado = hecho ? "bg-carbon/20" : preparado ? "bg-forest" : "bg-amber-400";
 
   return (
-    <div id={`pedido-${p.id}`} className={cn("scroll-mt-40 rounded-2xl border bg-white transition", hecho ? "border-carbon/[0.05] opacity-60" : "border-carbon/8")}>
-      <div className="flex items-stretch gap-3 px-3 py-3 sm:px-4">
-        <button type="button" onClick={onAbrir} className="flex min-w-0 flex-1 items-start gap-3 text-left">
-          <span className="w-14 shrink-0 pt-0.5 text-center">
-            <span className={cn("block font-display text-xl leading-none tabular-nums", p.recogida_hora ? "text-carbon" : "text-stone/60")}>
-              {p.recogida_hora ?? "--:--"}
-            </span>
-            {mostrarFecha && fechaCorta && <span className="mt-1 block text-[10px] uppercase tracking-wide text-stone">{fechaCorta}</span>}
+    <div
+      id={`pedido-${p.id}`}
+      className={cn(
+        "group relative flex scroll-mt-40 flex-col overflow-hidden rounded-2xl border bg-white transition hover:border-carbon/15 hover:shadow-[0_6px_20px_rgba(28,26,22,0.06)] md:flex-row md:items-center",
+        hecho ? "border-carbon/[0.05] opacity-60" : "border-carbon/[0.08]"
+      )}
+    >
+      <span className={cn("absolute inset-y-0 left-0 w-1", estado)} aria-hidden />
+      <button type="button" onClick={onAbrir} className="flex min-w-0 flex-1 items-center gap-3 py-3 pl-4 pr-3 text-left sm:gap-4 sm:pl-5">
+        <span className="w-14 shrink-0">
+          <span className={cn("block font-display text-xl leading-none tabular-nums", p.recogida_hora ? "text-carbon" : "text-stone/60")}>
+            {p.recogida_hora ?? "--:--"}
           </span>
-          <span className="min-w-0 flex-1">
-            <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span className="truncate font-medium text-carbon">{p.cliente_nombre || "Sin nombre"}</span>
-              <span className="text-xs tabular-nums text-stone">#{p.numero}</span>
-              {hecho ? (
-                <Badge tone="green">Recogido</Badge>
-              ) : efectivo ? (
-                <Badge tone="amber">Cobrar {eur(p.total_eur)}</Badge>
-              ) : (
-                <Badge tone="blue">Pagado · {METODO_PAGO[p.metodo_pago]}</Badge>
-              )}
-              {!hecho && p.preparado_at && <Badge tone="green">Preparado</Badge>}
-            </span>
-            <span className="mt-1 line-clamp-2 block text-xs text-stone">
-              {unidades} ud. · {resumen}
-            </span>
+          {mostrarFecha && fechaCorta && <span className="mt-1 block text-[10px] uppercase tracking-wide text-xs-red">{fechaCorta}</span>}
+        </span>
+        <Miniaturas p={p} />
+        <span className="min-w-0 flex-1">
+          <span className="flex items-center gap-2">
+            <span className="truncate font-medium text-carbon">{p.cliente_nombre || "Sin nombre"}</span>
+            <span className="shrink-0 text-xs tabular-nums text-stone">#{p.numero}</span>
           </span>
-        </button>
-        <ChevronDown size={16} className={cn("mt-1 shrink-0 self-start text-stone transition", abierto && "rotate-180")} />
-      </div>
+          <span className="mt-0.5 block truncate text-xs text-stone" title={resumen}>
+            <span className="font-medium text-carbon sm:hidden">
+              {eur(p.total_eur)}
+              {cobrar && !hecho && <span className="text-amber-700"> · cobrar</span>} ·{" "}
+            </span>
+            {unidades} ud. · {resumen}
+          </span>
+        </span>
+        <span className="hidden shrink-0 flex-col items-end gap-1 sm:flex">
+          <span className="font-medium tabular-nums text-carbon">{eur(p.total_eur)}</span>
+          {hecho ? (
+            <Badge tone="green">Recogido</Badge>
+          ) : cobrar ? (
+            <Badge tone="amber">Cobrar en {METODO_PAGO[p.metodo_pago].toLowerCase()}</Badge>
+          ) : (
+            <Badge tone="blue">Pagado · {METODO_PAGO[p.metodo_pago]}</Badge>
+          )}
+        </span>
+        <ChevronRight size={16} className="hidden shrink-0 text-stone/60 transition group-hover:translate-x-0.5 group-hover:text-carbon md:block" />
+      </button>
 
-      <div className="flex flex-wrap items-center gap-1.5 border-t border-carbon/[0.05] px-3 py-2 sm:px-4">
+      <div className="flex items-center gap-1.5 border-t border-carbon/[0.05] py-2 pl-4 pr-3 md:border-l md:border-t-0 md:py-3 md:pl-3">
         {hecho ? (
           <button
             type="button"
             onClick={() => onUpdate({ estado: p.metodo_pago === "efectivo" ? "pendiente" : "pagado" })}
-            className="inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs text-stone hover:bg-cream hover:text-carbon"
+            className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-xs text-stone hover:bg-cream hover:text-carbon"
           >
             <Undo2 size={13} /> Deshacer
           </button>
@@ -242,33 +323,40 @@ export function FilaRecogida({
           <>
             <button
               type="button"
-              onClick={() => onUpdate({ estado: "entregado" })}
-              className="inline-flex h-8 items-center gap-1.5 rounded-full bg-carbon px-3.5 text-xs font-medium text-cream hover:bg-carbon-soft"
+              onClick={() => onUpdate({ preparado_at: preparado ? null : new Date().toISOString() })}
+              aria-pressed={preparado}
+              title={preparado ? "Bolsa preparada (pulsa para desmarcar)" : "Marcar la bolsa como preparada"}
+              className={cn(
+                "inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-xs font-medium transition",
+                preparado ? "border-forest/25 bg-forest/10 text-forest" : "border-carbon/[0.12] text-carbon hover:border-carbon/25"
+              )}
             >
-              {efectivo ? <HandCoins size={13} /> : <PackageCheck size={13} />}
-              {efectivo ? "Recogido y cobrado" : "Recogido"}
+              <Check size={13} /> {preparado ? "Preparado" : "Preparar"}
             </button>
             <button
               type="button"
-              onClick={() => onUpdate({ preparado_at: p.preparado_at ? null : new Date().toISOString() })}
-              aria-pressed={!!p.preparado_at}
-              className={cn(
-                "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-medium transition",
-                p.preparado_at ? "border-forest/30 bg-forest/10 text-forest" : "border-carbon/10 text-stone hover:text-carbon"
-              )}
+              onClick={() => onUpdate({ estado: "entregado" })}
+              className="inline-flex h-9 items-center gap-1.5 rounded-full bg-carbon px-3.5 text-xs font-medium text-cream hover:bg-carbon-soft"
             >
-              <Check size={13} /> {p.preparado_at ? "Preparado" : "Marcar preparado"}
+              {cobrar ? <HandCoins size={13} /> : <PackageCheck size={13} />}
+              {cobrar ? (
+                <>
+                  Cobrado<span className="hidden sm:inline"> y recogido</span>
+                </>
+              ) : (
+                "Recogido"
+              )}
             </button>
           </>
         )}
-        <span className="flex-1" />
         {p.cliente_telefono && (
           <>
+            <span className="flex-1 md:hidden" />
             <a
               href={`tel:${p.cliente_telefono.replace(/\s/g, "")}`}
               aria-label="Llamar"
               title="Llamar"
-              className="flex h-8 w-8 items-center justify-center rounded-full text-stone hover:bg-cream hover:text-carbon"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-stone hover:bg-cream hover:text-carbon"
             >
               <Phone size={14} />
             </a>
@@ -278,14 +366,13 @@ export function FilaRecogida({
               rel="noopener noreferrer"
               aria-label="WhatsApp"
               title="WhatsApp"
-              className="flex h-8 w-8 items-center justify-center rounded-full text-stone hover:bg-cream hover:text-forest"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-stone hover:bg-cream hover:text-forest"
             >
               <MessageCircle size={14} />
             </a>
           </>
         )}
       </div>
-      {abierto && children}
     </div>
   );
 }

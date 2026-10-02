@@ -390,7 +390,6 @@ function Paneles({ session, rol, nombre }: { session: Session; rol: Rol; nombre:
         <HoyPanel
           key={recarga}
           onNavigate={setGTab}
-          onAbrirPedido={abrirPedido}
           onChange={refrescarPendientes}
           pendientes={pendientes}
           nombre={nombre}

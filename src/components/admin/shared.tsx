@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { formatEUR } from "@/lib/currency";
+import { Sparkline } from "./charts";
 
 // ---------- Tipos de las tablas amway_* ----------
 
@@ -252,6 +253,64 @@ export function Stat({
         {hint}
       </div>
     </Card>
+  );
+}
+
+// Cifra clave con variación y mini tendencia opcional; pulsable si lleva a otra sección.
+export function Kpi({
+  label,
+  value,
+  delta,
+  hint,
+  tone,
+  spark,
+  onClick,
+}: {
+  label: string;
+  value: string;
+  delta?: number | null;
+  hint?: string;
+  tone?: "good" | "bad";
+  spark?: number[];
+  onClick?: () => void;
+}) {
+  const Tag = onClick ? "button" : "div";
+  return (
+    <Tag
+      {...(onClick && { type: "button" as const, onClick })}
+      className={cn(
+        "flex flex-col rounded-2xl border border-carbon/[0.07] bg-white p-4 text-left shadow-[0_1px_3px_rgba(28,26,22,0.04)] sm:p-5",
+        onClick && "transition hover:border-carbon/20"
+      )}
+    >
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">{label}</p>
+      <p
+        className={cn(
+          "mt-2.5 font-display text-[1.75rem] leading-none tabular-nums sm:text-[2rem]",
+          tone === "good" ? "text-forest" : tone === "bad" ? "text-xs-red" : "text-carbon"
+        )}
+      >
+        {value}
+      </p>
+      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-stone">
+        {delta != null && Number.isFinite(delta) && (
+          <span
+            className={cn(
+              "rounded-full px-1.5 py-0.5 font-medium tabular-nums",
+              delta > 0 ? "bg-emerald-50 text-emerald-700" : delta < 0 ? "bg-red-50 text-red-600" : "bg-carbon/[0.04] text-stone"
+            )}
+          >
+            {delta > 0 ? "↑" : delta < 0 ? "↓" : "="} {Math.abs(delta).toFixed(0)} %
+          </span>
+        )}
+        {hint}
+      </div>
+      {spark && (
+        <div className="mt-3">
+          <Sparkline data={spark} height={32} />
+        </div>
+      )}
+    </Tag>
   );
 }
 
