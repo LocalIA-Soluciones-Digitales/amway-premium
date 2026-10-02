@@ -825,7 +825,7 @@ function FilaProducto({
           {src && <Image src={src} alt="" fill sizes="40px" className="object-contain p-1" />}
         </span>
         <span className="min-w-0">
-          <span className={cn("block truncate text-sm font-medium", row.oculto ? "text-stone" : "text-carbon")} title={product.name}>
+          <span className={cn("line-clamp-2 text-sm font-medium leading-snug lg:line-clamp-1", row.oculto ? "text-stone" : "text-carbon")} title={product.name}>
             {product.name}
           </span>
           <span className="flex items-center gap-2 truncate text-xs text-stone">

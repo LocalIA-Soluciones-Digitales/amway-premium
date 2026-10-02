@@ -127,8 +127,8 @@ export function CabeceraGrupo({
   const pct = r.activos ? (r.preparados / r.activos) * 100 : 100;
   const contenido = (
     <>
-      <span className="flex min-w-0 flex-1 items-center gap-3">
-        <span className={cn("h-9 w-1.5 shrink-0 rounded-full", acento)} />
+      <span className="flex w-full min-w-0 items-center gap-3 sm:w-auto sm:flex-1">
+        <span className={cn("h-9 w-1.5 shrink-0 self-start rounded-full sm:self-center", acento)} />
         <span className="min-w-0">
           <span className="flex flex-wrap items-center gap-2">
             <span className="font-display text-lg leading-tight text-carbon">{g.titulo}</span>
@@ -140,23 +140,23 @@ export function CabeceraGrupo({
           </span>
         </span>
       </span>
-      <span className="flex items-center gap-4 text-xs">
+      <span className="flex w-full items-center gap-3 pl-[1.125rem] text-xs sm:w-auto sm:gap-4 sm:pl-0">
         {r.activos > 0 && (
           <span className="flex items-center gap-2" title="Bolsas preparadas">
             <span className="h-1.5 w-16 overflow-hidden rounded-full bg-carbon/[0.08]">
               <span className="block h-full rounded-full bg-forest transition-all" style={{ width: `${pct}%` }} />
             </span>
-            <span className="tabular-nums text-stone">
+            <span className="whitespace-nowrap tabular-nums text-stone">
               <span className="font-semibold text-carbon">{r.preparados}</span>/{r.activos} preparados
             </span>
           </span>
         )}
         {r.porCobrar > 0 && (
-          <span className="rounded-full bg-amber-50 px-2 py-0.5 font-medium tabular-nums text-amber-800 ring-1 ring-inset ring-amber-200/70">
+          <span className="whitespace-nowrap rounded-full bg-amber-50 px-2 py-0.5 font-medium tabular-nums text-amber-800 ring-1 ring-inset ring-amber-200/70">
             {eur(r.porCobrar)} por cobrar
           </span>
         )}
-        {onToggle && <ChevronDown size={16} className={cn("text-stone transition", plegado && "-rotate-90")} />}
+        {onToggle && <ChevronDown size={16} className={cn("ml-auto shrink-0 text-stone transition sm:ml-0", plegado && "-rotate-90")} />}
       </span>
     </>
   );
@@ -178,11 +178,11 @@ export function APreparar({ pedidos }: { pedidos: Pedido[] }) {
   return (
     <div className="rounded-xl border border-dashed border-carbon/[0.12] px-3 py-2">
       <button type="button" onClick={() => setOpen((v) => !v)} className="flex w-full items-center justify-between gap-2 text-left text-xs">
-        <span className="flex items-center gap-1.5 font-medium text-carbon">
-          <PackageOpen size={14} className="text-stone" /> Lista para preparar · {total} ud. de {lista.length} producto
+        <span className="flex min-w-0 items-center gap-1.5 font-medium text-carbon">
+          <PackageOpen size={14} className="shrink-0 text-stone" /> Lista para preparar · {total} ud. de {lista.length} producto
           {lista.length === 1 ? "" : "s"}
         </span>
-        <ChevronDown size={14} className={cn("text-stone transition", open && "rotate-180")} />
+        <ChevronDown size={14} className={cn("shrink-0 text-stone transition", open && "rotate-180")} />
       </button>
       {open && (
         <ul className="mt-2 grid gap-x-6 gap-y-1 text-[13px] sm:grid-cols-2">
@@ -277,23 +277,31 @@ export function FilaRecogida({
     >
       <span className={cn("absolute inset-y-0 left-0 w-1", estado)} aria-hidden />
       <button type="button" onClick={onAbrir} className="flex min-w-0 flex-1 items-center gap-3 py-3 pl-4 pr-3 text-left sm:gap-4 sm:pl-5">
-        <span className="w-14 shrink-0">
+        <span className="w-[4.5rem] shrink-0 sm:w-14">
           <span className={cn("block font-display text-xl leading-none tabular-nums", p.recogida_hora ? "text-carbon" : "text-stone/60")}>
             {p.recogida_hora ?? "--:--"}
           </span>
           {mostrarFecha && fechaCorta && <span className="mt-1 block text-[10px] uppercase tracking-wide text-xs-red">{fechaCorta}</span>}
         </span>
-        <Miniaturas p={p} />
+        <span className="hidden sm:block">
+          <Miniaturas p={p} />
+        </span>
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-2">
             <span className="truncate font-medium text-carbon">{p.cliente_nombre || "Sin nombre"}</span>
             <span className="shrink-0 text-xs tabular-nums text-stone">#{p.numero}</span>
           </span>
-          <span className="mt-0.5 block truncate text-xs text-stone" title={resumen}>
-            <span className="font-medium text-carbon sm:hidden">
-              {eur(p.total_eur)}
-              {cobrar && !hecho && <span className="text-amber-700"> · cobrar</span>} ·{" "}
-            </span>
+          <span className="mt-0.5 block text-xs sm:hidden">
+            <span className="font-medium tabular-nums text-carbon">{eur(p.total_eur)}</span>
+            {hecho ? (
+              <span className="text-stone"> · recogido</span>
+            ) : cobrar ? (
+              <span className="text-amber-700"> · cobrar en {METODO_PAGO[p.metodo_pago].toLowerCase()}</span>
+            ) : (
+              <span className="text-forest"> · pagado</span>
+            )}
+          </span>
+          <span className="mt-0.5 line-clamp-2 text-xs text-stone sm:line-clamp-1" title={resumen}>
             {unidades} ud. · {resumen}
           </span>
         </span>

@@ -198,9 +198,9 @@ export function ClientesPanel() {
                   }. ¿Quieres que te prepare otro? 😊`;
                   return (
                     <li key={r.key} className="flex flex-wrap items-center gap-x-4 gap-y-2 py-3">
-                      <div className="min-w-0 flex-1">
+                      <div className="w-full min-w-0 sm:w-auto sm:flex-1">
                         <p className="text-sm font-medium text-carbon">{r.cliente.nombre}</p>
-                        <p className="truncate text-xs text-stone">
+                        <p className="text-xs text-stone sm:truncate">
                           {r.producto}
                           {r.formato && ` · ${r.formato}`} · comprado el {fecha(r.comprado)}
                         </p>
@@ -208,7 +208,7 @@ export function ClientesPanel() {
                       <Badge tone={r.dias <= 0 ? "red" : "amber"}>
                         {r.dias < 0 ? `Se acabó hace ${-r.dias} días` : r.dias === 0 ? "Se acaba hoy" : `Se acaba en ${r.dias} días`}
                       </Badge>
-                      <div className="flex items-center gap-1.5">
+                      <div className="ml-auto flex items-center gap-1.5 sm:ml-0">
                         {r.cliente.telefono && (
                           <a
                             href={waHref(r.cliente.telefono, texto)}
@@ -267,31 +267,34 @@ export function ClientesPanel() {
                   <button
                     type="button"
                     onClick={() => setAbierto(open ? null : c.key)}
-                    className="flex w-full flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3.5 text-left transition hover:bg-cream/50"
+                    className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition hover:bg-cream/50 sm:gap-4 sm:px-5"
                   >
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cream text-sm font-medium text-carbon">
                       {c.nombre.charAt(0).toUpperCase()}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="flex items-center gap-1.5 text-sm font-medium text-carbon">
-                        {c.nombre}
-                        {top.includes(c.key) && c.total > 0 && <Crown size={13} className="text-gold" aria-label="Mejor cliente" />}
+                      <span className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm font-medium text-carbon">
+                        <span className="min-w-0 truncate">{c.nombre}</span>
+                        {top.includes(c.key) && c.total > 0 && <Crown size={13} className="shrink-0 text-gold" aria-label="Mejor cliente" />}
                         {c.conCuenta && <Badge tone="green">Con cuenta</Badge>}
                       </span>
                       <span className="block truncate text-xs text-stone">{[c.telefono, c.email].filter(Boolean).join(" · ")}</span>
+                      <span className="block text-xs text-stone sm:hidden">
+                        {c.pedidos.length} pedido{c.pedidos.length === 1 ? "" : "s"} · último {fecha(c.ultimo)}
+                      </span>
                     </span>
-                    <span className="text-xs text-stone">
+                    <span className="hidden shrink-0 text-xs text-stone sm:block">
                       {c.pedidos.length} pedido{c.pedidos.length === 1 ? "" : "s"} · último {fecha(c.ultimo)}
                     </span>
-                    <span className="w-24 text-right text-sm font-medium tabular-nums text-carbon">{eur(c.total)}</span>
-                    <ChevronDown size={16} className={cn("text-stone transition", open && "rotate-180")} />
+                    <span className="shrink-0 text-right text-sm font-medium tabular-nums text-carbon sm:w-24">{eur(c.total)}</span>
+                    <ChevronDown size={16} className={cn("shrink-0 text-stone transition", open && "rotate-180")} />
                   </button>
                   {open && (
-                    <div className="flex flex-col gap-4 bg-cream/40 px-5 py-4 sm:flex-row">
+                    <div className="flex flex-col gap-4 bg-cream/40 px-4 py-4 sm:flex-row sm:px-5">
                       <ul className="min-w-0 flex-1 text-sm">
                         {c.pedidos.map((p) => (
-                          <li key={p.id} className="flex justify-between gap-3 py-1.5">
-                            <span className="min-w-0 truncate text-carbon">
+                          <li key={p.id} className="flex flex-col gap-0.5 py-1.5 sm:flex-row sm:justify-between sm:gap-3">
+                            <span className="min-w-0 text-carbon sm:truncate">
                               <span className="mr-2 tabular-nums text-stone">#{p.numero}</span>
                               {p.items.map((i) => `${i.cantidad}× ${i.nombre}`).join(", ")}
                             </span>
