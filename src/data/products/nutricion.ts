@@ -22,7 +22,7 @@ export const nutricionProducts: Product[] = [
     description:
       "DOUBLE X NUTRILITE es un potente complemento multivitamínico y multimineral con fitonutrientes enriquecido con PhytoBlend™, una mezcla especial de 22 plantas y fitonutrientes procedentes de los 5 grupos de colores que aporta a tu cuerpo un apoyo demostrado científicamente.",
     variants: [{ sku: "292409", size: "372 comprimidos", price: 159.32 }],
-    image: "nutrilite/catalog/double-x.webp",
+    image: "espana/repuesto-nutrilite-double-x.webp",
   },
   {
     id: "vitamina-c-plus-tamano-familiar-nutrilite",
@@ -33,7 +33,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento de vitamina C sumamente eficaz, diseñado para liberar vitamina C de forma lenta y continua.",
     variants: [{ sku: "109743", size: "180 comprimidos", price: 59.04 }],
-    image: "nutrilite/catalog/vitamina-c.webp",
+    image: "espana/vitamina-c-plus-tamano-familiar-nutrilite.webp",
   },
   {
     id: "balance-within",
@@ -254,7 +254,7 @@ export const nutricionProducts: Product[] = [
     description:
       "El sustituto perfecto para 1-2 comidas diarias que te ayuda a alcanzar tus objetivos de pérdida de peso y estilo de vida sano.",
     variants: [{ sku: "121057", size: "14 barritas", price: 62.04 }],
-    image: "espana/bodykey-barrita.webp",
+    image: "espana/barrita-sustitutiva-comida-bodykey-by-nutrilite.webp",
   },
   {
     id: "bodykey-batido",
@@ -276,7 +276,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Batido de vainilla bodykey",
     variants: [{ sku: "116661", size: "14 × 23,5 g", price: 54.52 }],
-    image: "espana/bodykey-batido.webp",
+    image: "espana/batido-cremoso-equilibrado-bodykey-by-nutrilite.webp",
   },
   {
     id: "be-focused",
@@ -639,7 +639,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio multivitamínico de consumo diario con 20 vitaminas y minerales esenciales y 4 extractos botánicos para favorecer múltiples objetivos de bienestar.",
     variants: [{ sku: "125166", size: "45 comprimidos", price: 22.18 }],
-    image: "espana/cotidiano.webp",
+    image: "espana/cotidiano-nutrilite.webp",
   },
   {
     id: "salud-articulaciones",
@@ -749,7 +749,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Eleva tu rutina mañanera con nutrientes esenciales en un formato de repuesto más sostenible.",
     variants: [{ sku: "128617", size: "1 conjunto", price: 169.24 }],
-    image: "espana/morning-nutrition.webp",
+    image: "espana/morning-nutrition-repuesto-nutrilite.webp",
   },
   {
     id: "multicaroteno",

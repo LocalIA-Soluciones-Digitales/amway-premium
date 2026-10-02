@@ -101,7 +101,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Protección solar diaria dentro de la línea renovadora.",
     variants: [{ sku: "123787", size: "50 g", price: 79.96 }],
-    image: "hq_123857.webp",
+    image: "espana/art-crema-hidratante-regeneradora-fps.webp",
   },
   {
     id: "art-crema-reactivacion",
@@ -123,7 +123,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Reduce los signos visibles de la edad en la zona del contorno de ojos, reactivando la habilidad natural de la piel para tener una apariencia más juvenil y saludable en la zona de los ojos.",
     variants: [{ sku: "123784", size: "15 g", price: 52.26 }],
-    image: "flip_renewingcream.webp",
+    image: "espana/art-crema-regeneradora-contorno-ojos.webp",
   },
   {
     id: "art-tonico-renovador",
@@ -222,7 +222,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Ligero y superhidratante, el Gel Crema Hidratante para el Contorno de Ojos Artistry Skin Nutrition ilumina la zona de tus ojos.",
     variants: [{ sku: "123796", size: "15 g", price: 38.53 }],
-    image: "flip_gelcream.webp",
+    image: "espana/art-gel-crema-hidratante-contorno.webp",
   },
   {
     id: "art-removedor-micelar",
@@ -277,7 +277,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Repuesto inteligente y sostenible para la Crema nutritiva Artistry LongXevity™, diseñado para reducir los residuos de plástico.",
     variants: [{ sku: "127575", size: "50 g", price: 349.52 }],
-    image: "flip_lxenriched.webp",
+    image: "espana/crema-nutritiva-repuesto-artistry-longxevity.webp",
   },
   {
     id: "crema-contorno-ojos-repuesto-artistry-longxevity",
@@ -288,7 +288,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Repuesto inteligente para la Crema para contorno de ojos Artistry LongXevity™, diseñado para reducir los residuos de plástico.",
     variants: [{ sku: "127577", size: "15 g", price: 171.80 }],
-    image: "flip_lxeyecream.webp",
+    image: "espana/crema-contorno-ojos-repuesto-artistry-longxevity.webp",
   },
   {
     id: "art-labs-sistema-retexturizador",
@@ -310,7 +310,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Elimina las células muertas de la superficie de la piel y favorece el aspecto general de la epidermis con el Peeling retexturizador y el Sérum retexturizador Artistry Labs.",
     variants: [{ sku: "125547", size: "15/30 ml", price: 262.49 }],
-    image: "art-labs-sistema-retexturizador.webp",
+    image: "espana/sistema-retexturizador-artistry-labs-repuesto.webp",
   },
   {
     id: "art-studio-toque-hidratacion",
@@ -431,7 +431,7 @@ export const bellezaProducts: Product[] = [
     description:
       "La Mascarilla Exfoliante Artistry Signature Select™ pule suavemente la piel para revelar una superficie lisa y suave con un resplandor de aspecto saludable.",
     variants: [{ sku: "122339", size: "100 g", price: 37.40 }],
-    image: "art-ss-mascarillas.webp",
+    image: "espana/art-mascarilla-exfoliante.webp",
   },
   {
     id: "art-mascarilla-purificante",
@@ -442,7 +442,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Esta mascarilla de arcilla espesa limpia profundamente la piel y los poros, eliminando impurezas y contaminantes ambientales.",
     variants: [{ sku: "122342", size: "100 g", price: 44.32 }],
-    image: "art-ss-mascarillas.webp",
+    image: "espana/art-mascarilla-purificante.webp",
   },
   {
     id: "art-mascarilla-reafirmante",
@@ -453,7 +453,7 @@ export const bellezaProducts: Product[] = [
     description:
       "La Mascarilla Reafirmante Artistry Signature Select™ es súper nutritiva y deja la piel con una sensación más firme y tersa.",
     variants: [{ sku: "122341", size: "125 g", price: 47.08 }],
-    image: "art-ss-mascarillas.webp",
+    image: "espana/art-mascarilla-reafirmante.webp",
   },
   {
     id: "art-mascarilla-iluminadora",
@@ -464,7 +464,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Aumenta la luminosidad de tu piel con el efecto energizante de la Mascarilla Iluminadora Artistry Signature Select™.",
     variants: [{ sku: "122340", size: "100 g", price: 47.08 }],
-    image: "art-ss-mascarillas.webp",
+    image: "espana/art-mascarilla-iluminadora.webp",
   },
   {
     id: "art-gv-rimel-volumen",
@@ -517,7 +517,7 @@ export const bellezaProducts: Product[] = [
       { sku: "124158", size: "204 Road Trip Red", price: 25.38 },
       { sku: "124162", size: "208 Lazy Day Latte", price: 25.38 },
     ],
-    image: "art-color-labial.webp",
+    image: "espana/art-color-labial-mate.webp",
   },
   {
     id: "art-fg-base-serum",
@@ -676,7 +676,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341135", size: "conjunto", price: 63.70 }],
-    image: "espana/art-ep-conjunto-maquillaje.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-103.webp",
   },
   {
     id: "art-ep-conjunto-maquillaje",
@@ -698,7 +698,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341134", size: "conjunto", price: 63.70 }],
-    image: "espana/art-ep-conjunto-maquillaje.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-102.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-201",
@@ -709,7 +709,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341136", size: "conjunto", price: 63.70 }],
-    image: "espana/art-ep-conjunto-maquillaje.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-201.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-202",
@@ -720,7 +720,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341137", size: "conjunto", price: 63.70 }],
-    image: "espana/art-ep-conjunto-maquillaje.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-202.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-203",
@@ -731,7 +731,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341138", size: "conjunto", price: 63.70 }],
-    image: "espana/art-ep-conjunto-maquillaje.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-203.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-301",
@@ -742,7 +742,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341139", size: "conjunto", price: 63.70 }],
-    image: "espana/art-ep-conjunto-maquillaje.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-301.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-302",
@@ -753,7 +753,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341140", size: "conjunto", price: 63.70 }],
-    image: "espana/art-ep-conjunto-maquillaje.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-302.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-401",
@@ -764,7 +764,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341141", size: "conjunto", price: 63.70 }],
-    image: "espana/art-ep-conjunto-maquillaje.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-401.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-402",
@@ -775,7 +775,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341142", size: "conjunto", price: 63.70 }],
-    image: "espana/art-ep-conjunto-maquillaje.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-402.webp",
   },
   {
     id: "reafirmante-moisturisation-power",
@@ -852,7 +852,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Repuesto inteligente y sostenible para la Crema suave Artistry LongXevity™, diseñado para reducir los residuos de plástico.",
     variants: [{ sku: "127576", size: "50 g", price: 349.52 }],
-    image: "hq_27572.webp",
+    image: "espana/crema-suave-artistry-longxevity-repuesto.webp",
   },
   {
     id: "art-gv-rubor",

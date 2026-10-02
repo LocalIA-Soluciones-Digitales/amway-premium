@@ -44,7 +44,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Al utilizarla regularmente, la Pasta Dentífrica Multiacción Glister, con agente limpiador de origen natural seguro para el esmalte, blanquea los dientes sin dañarlos, elimina la placa, limpia eficazmente y elimina las manchas suavemente.",
     variants: [{ sku: "124107", size: "50 g", price: 3.44 }],
-    image: "flip_glisterpaste.webp",
+    image: "espana/pasta-dentifrica-multiaccion-glister-tamano-viaje.webp",
   },
   {
     id: "glister-spray",
@@ -66,7 +66,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Gel de ducha denso y cremoso que limpia la piel de forma profunda y suave y la nutre con agua de complejo de bambú, ceramida de aceite de oliva y aceite de chía blanca, dejándola suave, tersa y acondicionada.",
     variants: [{ sku: "125890", size: "400 ml", price: 13.16 }],
-    image: "hq_25914.webp",
+    image: "espana/gel-ducha-g-h-nourish.webp",
   },
   {
     id: "gh-jabon-nourish",
@@ -121,7 +121,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Experimenta un tónico anticaída para cuero cabelludo suave pero eficaz, con una fórmula de ingredientes de origen vegetal y tecnología de liposomas patentada diseñada para fortalecer el cabello y equilibrar la hidratación del cuero cabelludo. Consigue un cabello más saludable y de aspecto más abundante con cada uso.",
     variants: [{ sku: "126466", size: "120 ml", price: 64.80 }],
-    image: "flip_satiniqueantihairfall.webp",
+    image: "espana/sat-tonico-anticaida.webp",
   },
   {
     id: "sat-anticaida",
@@ -143,7 +143,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un acondicionador anticaída que fortalece y espesa el cabello frágil y escaso, al tiempo que reduce la rotura un 55 % y aumenta el volumen.",
     variants: [{ sku: "126459", size: "280 ml", price: 19.90 }],
-    image: "flip_satiniqueantihairfall.webp",
+    image: "espana/sat-acondicionador-anticaida.webp",
   },
   {
     id: "sat-anticaspa",
@@ -165,7 +165,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un champú anticaspa científicamente probado para el cuero cabelludo y el cabello, con potentes ingredientes de origen vegetal que contribuyen a prevenir la aparición de caspa y reduce la descamación del cuero cabelludo.",
     variants: [{ sku: "126464", size: "750 ml", price: 41.82 }],
-    image: "flip_satiniqueantidandruff.webp",
+    image: "espana/champu-anticaspa-cabello-cuero-cabelludo-satinique.webp",
   },
   {
     id: "gh-jabon-manos-protect",
@@ -209,7 +209,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un acondicionador con potentes ingredientes de origen vegetal que refuerza las fibras capilares y contribuye a reducir su rotura para conseguir que sean más fuertes y tengan un aspecto más saludable. ** Cuando se usa como parte de un sistema con el Champú Reparador Intensivo.",
     variants: [{ sku: "126454", size: "280 ml", price: 19.90 }],
-    image: "flip_satiniquerepair.webp",
+    image: "espana/sat-acondicionador-reparador-intensivo.webp",
   },
   {
     id: "sat-suero-aceite-reparador-intensivo",
@@ -220,7 +220,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un suero-aceite intensivo con potentes ingredientes de origen vegetal que repara y fortalece el cabello mediante la reducción de su rotura y la consolidación de cada hebra capilar. Transforma el cabello seco y dañado en cabello sedoso y de aspecto saludable, al tiempo que repara las puntas abiertas y revitaliza las cutículas para aportar un brillo atractivo.",
     variants: [{ sku: "126467", size: "100 ml", price: 27.16 }],
-    image: "flip_satiniquerepair.webp",
+    image: "espana/sat-suero-aceite-reparador-intensivo.webp",
   },
   {
     id: "sat-tratamiento-capilar-reparacion-intensiva",
@@ -231,7 +231,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un tratamiento intensivo del cabello con aclarado cuyos potentes ingredientes de origen vegetal transforman el cabello seco, dañado y debilitado en cabello sedoso, suave y fuerte. * Cuando se usa conjuntamente con el Acondicionador Reparador Intensivo.",
     variants: [{ sku: "126465", size: "250 ml", price: 34.28 }],
-    image: "flip_satiniquerepair.webp",
+    image: "espana/sat-tratamiento-capilar-reparacion-intensiva.webp",
   },
   {
     id: "gel-ducha-exfoliante-g-h-refresh",
@@ -242,7 +242,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Gel de ducha exfoliante para uso diario con agua de complejo de bambú, ceramida obtenida de aceite de oliva, acerola verde y exfoliantes naturales que eliminan con suavidad las impurezas y las células muertas de la piel, dejándola con una sensación de frescor e hidratación.",
     variants: [{ sku: "125892", size: "400 ml", price: 13.16 }],
-    image: "hq_25915.webp",
+    image: "espana/gel-ducha-exfoliante-g-h-refresh.webp",
   },
   {
     id: "gh-bano-refresh",
@@ -330,7 +330,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un acondicionador hidratante con potentes ingredientes de origen vegetal que restaura el brillo y la hidratación del cabello seco y rebelde. Su fórmula enriquecida con proteínas protege, nutre y hace más manejable el cabello con cada lavado.",
     variants: [{ sku: "126451", size: "280 ml", price: 17.86 }],
-    image: "hq_126449.webp",
+    image: "espana/sat-acondicionador-suave-e-hidratante.webp",
   },
   {
     id: "sat-2en1",
@@ -363,7 +363,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un acondicionador purificador impregnado de ingredientes de origen vegetal que deja el cabello y el cuero cabelludo acondicionados, al tiempo que elimina con el aclarado las impurezas, el sebo y la acumulación de producto.",
     variants: [{ sku: "126462", size: "280 ml", price: 19.90 }],
-    image: "flip_satiniquepurifying.webp",
+    image: "espana/sat-acondicionador-purificador.webp",
   },
   {
     id: "champu-anticaida-cabello-cuero-cabelludo-satinique",
@@ -374,7 +374,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un champú anticaída que fortalece y espesa el cabello frágil y escaso, al tiempo que reduce la rotura un 55 % y aumenta el volumen.",
     variants: [{ sku: "126458", size: "750 ml", price: 41.82 }],
-    image: "flip_satiniqueantihairfall.webp",
+    image: "espana/champu-anticaida-cabello-cuero-cabelludo-satinique.webp",
   },
   {
     id: "champu-acondicionador-2-1-satinique",
@@ -385,7 +385,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un champú y acondicionador 2 en 1 con potentes ingredientes de origen vegetal que deja el cabello hidratado y acondicionado, y limpia en profundidad las impurezas en un solo paso.",
     variants: [{ sku: "126456", size: "750 ml", price: 40.45 }],
-    image: "flip_satinique2in1.webp",
+    image: "espana/champu-acondicionador-2-1-satinique.webp",
   },
   {
     id: "acondicionador-anticaida-cabello-cuero-cabelludo-satinique",
@@ -396,7 +396,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un acondicionador anticaída que fortalece y espesa el cabello frágil y escaso, al tiempo que reduce la rotura un 55 % y aumenta el volumen.",
     variants: [{ sku: "126636", size: "750 ml", price: 45.24 }],
-    image: "flip_satiniqueantihairfall.webp",
+    image: "espana/acondicionador-anticaida-cabello-cuero-cabelludo-satinique.webp",
   },
   {
     id: "champu-reparador-intensivo-satinique",
@@ -407,7 +407,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un champú con potentes ingredientes de origen vegetal que aporta una limpieza profunda pero suave, fortalece el cabello y contribuye a reducir su rotura para conseguir que sea más fuerte y tenga un aspecto más saludable. ** Cuando se usa como parte de un sistema con el Acondicionador Reparador Intensivo.",
     variants: [{ sku: "126453", size: "750 ml", price: 41.82 }],
-    image: "flip_satiniquerepair.webp",
+    image: "espana/champu-reparador-intensivo-satinique.webp",
   },
   {
     id: "acondicionador-reparador-intensivo-satinique",
@@ -418,7 +418,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un acondicionador con potentes ingredientes de origen vegetal que refuerza las fibras capilares y contribuye a reducir su rotura para conseguir que sean más fuertes y tengan un aspecto más saludable. ** Cuando se usa como parte de un sistema con el Acondicionador Reparador Intensivo.",
     variants: [{ sku: "126635", size: "750 ml", price: 45.24 }],
-    image: "flip_satiniquerepair.webp",
+    image: "espana/acondicionador-reparador-intensivo-satinique.webp",
   },
   {
     id: "gh-baby-champu",
@@ -462,7 +462,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un acondicionador hidratante con potentes ingredientes de origen vegetal que restaura el brillo y la hidratación del cabello seco y rebelde. Su fórmula enriquecida con proteínas protege, nutre y hace más manejable el cabello con cada lavado.",
     variants: [{ sku: "126634", size: "750 ml", price: 40.45 }],
-    image: "hq_126449.webp",
+    image: "espana/acondicionador-suave-e-hidratante-satinique.webp",
   },
   {
     id: "champu-purificador-cabello-cuero-cabelludo-satinique",
@@ -473,7 +473,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un champú purificador impregnado de ingredientes de origen vegetal que limpia profundamente la contaminación, el polvo fino y el exceso de grasa del cuero cabelludo y el cabello.",
     variants: [{ sku: "126461", size: "750 ml", price: 41.82 }],
-    image: "flip_satiniquepurifying.webp",
+    image: "espana/champu-purificador-cabello-cuero-cabelludo-satinique.webp",
   },
   {
     id: "glister-cabezales",
@@ -528,7 +528,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un champú hidratante con potentes ingredientes de origen vegetal que restaura el brillo y la hidratación del cabello seco y rebelde. Su fórmula enriquecida con proteínas protege, nutre y hace más manejable el cabello con cada lavado.",
     variants: [{ sku: "126450", size: "750 ml", price: 37.57 }],
-    image: "hq_126449.webp",
+    image: "espana/champu-suave-e-hidratante-satinique.webp",
   },
   {
     id: "glister-conjunto-familiar",
@@ -572,7 +572,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un tratamiento intensivo del cabello sin aclarado cuyos potentes ingredientes de origen vegetal transforman el cabello seco y dañado en cabello sedoso, suave y fuerte.",
     variants: [{ sku: "126468", size: "100 ml", price: 23.30 }],
-    image: "flip_satiniquerepair.webp",
+    image: "espana/sat-locion-capilar-reparacion-intensiva.webp",
   },
   {
     id: "glister-pasta-infantil",

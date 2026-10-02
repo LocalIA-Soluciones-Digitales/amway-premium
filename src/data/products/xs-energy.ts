@@ -121,7 +121,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Barrita con alto contenido de proteínas y sabor a coco, con colágeno hidrolizado y sirope de agave.",
     variants: [{ sku: "127731", size: "14 barritas", price: 53.27 }],
-    image: "espana/xs-high-protein-bar.webp",
+    image: "espana/barritas-xs-high-protein-energy-bar.webp",
   },
   {
     id: "xs-barrita-proteinas",
@@ -209,7 +209,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "La combinación definitiva de una potente dosis de proteínas para un mejor crecimiento y desarrollo del músculo magro.",
     variants: [{ sku: "121609", size: "12 barritas", price: 47.09 }],
-    image: "espana/xs-barrita-proteinas.webp",
+    image: "espana/barrita-proteinas-xs-caramelo-vainilla.webp",
   },
   {
     id: "xs-bebida-pre-entrenamiento",

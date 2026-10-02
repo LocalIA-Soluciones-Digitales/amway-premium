@@ -57,7 +57,7 @@ export const hogarProducts: Product[] = [
     description:
       "Sartén de alta calidad hecha de una combinación de aluminio y acero inoxidable, diseñada en Italia con la última tecnología de revestimiento antiadherente.",
     variants: [{ sku: "124695", size: "1 unidad", price: 251.29 }],
-    image: "flip_icooknonstick.webp",
+    image: "espana/icook-sarten-antiadherente-28-cm.webp",
   },
   {
     id: "loc-multiusos",
@@ -399,7 +399,7 @@ export const hogarProducts: Product[] = [
     description:
       "Piezas de repuesto originales para tus ollas, sartenes y tapas iCook™.",
     variants: [{ sku: "400136", size: "1 pieza", price: 9.29 }],
-    image: "icook-mangos-repuesto.webp",
+    image: "espana/icook-asa-lateral-2-l.webp",
   },
   {
     id: "asa-lateral-wok-icook",
@@ -663,7 +663,7 @@ export const hogarProducts: Product[] = [
     description:
       "Piezas de repuesto originales para tus ollas, sartenes y tapas iCook™.",
     variants: [{ sku: "400137", size: "1 pieza", price: 9.29 }],
-    image: "icook-mangos-repuesto.webp",
+    image: "espana/icook-pomo-tapas-cacerolas.webp",
   },
   {
     id: "icook-pomo-tapas-sartenes-antiadherentes",
@@ -674,7 +674,7 @@ export const hogarProducts: Product[] = [
     description:
       "Piezas de repuesto originales para tus ollas, sartenes y tapas iCook™.",
     variants: [{ sku: "400141", size: "1 pieza", price: 13.01 }],
-    image: "icook-mangos-repuesto.webp",
+    image: "espana/icook-pomo-tapas-sartenes-antiadherentes.webp",
   },
   {
     id: "pre-filtro-modelo-anterior",
