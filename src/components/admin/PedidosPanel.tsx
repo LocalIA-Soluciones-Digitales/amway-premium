@@ -1,15 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
-import { CalendarDays, ChevronRight, Loader2, Plus, Search, Trash2, X } from "lucide-react";
+import { CalendarDays, History, Loader2, Plus, Search, Trash2, X } from "lucide-react";
+import { HistorialPedidos } from "./HistorialPedidos";
 import { PedidoDrawer } from "./PedidoDrawer";
 import { PRODUCTS, getProductById } from "@/data/products";
 import { amwayDb } from "@/lib/amway-db";
 import { fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
 import { cn } from "@/lib/utils";
-import { APreparar, CabeceraGrupo, FilaRecogida, Miniaturas, agruparPorDia, esActivo, proximosDias } from "./recogidas";
+import { APreparar, CabeceraGrupo, FilaRecogida, agruparPorDia, esActivo, proximosDias } from "./recogidas";
 import {
-  Badge,
   ESTADO_PEDIDO,
   Empty,
   METODO_PAGO,
@@ -17,17 +17,14 @@ import {
   Segmented,
   btnPrimary,
   eur,
-  fecha,
   inputClass,
-  recogidaCorta,
   type MetodoPago,
   type Pedido,
   type PedidoEstado,
   type PedidoItem,
 } from "./shared";
 
-type Filtro = "activos" | PedidoEstado | "todos";
-type Vista = "recogidas" | "lista";
+type Vista = "recogidas" | "historial";
 
 export function PedidosPanel({
   onChange,
@@ -44,7 +41,6 @@ export function PedidosPanel({
   const [vista, setVista] = useState<Vista>("recogidas");
   const [dia, setDia] = useState<string | null>(null);
   const [plegados, setPlegados] = useState<Set<string>>(new Set());
-  const [filtro, setFiltro] = useState<Filtro>("activos");
   const [query, setQuery] = useState("");
   const [abierto, setAbierto] = useState<string | null>(null);
   const [nuevo, setNuevo] = useState(false);
@@ -67,10 +63,7 @@ export function PedidosPanel({
     if (!foco || !pedidos) return;
     const p = pedidos.find((x) => x.id === foco);
     if (!p) return;
-    if (!(esActivo(p) || p.recogida_fecha)) {
-      setVista("lista");
-      setFiltro("todos");
-    }
+    if (!esActivo(p)) setVista("historial");
     setDia(null);
     setQuery("");
     setAbierto(foco);
@@ -91,12 +84,6 @@ export function PedidosPanel({
     onChange();
   }
 
-  const counts = useMemo(() => {
-    const c: Record<string, number> = {};
-    for (const p of pedidos ?? []) c[p.estado] = (c[p.estado] ?? 0) + 1;
-    return c;
-  }, [pedidos]);
-
   const coincide = useCallback(
     (p: Pedido) => {
       const q = query.trim().toLowerCase();
@@ -108,16 +95,6 @@ export function PedidosPanel({
         .includes(q);
     },
     [query]
-  );
-
-  const lista = useMemo(
-    () =>
-      (pedidos ?? []).filter((p) => {
-        if (filtro === "activos" && !esActivo(p)) return false;
-        if (filtro !== "activos" && filtro !== "todos" && p.estado !== filtro) return false;
-        return coincide(p);
-      }),
-    [pedidos, filtro, coincide]
   );
 
   const semana = useMemo(() => proximosDias(pedidos ?? []), [pedidos]);
@@ -133,7 +110,7 @@ export function PedidosPanel({
     <div>
       <PanelHeader
         title="Pedidos"
-        description="Por día de recogida: quién viene, a qué hora, qué preparar y qué queda por cobrar. Los pedidos de la web entran solos; las ventas por WhatsApp o en mano se apuntan a mano."
+        description="Próximas recogidas: quién viene, a qué hora y qué preparar. En Historial ves cualquier día pasado o todos los pedidos de un cliente."
         actions={
           <button type="button" className={btnPrimary} onClick={() => setNuevo(true)}>
             <Plus size={15} /> Venta manual
@@ -146,8 +123,8 @@ export function PedidosPanel({
           value={vista}
           onChange={setVista}
           options={[
-            { value: "recogidas", label: "Por recogida" },
-            { value: "lista", label: "Todos los pedidos" },
+            { value: "recogidas", label: "Próximas recogidas" },
+            { value: "historial", label: "Historial" },
           ]}
         />
         <div className="relative flex-1">
@@ -159,21 +136,6 @@ export function PedidosPanel({
             className={cn(inputClass, "w-full pl-9")}
           />
         </div>
-        {vista === "lista" && (
-          <Segmented
-            value={filtro}
-            onChange={setFiltro}
-            options={[
-              { value: "activos", label: "En curso" },
-              { value: "pendiente", label: "Por cobrar", count: counts.pendiente },
-              { value: "pagado", label: "Por entregar", count: counts.pagado },
-              { value: "enviado", label: "Enviados" },
-              { value: "entregado", label: "Entregados" },
-              { value: "cancelado", label: "Cancelados" },
-              { value: "todos", label: "Todos" },
-            ]}
-          />
-        )}
       </div>
 
       {nuevo && (
@@ -245,6 +207,14 @@ export function PedidosPanel({
                 </span>
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => setVista("historial")}
+              className="flex shrink-0 flex-col items-center justify-center rounded-2xl border border-dashed border-carbon/15 px-4 py-2 text-xs font-medium text-stone transition hover:border-carbon/30 hover:text-carbon"
+            >
+              <History size={16} />
+              <span className="mt-1">Historial</span>
+            </button>
           </div>
 
           {grupos.length === 0 ? (
@@ -289,47 +259,8 @@ export function PedidosPanel({
             </div>
           )}
         </div>
-      ) : lista.length === 0 ? (
-        <Empty>No hay pedidos en esta vista.</Empty>
       ) : (
-        <div className="flex flex-col gap-2">
-          {lista.map((p) => {
-            const unidades = p.items.reduce((s, i) => s + i.cantidad, 0);
-            return (
-              <div
-                key={p.id}
-                id={`pedido-${p.id}`}
-                className={cn(
-                  "group rounded-2xl border bg-white transition hover:border-carbon/15 hover:shadow-[0_6px_20px_rgba(28,26,22,0.06)]",
-                  abierto === p.id ? "border-carbon/30" : "border-carbon/8"
-                )}
-              >
-                <button
-                  type="button"
-                  onClick={() => setAbierto(p.id)}
-                  className="flex w-full flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 text-left sm:px-5"
-                >
-                  <span className="w-12 font-display text-lg tabular-nums text-carbon">#{p.numero}</span>
-                  <Miniaturas p={p} size={34} />
-                  <span className="min-w-0 flex-1 truncate text-sm text-carbon">
-                    {p.cliente_nombre || "Sin nombre"}
-                    <span className="ml-2 text-stone">
-                      · {unidades} ud. · {METODO_PAGO[p.metodo_pago]}
-                      {p.origen === "manual" && " · manual"}
-                    </span>
-                  </span>
-                  {p.recogida_fecha && p.estado !== "entregado" && p.estado !== "cancelado" && (
-                    <Badge tone="amber">Recoge {recogidaCorta(p)}</Badge>
-                  )}
-                  <span className="text-xs text-stone">{fecha(p.created_at, true)}</span>
-                  <Badge tone={ESTADO_PEDIDO[p.estado].tone}>{ESTADO_PEDIDO[p.estado].label}</Badge>
-                  <span className="w-24 text-right font-medium tabular-nums text-carbon">{eur(p.total_eur)}</span>
-                  <ChevronRight size={16} className="text-stone/60 transition group-hover:translate-x-0.5 group-hover:text-carbon" />
-                </button>
-              </div>
-            );
-          })}
-        </div>
+        <HistorialPedidos pedidos={pedidos} query={query} abierto={abierto} onAbrir={setAbierto} />
       )}
 
       <PedidoDrawer

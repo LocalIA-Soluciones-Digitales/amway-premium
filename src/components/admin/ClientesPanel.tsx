@@ -8,7 +8,7 @@ import { SITE } from "@/data/site-config";
 import { amwayDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
 import { pedidosValidos } from "./report-data";
-import { Badge, Card, CardTitle, Empty, Loading, PanelHeader, Segmented, Stat, eur, fecha, inputClass, waHref, type Pedido } from "./shared";
+import { Badge, Card, CardTitle, Empty, Loading, PanelHeader, Segmented, Stat, clienteKey, eur, fecha, inputClass, waHref, type Pedido } from "./shared";
 
 const HECHOS_KEY = "amway_premium_recompra_hechos";
 
@@ -46,14 +46,6 @@ interface Recompra {
   comprado: string;
   vence: Date;
   dias: number;
-}
-
-function clienteKey(p: Pedido): string | null {
-  const tel = p.cliente_telefono?.replace(/\D/g, "").slice(-9);
-  if (tel && tel.length >= 9) return `t:${tel}`;
-  if (p.cliente_email) return `e:${p.cliente_email.toLowerCase().trim()}`;
-  if (p.cliente_nombre) return `n:${p.cliente_nombre.toLowerCase().trim()}`;
-  return null;
 }
 
 function leerHechos(): Set<string> {

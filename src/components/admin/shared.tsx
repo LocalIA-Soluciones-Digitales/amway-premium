@@ -134,6 +134,15 @@ export function recogidaCorta(p: Pick<Pedido, "recogida_fecha" | "recogida_hora"
   return p.recogida_hora ? `${f} · ${p.recogida_hora}` : f;
 }
 
+// Misma persona aunque compre por la web y por WhatsApp: teléfono > email > nombre.
+export function clienteKey(p: Pedido): string | null {
+  const tel = p.cliente_telefono?.replace(/\D/g, "").slice(-9);
+  if (tel && tel.length >= 9) return `t:${tel}`;
+  if (p.cliente_email) return `e:${p.cliente_email.toLowerCase().trim()}`;
+  if (p.cliente_nombre) return `n:${p.cliente_nombre.toLowerCase().trim()}`;
+  return null;
+}
+
 export const eur = (n: number | null | undefined) => formatEUR(Number(n ?? 0) || 0);
 
 export const dec = (n: number, digits = 1) => n.toLocaleString("es-ES", { minimumFractionDigits: digits, maximumFractionDigits: digits });
