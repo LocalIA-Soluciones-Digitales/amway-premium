@@ -5,6 +5,7 @@ import { CalendarClock, Check, ClipboardCopy, HandCoins, MessageCircle, PackageC
 import { SITE } from "@/data/site-config";
 import { fechaLarga } from "@/lib/recogida";
 import { cn } from "@/lib/utils";
+import { FotoItem } from "./recogidas";
 import { ESTADO_PEDIDO, METODO_PAGO, btnGhost, btnPrimary, eur, fecha, inputClass, waHref, type Pedido } from "./shared";
 
 const PASOS_ENVIO: { estado: Pedido["estado"]; label: string }[] = [
@@ -229,20 +230,22 @@ export function PedidoDetalle({
           </ol>
         )}
 
-        <table className="w-full text-sm">
-          <tbody>
-            {p.items.map((i, idx) => (
-              <tr key={idx} className="border-b border-carbon/[0.05] last:border-0">
-                <td className="w-10 py-2.5 pr-3 tabular-nums text-stone">{i.cantidad}×</td>
-                <td className="py-2.5 pr-3">
-                  <p className="text-carbon">{i.nombre}</p>
-                  <p className="text-xs text-stone">{[i.formato, i.sabor].filter(Boolean).join(" · ")}</p>
-                </td>
-                <td className="py-2.5 text-right tabular-nums text-carbon">{eur(i.precio_eur * i.cantidad)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ul className="flex flex-col text-sm">
+          {p.items.map((i, idx) => (
+            <li key={idx} className="flex items-center gap-3 border-b border-carbon/[0.05] py-2.5 last:border-0">
+              <FotoItem item={i} size={48} />
+              <span className="min-w-0 flex-1">
+                <span className="block leading-snug text-carbon">{i.nombre}</span>
+                <span className="mt-0.5 block text-xs text-stone">
+                  <span className="font-medium text-carbon">{i.cantidad} ud.</span>
+                  {[i.formato, i.sabor].filter(Boolean).map((x) => ` · ${x}`)}
+                  {i.cantidad > 1 && ` · ${eur(i.precio_eur)}/ud.`}
+                </span>
+              </span>
+              <span className="shrink-0 tabular-nums text-carbon">{eur(i.precio_eur * i.cantidad)}</span>
+            </li>
+          ))}
+        </ul>
         <div className="mt-2 flex justify-end gap-6 text-sm">
           {p.envio_eur > 0 && <span className="text-stone">Envío {eur(p.envio_eur)}</span>}
           <span className="font-medium text-carbon">Total {eur(p.total_eur)}</span>

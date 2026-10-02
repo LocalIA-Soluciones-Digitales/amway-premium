@@ -3,11 +3,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Check, ChevronDown, ChevronRight, HandCoins, MessageCircle, PackageCheck, PackageOpen, Phone, Undo2 } from "lucide-react";
-import { getProductById } from "@/data/products";
-import { productImageSrc } from "@/data/types";
 import { fechaLarga, hoyMadrid, sumarDias } from "@/lib/recogida";
 import { cn } from "@/lib/utils";
-import { Badge, METODO_PAGO, eur, waHref, type Pedido } from "./shared";
+import { imagenDeItem, inicialesItem } from "./producto-item";
+import { Badge, METODO_PAGO, eur, waHref, type Pedido, type PedidoItem } from "./shared";
 
 // Agenda de recogidas: los pedidos agrupados por el día en que el cliente
 // pasa a recogerlos (como la vista por fecha de Arrantza), para saber qué
@@ -201,33 +200,41 @@ export function APreparar({ pedidos }: { pedidos: Pedido[] }) {
   );
 }
 
+// Foto del producto de una línea de pedido (o sus iniciales si no hay foto),
+// con la cantidad en la esquina cuando lleva más de una.
+export function FotoItem({ item, size = 40, className }: { item: Pick<PedidoItem, "product_id" | "nombre" | "cantidad">; size?: number; className?: string }) {
+  const src = imagenDeItem(item);
+  const ini = src ? null : inicialesItem(item.nombre);
+  return (
+    <span
+      title={`${item.cantidad}× ${item.nombre}`}
+      style={{ width: size, height: size, background: ini?.fondo }}
+      className={cn("relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl bg-linen", className)}
+    >
+      {src ? (
+        <Image src={src} alt="" fill sizes={`${size}px`} className="object-contain p-1" />
+      ) : (
+        <span className="font-display text-carbon/70" style={{ fontSize: Math.max(10, size * 0.32) }}>
+          {ini!.texto}
+        </span>
+      )}
+      {item.cantidad > 1 && (
+        <span className="absolute bottom-0 right-0 rounded-tl-md bg-carbon px-1 text-[9px] font-semibold leading-tight text-cream">
+          {item.cantidad}
+        </span>
+      )}
+    </span>
+  );
+}
+
 // Miniaturas de lo que se lleva (hasta 3 y "+n").
-export function Miniaturas({ p, size = 40 }: { p: Pick<Pedido, "items">; size?: number }) {
-  const imgs = p.items.slice(0, 3).map((i) => {
-    const prod = i.product_id ? getProductById(i.product_id) : undefined;
-    return { src: prod ? productImageSrc(prod) : null, nombre: i.nombre, n: i.cantidad };
-  });
-  const resto = p.items.length - imgs.length;
+export function Miniaturas({ p, size = 40, max = 3 }: { p: Pick<Pedido, "items">; size?: number; max?: number }) {
+  const items = p.items.slice(0, max);
+  const resto = p.items.length - items.length;
   return (
     <span className="flex shrink-0 -space-x-2">
-      {imgs.map((m, k) => (
-        <span
-          key={k}
-          title={`${m.n}× ${m.nombre}`}
-          style={{ width: size, height: size }}
-          className="relative flex items-center justify-center overflow-hidden rounded-xl bg-linen ring-2 ring-white"
-        >
-          {m.src ? (
-            <Image src={m.src} alt="" fill sizes={`${size}px`} className="object-contain p-1" />
-          ) : (
-            <PackageOpen size={14} className="text-stone" />
-          )}
-          {m.n > 1 && (
-            <span className="absolute bottom-0 right-0 rounded-tl-md bg-carbon px-1 text-[9px] font-semibold leading-tight text-cream">
-              {m.n}
-            </span>
-          )}
-        </span>
+      {items.map((i, k) => (
+        <FotoItem key={k} item={i} size={size} className="ring-2 ring-white" />
       ))}
       {resto > 0 && (
         <span
@@ -277,11 +284,14 @@ export function FilaRecogida({
     >
       <span className={cn("absolute inset-y-0 left-0 w-1", estado)} aria-hidden />
       <button type="button" onClick={onAbrir} className="flex min-w-0 flex-1 items-center gap-3 py-3 pl-4 pr-3 text-left sm:gap-4 sm:pl-5">
-        <span className="w-[4.5rem] shrink-0 sm:w-14">
-          <span className={cn("block font-display text-xl leading-none tabular-nums", p.recogida_hora ? "text-carbon" : "text-stone/60")}>
+        <span className="w-12 shrink-0 sm:w-14">
+          <span className={cn("block font-display text-lg leading-none tabular-nums sm:text-xl", p.recogida_hora ? "text-carbon" : "text-stone/60")}>
             {p.recogida_hora ?? "--:--"}
           </span>
           {mostrarFecha && fechaCorta && <span className="mt-1 block text-[10px] uppercase tracking-wide text-xs-red">{fechaCorta}</span>}
+        </span>
+        <span className="sm:hidden">
+          <Miniaturas p={p} size={34} max={2} />
         </span>
         <span className="hidden sm:block">
           <Miniaturas p={p} />

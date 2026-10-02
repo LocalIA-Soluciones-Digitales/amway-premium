@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import {
   Check,
@@ -60,17 +54,6 @@ export function DashboardShell<T extends string>({
   children: ReactNode;
 }) {
   const [pwOpen, setPwOpen] = useState(false);
-  // En el móvil la cabecera se esconde al bajar y solo quedan fijas las
-  // pestañas: se pega con un top negativo igual a lo que mide la parte de arriba.
-  const topRef = useRef<HTMLDivElement>(null);
-  const [topH, setTopH] = useState(0);
-  useEffect(() => {
-    const el = topRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => setTopH(el.offsetHeight));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
   const tabsNav = (
     <nav
       className="-mx-1 flex items-center gap-1 overflow-x-auto px-1 [scrollbar-width:none]"
@@ -111,11 +94,12 @@ export function DashboardShell<T extends string>({
 
   return (
     <div className="min-h-screen bg-[#f3f0e9] print:bg-white">
-      <header
-        style={{ "--shell-top": `${topH}px` } as CSSProperties}
-        className="sticky top-[calc(env(safe-area-inset-top)_-_var(--shell-top))] z-30 border-b border-carbon/[0.07] bg-cream-soft/95 backdrop-blur-xl before:absolute before:inset-x-0 before:bottom-full before:h-40 before:bg-cream-soft md:top-0 print:hidden"
-      >
-        <div ref={topRef}>
+      {/* En el móvil la cabecera se va al bajar y solo quedan fijas las
+          pestañas, opacas y pegadas arriba del todo (así Safari tiñe también la
+          zona de la hora). En la app instalada, una franja tapa esa zona. */}
+      <div className="fixed inset-x-0 top-0 z-40 h-[env(safe-area-inset-top)] bg-cream-soft md:hidden print:hidden" />
+      <header className="z-30 print:hidden max-md:contents md:sticky md:top-0 md:border-b md:border-carbon/[0.07] md:bg-cream-soft/90 md:backdrop-blur-xl">
+        <div className="bg-cream-soft md:bg-transparent">
           <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-3 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] sm:gap-4 sm:px-8">
             <div className="flex min-w-0 items-center gap-3">
               <Link
@@ -180,8 +164,10 @@ export function DashboardShell<T extends string>({
             </div>
           )}
         </div>
-        <div className="mx-auto max-w-[1440px] px-4 pb-2.5 sm:px-8 sm:pb-3">
-          {tabsNav}
+        <div className="z-30 border-b border-carbon/[0.07] bg-cream-soft max-md:sticky max-md:top-[env(safe-area-inset-top)] md:border-0 md:bg-transparent">
+          <div className="mx-auto max-w-[1440px] px-4 py-2 sm:px-8 md:pb-3 md:pt-0">
+            {tabsNav}
+          </div>
         </div>
       </header>
 

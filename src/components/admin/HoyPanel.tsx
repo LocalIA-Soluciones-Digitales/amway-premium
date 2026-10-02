@@ -422,7 +422,7 @@ export function HoyPanel({
                         onClick={() => abrir(p)}
                         className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition hover:bg-cream"
                       >
-                        <Miniaturas p={p} size={32} />
+                        <Miniaturas p={p} size={36} max={2} />
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-sm text-carbon">
                             <span className="tabular-nums text-stone">#{p.numero}</span> {p.cliente_nombre || "Sin nombre"}

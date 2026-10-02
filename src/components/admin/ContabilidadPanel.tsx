@@ -1,17 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
-import Image from "next/image";
 import {
   ArrowDownRight,
   ArrowUpRight,
   CalendarRange,
+  Check,
   Download,
   HandCoins,
   Lightbulb,
   Loader2,
   Package,
   Plus,
+  Receipt,
   Repeat,
   Sparkles,
   Tag,
@@ -19,11 +20,11 @@ import {
   TrendingUp,
   Wallet,
 } from "lucide-react";
-import { getProductById } from "@/data/products";
-import { productImageSrc } from "@/data/types";
 import { amwayDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
 import { BarList, ColumnChart, Donut, ForecastChart, type ForecastPoint } from "./charts";
+import { productoDeItem } from "./producto-item";
+import { FotoItem } from "./recogidas";
 import { CATEGORIA_LABEL, variacion } from "./report-data";
 import {
   CATEGORIA_GASTO,
@@ -357,7 +358,7 @@ export function ContabilidadPanel() {
   const porGama = useMemo(() => {
     const m = new Map<string, { ingresos: number; coste: number; conCoste: number }>();
     for (const x of productos) {
-      const prod = x.productId ? getProductById(x.productId) : undefined;
+      const prod = productoDeItem({ product_id: x.productId, nombre: x.nombre });
       const k = prod?.brand ?? "Otros";
       const cur = m.get(k) ?? { ingresos: 0, coste: 0, conCoste: 0 };
       cur.ingresos += x.ingresos;
@@ -375,7 +376,7 @@ export function ContabilidadPanel() {
   const porCategoria = useMemo(() => {
     const m = new Map<string, number>();
     for (const x of productos) {
-      const prod = x.productId ? getProductById(x.productId) : undefined;
+      const prod = productoDeItem({ product_id: x.productId, nombre: x.nombre });
       const k = prod ? (CATEGORIA_LABEL[prod.category] ?? prod.category) : "Otros";
       m.set(k, (m.get(k) ?? 0) + x.ingresos);
     }
@@ -587,6 +588,8 @@ export function ContabilidadPanel() {
         </div>
       </div>
 
+      <NuevoGasto onChange={cargar} />
+
       {!r || !semanal ? (
         <div className="flex justify-center py-20">
           <Loader2 className="animate-spin text-stone" />
@@ -615,6 +618,8 @@ export function ContabilidadPanel() {
               hint={`${r.pedidos} pedido${r.pedidos === 1 ? "" : "s"}`}
             />
           </div>
+
+          <CuentaResultados r={r} prev={rPrev} etiqueta={per.etiqueta} comparaCon={per.comparaCon} />
 
           {/* Tendencia y previsión */}
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_20rem]">
@@ -818,19 +823,19 @@ export function ContabilidadPanel() {
             ) : (
               <ol className="flex flex-col">
                 {top.map((t, i) => {
-                  const prod = t.productId ? getProductById(t.productId) : undefined;
-                  const src = prod ? productImageSrc(prod) : null;
                   const v = ordenTop === "unidades" ? t.unidades : ordenTop === "beneficio" ? (t.beneficio ?? 0) : t.ingresos;
                   const m = t.beneficio != null && t.ingresos > 0 ? (t.beneficio / t.ingresos) * 100 : null;
                   return (
                     <li key={t.key} className="flex items-center gap-3 border-b border-carbon/[0.05] py-2.5 last:border-0">
                       <span className="w-5 text-right font-display text-base tabular-nums text-stone">{i + 1}</span>
-                      <span className="relative h-11 w-10 shrink-0 overflow-hidden rounded-lg bg-linen">
-                        {src && <Image src={src} alt="" fill sizes="40px" className="object-contain p-0.5" />}
-                      </span>
+                      <FotoItem item={{ product_id: t.productId, nombre: t.nombre, cantidad: 1 }} size={44} />
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm text-carbon" title={t.nombre}>
+                        <span className="line-clamp-2 text-sm leading-snug text-carbon sm:line-clamp-1" title={t.nombre}>
                           {t.nombre}
+                        </span>
+                        <span className="block text-[11px] text-stone sm:hidden">
+                          {t.unidades} ud.
+                          {t.formato && ` · ${t.formato}`}
                         </span>
                         <span className="mt-1 block h-1.5 overflow-hidden rounded-full bg-carbon/[0.05]">
                           <span className="block h-full rounded-full bg-forest" style={{ width: `${(Math.max(0, v) / maxTop) * 100}%` }} />
@@ -919,37 +924,6 @@ export function ContabilidadPanel() {
             </Card>
           )}
 
-          {/* Cuenta de resultados */}
-          <Card>
-            <CardTitle>Cuenta de resultados · {per.etiqueta}</CardTitle>
-            <dl className="grid gap-y-2 text-sm sm:max-w-lg">
-              {(
-                [
-                  ["Ventas (con envío)", r.ventas, rPrev?.ventas],
-                  ["− Coste de la mercancía vendida", -r.coste, rPrev ? -rPrev.coste : undefined],
-                  ["− Comisiones de pago (estimadas)", -r.comisiones, rPrev ? -rPrev.comisiones : undefined],
-                  ["− Otros gastos", -r.gastos, rPrev ? -rPrev.gastos : undefined],
-                ] as const
-              ).map(([label, v, prev]) => (
-                <div key={label} className="flex items-baseline justify-between gap-4">
-                  <dt className="text-stone">{label}</dt>
-                  <dd className="flex items-baseline gap-3 tabular-nums text-carbon">
-                    {prev != null && <span className="text-xs text-stone/70">{eur(prev)}</span>}
-                    {eur(v)}
-                  </dd>
-                </div>
-              ))}
-              <div className="mt-1 flex items-baseline justify-between border-t border-carbon/10 pt-2 font-medium">
-                <dt className="text-carbon">Resultado</dt>
-                <dd className="flex items-baseline gap-3 tabular-nums">
-                  {rPrev && <span className="text-xs font-normal text-stone/70">{eur(rPrev.beneficioNeto)}</span>}
-                  <span className={r.beneficioNeto >= 0 ? "text-forest" : "text-xs-red"}>{eur(r.beneficioNeto)}</span>
-                </dd>
-              </div>
-              {rPrev && <p className="text-right text-[11px] text-stone">En gris, el periodo anterior ({per.comparaCon.replace("vs. ", "")})</p>}
-            </dl>
-          </Card>
-
           <GastosSection gastos={gastos ?? []} porCategoria={gastosPorCategoria} onChange={cargar} />
         </div>
       )}
@@ -975,6 +949,245 @@ function Leyenda({ color, linea, rayas, children }: { color?: string; linea?: bo
   );
 }
 
+// Apuntar un gasto: lo primero del panel, para hacerlo en segundos desde el
+// móvil (importe, tipo y listo; si no se pone concepto, se usa el tipo).
+function NuevoGasto({ onChange }: { onChange: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [fechaG, setFechaG] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  });
+  const [concepto, setConcepto] = useState("");
+  const [categoria, setCategoria] = useState<Gasto["categoria"]>("mercancia");
+  const [importe, setImporte] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [hecho, setHecho] = useState<string | null>(null);
+  const n = Number(importe.replace(",", "."));
+  const valido = importe.trim() !== "" && Number.isFinite(n) && n > 0;
+
+  async function add(e: FormEvent) {
+    e.preventDefault();
+    if (!valido) return;
+    setSaving(true);
+    const texto = concepto.trim() || CATEGORIA_GASTO[categoria];
+    const { error } = await amwayDb().from("amway_gastos").insert({ fecha: fechaG, concepto: texto, categoria, importe_eur: n });
+    setSaving(false);
+    if (error) {
+      alert("No se pudo guardar el gasto. Inténtalo de nuevo.");
+      return;
+    }
+    setConcepto("");
+    setImporte("");
+    setHecho(`${eur(n)} · ${texto}`);
+    setTimeout(() => setHecho(null), 4000);
+    onChange();
+  }
+
+  return (
+    <Card className="mb-4">
+      <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} className="flex w-full items-center gap-3 text-left">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-forest text-cream">
+          <Receipt size={17} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-medium text-carbon">Apuntar un gasto</span>
+          <span className="block text-xs text-stone">Compra a Amway, envío, publicidad, embalaje…</span>
+        </span>
+        <span
+          className={cn(
+            "inline-flex h-9 shrink-0 items-center gap-1 rounded-full px-3.5 text-xs font-medium transition",
+            open ? "bg-cream text-stone" : "bg-carbon text-cream"
+          )}
+        >
+          {open ? (
+            "Cerrar"
+          ) : (
+            <>
+              <Plus size={14} /> Nuevo
+            </>
+          )}
+        </span>
+      </button>
+
+      {hecho && (
+        <p className="mt-3 flex items-center gap-2 rounded-xl bg-emerald-50 px-3 py-2 text-xs text-emerald-800 ring-1 ring-inset ring-emerald-200/70">
+          <Check size={14} /> Apuntado: {hecho}
+        </p>
+      )}
+
+      {open && (
+        <form onSubmit={add} className="mt-4 flex flex-col gap-3">
+          <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label="Tipo de gasto">
+            {(Object.entries(CATEGORIA_GASTO) as [Gasto["categoria"], string][]).map(([v, label]) => (
+              <button
+                key={v}
+                type="button"
+                role="radio"
+                aria-checked={categoria === v}
+                onClick={() => setCategoria(v)}
+                className={cn(
+                  "rounded-full border px-3 py-1.5 text-xs font-medium transition",
+                  categoria === v ? "border-carbon bg-carbon text-cream" : "border-carbon/[0.12] text-stone hover:border-carbon/25 hover:text-carbon"
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-[10rem_10rem_minmax(0,1fr)_auto]">
+            <label className="relative">
+              <span className="sr-only">Importe</span>
+              <input
+                inputMode="decimal"
+                autoFocus
+                value={importe}
+                onChange={(e) => setImporte(e.target.value.replace(/[^\d.,]/g, ""))}
+                placeholder="0,00"
+                className={cn(inputClass, "w-full pr-8 text-right text-base font-medium tabular-nums")}
+                required
+              />
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-stone">€</span>
+            </label>
+            <input type="date" value={fechaG} onChange={(e) => setFechaG(e.target.value)} className={cn(inputClass, "w-full")} aria-label="Fecha" required />
+            <input
+              value={concepto}
+              onChange={(e) => setConcepto(e.target.value)}
+              placeholder="Concepto (opcional)"
+              maxLength={200}
+              className={cn(inputClass, "col-span-2 w-full sm:col-span-1")}
+            />
+            <button type="submit" disabled={saving || !valido} className={cn(btnPrimary, "col-span-2 justify-center disabled:opacity-40 sm:col-span-1")}>
+              {saving ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} Guardar gasto
+            </button>
+          </div>
+        </form>
+      )}
+    </Card>
+  );
+}
+
+// Cuenta de resultados en cascada: de lo vendido se van restando coste,
+// comisiones y gastos hasta lo que queda limpio. Todas las barras a escala.
+function CuentaResultados({ r, prev, etiqueta, comparaCon }: { r: Resultado; prev: Resultado | null; etiqueta: string; comparaCon: string }) {
+  const escala = Math.max(1, r.ventas, r.coste + r.comisiones + r.gastos);
+  const w = (v: number) => `${(Math.max(0, v) / escala) * 100}%`;
+  let tope = r.ventas;
+  const filas = [
+    { label: "Coste de la mercancía", hint: undefined, v: r.coste, antes: prev?.coste, color: "#b7ae9b" },
+    { label: "Comisiones de pago", hint: "estimadas", v: r.comisiones, antes: prev?.comisiones, color: "#e4cba3" },
+    { label: "Otros gastos", hint: undefined, v: r.gastos, antes: prev?.gastos, color: "#3f6b7d" },
+  ].map((f) => {
+    // Cada resta ocupa el tramo que se "come" de lo que queda; si ya no queda
+    // nada (pérdida), se dibuja desde cero.
+    const desde = Math.max(0, tope - f.v);
+    const fila = { ...f, left: w(desde), width: w(Math.max(0, tope) > 0 ? Math.min(f.v, tope) : f.v) };
+    tope -= f.v;
+    return fila;
+  });
+  const positivo = r.beneficioNeto >= 0;
+  const margen = r.ventas > 0 ? (r.beneficioNeto / r.ventas) * 100 : null;
+  const hayComparacion = !!prev && !!comparaCon;
+
+  return (
+    <Card>
+      <CardTitle>Cuenta de resultados · {etiqueta}</CardTitle>
+      <div className="flex flex-col gap-4">
+        <FilaCuenta
+          label="Ventas"
+          hint="con envío"
+          valor={eur(r.ventas)}
+          cambio={hayComparacion ? <Cambio a={r.ventas} b={prev!.ventas} /> : null}
+          bar={<span className="absolute inset-y-0 left-0 rounded-md bg-forest" style={{ width: w(r.ventas) }} />}
+        />
+        {filas.map((f) => (
+          <FilaCuenta
+            key={f.label}
+            label={`− ${f.label}`}
+            hint={f.hint}
+            valor={eur(-f.v)}
+            pct={r.ventas > 0 && f.v > 0 ? pct((f.v / r.ventas) * 100) : null}
+            cambio={hayComparacion && f.antes != null ? <Cambio a={f.v} b={f.antes} invertir /> : null}
+            tenue
+            bar={<span className="absolute inset-y-0 rounded-md" style={{ left: f.left, width: f.width, background: f.color }} />}
+          />
+        ))}
+      </div>
+
+      <div className={cn("mt-5 flex flex-wrap items-end justify-between gap-3 rounded-2xl px-4 py-3.5", positivo ? "bg-forest/[0.07]" : "bg-red-50")}>
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">{positivo ? "Te queda limpio" : "Pérdida"}</p>
+          <p className={cn("mt-1 font-display text-[2rem] leading-none tabular-nums", positivo ? "text-forest" : "text-xs-red")}>{eur(r.beneficioNeto)}</p>
+        </div>
+        <div className="text-right text-xs text-stone">
+          {margen != null && (
+            <p>
+              <span className="font-medium text-carbon">{pct(margen)}</span> de lo vendido
+            </p>
+          )}
+          {hayComparacion && (
+            <p className="mt-0.5">
+              Antes {eur(prev!.beneficioNeto)} <Cambio a={r.beneficioNeto} b={prev!.beneficioNeto} />
+            </p>
+          )}
+        </div>
+      </div>
+      {r.lineasSinCoste > 0 && (
+        <p className="mt-3 text-[11px] text-stone">
+          {r.lineasSinCoste} línea{r.lineasSinCoste === 1 ? "" : "s"} vendida{r.lineasSinCoste === 1 ? "" : "s"} sin coste apuntado: el beneficio real
+          será algo menor. Apúntalo en Productos.
+        </p>
+      )}
+      {hayComparacion && <p className="mt-2 text-[11px] text-stone">Las flechas comparan con el periodo anterior ({comparaCon.replace("vs. ", "")}).</p>}
+    </Card>
+  );
+}
+
+function Cambio({ a, b, invertir }: { a: number; b: number; invertir?: boolean }) {
+  const d = variacion(a, b);
+  if (d == null || !Number.isFinite(d) || Math.round(d) === 0) return <span className="text-[11px] text-stone/70">=</span>;
+  const bueno = invertir ? d < 0 : d > 0;
+  return (
+    <span className={cn("text-[11px] font-medium tabular-nums", bueno ? "text-emerald-700" : "text-red-600")}>
+      {d > 0 ? "▲" : "▼"} {Math.abs(d).toFixed(0)} %
+    </span>
+  );
+}
+
+function FilaCuenta({
+  label,
+  hint,
+  valor,
+  pct: porcentaje,
+  cambio,
+  tenue,
+  bar,
+}: {
+  label: string;
+  hint?: string;
+  valor: string;
+  pct?: string | null;
+  cambio?: ReactNode;
+  tenue?: boolean;
+  bar: ReactNode;
+}) {
+  return (
+    <div>
+      <div className="flex items-baseline justify-between gap-3 text-sm">
+        <span className={cn("min-w-0", tenue ? "text-stone" : "font-medium text-carbon")}>
+          {label}
+          {hint && <span className="ml-1 text-[11px] text-stone/70">({hint})</span>}
+        </span>
+        <span className="flex shrink-0 items-baseline gap-2 tabular-nums">
+          {cambio}
+          {porcentaje && <span className="text-[11px] text-stone">{porcentaje}</span>}
+          <span className={cn("text-carbon", !tenue && "font-medium")}>{valor}</span>
+        </span>
+      </div>
+      <div className="relative mt-1.5 h-3 overflow-hidden rounded-md bg-carbon/[0.04]">{bar}</div>
+    </div>
+  );
+}
+
 function GastosSection({
   gastos,
   porCategoria,
@@ -984,24 +1197,7 @@ function GastosSection({
   porCategoria: [Gasto["categoria"], number][];
   onChange: () => void;
 }) {
-  const [fechaG, setFechaG] = useState(new Date().toISOString().slice(0, 10));
-  const [concepto, setConcepto] = useState("");
-  const [categoria, setCategoria] = useState<Gasto["categoria"]>("mercancia");
-  const [importe, setImporte] = useState("");
-  const [saving, setSaving] = useState(false);
   const total = porCategoria.reduce((s, [, v]) => s + v, 0);
-
-  async function add(e: FormEvent) {
-    e.preventDefault();
-    const n = Number(importe.replace(",", "."));
-    if (!concepto.trim() || !Number.isFinite(n) || n < 0) return;
-    setSaving(true);
-    await amwayDb().from("amway_gastos").insert({ fecha: fechaG, concepto: concepto.trim(), categoria, importe_eur: n });
-    setSaving(false);
-    setConcepto("");
-    setImporte("");
-    onChange();
-  }
 
   async function borrar(g: Gasto) {
     if (!confirm(`¿Borrar el gasto "${g.concepto}"?`)) return;
@@ -1013,8 +1209,8 @@ function GastosSection({
     <div className="mt-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h3 className="font-display text-2xl text-carbon">Gastos</h3>
-          <p className="mt-1 text-sm text-stone">Compras a Amway, envíos, publicidad, embalaje… todo lo que no es una venta.</p>
+          <h3 className="font-display text-2xl text-carbon">Gastos del periodo</h3>
+          <p className="mt-1 text-sm text-stone">Se apuntan arriba, en «Apuntar un gasto».</p>
         </div>
         {total > 0 && (
           <p className="text-sm text-stone">
@@ -1045,22 +1241,6 @@ function GastosSection({
         </div>
       )}
 
-      <form onSubmit={add} className="mt-4 grid gap-2 rounded-2xl border border-carbon/8 bg-white p-3 sm:grid-cols-[9.5rem_1fr_13rem_8rem_auto]">
-        <input type="date" value={fechaG} onChange={(e) => setFechaG(e.target.value)} className={inputClass} aria-label="Fecha" required />
-        <input value={concepto} onChange={(e) => setConcepto(e.target.value)} placeholder="Concepto (p. ej. pedido a Amway)" maxLength={200} className={inputClass} required />
-        <select value={categoria} onChange={(e) => setCategoria(e.target.value as Gasto["categoria"])} className={inputClass} aria-label="Categoría">
-          {Object.entries(CATEGORIA_GASTO).map(([v, label]) => (
-            <option key={v} value={v}>
-              {label}
-            </option>
-          ))}
-        </select>
-        <input inputMode="decimal" value={importe} onChange={(e) => setImporte(e.target.value)} placeholder="Importe €" className={inputClass} required />
-        <button type="submit" disabled={saving} className={btnPrimary}>
-          {saving ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} Añadir
-        </button>
-      </form>
-
       {gastos.length === 0 ? (
         <div className="mt-3">
           <Empty>No hay gastos en este periodo.</Empty>
@@ -1068,11 +1248,15 @@ function GastosSection({
       ) : (
         <div className="mt-3 overflow-hidden rounded-2xl border border-carbon/8 bg-white">
           {gastos.map((g) => (
-            <div key={g.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-carbon/5 px-4 py-3 text-sm last:border-0">
-              <span className="w-24 text-stone">{fecha(g.fecha)}</span>
-              <span className="min-w-0 flex-1 text-carbon">{g.concepto}</span>
-              <span className="rounded-full bg-cream px-2 py-0.5 text-xs text-stone">{CATEGORIA_GASTO[g.categoria]}</span>
-              <span className="w-24 text-right tabular-nums text-carbon">{eur(g.importe_eur)}</span>
+            <div key={g.id} className="flex items-center gap-3 border-b border-carbon/5 px-4 py-3 text-sm last:border-0">
+              <span className="min-w-0 flex-1">
+                <span className="block text-carbon">{g.concepto}</span>
+                <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-stone">
+                  {fecha(g.fecha)}
+                  <span className="rounded-full bg-cream px-2 py-0.5">{CATEGORIA_GASTO[g.categoria]}</span>
+                </span>
+              </span>
+              <span className="shrink-0 text-right tabular-nums text-carbon">{eur(g.importe_eur)}</span>
               <button type="button" onClick={() => borrar(g)} aria-label="Borrar gasto" className="p-1 text-stone hover:text-xs-red">
                 <Trash2 size={14} />
               </button>
