@@ -358,7 +358,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "art-studio-parches-ojos",
-    name: "Parches Descongestionantes +Iluminadores para Ojos Artistry Studio™",
+    name: "Parches Descongestionantes + Iluminadores para Ojos Artistry Studio™",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Cuidado de la piel",
@@ -475,7 +475,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Máscara que cuida tus pestañas gracias al poder de las plantas, con un cepillo transformador para alargarlas, definirlas y darles volumen.",
     variants: [{ sku: "127845", size: "7,5 g", price: 35.62 }],
-    image: "art-gv-rimel-volumen.webp",
+    image: "espana/art-gv-rimel-volumen.webp",
   },
   {
     id: "art-color-labial",
@@ -521,7 +521,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "art-fg-base-serum",
-    name: "Base de Maquillaje en Sérum Artistry Future Glow™",
+    name: "Base de Maquillaje en Sérum FPS 35 PA++ Artistry Future Glow™",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -603,7 +603,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "caja-tarjetas-muestra-suero-diario-vitamina",
-    name: "Caja con Tarjetas de Muestra del Suero Diario Vitamina C+HA3 Artistry",
+    name: "Caja con Tarjetas de Muestra del Suero Diario Vitamina C+HA3 Artistry Skin Nutrition™",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Cuidado de la piel",
@@ -669,7 +669,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-103",
-    name: "Conjunto Maquillaje Artistry Ever Perfect™ - 103 Ivory",
+    name: "Conjunto Maquillaje en Polvo, Esponja y Polvera Artistry Ever Perfect™ - 103 Ivory",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -680,7 +680,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "art-ep-conjunto-maquillaje",
-    name: "Conjunto Maquillaje Artistry Ever Perfect™ - 101 Shell",
+    name: "Conjunto Maquillaje en Polvo, Esponja y Polvera Artistry Ever Perfect™ - 101 Shell",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -691,7 +691,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-102",
-    name: "Conjunto Maquillaje Artistry Ever Perfect™ - 102 Cashmere",
+    name: "Conjunto Maquillaje en Polvo, Esponja y Polvera Artistry Ever Perfect™ - 102 Cashmere",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -702,7 +702,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-201",
-    name: "Conjunto Maquillaje Artistry Ever Perfect™ - 201 Beige",
+    name: "Conjunto Maquillaje en Polvo, Esponja y Polvera Artistry Ever Perfect™ - 201 Beige",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -713,7 +713,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-202",
-    name: "Conjunto Maquillaje Artistry Ever Perfect™ - 202 Bamboo",
+    name: "Conjunto Maquillaje en Polvo, Esponja y Polvera Artistry Ever Perfect™ - 202 Bamboo",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -724,7 +724,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-203",
-    name: "Conjunto Maquillaje Artistry Ever Perfect™ - 203 Honey",
+    name: "Conjunto Maquillaje en Polvo, Esponja y Polvera Artistry Ever Perfect™ - 203 Honey",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -735,7 +735,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-301",
-    name: "Conjunto Maquillaje Artistry Ever Perfect™ - 301 Biscotti",
+    name: "Conjunto Maquillaje en Polvo, Esponja y Polvera Artistry Ever Perfect™ - 301 Biscotti",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -746,7 +746,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-302",
-    name: "Conjunto Maquillaje Artistry Ever Perfect™ - 302 Almond",
+    name: "Conjunto Maquillaje en Polvo, Esponja y Polvera Artistry Ever Perfect™ - 302 Almond",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -757,7 +757,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-401",
-    name: "Conjunto Maquillaje Artistry Ever Perfect™ - 401 Mocha",
+    name: "Conjunto Maquillaje en Polvo, Esponja y Polvera Artistry Ever Perfect™ - 401 Mocha",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -768,7 +768,7 @@ export const bellezaProducts: Product[] = [
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-402",
-    name: "Conjunto Maquillaje Artistry Ever Perfect™ - 402 Nutmeg",
+    name: "Conjunto Maquillaje en Polvo, Esponja y Polvera Artistry Ever Perfect™ - 402 Nutmeg",
     brand: "Artistry",
     category: "belleza",
     subcategory: "Maquillaje",
@@ -1051,7 +1051,7 @@ export const bellezaProducts: Product[] = [
       { sku: "127467", size: "Light to Medium", price: 48.96 },
       { sku: "127468", size: "Medium To Deep", price: 48.96 },
     ],
-    image: "art-ep-polvo-fijador.webp",
+    image: "espana/art-ep-polvo-fijador.webp",
   },
   {
     id: "pro-retinol-artistry-labs",

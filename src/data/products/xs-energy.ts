@@ -33,7 +33,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Descubre Rhodiola Plus XS™, un complemento alimenticio en comprimidos muy efectivos que contiene 4 concentrados vegetales naturales más vitamina C.",
     variants: [{ sku: "101593", size: "60 comprimidos", price: 37.87 }],
-    image: "xs-energy/catalog/enfoque-energia.webp",
+    image: "espana/xs-enfoque-energia.webp",
   },
   {
     id: "xs-power-drink-naranja",
@@ -92,7 +92,7 @@ export const xsEnergyProducts: Product[] = [
   },
   {
     id: "xs-proteina-hidrolizada",
-    name: "Proteína Hidrolizada de Suero en Polvo XS™ – Sabor Chocolate",
+    name: "Proteína Hidrolizada de Suero en Polvo XS™ – Sabor Cacao-Chocolate",
     brand: "XS",
     category: "xs-energy",
     subcategory: "Nutrición deportiva",
@@ -114,7 +114,7 @@ export const xsEnergyProducts: Product[] = [
   },
   {
     id: "barritas-xs-high-protein-energy-bar",
-    name: "Barritas XS™ High Protein Energy Bar - Sabor coco",
+    name: "Barrita XS™ High Protein Energy Bar con sabor a coco y recubrimiento de chocolate",
     brand: "XS",
     category: "xs-energy",
     subcategory: "Nutrición deportiva",
@@ -213,7 +213,7 @@ export const xsEnergyProducts: Product[] = [
   },
   {
     id: "xs-bebida-pre-entrenamiento",
-    name: "Bebida Pre-Entrenamiento XS™",
+    name: "Bebida Pre-Entrenamiento XS™ – Sabor Lima-Limón",
     brand: "XS",
     category: "xs-energy",
     subcategory: "Nutrición deportiva",

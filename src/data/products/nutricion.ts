@@ -11,7 +11,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Favorece la función normal de la visión¹, el corazón² y cerebro³ con Nutrilite™ Omega-3 Triple Strength, formulado con tecnología AquaCelle®⁴ para lograr una mejor absorción. ¹El ácido docosahexaenoico contribuye al mantenimiento de una visión normal. Este efecto beneficioso se obtiene con la ingesta diaria de 250 mg de ácido docosahexaenoico. ²El ácido eicosapentaenoico y el ácido docosahexaenoico contribuyen al funcionamiento normal del corazón. Este efecto beneficioso se obtiene con la ingesta diaria de 250 mg de ácido eicosapentaenoico y ácido docosahexaenoico. ³El ácido docosahexaenoico contribuye a mantener el funcionamiento normal del cerebro. Este efecto beneficioso se obtiene con la ingesta diaria de 250 mg de ácido docosahexaenoico. 4 AquaCelle® es una marca registrada de Pharmako Biotechnologies Pty Ltd.",
     variants: [{ sku: "126132", size: "30 cápsulas", price: 27.98 }],
-    image: "nutrilite/catalog/omega-nutrilite.webp",
+    image: "espana/omega-nutrilite.webp",
   },
   {
     id: "repuesto-nutrilite-double-x",
@@ -44,7 +44,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Un complemento alimenticio fácil de usar que puede proporcionarle una ayuda invisible a tu sistema inmunitario gracias a dos tipos de vitamina B**. **La vitamina B6 y el ácido fólico (vitamina B9) contribuyen al funcionamiento normal del sistema inmunitario.",
     variants: [{ sku: "120571", size: "30 sobres", price: 49.72 }],
-    image: "nutrilite/catalog/balance-within.webp",
+    image: "espana/balance-within.webp",
   },
   {
     id: "proteina-vegetal",
@@ -66,7 +66,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio que contiene 3 nutrientes extraídos de fuentes naturales: calcio, magnesio y vitamina D.",
     variants: [{ sku: "110606", size: "180 comprimidos", price: 29.71 }],
-    image: "nutrilite/catalog/cal-mag-d.webp",
+    image: "espana/cal-mag-d.webp",
   },
   {
     id: "cotidiano",
@@ -110,7 +110,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Este complemento alimenticio con vitamina D procedente de fuentes naturales, contribuye al mantenimiento normal de huesos y dientes, a la función de los músculos y a las funciones normales del sistema inmunológico.",
     variants: [{ sku: "119797", size: "90 comprimidos", price: 22.97 }],
-    image: "nutrilite/catalog/vitamina-d.webp",
+    image: "espana/vitamina-d.webp",
   },
   {
     id: "fibra-polvo",
@@ -154,7 +154,7 @@ export const nutricionProducts: Product[] = [
     description:
       "DOUBLE X NUTRILITE es un potente complemento multivitamínico y multimineral con fitonutrientes enriquecido con PhytoBlend™, una mezcla especial de 22 plantas y fitonutrientes procedentes de los 5 grupos de colores que aporta a tu cuerpo un apoyo demostrado científicamente.",
     variants: [{ sku: "121576", size: "186 comprimidos", price: 86.87 }],
-    image: "nutrilite/catalog/double-x.webp",
+    image: "espana/double-x.webp",
     flagship: "nutrilite",
   },
   {
@@ -170,14 +170,14 @@ export const nutricionProducts: Product[] = [
   },
   {
     id: "multivitaminico-ninos",
-    name: "Multivitaminas Masticable Nutrilite™",
+    name: "Multivitaminas / Minerales Masticable Nutrilite™",
     brand: "Nutrilite",
     category: "nutricion",
     subcategory: "Niños",
     description:
       "Complemento masticable y con sabor a naranja que proporciona vitaminas, minerales y betacaroteno.",
     variants: [{ sku: "100930", size: "120 comprimidos", price: 33.18 }],
-    image: "nutrilite/catalog/multivitaminico-ninos.webp",
+    image: "espana/multivitaminico-ninos.webp",
   },
   {
     id: "concentrado-frutas-verduras",
@@ -188,7 +188,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio que proporciona fitonutrientes extraídos de frutas y verduras.",
     variants: [{ sku: "100296", size: "60 comprimidos", price: 38.71 }],
-    image: "nutrilite/catalog/concentrado-frutas-verduras.webp",
+    image: "espana/concentrado-frutas-verduras.webp",
   },
   {
     id: "aceite-oliva",
@@ -221,7 +221,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Apoya el sistema inmunitario de tus hijos con vitamina D*, en un práctico producto 4 en 1 que encanta a los niños y a las madres. * La vitamina D contribuye al funcionamiento normal del sistema inmunitario en los niños.",
     variants: [{ sku: "123046", size: "30 sobres", price: 47.47 }],
-    image: "nutrilite/catalog/inmunidad-ninos-polvo.webp",
+    image: "espana/inmunidad-ninos-polvo.webp",
   },
   {
     id: "appetite-controller",
@@ -408,7 +408,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio que contiene ácido linoleico conjugado (CLA), derivado del aceite de cártamo.",
     variants: [{ sku: "100280", size: "180 cápsulas", price: 80.56 }],
-    image: "nutrilite/catalog/masa-magra.webp",
+    image: "espana/masa-magra.webp",
   },
   {
     id: "coq10",
@@ -419,7 +419,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio con coenzima Q10.",
     variants: [{ sku: "0191", size: "60 cápsulas", price: 53.94 }],
-    image: "nutrilite/catalog/coq10.webp",
+    image: "espana/coq10.webp",
   },
   {
     id: "nutrilite-oxibeauty",
@@ -650,7 +650,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio con glucosamina y boswellia (una hierba tradicional de la India).",
     variants: [{ sku: "100108", size: "150 comprimidos", price: 29.40 }],
-    image: "nutrilite/catalog/salud-articulaciones.webp",
+    image: "espana/salud-articulaciones.webp",
   },
   {
     id: "hierro-folico",
@@ -661,7 +661,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio que contiene hierro de dos fuentes distintas junto con ácido fólico.",
     variants: [{ sku: "100295", size: "120 comprimidos", price: 16.54 }],
-    image: "nutrilite/catalog/hierro-folico.webp",
+    image: "espana/hierro-folico.webp",
   },
   {
     id: "immuno",
@@ -716,7 +716,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Nutrilite Metabolism* plus aporta dos vitaminas del grupo B que favorecen un metabolismo saludable* * La vitamina B2 (riboflavina) y el ácido pantoténico (vitamina B5) contribuyen al metabolismo energético normal.",
     variants: [{ sku: "127620", size: "60 cápsulas", price: 41.62 }],
-    image: "nutrilite/catalog/pre-postbiotico.webp",
+    image: "espana/pre-postbiotico.webp",
   },
   {
     id: "mezclador-bodykey",
@@ -804,7 +804,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio con una mezcla de extractos de palma enana y raíz de ortiga.",
     variants: [{ sku: "8004", size: "100 cápsulas", price: 67.14 }],
-    image: "nutrilite/catalog/salud-prostata.webp",
+    image: "espana/salud-prostata.webp",
   },
   {
     id: "sleep-easy",
@@ -848,7 +848,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento de vitamina C sumamente eficaz, diseñado para liberar vitamina C de forma lenta y continua.",
     variants: [{ sku: "109741", size: "60 comprimidos", price: 23.98 }],
-    image: "nutrilite/catalog/vitamina-c.webp",
+    image: "espana/vitamina-c.webp",
   },
   {
     id: "womens-40-support",

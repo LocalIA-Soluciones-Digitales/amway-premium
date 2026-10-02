@@ -26,7 +26,7 @@ export const cuidadoPersonalProducts: Product[] = [
   },
   {
     id: "glister-enjuague",
-    name: "Enjuague Bucal Multiacción glister™",
+    name: "Enjuague Bucal Multiacción (concentrado) glister™",
     brand: "Glister",
     category: "cuidado-personal",
     subcategory: "Cuidado bucal",
@@ -88,7 +88,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Loción corporal densa y suave con ingredientes de origen vegetal que nutren la piel en profundidad y favorecen su barrera de hidratación.",
     variants: [{ sku: "125891", size: "400 ml", price: 19.90 }],
-    image: "hq_25893.webp",
+    image: "espana/gh-locion-nourish.webp",
   },
   {
     id: "gh-desodorante-spray",
@@ -187,7 +187,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Jabón en pastilla suave que contribuye a combatir el olor corporal y elimina con eficacia la suciedad y las impurezas para dejar la piel acondicionada y con una sensación de suavidad.",
     variants: [{ sku: "125897", size: "6 × 150 g", price: 27.61 }],
-    image: "gh-barra-jabon-protect.webp",
+    image: "espana/gh-barra-jabon-protect.webp",
   },
   {
     id: "sat-reparacion-intensiva",
@@ -576,7 +576,7 @@ export const cuidadoPersonalProducts: Product[] = [
   },
   {
     id: "glister-pasta-infantil",
-    name: "Pasta Dentífrica Infantil glister™",
+    name: "Pasta Dentífrica Infantil glister™ Kids",
     brand: "Glister",
     category: "cuidado-personal",
     subcategory: "Cuidado bucal",

@@ -68,7 +68,7 @@ export const hogarProducts: Product[] = [
     description:
       "Un producto de limpieza muy eficaz, concentrado, seguro, delicado y versátil creado con ingredientes de origen natural.",
     variants: [{ sku: "0001", size: "1 l", price: 12.54 }],
-    image: "hq_E0001.webp",
+    image: "espana/loc-multiusos.webp",
   },
   {
     id: "sa8-polvo",
@@ -79,7 +79,7 @@ export const hogarProducts: Product[] = [
     description:
       "Detergente en Polvo Concentrado Premium SA8™. Detergente sostenible que ofrece una potente eliminación de manchas y una fórmula biodegradable.",
     variants: [{ sku: "109849", size: "3 kg", price: 57.46 }],
-    image: "hq_09849.webp",
+    image: "espana/sa8-polvo.webp",
   },
   {
     id: "blanqueador",
@@ -90,7 +90,7 @@ export const hogarProducts: Product[] = [
     description:
       "Se estima que el producto estará disponible en la semana del 25 al 29 de enero.",
     variants: [{ sku: "124485", size: "1 kg", price: 21.31 }],
-    image: "flip_blanqueador.webp",
+    image: "espana/blanqueador.webp",
   },
   {
     id: "rociador-prelavado",
@@ -101,7 +101,7 @@ export const hogarProducts: Product[] = [
     description:
       "Un solo rociado ayuda a eliminar las manchas más difíciles sin frotar ni remojar.",
     variants: [{ sku: "110403", size: "400 ml", price: 16.50 }],
-    image: "hq_10403.webp",
+    image: "espana/rociador-prelavado.webp",
   },
   {
     id: "dish-drops-liquido",
@@ -112,7 +112,7 @@ export const hogarProducts: Product[] = [
     description:
       "Líquido concentrado para vajilla.",
     variants: [{ sku: "110488", size: "1 l", price: 12.05 }],
-    image: "hq_10488.webp",
+    image: "espana/dish-drops-liquido.webp",
   },
   {
     id: "sa8-liquido",
@@ -123,7 +123,7 @@ export const hogarProducts: Product[] = [
     description:
       "Detergente de disolución rápida que deja la ropa más blanca y brillante, sin residuos irritantes.",
     variants: [{ sku: "110478", size: "4 l", price: 96.98 }],
-    image: "flip_sa8liquido.webp",
+    image: "espana/sa8-liquido.webp",
   },
   {
     id: "suavizante",
@@ -134,7 +134,7 @@ export const hogarProducts: Product[] = [
     description:
       "Restituye naturalmente la sensación suave y esponjosa de prendas y ropa de cama.",
     variants: [{ sku: "110480", size: "1 l", price: 14.52 }],
-    image: "hq_10480.webp",
+    image: "espana/suavizante.webp",
   },
   {
     id: "tabletas-lavavajillas",
@@ -145,7 +145,7 @@ export const hogarProducts: Product[] = [
     description:
       "Nuevas pastillas para el lavavajillas todo en uno para una limpieza profunda y un brillo perfecto. Elaboradas con más del 90 % de sus ingredientes procedentes de plantas y minerales.",
     variants: [{ sku: "109867", size: "60 comprimidos", price: 27.58 }],
-    image: "flip_dishdrops.webp",
+    image: "espana/tabletas-lavavajillas.webp",
   },
   {
     id: "scrub-buds",
@@ -156,7 +156,7 @@ export const hogarProducts: Product[] = [
     description:
       "Almohadillas para una limpieza fácil de sartenes y utensilios.",
     variants: [{ sku: "110490", size: "4 unidades", price: 10.45 }],
-    image: "hq_10490.webp",
+    image: "espana/scrub-buds.webp",
   },
   {
     id: "sa8-delicate",
@@ -171,7 +171,7 @@ export const hogarProducts: Product[] = [
   },
   {
     id: "sa8-liquido-1l",
-    name: "Detergente Líquido Concentrado para la Ropa Amway Home™ SA8™",
+    name: "Detergente Líquido Concentrado para la Ropa Amway Home™ SA8™ Baby con efecto suavizante",
     brand: "Amway Home",
     category: "hogar",
     subcategory: "Lavandería",
@@ -200,7 +200,7 @@ export const hogarProducts: Product[] = [
     description:
       "Reemplazo de líquido concentrado para vidrios.",
     variants: [{ sku: "117080", size: "500 ml", price: 6.50 }],
-    image: "hq_12537.webp",
+    image: "espana/limpiador-vidrios.webp",
   },
   {
     id: "limpiador-bano",
@@ -211,7 +211,7 @@ export const hogarProducts: Product[] = [
     description:
       "Reemplazo de líquido concentrado para el baño.",
     variants: [{ sku: "117078", size: "500 ml", price: 9.11 }],
-    image: "hq_12546.webp",
+    image: "espana/limpiador-bano.webp",
   },
   {
     id: "limpiador-cocina",
@@ -222,7 +222,7 @@ export const hogarProducts: Product[] = [
     description:
       "Reemplazo de líquido concentrado para la cocina.",
     variants: [{ sku: "117079", size: "500 ml", price: 9.11 }],
-    image: "flip_locclocina.webp",
+    image: "espana/limpiador-cocina.webp",
   },
   {
     id: "icook-cuchillos",
@@ -266,7 +266,7 @@ export const hogarProducts: Product[] = [
     description:
       "Controla la calidad del aire que tú y tu familia respirais día tras día con el nuevo Purificador de Aire Atmosphere Sky.",
     variants: [{ sku: "120539", size: "1 unidad", price: 2007.19 }],
-    image: "hq_20539.webp",
+    image: "espana/atmosphere-sky.webp",
     flagship: "atmosphere",
   },
   {
@@ -278,7 +278,7 @@ export const hogarProducts: Product[] = [
     description:
       "El cartucho de recambio original del Sistema de Tratamiento de Agua eSpring con carbón activado y tecnología UV. Compatible con el antiguo eSpring.",
     variants: [{ sku: "100186", size: "1 unidad", price: 289.45 }],
-    image: "espring/catalog/filtro-uv.webp",
+    image: "espana/espring-filtro-uv.webp",
   },
   {
     id: "icook-olla-4l",
@@ -476,7 +476,7 @@ export const hogarProducts: Product[] = [
     description:
       "Bomba dosificadora para los envases de 1 L de los limpiadores concentrados Amway Home™.",
     variants: [{ sku: "103972", size: "1 unidad", price: 2.86 }],
-    image: "home-bomba-dispensadora.webp",
+    image: "espana/home-bomba-dispensadora.webp",
   },
   {
     id: "dosificador-detergente-180-ml",
@@ -520,7 +520,7 @@ export const hogarProducts: Product[] = [
     description:
       "Utiliza este completo kit para convertir el Sistema de Tratamiento de Agua eSpring en una unidad bajo la encimera. Compatible con el nuevo y el antiguo eSpring.",
     variants: [{ sku: "125627", size: "1 unidad", price: 186.80 }],
-    image: "espring/catalog/kit-grifo-auxiliar.webp",
+    image: "espana/espring-kit-grifo-auxiliar.webp",
   },
   {
     id: "espring-kit-pared-modelo-anterior",
@@ -652,7 +652,7 @@ export const hogarProducts: Product[] = [
     description:
       "Compatible con el nuevo y el antiguo eSpring.",
     variants: [{ sku: "127065", size: "1 unidad", price: 129.59 }],
-    image: "espring/catalog/kit-grifo-existente.webp",
+    image: "espana/espring-kit-grifo-existente.webp",
   },
   {
     id: "icook-pomo-tapas-cacerolas",
@@ -696,7 +696,7 @@ export const hogarProducts: Product[] = [
     description:
       "Mantén toda la vida útil del cartucho eSpring sustituyendo el prefiltro de la unidad. Compatible con el nuevo eSpring.",
     variants: [{ sku: "127063", size: "1 unidad", price: 24.01 }],
-    image: "espring/catalog/prefiltro.webp",
+    image: "espana/espring-prefiltro.webp",
   },
   {
     id: "pulverizador-pistola",
