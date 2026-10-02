@@ -7,8 +7,8 @@ import { ArrowUpRight } from "lucide-react";
 const NEEDS = [
   { label: "Energía", href: "/xs-energy", description: "Rendimiento, foco y recuperación." },
   { label: "Bienestar", href: "/nutricion", description: "Vitaminas, proteína e inmunidad." },
-  { label: "Belleza", href: "/belleza", description: "Cuidado de la piel y el cabello." },
-  { label: "Cuidado diario", href: "/belleza", description: "Higiene y rutina personal." },
+  { label: "Belleza", href: "/belleza", description: "Cuidado de la piel y maquillaje." },
+  { label: "Cuidado diario", href: "/cuidado-personal", description: "Cabello, cuerpo e higiene bucal." },
   { label: "Hogar", href: "/hogar", description: "Agua, aire y cocina más limpios." },
 ];
 

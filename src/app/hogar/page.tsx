@@ -17,7 +17,7 @@ export default function HogarPage() {
 
   const espring = getProductById("espring-mesón")!;
   const atmosphere = getProductById("atmosphere-sky")!;
-  const icook = getProductById("icook-coleccion-19")!;
+  const icook = getProductById("icook-prestige")!;
 
   const highlights = [
     {

@@ -302,6 +302,7 @@ export const INTENTOS: Record<string, Intento> = {
     acciones: [
       { tipo: "enlace", href: "/nutricion", label: "Nutrición" },
       { tipo: "enlace", href: "/belleza", label: "Belleza" },
+      { tipo: "enlace", href: "/cuidado-personal", label: "Cuidado personal" },
       { tipo: "enlace", href: "/hogar", label: "Hogar" },
       { tipo: "enlace", href: "/xs-energy", label: "XS Energy" },
       { tipo: "tema", id: "asesorPersonal" },

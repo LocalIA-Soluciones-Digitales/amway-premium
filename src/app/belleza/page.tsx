@@ -7,7 +7,7 @@ import { getBrands, getProductsByCategory, getSubcategories, getProductById } fr
 export const metadata: Metadata = {
   title: "Artistry™ Belleza — Skincare, LongXevity y maquillaje",
   description:
-    "Artistry Skin Nutrition™, Artistry LongXevity™, Satinique™, g&h™ y Glister™. Ciencia de la piel y el cabello importada de Estados Unidos.",
+    "Artistry Skin Nutrition™, Artistry LongXevity™, Artistry Studio™, Artistry Labs™ y maquillaje Artistry™. Ciencia de la piel con atención personal en Barakaldo.",
 };
 
 const HIGHLIGHT_IDS = [
@@ -36,7 +36,7 @@ export default function BellezaPage() {
       <CategoryHero
         eyebrow="Artistry™ · Belleza elevada por la ciencia"
         title="Belleza que no tiene edad."
-        description="Artistry Skin Nutrition™ y Artistry LongXevity™ combinan décadas de innovación con la ciencia de plantas de Nutrilite™, además de Satinique™, g&h™ y Glister™."
+        description="Artistry Skin Nutrition™ y Artistry LongXevity™ combinan décadas de innovación con la ciencia de plantas de Nutrilite™, además de Artistry Studio™, Artistry Labs™ y el maquillaje Artistry™."
         photo="/images/editorial/belleza-editorial.webp"
         accent="gold"
         waMessage="Hola, quiero información sobre los productos Artistry."

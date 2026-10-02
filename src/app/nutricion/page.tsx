@@ -14,8 +14,8 @@ const XS_LINK = { href: "/xs-energy", label: "Descubre XS™ →" };
 
 const HIGHLIGHT_IDS = [
   { id: "double-x", media: "double-x", tag: "El multivitamínico insignia" },
-  { id: "xs-energy-drink", media: "xs-energy", tag: "Energía sin azúcar", link: XS_LINK },
-  { id: "xs-creatina", media: "creatina", tag: "Fuerza y recuperación", link: XS_LINK },
+  { id: "xs-power-drink-naranja", media: "xs-energy", tag: "Energía sin azúcar", link: XS_LINK },
+  { id: "creatine-plus-xs", media: "creatina", tag: "Fuerza y recuperación", link: XS_LINK },
 ];
 
 export default function NutricionPage() {

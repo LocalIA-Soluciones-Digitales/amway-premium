@@ -1,6 +1,6 @@
 import { formatEUR } from "@/lib/currency";
 
-export type CategorySlug = "nutricion" | "xs-energy" | "belleza" | "hogar";
+export type CategorySlug = "nutricion" | "xs-energy" | "belleza" | "cuidado-personal" | "hogar";
 
 export type FlagshipKey =
   | "xs-energy"

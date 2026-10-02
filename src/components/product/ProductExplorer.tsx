@@ -13,10 +13,11 @@ import { SolicitudModal } from "@/components/catalog/SolicitudModal";
 const CATEGORY_TILES: { slug: CategorySlug; image: string }[] = [
   { slug: "nutricion", image: "/images/editorial/nutricion-botanico.webp" },
   { slug: "belleza", image: "/images/editorial/belleza-editorial.webp" },
+  { slug: "cuidado-personal", image: "/images/editorial/cuidado-personal.webp" },
   { slug: "hogar", image: "/images/editorial/hogar-familia.webp" },
 ];
 
-// XS Energy se filtra dentro de Nutrición: en el catálogo solo hay tres bloques.
+// XS Energy se filtra dentro de Nutrición, igual que en amway.es.
 const groupOf = (c: CategorySlug): CategorySlug => (c === "xs-energy" ? "nutricion" : c);
 
 // Lowercase and strip accents so "vitamina c" matches "Vitamina C" and "nutricion" matches "Nutrición".
@@ -137,7 +138,7 @@ export function ProductExplorer({
   return (
     <div>
       {showCategories && (
-        <div className="mb-10 grid grid-cols-3 gap-3 sm:gap-4">
+        <div className="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
           {CATEGORY_TILES.map(({ slug, image }) => {
             const active = category === slug;
             return (
@@ -155,7 +156,7 @@ export function ProductExplorer({
                   src={image}
                   alt=""
                   fill
-                  sizes="(max-width: 1024px) 33vw, 30vw"
+                  sizes="(max-width: 640px) 50vw, 25vw"
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
                 <div

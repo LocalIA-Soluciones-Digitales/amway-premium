@@ -12,8 +12,7 @@ export interface EnergyFlavor {
   /** Product line this can belongs to. */
   line: string;
   tag?: string;
-  /** Catalog product this can is sold as (price + Stripe checkout); empty when
-   *  the flavour is not in the Spanish price list (WhatsApp only). */
+  /** Catalog product this can is sold as (price + Stripe checkout). */
   productId: string;
   /** One real, verbatim-sourced benefit line for this specific can. */
   benefit: string;
@@ -52,7 +51,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Orange Kumquat Blast",
     flavorEs: "Sabor Naranja",
     line: "XS™ Power Drink",
-    productId: "xs-energy-drink",
+    productId: "xs-power-drink-naranja",
     benefit: "Favorece la agilidad mental y combate el cansancio.",
     image: "orange-kumquat.webp",
     accent: "#b44824",
@@ -63,7 +62,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Pink Grapefruit Blast",
     flavorEs: "Sabor Pomelo",
     line: "XS™ Power Drink",
-    productId: "xs-energy-drink",
+    productId: "xs-power-drink-pomelo",
     benefit: "Favorece la agilidad mental y combate el cansancio.",
     image: "pink-grapefruit.webp",
     accent: "#b43060",
@@ -74,22 +73,11 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     name: "Wild Berry Blast",
     flavorEs: "Sabor Baya Silvestre",
     line: "XS™ Power Drink",
-    productId: "xs-energy-drink",
+    productId: "xs-power-drink-baya-silvestre",
     benefit: "Favorece la agilidad mental y combate el cansancio.",
     image: "wild-berry.webp",
     accent: "#543c78",
     accentSoft: "rgba(84,60,120,0.5)",
-  },
-  {
-    id: "tropical",
-    name: "Tropical Blast",
-    flavorEs: "Sabor Tropical",
-    line: "XS™ Power Drink",
-    productId: "",
-    benefit: "Favorece la agilidad mental y combate el cansancio.",
-    image: "tropical.webp",
-    accent: "#0c3054",
-    accentSoft: "rgba(12,48,84,0.5)",
   },
 ];
 

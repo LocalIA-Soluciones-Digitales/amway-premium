@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/nutricion",
     "/xs-energy",
     "/belleza",
+    "/cuidado-personal",
     "/hogar",
     "/espring",
     "/catalogo",

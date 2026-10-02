@@ -47,6 +47,7 @@ export const PAGE_LABELS: Record<string, string> = {
   "/opiniones": "Opiniones",
   "/nutricion": "Nutrición",
   "/belleza": "Belleza",
+  "/cuidado-personal": "Cuidado personal",
   "/hogar": "Hogar",
   "/espring": "eSpring",
   "/xs-energy": "XS Energy",

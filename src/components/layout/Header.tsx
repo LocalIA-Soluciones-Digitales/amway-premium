@@ -13,7 +13,8 @@ import { CuentaButton } from "@/components/cuenta/CuentaButton";
 
 const CATEGORY_LINKS = [
   { href: "/nutricion", label: "Nutrición", tagline: "Vitaminas y bienestar diario" },
-  { href: "/belleza", label: "Belleza", tagline: "Artistry, Satinique y g&h" },
+  { href: "/belleza", label: "Belleza", tagline: "Artistry: piel y maquillaje" },
+  { href: "/cuidado-personal", label: "Cuidado personal", tagline: "Satinique, g&h y glister" },
   { href: "/hogar", label: "Hogar", tagline: "Agua, aire y cocina" },
   { href: "/espring", label: "eSpring", tagline: "Agua purificada al instante" },
   { href: "/xs-energy", label: "XS Energy", tagline: "Power Drink y nutrición deportiva" },
@@ -36,6 +37,7 @@ const DARK_HERO_ROUTES = new Set([
   "/",
   "/nutricion",
   "/belleza",
+  "/cuidado-personal",
   "/hogar",
   "/espring",
   "/xs-energy",

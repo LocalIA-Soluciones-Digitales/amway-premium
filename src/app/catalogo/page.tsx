@@ -34,11 +34,11 @@ export default function CatalogoPage() {
             Catálogo Amway Barakaldo
           </p>
           <h1 className="mt-5 max-w-2xl font-display text-5xl leading-[1.05] text-carbon sm:text-6xl">
-            Más de {Math.floor(PRODUCTS.length / 10) * 10} productos originales de Estados Unidos.
+            {PRODUCTS.length} productos originales Amway.
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-stone sm:text-lg">
-            Elige una categoría o busca directamente lo que necesitas en Nutrición, Belleza
-            y Hogar.
+            Elige una categoría o busca directamente lo que necesitas en Nutrición, Belleza,
+            Cuidado personal y Hogar.
           </p>
         </div>
       </section>

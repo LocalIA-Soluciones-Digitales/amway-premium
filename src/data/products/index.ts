@@ -3,14 +3,14 @@ import { nutricionProducts } from "./nutricion";
 import { xsEnergyProducts } from "./xs-energy";
 import { bellezaProducts } from "./belleza";
 import { hogarProducts } from "./hogar";
-import { espanaProducts } from "./espana";
+import { cuidadoPersonalProducts } from "./cuidado-personal";
 
 export const PRODUCTS: Product[] = [
   ...nutricionProducts,
   ...xsEnergyProducts,
   ...bellezaProducts,
+  ...cuidadoPersonalProducts,
   ...hogarProducts,
-  ...espanaProducts,
 ];
 
 export function getProductsByCategory(category: CategorySlug): Product[] {
@@ -63,8 +63,14 @@ export const CATEGORY_META: Record<
   },
   belleza: {
     label: "Belleza",
-    tagline: "Artistry, Satinique y g&h: ciencia de la piel y el cabello.",
+    tagline: "Artistry™: cuidado de la piel y maquillaje.",
     href: "/belleza",
+    accent: "gold",
+  },
+  "cuidado-personal": {
+    label: "Cuidado personal",
+    tagline: "Satinique™, g&h™ y glister™: cabello, cuerpo e higiene bucal.",
+    href: "/cuidado-personal",
     accent: "gold",
   },
   hogar: {
@@ -76,4 +82,4 @@ export const CATEGORY_META: Record<
 };
 
 export * from "../types";
-export { nutricionProducts, xsEnergyProducts, bellezaProducts, hogarProducts };
+export { nutricionProducts, xsEnergyProducts, bellezaProducts, cuidadoPersonalProducts, hogarProducts };
