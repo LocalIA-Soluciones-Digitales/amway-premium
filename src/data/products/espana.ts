@@ -11,6 +11,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Packs y programas",
     description: "Conjunto Nutrilite™ Body Cleansing Program, de la lista oficial de Amway España.",
     variants: [{ sku: "127059", size: "1 conjunto", price: 188.81 }],
+    image: "espana/body-cleansing-program.webp",
   },
   {
     id: "body-cleansing-refill-repuesto",
@@ -20,6 +21,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Packs y programas",
     description: "Conjunto Nutrilite™ Body Cleansing Refill - repuesto, de la lista oficial de Amway España.",
     variants: [{ sku: "317514", size: "1 conjunto", price: 169.93 }],
+    image: "espana/body-cleansing-refill-repuesto.webp",
   },
   {
     id: "conjunto-vitaminas-inmunidad",
@@ -29,6 +31,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Packs y programas",
     description: "Conjunto de complementos Nutrilite™ pensado para cuidar las defensas durante todo el año.",
     variants: [{ sku: "315562", size: "1 conjunto", price: 152.32 }],
+    image: "espana/conjunto-vitaminas-inmunidad.webp",
   },
   {
     id: "conjunto-apoyo-inmunitario-estacional",
@@ -38,6 +41,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Packs y programas",
     description: "Conjunto de complementos Nutrilite™ para los cambios de estación.",
     variants: [{ sku: "314051", size: "1 conjunto", price: 89.23 }],
+    image: "espana/conjunto-apoyo-inmunitario-estacional.webp",
   },
   {
     id: "conjunto-vitalidad",
@@ -47,6 +51,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Packs y programas",
     description: "Conjunto de complementos Nutrilite™ de la línea Destination Wellbeing orientado a la vitalidad diaria.",
     variants: [{ sku: "326042", size: "1 conjunto", price: 70.32 }],
+    image: "espana/conjunto-vitalidad.webp",
   },
   {
     id: "conjunto-best-age",
@@ -56,6 +61,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Packs y programas",
     description: "Conjunto de complementos Nutrilite™ pensado para cuidarse a partir de la madurez.",
     variants: [{ sku: "326037", size: "1 conjunto", price: 121.37 }],
+    image: "espana/conjunto-best-age.webp",
   },
   {
     id: "apoyo-inmunitario-ninos-conjunto",
@@ -65,6 +71,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Niños",
     description: "Conjunto de complementos Nutrilite™ para las defensas de los más pequeños.",
     variants: [{ sku: "308133", size: "1 conjunto", price: 72.01 }],
+    image: "espana/apoyo-inmunitario-ninos-conjunto.webp",
   },
   {
     id: "conjunto-futura-mama",
@@ -74,6 +81,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Mujeres",
     description: "Conjunto de complementos Nutrilite™ pensado para el embarazo.",
     variants: [{ sku: "294852", size: "1 conjunto", price: 72.16 }],
+    image: "espana/conjunto-futura-mama.webp",
   },
   {
     id: "energy-program",
@@ -110,6 +118,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Packs y programas",
     description: "Trío Fundamental con Cotidiano Nutrilite™, de la lista oficial de Amway España.",
     variants: [{ sku: "326043", size: "1 conjunto", price: 110.16 }],
+    image: "espana/trio-fundamental.webp",
   },
   {
     id: "trio-fundamental-double-x",
@@ -119,6 +128,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Packs y programas",
     description: "Trío Fundamental con Nutrilite™ Double X™, de la lista oficial de Amway España.",
     variants: [{ sku: "326041", size: "1 conjunto", price: 152.64 }],
+    image: "espana/trio-fundamental-double-x.webp",
   },
   {
     id: "morning-nutrition",
@@ -131,6 +141,7 @@ export const espanaProducts: Product[] = [
       { sku: "326812", size: "1 conjunto", price: 176.44 },
       { sku: "128617", size: "Repuesto · 1 conjunto", price: 169.24 },
     ],
+    image: "espana/morning-nutrition.webp",
   },
   {
     id: "proteina-vegetal",
@@ -140,6 +151,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description: "Proteína en polvo de origen vegetal de Nutrilite™ para completar la alimentación diaria.",
     variants: [{ sku: "110415", size: "450 g", price: 45.83 }],
+    image: "espana/proteina-vegetal.webp",
   },
   {
     id: "cotidiano",
@@ -152,6 +164,7 @@ export const espanaProducts: Product[] = [
       { sku: "125167", size: "90 comprimidos", price: 42.14 },
       { sku: "125166", size: "45 comprimidos", price: 22.18 },
     ],
+    image: "espana/cotidiano.webp",
   },
   {
     id: "conjunto-cotidiano",
@@ -161,6 +174,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description: "Conjunto Cotidiano Nutrilite™, de la lista oficial de Amway España.",
     variants: [{ sku: "126624", size: "2 × 90 comprimidos", price: 84.30 }],
+    image: "espana/conjunto-cotidiano.webp",
   },
   {
     id: "less-stress-more-yes",
@@ -170,6 +184,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Sueño y estrés",
     description: "Complemento alimenticio Nutrilite™ en sobres para el día a día.",
     variants: [{ sku: "126148", size: "30 sobres", price: 29.70 }],
+    image: "espana/less-stress-more-yes.webp",
   },
   {
     id: "immuno",
@@ -179,6 +194,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Salud inmunológica",
     description: "Complemento alimenticio Nutrilite™ para el sistema inmunitario.",
     variants: [{ sku: "126149", size: "60 comprimidos", price: 26.53 }],
+    image: "espana/immuno.webp",
   },
   {
     id: "be-focused",
@@ -188,6 +204,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Energía y enfoque",
     description: "Gominolas Nutrilite™ pensadas para la concentración.",
     variants: [{ sku: "126150", size: "60 gominolas", price: 29.70 }],
+    image: "espana/be-focused.webp",
   },
   {
     id: "beauty-you-glow",
@@ -197,6 +214,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description: "Complemento alimenticio Nutrilite™ para la belleza desde dentro.",
     variants: [{ sku: "308613", size: "60 comprimidos", price: 33.37 }],
+    image: "espana/beauty-you-glow.webp",
   },
   {
     id: "cant-stop-wont-stop",
@@ -206,6 +224,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Energía y enfoque",
     description: "Complemento alimenticio Nutrilite™ en sobres para los días de más actividad.",
     variants: [{ sku: "308612", size: "15 sobres", price: 16.84 }],
+    image: "espana/cant-stop-wont-stop.webp",
   },
   {
     id: "sleep-easy",
@@ -215,6 +234,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Sueño y estrés",
     description: "Complemento alimenticio Nutrilite™ para la noche.",
     variants: [{ sku: "308614", size: "30 comprimidos", price: 21.23 }],
+    image: "espana/sleep-easy.webp",
   },
   {
     id: "zinc-selenio",
@@ -224,6 +244,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Salud inmunológica",
     description: "Complemento alimenticio Nutrilite™ con zinc y selenio.",
     variants: [{ sku: "126811", size: "30 sobres", price: 23.50 }],
+    image: "espana/zinc-selenio.webp",
   },
   {
     id: "vitamina-b-plus",
@@ -233,6 +254,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Energía y enfoque",
     description: "Complemento alimenticio Nutrilite™ con vitaminas del grupo B.",
     variants: [{ sku: "110178", size: "60 comprimidos", price: 22.06 }],
+    image: "espana/vitamina-b-plus.webp",
   },
   {
     id: "lecitina-e",
@@ -242,6 +264,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Salud celular",
     description: "Complemento alimenticio Nutrilite™ con lecitina y vitamina E.",
     variants: [{ sku: "4042", size: "110 comprimidos", price: 21.16 }],
+    image: "espana/lecitina-e.webp",
   },
   {
     id: "vision-plus",
@@ -251,6 +274,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Memoria y vista",
     description: "Complemento alimenticio Nutrilite™ para la vista.",
     variants: [{ sku: "124321", size: "60 cápsulas", price: 42.37 }],
+    image: "espana/vision-plus.webp",
   },
   {
     id: "multicaroteno",
@@ -260,6 +284,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Memoria y vista",
     description: "Complemento alimenticio Nutrilite™ con carotenoides de origen natural.",
     variants: [{ sku: "109538", size: "90 comprimidos", price: 36.59 }],
+    image: "espana/multicaroteno.webp",
   },
   {
     id: "cardo-mariano",
@@ -269,6 +294,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Nutrición diaria",
     description: "Complemento alimenticio Nutrilite™ a base de cardo mariano.",
     variants: [{ sku: "101831", size: "60 comprimidos", price: 49.52 }],
+    image: "espana/cardo-mariano.webp",
   },
   {
     id: "biotina-c-plus",
@@ -278,6 +304,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Mujeres",
     description: "Complemento alimenticio Nutrilite™ con biotina y vitamina C.",
     variants: [{ sku: "100305", size: "90 comprimidos", price: 24.04 }],
+    image: "espana/biotina-c-plus.webp",
   },
   {
     id: "womens-40-support",
@@ -287,6 +314,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Mujeres",
     description: "Complemento alimenticio Nutrilite™ pensado para mujeres a partir de los 40.",
     variants: [{ sku: "128057", size: "30 comprimidos", price: 52.15 }],
+    image: "espana/womens-40-support.webp",
   },
   {
     id: "kids-omega-3",
@@ -296,6 +324,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Niños",
     description: "Omega-3 de Nutrilite™ en formato para niños.",
     variants: [{ sku: "122447", size: "30 comprimidos", price: 28.33 }],
+    image: "espana/kids-omega-3.webp",
   },
   {
     id: "calcio-magnesio-masticable",
@@ -305,6 +334,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Niños",
     description: "Comprimidos masticables Nutrilite™ con calcio y magnesio.",
     variants: [{ sku: "5847", size: "80 comprimidos", price: 16.91 }],
+    image: "espana/calcio-magnesio-masticable.webp",
   },
   {
     id: "nutrilite-beauty",
@@ -314,6 +344,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description: "Conjunto Nutrilite™ Beauty (complemento y bebida en polvo), de la lista oficial de Amway España.",
     variants: [{ sku: "114447", size: "1 conjunto", price: 130.06 }],
+    image: "espana/nutrilite-beauty.webp",
   },
   {
     id: "nutrilite-beauty-supplement",
@@ -323,6 +354,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description: "Nutrilite™ Beauty Supplement, de la lista oficial de Amway España.",
     variants: [{ sku: "128149", size: "60 comprimidos", price: 83.70 }],
+    image: "espana/nutrilite-beauty-supplement.webp",
   },
   {
     id: "nutrilite-beauty-powder-drink",
@@ -332,6 +364,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description: "Nutrilite™ Beauty Powder Drink, de la lista oficial de Amway España.",
     variants: [{ sku: "128148", size: "30 sobres", price: 46.36 }],
+    image: "espana/nutrilite-beauty-powder-drink.webp",
   },
   {
     id: "nutrilite-oxibeauty",
@@ -341,6 +374,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description: "Conjunto Nutrilite™ OxiBeauty™ (complemento y bebida en polvo), de la lista oficial de Amway España.",
     variants: [{ sku: "114448", size: "1 conjunto", price: 134.66 }],
+    image: "espana/nutrilite-oxibeauty.webp",
   },
   {
     id: "nutrilite-oxibeauty-supplement",
@@ -350,6 +384,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description: "Nutrilite™ OxiBeauty™ Supplement, de la lista oficial de Amway España.",
     variants: [{ sku: "128151", size: "60 comprimidos", price: 86.68 }],
+    image: "espana/nutrilite-oxibeauty-supplement.webp",
   },
   {
     id: "nutrilite-oxibeauty-powder-drink",
@@ -359,6 +394,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Piel desde adentro",
     description: "Nutrilite™ OxiBeauty™ Powder Drink, de la lista oficial de Amway España.",
     variants: [{ sku: "128152", size: "30 sobres", price: 47.99 }],
+    image: "espana/nutrilite-oxibeauty-powder-drink.webp",
   },
   {
     id: "bodykey-te-hierbas",
@@ -368,6 +404,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Control de peso",
     description: "Infusión de hierbas de la línea bodykey by Nutrilite™.",
     variants: [{ sku: "116670", size: "25 × 1,8 g", price: 10.39 }],
+    image: "espana/bodykey-te-hierbas.webp",
   },
   {
     id: "bodykey-batido",
@@ -380,6 +417,7 @@ export const espanaProducts: Product[] = [
       { sku: "116660", size: "Chocolate · 14 × 26,5 g", price: 54.52 },
       { sku: "116661", size: "Vainilla · 14 × 23,5 g", price: 54.52 },
     ],
+    image: "espana/bodykey-batido.webp",
   },
   {
     id: "bodykey-barrita",
@@ -392,6 +430,7 @@ export const espanaProducts: Product[] = [
       { sku: "121056", size: "Chocolate Negro · 14 barritas", price: 62.04 },
       { sku: "121057", size: "Frutas Tropicales · 14 barritas", price: 62.04 },
     ],
+    image: "espana/bodykey-barrita.webp",
   },
   {
     id: "fibra-polvo",
@@ -401,6 +440,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Control de peso",
     description: "Fibra en polvo de Nutrilite™ en sobres individuales.",
     variants: [{ sku: "102736", size: "30 sobres", price: 43.74 }],
+    image: "espana/fibra-polvo.webp",
   },
   {
     id: "appetite-controller",
@@ -410,6 +450,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Control de peso",
     description: "Complemento alimenticio Nutrilite™ en sobres de la línea de control de peso.",
     variants: [{ sku: "119792", size: "30 sobres", price: 46.86 }],
+    image: "espana/appetite-controller.webp",
   },
   {
     id: "xs-bebida-pre-entrenamiento",
@@ -419,6 +460,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Nutrición deportiva",
     description: "Bebida en polvo XS™ para antes de entrenar.",
     variants: [{ sku: "121602", size: "15 sobres", price: 43.38 }],
+    image: "espana/xs-bebida-pre-entrenamiento.webp",
   },
   {
     id: "xs-bebida-rehidratante",
@@ -428,6 +470,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Nutrición deportiva",
     description: "Bebida rehidratante en polvo XS™ sabor lima-naranja.",
     variants: [{ sku: "121604", size: "15 sobres", price: 26.44 }],
+    image: "espana/xs-bebida-rehidratante.webp",
   },
   {
     id: "xs-proteina-hidrolizada",
@@ -437,6 +480,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Nutrición deportiva",
     description: "Proteína de suero hidrolizada XS™ sabor chocolate.",
     variants: [{ sku: "121606", size: "700 g", price: 77.32 }],
+    image: "espana/xs-proteina-hidrolizada.webp",
   },
   {
     id: "xs-magnesio",
@@ -446,6 +490,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Nutrición deportiva",
     description: "Magnesio XS™ en sobres individuales.",
     variants: [{ sku: "121062", size: "30 sobres", price: 14.62 }],
+    image: "espana/xs-magnesio.webp",
   },
   {
     id: "xs-barrita-proteinas",
@@ -458,6 +503,7 @@ export const espanaProducts: Product[] = [
       { sku: "121608", size: "Cacao-chocolate · 12 barritas", price: 47.09 },
       { sku: "121609", size: "Caramelo-vainilla · 12 barritas", price: 47.09 },
     ],
+    image: "espana/xs-barrita-proteinas.webp",
   },
   {
     id: "xs-power-water",
@@ -490,6 +536,7 @@ export const espanaProducts: Product[] = [
       { sku: "127730", size: "Chocolate negro · 14 barritas", price: 48.58 },
       { sku: "127731", size: "Coco · 14 barritas", price: 48.58 },
     ],
+    image: "espana/xs-high-protein-bar.webp",
   },
   {
     id: "xs-high-protein-shake",
@@ -499,6 +546,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Nutrición deportiva",
     description: "Batidos altos en proteínas XS™ sabor chocolate negro.",
     variants: [{ sku: "321579", size: "14 × 67,1 g", price: 67.31 }],
+    image: "espana/xs-high-protein-shake.webp",
   },
   {
     id: "te-darjeeling",
@@ -508,6 +556,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description: "Té Darjeeling de la selección Amway™.",
     variants: [{ sku: "101162", size: "200 g", price: 22.26 }],
+    image: "espana/te-darjeeling.webp",
   },
   {
     id: "te-ingles-desayuno",
@@ -526,6 +575,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description: "Café Instantáneo Amway™, de la lista oficial de Amway España.",
     variants: [{ sku: "100257", size: "4 × 100 g", price: 42.59 }],
+    image: "espana/cafe-amway.webp",
   },
   {
     id: "cafe-filtro",
@@ -535,6 +585,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description: "Café de Filtro Amway™, de la lista oficial de Amway España.",
     variants: [{ sku: "100180", size: "4 × 250 g", price: 37.44 }],
+    image: "espana/cafe-filtro.webp",
   },
   {
     id: "cafe-molido-expres",
@@ -544,6 +595,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description: "Café Molido Exprés Amway™, de la lista oficial de Amway España.",
     variants: [{ sku: "100209", size: "4 × 250 g", price: 38.65 }],
+    image: "espana/cafe-molido-expres.webp",
   },
   {
     id: "cafe-grano",
@@ -553,6 +605,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description: "Café en Grano Amway™, de la lista oficial de Amway España.",
     variants: [{ sku: "100181", size: "4 × 250 g", price: 42.68 }],
+    image: "espana/cafe-grano.webp",
   },
   {
     id: "vinagre-modena",
@@ -562,6 +615,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description: "Vinagre balsámico de Módena de la selección Amway™.",
     variants: [{ sku: "200662", size: "500 ml", price: 22.60 }],
+    image: "espana/vinagre-modena.webp",
   },
   {
     id: "aceite-oliva",
@@ -571,6 +625,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Alimentación saludable",
     description: "Aceite de oliva virgen extra de la selección Amway™.",
     variants: [{ sku: "3963", size: "2 × 750 ml", price: 43.68 }],
+    image: "espana/aceite-oliva.webp",
   },
   {
     id: "organizador-vitaminas",
@@ -580,6 +635,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Accesorios",
     description: "Pastillero Nutrilite™ para organizar los complementos de la semana.",
     variants: [{ sku: "111661", size: "1 unidad", price: 7.42 }],
+    image: "espana/organizador-vitaminas.webp",
   },
   {
     id: "mezclador-bodykey",
@@ -589,6 +645,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Accesorios",
     description: "Vaso mezclador para preparar batidos bodykey by Nutrilite™.",
     variants: [{ sku: "301617", size: "1 unidad", price: 13.61 }],
+    image: "espana/mezclador-bodykey.webp",
   },
   {
     id: "art-crema-desmaquillante",
@@ -598,6 +655,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Crema desmaquillante de la línea Artistry Skin Nutrition™.",
     variants: [{ sku: "123779", size: "118 ml", price: 28.21 }],
+    image: "espana/art-crema-desmaquillante.webp",
   },
   {
     id: "rutina-belleza-saludable-hidratante",
@@ -607,6 +665,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Rutina de Belleza Saludable Hidratante Artistry Skin Nutrition™, de la lista oficial de Amway España.",
     variants: [{ sku: "319392", size: "1 conjunto", price: 147.17 }],
+    image: "espana/rutina-belleza-saludable-hidratante.webp",
   },
   {
     id: "rutina-belleza-saludable-regeneradora",
@@ -616,6 +675,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Rutina de Belleza Saludable Regeneradora Artistry Skin Nutrition™, de la lista oficial de Amway España.",
     variants: [{ sku: "319385", size: "1 conjunto", price: 200.18 }],
+    image: "espana/rutina-belleza-saludable-regeneradora.webp",
   },
   {
     id: "rutina-belleza-saludable-reafirmante",
@@ -625,6 +685,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Rutina de Belleza Saludable Reafirmante Artistry Skin Nutrition™, de la lista oficial de Amway España.",
     variants: [{ sku: "319398", size: "1 conjunto", price: 207.79 }],
+    image: "espana/rutina-belleza-saludable-reafirmante.webp",
   },
   {
     id: "hidratante-moisturisation-power",
@@ -634,6 +695,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Conjunto Hidratante Moisturisation Power Artistry Skin Nutrition™, de la lista oficial de Amway España.",
     variants: [{ sku: "319401", size: "1 conjunto", price: 115.79 }],
+    image: "espana/hidratante-moisturisation-power.webp",
   },
   {
     id: "regenerador-moisturisation-power",
@@ -643,6 +705,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Conjunto Regenerador Moisturisation Power Artistry Skin Nutrition™, de la lista oficial de Amway España.",
     variants: [{ sku: "319400", size: "1 conjunto", price: 201.56 }],
+    image: "espana/regenerador-moisturisation-power.webp",
   },
   {
     id: "reafirmante-moisturisation-power",
@@ -652,6 +715,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Conjunto Reafirmante Moisturisation Power Artistry Skin Nutrition™, de la lista oficial de Amway España.",
     variants: [{ sku: "319402", size: "1 conjunto", price: 209.17 }],
+    image: "espana/reafirmante-moisturisation-power.webp",
   },
   {
     id: "art-beauty-sleep",
@@ -661,6 +725,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Conjunto Artistry™ para la rutina de noche.",
     variants: [{ sku: "321906", size: "1 conjunto", price: 167.18 }],
+    image: "espana/art-beauty-sleep.webp",
   },
   {
     id: "kit-viaje-hidratante",
@@ -670,6 +735,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Kit de Viaje Hidratante Beauty-on-the-go Artistry Skin Nutrition™, de la lista oficial de Amway España.",
     variants: [{ sku: "123804", size: "1 conjunto", price: 61.36 }],
+    image: "espana/kit-viaje-hidratante.webp",
   },
   {
     id: "kit-viaje-regenerador",
@@ -679,6 +745,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Kit de Viaje Regenerador Beauty on-the-go Artistry Skin Nutrition™, de la lista oficial de Amway España.",
     variants: [{ sku: "123790", size: "1 conjunto", price: 61.36 }],
+    image: "espana/kit-viaje-regenerador.webp",
   },
   {
     id: "kit-viaje-reafirmante",
@@ -688,6 +755,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Kit de Viaje Reafirmante Beauty on-the-go Artistry Skin Nutrition™, de la lista oficial de Amway España.",
     variants: [{ sku: "123789", size: "1 conjunto", price: 61.36 }],
+    image: "espana/kit-viaje-reafirmante.webp",
   },
   {
     id: "art-mascarilla-vitamin-c",
@@ -697,6 +765,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Mascarillas de gel iluminadoras con vitamina C de Artistry Skin Nutrition™.",
     variants: [{ sku: "128276", size: "5 unidades", price: 47.62 }],
+    image: "espana/art-mascarilla-vitamin-c.webp",
   },
   {
     id: "art-gotas-omega",
@@ -706,6 +775,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Gotas faciales con omegas de Artistry Skin Nutrition™.",
     variants: [{ sku: "128047", size: "20 ml", price: 57.55 }],
+    image: "espana/art-gotas-omega.webp",
   },
   {
     id: "longxevity-esencia",
@@ -715,6 +785,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Artistry LongXevity",
     description: "Esencia tonificante de la línea Artistry LongXevity™.",
     variants: [{ sku: "127600", size: "125 ml", price: 131.65 }],
+    image: "espana/longxevity-esencia.webp",
   },
   {
     id: "art-studio-parches-ojos",
@@ -724,6 +795,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Parches para el contorno de ojos de Artistry Studio™.",
     variants: [{ sku: "124818", size: "60 unidades", price: 34.66 }],
+    image: "espana/art-studio-parches-ojos.webp",
   },
   {
     id: "art-studio-bruma",
@@ -733,6 +805,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Bruma facial de Artistry Studio™.",
     variants: [{ sku: "125325", size: "100 ml", price: 26.62 }],
+    image: "espana/art-studio-bruma.webp",
   },
   {
     id: "art-studio-serum-ojos",
@@ -742,6 +815,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Sérum para el contorno de ojos de Artistry Studio™.",
     variants: [{ sku: "125964", size: "15 ml", price: 26.57 }],
+    image: "espana/art-studio-serum-ojos.webp",
   },
   {
     id: "art-studio-suero-iluminador",
@@ -751,6 +825,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Suero facial iluminador de Artistry Studio™.",
     variants: [{ sku: "303185", size: "20 ml", price: 29.66 }],
+    image: "espana/art-studio-suero-iluminador.webp",
   },
   {
     id: "art-studio-empieza-manana",
@@ -760,6 +835,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Conjunto Empieza la Mañana a Tope Artistry Studio™, de la lista oficial de Amway España.",
     variants: [{ sku: "316099", size: "1 conjunto", price: 73.26 }],
+    image: "espana/art-studio-empieza-manana.webp",
   },
   {
     id: "art-studio-lista-irte-a-cama",
@@ -769,6 +845,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Conjunto Lista para Irte a la Cama en 3 Minutos Artistry Studio™, de la lista oficial de Amway España.",
     variants: [{ sku: "316101", size: "1 conjunto", price: 65.47 }],
+    image: "espana/art-studio-lista-irte-a-cama.webp",
   },
   {
     id: "art-derma-architect",
@@ -778,6 +855,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Artistry Derma-Architect™, de la lista oficial de Amway España.",
     variants: [{ sku: "127720", size: "1 unidad", price: 747.36 }],
+    image: "espana/art-derma-architect.webp",
   },
   {
     id: "gel-revitalizante-derma-architect",
@@ -787,6 +865,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado de la piel",
     description: "Gel revitalizante Artistry Derma-Architect™, de la lista oficial de Amway España.",
     variants: [{ sku: "127784", size: "120 g", price: 27.36 }],
+    image: "espana/gel-revitalizante-derma-architect.webp",
   },
   {
     id: "art-ep-conjunto-maquillaje",
@@ -807,6 +886,7 @@ export const espanaProducts: Product[] = [
       { sku: "341141", size: "401 Mocha", price: 63.70 },
       { sku: "341142", size: "402 Nutmeg", price: 63.70 },
     ],
+    image: "espana/art-ep-conjunto-maquillaje.webp",
   },
   {
     id: "glister-cepillo-dental-suave",
@@ -816,6 +896,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado bucal",
     description: "Cepillo Dental Multiacción (suave) glister™, de la lista oficial de Amway España.",
     variants: [{ sku: "124109", size: "4 unidades", price: 14.78 }],
+    image: "espana/glister-cepillo-dental-suave.webp",
   },
   {
     id: "glister-cepillo-dental-medio",
@@ -825,6 +906,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado bucal",
     description: "Cepillo Dental Multiacción (dureza media) glister™, de la lista oficial de Amway España.",
     variants: [{ sku: "124110", size: "4 unidades", price: 14.78 }],
+    image: "espana/glister-cepillo-dental-medio.webp",
   },
   {
     id: "glister-enjuague-aloe",
@@ -834,6 +916,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado bucal",
     description: "Enjuague bucal glister™ con aloe.",
     variants: [{ sku: "124113", size: "500 ml", price: 14.04 }],
+    image: "espana/glister-enjuague-aloe.webp",
   },
   {
     id: "glister-pasta-infantil",
@@ -843,6 +926,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado bucal",
     description: "Pasta de dientes glister™ para niños.",
     variants: [{ sku: "120519", size: "65 ml", price: 5.30 }],
+    image: "espana/glister-pasta-infantil.webp",
   },
   {
     id: "glister-conjunto-familiar",
@@ -852,6 +936,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado bucal",
     description: "Conjunto de higiene bucal glister™ para toda la familia.",
     variants: [{ sku: "317878", size: "1 conjunto", price: 54.17 }],
+    image: "espana/glister-conjunto-familiar.webp",
   },
   {
     id: "gh-jabon-corporal-nourish",
@@ -861,6 +946,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Jabón corporal de la línea g&h™ Nourish.",
     variants: [{ sku: "125913", size: "250 g", price: 14.52 }],
+    image: "espana/gh-jabon-corporal-nourish.webp",
   },
   {
     id: "gh-crema-pies",
@@ -870,6 +956,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Crema para pies de la línea g&h™ Nourish.",
     variants: [{ sku: "125899", size: "100 ml", price: 14.94 }],
+    image: "espana/gh-crema-pies.webp",
   },
   {
     id: "gh-balsamo-labial",
@@ -879,6 +966,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Bálsamo labial de la línea g&h™ Nourish.",
     variants: [{ sku: "125900", size: "4 g", price: 12.80 }],
+    image: "espana/gh-balsamo-labial.webp",
   },
   {
     id: "gh-locion-refresh",
@@ -888,6 +976,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Loción corporal de la línea g&h™ Refresh.",
     variants: [{ sku: "125893", size: "400 ml", price: 19.90 }],
+    image: "espana/gh-locion-refresh.webp",
   },
   {
     id: "gh-desodorante-spray",
@@ -897,6 +986,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Cuidado corporal",
     description: "Desodorante antitranspirante en spray de la línea g&h™ Protect.",
     variants: [{ sku: "125898", size: "200 ml", price: 13.75 }],
+    image: "espana/gh-desodorante-spray.webp",
   },
   {
     id: "detergente-ropa-color",
@@ -906,6 +996,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Detergente líquido Amway Home™ para ropa oscura y de color.",
     variants: [{ sku: "124456", size: "1 l", price: 29.82 }],
+    image: "espana/detergente-ropa-color.webp",
   },
   {
     id: "sa8-liquido-1l",
@@ -915,6 +1006,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Detergente líquido concentrado para la ropa SA8™ en formato de 1 litro.",
     variants: [{ sku: "120536", size: "1 l", price: 30.50 }],
+    image: "espana/sa8-liquido-1l.webp",
   },
   {
     id: "sa8-delicate",
@@ -924,6 +1016,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Lavandería",
     description: "Detergente líquido concentrado SA8™ para prendas delicadas.",
     variants: [{ sku: "110479", size: "1 l", price: 18.28 }],
+    image: "espana/sa8-delicate.webp",
   },
   {
     id: "limpiador-hornos",
@@ -933,6 +1026,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Limpiador de hornos Amway™.",
     variants: [{ sku: "0014", size: "500 ml", price: 10.81 }],
+    image: "espana/limpiador-hornos.webp",
   },
   {
     id: "botella-plastico",
@@ -942,6 +1036,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Botella de Plástico Amway Home™, de la lista oficial de Amway España.",
     variants: [{ sku: "110487", size: "1 unidad", price: 2.42 }],
+    image: "espana/botella-plastico.webp",
   },
   {
     id: "pulverizador-pistola",
@@ -951,6 +1046,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Pulverizador de Pistola Amway Home™, de la lista oficial de Amway España.",
     variants: [{ sku: "110483", size: "1 unidad", price: 3.46 }],
+    image: "espana/pulverizador-pistola.webp",
   },
   {
     id: "dosificador-sa8",
@@ -960,6 +1056,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Dosificador Amway Home™ SA8™, de la lista oficial de Amway España.",
     variants: [{ sku: "1560", size: "1 unidad", price: 6.86 }],
+    image: "espana/dosificador-sa8.webp",
   },
   {
     id: "dosificador-detergente-180-ml",
@@ -969,6 +1066,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Hogar limpio",
     description: "Dosificador de Detergente de 180 ml Amway™, de la lista oficial de Amway España.",
     variants: [{ sku: "5101", size: "1 unidad", price: 1.86 }],
+    image: "espana/dosificador-detergente-180-ml.webp",
   },
   {
     id: "icook-prestige",
@@ -978,6 +1076,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Batería de cocina completa iCook™ de acero inoxidable.",
     variants: [{ sku: "101098", size: "27 piezas", price: 1904.77 }],
+    image: "espana/icook-prestige.webp",
   },
   {
     id: "icook-wok",
@@ -987,6 +1086,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Wok iCook™ de acero inoxidable.",
     variants: [{ sku: "105084", size: "1 pieza", price: 571.00 }],
+    image: "espana/icook-wok.webp",
   },
   {
     id: "icook-cacerola-1l",
@@ -996,6 +1096,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Cacerola iCook™ de 1 litro con asa larga y tapa.",
     variants: [{ sku: "101088", size: "1 conjunto", price: 154.20 }],
+    image: "espana/icook-cacerola-1l.webp",
   },
   {
     id: "icook-mango-largo-tornillo",
@@ -1005,6 +1106,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Mango Largo con Tornillo para Sartén Antiadherente iCook™ de 28 y 24 cm, de la lista oficial de Amway España.",
     variants: [{ sku: "401954", size: "1 unidad", price: 13.84 }],
+    image: "espana/icook-mango-largo-tornillo.webp",
   },
   {
     id: "mango-lateral-tornillo-sarten",
@@ -1014,6 +1116,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Mango Lateral con Tornillo para Sartén Antiadherente iCook™ de 28 cm, de la lista oficial de Amway España.",
     variants: [{ sku: "401955", size: "1 unidad", price: 13.74 }],
+    image: "espana/mango-lateral-tornillo-sarten.webp",
   },
   {
     id: "tapa-sarten-antiadherente-28",
@@ -1023,6 +1126,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Tapa para Sartén Antiadherente iCook™ de 28 cm, de la lista oficial de Amway España.",
     variants: [{ sku: "401956", size: "1 unidad", price: 43.24 }],
+    image: "espana/tapa-sarten-antiadherente-28.webp",
   },
   {
     id: "tapa-sarten-antiadherente-24",
@@ -1032,6 +1136,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Tapa para Sartén Antiadherente iCook™ de 24 cm, de la lista oficial de Amway España.",
     variants: [{ sku: "401962", size: "1 unidad", price: 38.05 }],
+    image: "espana/tapa-sarten-antiadherente-24.webp",
   },
   {
     id: "tapas-recipientes-3-tamanos",
@@ -1041,6 +1146,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Utensilios de cocina",
     description: "Tapas de los Recipientes iCook™ – 3 tamaños, de la lista oficial de Amway España.",
     variants: [{ sku: "400142", size: "1 pieza", price: 9.29 }],
+    image: "espana/tapas-recipientes-3-tamanos.webp",
   },
   {
     id: "espring-adaptador-alimentacion",
@@ -1050,6 +1156,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Adaptador de alimentación para el sistema de tratamiento de agua eSpring™.",
     variants: [{ sku: "1109", size: "1 unidad", price: 53.38 }],
+    image: "espana/espring-adaptador-alimentacion.webp",
   },
   {
     id: "espring-kit-pared-modelo-anterior",
@@ -1059,6 +1166,7 @@ export const espanaProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Kit para instalación en pared eSpring™ (para modelo anterior eSpring), de la lista oficial de Amway España.",
     variants: [{ sku: "102996", size: "1 unidad", price: 28.09 }],
+    image: "espana/espring-kit-pared-modelo-anterior.webp",
   },
   {
     id: "pre-filtro-modelo-anterior",
@@ -1068,5 +1176,6 @@ export const espanaProducts: Product[] = [
     subcategory: "Agua y aire limpios",
     description: "Pre-filtro eSpring™ (para modelo anterior eSpring), de la lista oficial de Amway España.",
     variants: [{ sku: "100187", size: "1 unidad", price: 27.06 }],
+    image: "espana/pre-filtro-modelo-anterior.webp",
   },
 ];
