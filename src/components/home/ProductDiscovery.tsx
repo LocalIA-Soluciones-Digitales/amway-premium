@@ -48,7 +48,7 @@ export function ProductDiscovery() {
               className="group flex items-center justify-between gap-6 py-7 transition-colors hover:bg-linen/60 sm:px-2"
             >
               <div className="flex min-w-0 items-baseline gap-5 sm:gap-10">
-                <span className="text-sm text-stone">{String(i + 1).padStart(2, "0")}</span>
+                <span className="w-6 shrink-0 text-sm tabular-nums text-stone">{String(i + 1).padStart(2, "0")}</span>
                 <div className="min-w-0">
                   <span className="block font-display text-3xl text-carbon transition-transform duration-300 group-hover:translate-x-2 sm:text-4xl">
                     {need.label}
@@ -57,7 +57,7 @@ export function ProductDiscovery() {
                 </div>
               </div>
               <div className="flex items-center gap-6">
-                <span className="hidden max-w-[14rem] text-right text-sm text-stone sm:block">
+                <span className="hidden max-w-[18rem] text-right text-sm text-stone sm:block">
                   {need.description}
                 </span>
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-carbon/15 text-carbon transition group-hover:border-forest group-hover:bg-forest group-hover:text-cream">
