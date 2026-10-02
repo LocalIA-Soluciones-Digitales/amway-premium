@@ -33,9 +33,7 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
           <div className="col-span-2">
             <p className="flex items-center gap-3 font-display text-3xl text-cream">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cream p-1.5">
-                <Image src="/brand/logo-mark.png" alt="" width={48} height={48} className="h-full w-full" />
-              </span>
+              <Image src="/brand/logo-mark-light.png" alt="" width={48} height={48} className="h-12 w-12 shrink-0" />
               {SITE.name}
             </p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/55">
