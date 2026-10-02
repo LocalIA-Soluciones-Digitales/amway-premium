@@ -1213,3 +1213,21 @@ update storage.buckets
    set file_size_limit = 31457280,
        allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'video/mp4', 'video/webm']
  where id = 'amway-anuncios';
+
+-- Panel de desarrollo → Accesos: último acceso y estado en Auth de cada
+-- correo con permiso. Solo lectura y solo para desarrolladores.
+create or replace function public.amway_actividad_admins()
+returns table (email text, tiene_usuario boolean, confirmado boolean, ultimo_acceso timestamptz, usuario_desde timestamptz)
+language sql stable security definer set search_path = public
+as $$
+  select a.email,
+         u.id is not null,
+         u.email_confirmed_at is not null,
+         u.last_sign_in_at,
+         u.created_at
+  from public.amway_admins a
+  left join auth.users u on lower(u.email) = a.email
+  where public.amway_es_desarrollador();
+$$;
+revoke all on function public.amway_actividad_admins() from public, anon;
+grant execute on function public.amway_actividad_admins() to authenticated;

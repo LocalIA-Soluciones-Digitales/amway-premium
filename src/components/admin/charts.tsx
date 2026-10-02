@@ -335,3 +335,121 @@ export function Donut({
     </div>
   );
 }
+
+export interface ProjectionPoint {
+  label: string;
+  real: number | null;
+  prevision: number | null;
+  rango: [number, number] | null;
+}
+
+// Serie real (área) seguida de la previsión (línea discontinua) con su banda
+// de incertidumbre del 80 %.
+export function ProjectionChart({
+  data,
+  format = (n) => String(Math.round(n)),
+  height = 260,
+  name,
+}: {
+  data: ProjectionPoint[];
+  format?: (n: number) => string;
+  height?: number;
+  name: string;
+}) {
+  const firstForecast = data.find((d) => d.real == null && d.prevision != null)?.label;
+  const gid = `proj-${name.replace(/\W/g, "")}`;
+  return (
+    <div style={{ height }} role="img" aria-label={`Gráfica: ${name} con previsión`}>
+      <ResponsiveContainer width="100%" height="100%">
+        <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -12 }}>
+          <defs>
+            <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={CHART_COLOR} stopOpacity={0.18} />
+              <stop offset="100%" stopColor={CHART_COLOR} stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid stroke={GRID} vertical={false} />
+          <XAxis dataKey="label" tick={{ fill: AXIS, fontSize: 11 }} tickLine={false} axisLine={false} minTickGap={24} />
+          <YAxis tick={{ fill: AXIS, fontSize: 11 }} tickLine={false} axisLine={false} width={56} tickFormatter={format} allowDecimals={false} />
+          {firstForecast && <ReferenceLine x={firstForecast} stroke="rgba(28,26,22,0.18)" strokeDasharray="3 3" label={{ value: "Previsión", position: "insideTopRight", fill: AXIS, fontSize: 10 }} />}
+          <Tooltip
+            cursor={{ stroke: "rgba(28,26,22,0.25)", strokeWidth: 1 }}
+            content={({ active, payload, label }) => {
+              if (!active || !payload?.length) return null;
+              const d = payload[0].payload as ProjectionPoint;
+              return d.real != null ? (
+                <TooltipBox label={String(label)} value={format(d.real)} />
+              ) : d.prevision != null ? (
+                <div className="rounded-xl border border-carbon/[0.08] bg-white px-3 py-2 text-xs shadow-[0_10px_30px_rgba(28,26,22,0.12)]">
+                  <p className="text-stone">{String(label)} · previsión</p>
+                  <p className="mt-0.5 font-semibold tabular-nums text-carbon">≈ {format(d.prevision)}</p>
+                  {d.rango && (
+                    <p className="text-stone tabular-nums">
+                      {format(d.rango[0])} – {format(d.rango[1])}
+                    </p>
+                  )}
+                </div>
+              ) : null;
+            }}
+          />
+          <Area type="monotone" dataKey="rango" stroke="none" fill={CHART_COLOR} fillOpacity={0.08} isAnimationActive={false} connectNulls={false} />
+          <Area
+            type="monotone"
+            dataKey="real"
+            name={name}
+            stroke={CHART_COLOR}
+            strokeWidth={2}
+            fill={`url(#${gid})`}
+            connectNulls={false}
+            activeDot={{ r: 4, stroke: "#fff", strokeWidth: 2, fill: CHART_COLOR }}
+          />
+          <Line type="monotone" dataKey="prevision" stroke={CHART_COLOR} strokeWidth={2} strokeDasharray="5 4" dot={false} connectNulls={false} />
+        </ComposedChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+const DIAS_CORTOS = ["L", "M", "X", "J", "V", "S", "D"];
+
+// Mapa de calor día de la semana × hora (Madrid). Celdas HTML para que se
+// lea bien en móvil y con lector de pantalla (title con el valor).
+export function Heatmap({ data, unidad = "visitantes", desde = 7, hasta = 23 }: { data: number[][]; unidad?: string; desde?: number; hasta?: number }) {
+  const max = Math.max(1, ...data.flat());
+  const horas = Array.from({ length: hasta - desde + 1 }, (_, i) => desde + i);
+  return (
+    <div className="overflow-x-auto [scrollbar-width:thin]">
+      <div className="inline-grid min-w-full gap-[3px]" style={{ gridTemplateColumns: `1.25rem repeat(${horas.length}, minmax(1.1rem, 1fr))` }}>
+        <span />
+        {horas.map((h) => (
+          <span key={h} className="text-center text-[9px] tabular-nums text-stone">
+            {h % 3 === 0 ? h : ""}
+          </span>
+        ))}
+        {data.map((fila, d) => (
+          <div key={d} className="contents">
+            <span className="text-[10px] font-medium leading-[1.1rem] text-stone">{DIAS_CORTOS[d]}</span>
+            {horas.map((h) => {
+              const v = fila[h] ?? 0;
+              return (
+                <span
+                  key={h}
+                  title={`${DIAS_CORTOS[d]} ${h}:00 · ${v} ${unidad}`}
+                  className="h-[1.1rem] rounded-[4px]"
+                  style={{ background: v ? `rgba(31,68,56,${0.12 + (v / max) * 0.83})` : "rgba(28,26,22,0.04)" }}
+                />
+              );
+            })}
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 flex items-center justify-end gap-1.5 text-[10px] text-stone">
+        menos
+        {[0.12, 0.35, 0.6, 0.95].map((o) => (
+          <span key={o} className="h-2.5 w-2.5 rounded-[3px]" style={{ background: `rgba(31,68,56,${o})` }} />
+        ))}
+        más
+      </div>
+    </div>
+  );
+}
