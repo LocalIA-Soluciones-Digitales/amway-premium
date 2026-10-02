@@ -14,7 +14,7 @@ const CATEGORY_TILES: { slug: CategorySlug; image: string }[] = [
   { slug: "nutricion", image: "/images/editorial/nutricion-botanico.webp" },
   { slug: "belleza", image: "/images/editorial/belleza-editorial.webp" },
   { slug: "cuidado-personal", image: "/images/editorial/cuidado-personal.webp" },
-  { slug: "hogar", image: "/images/editorial/hogar-familia.webp" },
+  { slug: "hogar", image: "/images/espring/kitchen-lifestyle.webp" },
 ];
 
 // XS Energy se filtra dentro de Nutrición, igual que en amway.es.

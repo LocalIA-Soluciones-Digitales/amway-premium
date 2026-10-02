@@ -6,10 +6,16 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { CATEGORY_META } from "@/data/products";
 
-const TILES: { slug: "nutricion" | "belleza" | "hogar"; image: string; span: string }[] = [
-  { slug: "nutricion", image: "/images/editorial/nutricion-botanico.webp", span: "sm:col-span-7 sm:row-span-2" },
-  { slug: "belleza", image: "/images/editorial/belleza-editorial.webp", span: "sm:col-span-5" },
-  { slug: "hogar", image: "/images/editorial/hogar-familia.webp", span: "sm:col-span-5" },
+const TILES: {
+  slug: "nutricion" | "belleza" | "cuidado-personal" | "hogar";
+  image: string;
+  span: string;
+  position: string;
+}[] = [
+  { slug: "nutricion", image: "/images/editorial/nutricion-botanico.webp", span: "sm:col-span-7", position: "object-center" },
+  { slug: "belleza", image: "/images/editorial/belleza-editorial.webp", span: "sm:col-span-5", position: "object-center" },
+  { slug: "cuidado-personal", image: "/images/editorial/cuidado-personal.webp", span: "sm:col-span-5", position: "object-[70%_center]" },
+  { slug: "hogar", image: "/images/espring/kitchen-lifestyle.webp", span: "sm:col-span-7", position: "object-[40%_65%]" },
 ];
 
 export function CategoryShowcase() {
@@ -26,12 +32,12 @@ export function CategoryShowcase() {
           Nuestro catálogo
         </p>
         <h2 className="mt-4 font-display text-4xl leading-[1.05] text-carbon sm:text-6xl">
-          Tres mundos, una sola calidad.
+          Cuatro mundos, una sola calidad.
         </h2>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-12 sm:grid-rows-2">
-        {TILES.map(({ slug, image, span }, i) => {
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-12">
+        {TILES.map(({ slug, image, span, position }, i) => {
           const meta = CATEGORY_META[slug];
           return (
             <motion.div
@@ -44,14 +50,14 @@ export function CategoryShowcase() {
             >
               <Link
                 href={meta.href}
-                className="group relative flex h-72 flex-col justify-end overflow-hidden sm:h-full sm:min-h-[17rem]"
+                className="group relative flex h-72 flex-col justify-end overflow-hidden sm:h-[22rem]"
               >
                 <Image
                   src={image}
                   alt={meta.label}
                   fill
                   sizes="(max-width: 640px) 100vw, 50vw"
-                  className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
+                  className={`object-cover ${position} transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-carbon/85 via-carbon/15 to-transparent transition-opacity duration-500 group-hover:from-carbon/90" />
 
