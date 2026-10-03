@@ -309,5 +309,6 @@ export const CATEGORIA_LABEL: Record<string, string> = {
 
 export function variacion(actual: number, anterior: number): number | null {
   if (!anterior) return actual ? null : 0;
-  return ((actual - anterior) / anterior) * 100;
+  // Sobre el valor absoluto: pasar de -200 € a +100 € es subir, no bajar.
+  return ((actual - anterior) / Math.abs(anterior)) * 100;
 }
