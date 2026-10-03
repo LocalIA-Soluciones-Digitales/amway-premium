@@ -54,8 +54,22 @@ export function DashboardShell<T extends string>({
   children: ReactNode;
 }) {
   const [pwOpen, setPwOpen] = useState(false);
+  // En tablet y móvil no caben todas las pestañas: la activa se desplaza a la
+  // vista para que siempre se vea dónde estás.
+  const navRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const nav = navRef.current;
+    const activa = nav?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!nav || !activa) return;
+    const izq = activa.getBoundingClientRect().left - nav.getBoundingClientRect().left + nav.scrollLeft;
+    if (izq < nav.scrollLeft || izq + activa.offsetWidth > nav.scrollLeft + nav.clientWidth) {
+      nav.scrollTo({ left: izq - (nav.clientWidth - activa.offsetWidth) / 2, behavior: "smooth" });
+    }
+    // También cuando llegan los contadores, que ensanchan las pestañas.
+  }, [tab, tabs]);
   const tabsNav = (
     <nav
+      ref={navRef}
       className="-mx-1 flex items-center gap-1 overflow-x-auto px-1 [scrollbar-width:none]"
       aria-label="Secciones"
     >

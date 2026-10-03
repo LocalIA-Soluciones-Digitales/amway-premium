@@ -283,7 +283,7 @@ export function FilaRecogida({
     <div
       id={`pedido-${p.id}`}
       className={cn(
-        "group relative flex scroll-mt-40 flex-col overflow-hidden rounded-2xl border bg-white transition hover:border-carbon/15 hover:shadow-[0_6px_20px_rgba(28,26,22,0.06)] md:flex-row md:items-center",
+        "group relative flex scroll-mt-40 flex-col overflow-hidden rounded-2xl border bg-white transition hover:border-carbon/15 hover:shadow-[0_6px_20px_rgba(28,26,22,0.06)] lg:flex-row lg:items-center",
         hecho ? "border-carbon/[0.05] opacity-60" : "border-carbon/[0.08]"
       )}
     >
@@ -330,10 +330,10 @@ export function FilaRecogida({
             <Badge tone="blue">Pagado · {METODO_PAGO[p.metodo_pago]}</Badge>
           )}
         </span>
-        <ChevronRight size={16} className="hidden shrink-0 text-stone/60 transition group-hover:translate-x-0.5 group-hover:text-carbon md:block" />
+        <ChevronRight size={16} className="hidden shrink-0 text-stone/60 transition group-hover:translate-x-0.5 group-hover:text-carbon lg:block" />
       </button>
 
-      <div className="flex items-center gap-1.5 border-t border-carbon/[0.05] py-2 pl-4 pr-3 md:border-l md:border-t-0 md:py-3 md:pl-3">
+      <div className="flex items-center gap-1.5 border-t border-carbon/[0.05] py-2 pl-4 pr-3 lg:border-l lg:border-t-0 lg:py-3 lg:pl-3">
         {hecho ? (
           <button
             type="button"
@@ -374,7 +374,7 @@ export function FilaRecogida({
         )}
         {p.cliente_telefono && (
           <>
-            <span className="flex-1 md:hidden" />
+            <span className="flex-1 lg:hidden" />
             <a
               href={`tel:${p.cliente_telefono.replace(/\s/g, "")}`}
               aria-label="Llamar"
