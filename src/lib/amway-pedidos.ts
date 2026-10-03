@@ -10,6 +10,7 @@ import { avisarPedidoNuevo } from "@/lib/push";
 // Sin AMWAY_PEDIDOS_TOKEN no apunta nada: la tienda sigue cobrando igual.
 // Devuelve lo que la página de éxito necesita para el mensaje al cliente.
 export interface PedidoPagado {
+  numero: number | null;
   nombre: string;
   total: number;
   recogidaFecha: string | null;
@@ -53,6 +54,7 @@ export async function registrarPedidoStripe(sessionId: string): Promise<PedidoPa
   const meta = session.metadata ?? {};
   const nombre = meta.cliente_nombre || shipping?.name || session.customer_details?.name || "";
   const pagado: PedidoPagado = {
+    numero: null,
     nombre,
     total: (session.amount_total ?? 0) / 100,
     recogidaFecha: meta.recogida_fecha || null,
@@ -80,5 +82,12 @@ export async function registrarPedidoStripe(sessionId: string): Promise<PedidoPa
     p_cliente_id: meta.cliente_id || null,
   }, { cache: "no-store" });
   await avisarPedidoNuevo(pedidoId);
+  // El nº es lo que cliente y gestora usan para hablar del pedido. Si la
+  // consulta falla, la página de éxito se muestra igual, sin él.
+  pagado.numero = await amwayRpc<number | null>(
+    "amway_numero_pedido_stripe",
+    { p_token: token, p_stripe_session_id: session.id },
+    { cache: "no-store" }
+  ).catch(() => null);
   return pagado;
 }

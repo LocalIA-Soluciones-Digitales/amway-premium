@@ -43,8 +43,24 @@ function buscarPorNombre(nombre: string): Product | null {
   return hit;
 }
 
+// Ids del catálogo anterior que ya no existen y cuyo nombre no se parece lo
+// bastante al actual: se apuntan a su equivalente para mantener la foto.
+const IDS_RETIRADOS: Record<string, string> = {
+  "batidos-todo-en-uno": "bodykey-batido",
+  "paquete-perfecto": "trio-fundamental-double-x",
+  "multivitaminico-hombres": "double-x",
+  "multivitaminico-mujeres": "double-x",
+  "multigomitas-hombres": "double-x",
+  "omega-avanzado": "omega-nutrilite",
+  "proteina-vegetal-polvo": "proteina-vegetal",
+  "equinacea": "conjunto-vitaminas-inmunidad",
+  "protegete-gomitas": "conjunto-vitaminas-inmunidad",
+  "xs-energy-drink": "xs-power-drink-naranja",
+};
+
 export function productoDeItem(i: { product_id: string | null; nombre: string }): Product | undefined {
-  return (i.product_id ? getProductById(i.product_id) : undefined) ?? buscarPorNombre(i.nombre) ?? undefined;
+  const id = i.product_id ? (IDS_RETIRADOS[i.product_id] ?? i.product_id) : null;
+  return (id ? getProductById(id) : undefined) ?? buscarPorNombre(i.nombre) ?? undefined;
 }
 
 export function imagenDeItem(i: { product_id: string | null; nombre: string }): string | null {

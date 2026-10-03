@@ -79,7 +79,7 @@ export function RecogidaPicker({
             >
               <ChevronLeft size={16} />
             </button>
-            <span className="text-sm font-medium capitalize text-carbon">{nombreMes(mesVisto)}</span>
+            <span className="text-sm font-medium text-carbon first-letter:uppercase">{nombreMes(mesVisto)}</span>
             <button
               type="button"
               onClick={() => setMes(mesSiguiente(mesVisto, 1))}

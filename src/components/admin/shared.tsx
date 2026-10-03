@@ -35,7 +35,8 @@ export interface Pedido {
   cliente_email: string | null;
   cliente_telefono: string | null;
   direccion: string | null;
-  notas: string | null;
+  notas: string | null; // comentario del cliente al pedir (lo ve en su cuenta)
+  notas_internas?: string | null; // solo para la gestora
   seguimiento: string | null;
   enviado_at: string | null;
   recogida_fecha: string | null; // YYYY-MM-DD (recogida en mano)

@@ -346,7 +346,7 @@ function VentaManualForm({ onClose, onCreated }: { onClose: () => void; onCreate
       cliente_nombre: nombre.trim() || null,
       cliente_telefono: telefono.trim() || null,
       direccion: direccion.trim() || null,
-      notas: notas.trim() || null,
+      notas_internas: notas.trim() || null,
     });
     setSaving(false);
     if (e2) {
@@ -448,7 +448,7 @@ function VentaManualForm({ onClose, onCreated }: { onClose: () => void; onCreate
         </select>
         <input value={direccion} onChange={(e) => setDireccion(e.target.value)} placeholder="Dirección (opcional)" className={cn(inputClass, "sm:col-span-2")} />
         <input inputMode="decimal" value={envio} onChange={(e) => setEnvio(e.target.value)} placeholder="Envío € (opcional)" className={inputClass} />
-        <input value={notas} onChange={(e) => setNotas(e.target.value)} placeholder="Notas" className={inputClass} />
+        <input value={notas} onChange={(e) => setNotas(e.target.value)} placeholder="Notas internas" className={inputClass} />
       </div>
 
       {error && <p role="alert" className="mt-3 text-sm text-xs-red">{error}</p>}

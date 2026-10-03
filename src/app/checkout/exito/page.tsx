@@ -29,6 +29,7 @@ export default async function CheckoutExitoPage({
   const recogida = pedido?.recogidaFecha && pedido.recogidaHora ? { fecha: pedido.recogidaFecha, hora: pedido.recogidaHora } : null;
   const waMensaje = pedido
     ? mensajePedido({
+        numero: pedido.numero,
         lineas: pedido.items.map((i) => ({
           cantidad: i.cantidad,
           nombre: i.nombre,
@@ -49,6 +50,7 @@ export default async function CheckoutExitoPage({
       <h1 className="mt-6 font-display text-3xl text-carbon sm:text-4xl">
         ¡Gracias por tu pedido!
       </h1>
+      {pedido?.numero && <p className="mt-3 font-display text-xl text-carbon">Pedido nº {pedido.numero}</p>}
       <p className="mt-4 max-w-md text-stone">
         Hemos recibido tu pago correctamente.
         {recogida
@@ -72,8 +74,11 @@ export default async function CheckoutExitoPage({
           Seguir comprando
         </Link>
       </div>
-      <Link href="/cuenta" className="mt-6 text-sm text-stone underline-offset-4 transition hover:text-carbon hover:underline">
-        Ver mis pedidos
+      <Link
+        href={pedido?.numero ? `/cuenta?pedido=${pedido.numero}` : "/cuenta"}
+        className="mt-6 text-sm text-stone underline-offset-4 transition hover:text-carbon hover:underline"
+      >
+        {pedido?.numero ? "Ver mis pedidos o guardar este en tu cuenta" : "Ver mis pedidos"}
       </Link>
     </div>
   );

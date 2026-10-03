@@ -1231,3 +1231,56 @@ as $$
 $$;
 revoke all on function public.amway_actividad_admins() from public, anon;
 grant execute on function public.amway_actividad_admins() to authenticated;
+
+-- ============================================================
+-- Pedidos: notas internas, nº de pedido con tarjeta y stock
+-- ============================================================
+-- Notas de la gestora, separadas del comentario del cliente (`notas`, que
+-- el cliente ve en su cuenta). amway_mis_pedidos no las devuelve.
+alter table public.amway_pedidos add column if not exists notas_internas text;
+
+create or replace function public.amway_cancelar_mi_pedido(p_numero bigint)
+returns boolean
+language plpgsql security definer set search_path = public
+as $$
+begin
+  if auth.uid() is null then
+    raise exception 'no autorizado';
+  end if;
+  update public.amway_pedidos
+     set estado = 'cancelado',
+         notas_internas = left(concat_ws(chr(10), notas_internas, 'Cancelado por el cliente desde su cuenta.'), 1000)
+   where numero = p_numero and cliente_id = auth.uid()
+     and estado = 'pendiente' and metodo_pago = 'efectivo' and preparado_at is null;
+  return found;
+end;
+$$;
+
+-- Nº de un pedido pagado con tarjeta (para la página de éxito). Solo el servidor.
+create or replace function public.amway_numero_pedido_stripe(p_token text, p_stripe_session_id text)
+returns bigint
+language plpgsql stable security definer set search_path = public
+as $$
+begin
+  if not public.amway_token_servidor_valido(p_token) then
+    raise exception 'no autorizado';
+  end if;
+  return (select numero from public.amway_pedidos where stripe_session_id = p_stripe_session_id);
+end;
+$$;
+
+-- Productos con stock controlado que no llegan a lo pedido. Solo dice cuáles,
+-- nunca cuántas unidades quedan.
+create or replace function public.amway_stock_insuficiente(p_items jsonb)
+returns text[]
+language sql stable security definer set search_path = public
+as $$
+  select coalesce(array_agg(p.product_id), '{}')
+  from (
+    select item ->> 'product_id' as product_id, sum(coalesce((item ->> 'cantidad')::integer, 0)) as cantidad
+    from jsonb_array_elements(case when jsonb_typeof(p_items) = 'array' then p_items else '[]'::jsonb end) item
+    group by 1
+  ) pedido
+  join public.amway_productos p on p.product_id = pedido.product_id
+  where p.stock is not null and p.stock < pedido.cantidad;
+$$;

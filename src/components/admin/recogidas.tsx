@@ -379,7 +379,11 @@ export function FilaRecogida({
               href={`tel:${p.cliente_telefono.replace(/\s/g, "")}`}
               aria-label="Llamar"
               title="Llamar"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-stone hover:bg-cream hover:text-carbon"
+              // En el móvil no caben llamar y "Avisar" a la vez: llamar sigue en la ficha.
+              className={cn(
+                "h-9 w-9 items-center justify-center rounded-full text-stone hover:bg-cream hover:text-carbon",
+                avisarListo ? "hidden sm:flex" : "flex"
+              )}
             >
               <Phone size={14} />
             </a>

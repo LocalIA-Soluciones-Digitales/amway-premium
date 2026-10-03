@@ -1,5 +1,6 @@
 import type { Product, ProductVariant } from "@/data/types";
 import { getProductById } from "@/data/products";
+import { amwayRpc } from "@/lib/amway-db";
 import { estaAgotado, estaOculto, fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
 import { recogidaValida, type Recogida } from "@/lib/recogida";
 
@@ -81,6 +82,22 @@ export async function validarPedidoWeb(body: unknown): Promise<ResultadoPedido> 
       ? Math.min(MAX_QUANTITY_PER_LINE, Math.max(1, line.quantity as number))
       : 1;
     lineas.push({ product, variant, variantIndex, flavor, quantity, eurPrice });
+  }
+
+  // Stock controlado: que no se vendan más unidades de las que hay. Si la
+  // consulta falla no se bloquea la venta (el agotado ya se ha mirado).
+  const cortos = await amwayRpc<string[]>(
+    "amway_stock_insuficiente",
+    { p_items: lineas.map((l) => ({ product_id: l.product.id, cantidad: l.quantity })) },
+    { cache: "no-store" }
+  ).catch(() => [] as string[]);
+  const corto = lineas.find((l) => cortos.includes(l.product.id));
+  if (corto) {
+    return {
+      ok: false,
+      error: `No nos quedan tantas unidades de "${corto.product.name}". Baja la cantidad o escríbenos por WhatsApp.`,
+      status: 409,
+    };
   }
 
   const total = Math.round(lineas.reduce((s, l) => s + l.eurPrice * l.quantity, 0) * 100) / 100;

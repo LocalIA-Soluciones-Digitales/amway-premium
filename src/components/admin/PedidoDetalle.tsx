@@ -193,10 +193,18 @@ export function PedidoDetalle({
           <span className="font-medium text-carbon">Total {eur(p.total_eur)}</span>
         </div>
 
+        {p.notas && (
+          <div className="mt-4 rounded-xl bg-amber-50 px-3 py-2.5 text-sm ring-1 ring-inset ring-amber-200/70">
+            <p className="text-[11px] font-medium uppercase tracking-wide text-amber-800">Comentario del cliente</p>
+            <p className="mt-0.5 whitespace-pre-line text-carbon">{p.notas}</p>
+          </div>
+        )}
         <textarea
-          defaultValue={p.notas ?? ""}
-          onBlur={(e) => e.target.value !== (p.notas ?? "") && onUpdate({ notas: e.target.value || null })}
-          placeholder="Notas del pedido (ojo: el cliente las ve en su cuenta)"
+          defaultValue={p.notas_internas ?? ""}
+          onBlur={(e) =>
+            e.target.value !== (p.notas_internas ?? "") && onUpdate({ notas_internas: e.target.value.trim() || null })
+          }
+          placeholder="Notas internas (solo las ves tú: incidencias, preferencias…)"
           rows={2}
           className={cn(inputClass, "mt-4 h-auto w-full py-2")}
         />
