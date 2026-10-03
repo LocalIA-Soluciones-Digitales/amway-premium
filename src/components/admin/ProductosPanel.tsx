@@ -23,7 +23,7 @@ import { productImageSrc, variantPriceEur, type Product } from "@/data/types";
 import { amwayDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
 import { Dialog } from "@/components/ui/Dialog";
-import { CATEGORIA_LABEL } from "./report-data";
+import { CATEGORIA_LABEL, categoriaTienda } from "./report-data";
 import { Badge, Empty, Loading, btnGhost, btnPrimary, eur, inputClass, revalidarTienda, type ProductoAjusteRow } from "./shared";
 
 type Filtro = "todos" | "en-web" | "agotados" | "ocultos" | "poco-stock" | "sin-coste";
@@ -92,7 +92,7 @@ const GAMAS: { nombre: string; total: number }[] = (() => {
   return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es")).map(([nombre, total]) => ({ nombre, total }));
 })();
 
-const CATEGORIAS = Array.from(new Set(PRODUCTS.map((p) => p.category)));
+const CATEGORIAS = Array.from(new Set(PRODUCTS.map((p) => categoriaTienda(p.category))));
 
 type AccionBloque = "agotar" | "reponer" | "ocultar" | "mostrar";
 
@@ -241,7 +241,7 @@ export function ProductosPanel({ session }: { session: Session }) {
   const coincide = useCallback(
     (p: Product) => {
       const q = query.trim().toLowerCase();
-      if (categoria && p.category !== categoria) return false;
+      if (categoria && categoriaTienda(p.category) !== categoria) return false;
       return !q || `${p.name} ${p.brand} ${p.subcategory} ${p.variants.map((v) => v.sku ?? "").join(" ")}`.toLowerCase().includes(q);
     },
     [query, categoria]

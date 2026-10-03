@@ -245,7 +245,7 @@ create table if not exists public.amway_gastos (
   fecha date not null default current_date,
   concepto text not null check (char_length(concepto) between 1 and 200),
   categoria text not null default 'otros'
-    check (categoria in ('mercancia', 'envios', 'publicidad', 'comisiones', 'material', 'otros')),
+    check (categoria in ('mercancia', 'muestras', 'envios', 'publicidad', 'comisiones', 'material', 'cuota', 'transporte', 'telefono', 'web', 'formacion', 'otros')),
   importe_eur numeric(10, 2) not null check (importe_eur >= 0),
   notas text,
   created_at timestamptz not null default now()
@@ -256,6 +256,11 @@ drop policy if exists "amway_gastos_admin" on public.amway_gastos;
 create policy "amway_gastos_admin"
   on public.amway_gastos for all to authenticated
   using (public.amway_es_admin()) with check (public.amway_es_admin());
+
+-- Tablas ya creadas con la lista corta de categorías.
+alter table public.amway_gastos drop constraint if exists amway_gastos_categoria_check;
+alter table public.amway_gastos add constraint amway_gastos_categoria_check
+  check (categoria in ('mercancia', 'muestras', 'envios', 'publicidad', 'comisiones', 'material', 'cuota', 'transporte', 'telefono', 'web', 'formacion', 'otros'));
 
 create index if not exists idx_amway_gastos_fecha on public.amway_gastos (fecha desc);
 

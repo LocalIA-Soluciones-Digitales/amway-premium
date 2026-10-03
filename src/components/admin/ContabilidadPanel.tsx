@@ -6,6 +6,8 @@ import {
   ArrowUpRight,
   CalendarRange,
   Check,
+  ChevronLeft,
+  ChevronRight,
   Download,
   HandCoins,
   Lightbulb,
@@ -99,20 +101,54 @@ export function calcular(pedidos: Pedido[], gastos: Gasto[]): Resultado {
   };
 }
 
-type Modo = "mes" | "anio" | "todo";
+type Modo = "dia" | "semana" | "mes" | "anio" | "todo";
 
 interface Periodo {
   desde: Date | null;
   hasta: Date | null;
-  // Periodo con el que comparar (mismo tramo del mes/año anterior).
+  // Periodo con el que comparar (mismo tramo del día/semana/mes/año anterior).
   prevDesde: Date | null;
   prevHasta: Date | null;
   etiqueta: string;
   comparaCon: string;
 }
 
-function periodo(modo: Modo, mes: string, anio: number): Periodo {
+const isoDia = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const sumarDias = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+const diaCorto = (d: Date, conAnio = false) =>
+  d.toLocaleDateString("es-ES", { day: "numeric", month: "short", ...(conAnio ? { year: "numeric" } : {}) }).replace(".", "");
+
+function periodo(modo: Modo, mes: string, anio: number, dia: string): Periodo {
   const now = new Date();
+  if (modo === "dia" || modo === "semana") {
+    const [y, m, d] = dia.split("-").map(Number);
+    const largo = modo === "dia" ? 1 : 7;
+    const desde = modo === "dia" ? new Date(y, m - 1, d) : lunes(new Date(y, m - 1, d));
+    const hasta = sumarDias(desde, largo);
+    const prevDesde = sumarDias(desde, -largo);
+    // Día o semana en curso: se compara con el anterior hasta el mismo momento.
+    const actual = now >= desde && now < hasta;
+    const prevHasta = actual ? new Date(prevDesde.getTime() + (now.getTime() - desde.getTime())) : desde;
+    if (modo === "dia") {
+      const nombre = desde.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+      return {
+        desde,
+        hasta,
+        prevDesde,
+        prevHasta,
+        etiqueta: nombre.charAt(0).toUpperCase() + nombre.slice(1),
+        comparaCon: actual ? "vs. ayer a esta hora" : "vs. el día anterior",
+      };
+    }
+    return {
+      desde,
+      hasta,
+      prevDesde,
+      prevHasta,
+      etiqueta: `Semana del ${diaCorto(desde)} al ${diaCorto(sumarDias(desde, 6), true)}`,
+      comparaCon: actual ? "vs. la semana pasada a estas alturas" : "vs. la semana anterior",
+    };
+  }
   if (modo === "todo") return { desde: null, hasta: null, prevDesde: null, prevHasta: null, etiqueta: "Desde el principio", comparaCon: "" };
   if (modo === "anio") {
     const actual = anio === now.getFullYear();
@@ -199,6 +235,7 @@ export function ContabilidadPanel() {
   const [modo, setModo] = useState<Modo>("mes");
   const [mes, setMes] = useState(`${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, "0")}`);
   const [anio, setAnio] = useState(hoy.getFullYear());
+  const [dia, setDia] = useState(() => isoDia(hoy));
   const [todosPedidos, setTodosPedidos] = useState<Pedido[] | null>(null);
   const [todosGastos, setTodosGastos] = useState<Gasto[] | null>(null);
   const [ordenTop, setOrdenTop] = useState<OrdenTop>("ingresos");
@@ -219,7 +256,13 @@ export function ContabilidadPanel() {
     void cargar();
   }, [cargar]);
 
-  const per = useMemo(() => periodo(modo, mes, anio), [modo, mes, anio]);
+  const per = useMemo(() => periodo(modo, mes, anio, dia), [modo, mes, anio, dia]);
+
+  // Flechas para pasar al día o a la semana anterior/siguiente.
+  function moverDia(sentido: 1 | -1) {
+    const [y, m, d] = dia.split("-").map(Number);
+    setDia(isoDia(new Date(y, m - 1, d + sentido * (modo === "semana" ? 7 : 1))));
+  }
 
   const pedidos = useMemo(() => todosPedidos?.filter((p) => enRango(p.created_at, per.desde, per.hasta)) ?? null, [todosPedidos, per]);
   const gastos = useMemo(() => todosGastos?.filter((g) => enRango(g.fecha, per.desde, per.hasta)) ?? null, [todosGastos, per]);
@@ -497,7 +540,8 @@ export function ContabilidadPanel() {
 
   function exportar() {
     if (!pedidos || !gastos) return;
-    const etiqueta = modo === "mes" ? mes : modo === "anio" ? String(anio) : "todo";
+    const etiqueta =
+      modo === "dia" ? dia : modo === "semana" ? `semana-${isoDia(per.desde!)}` : modo === "mes" ? mes : modo === "anio" ? String(anio) : "todo";
     downloadCsv(`amway-ventas-${etiqueta}.csv`, [
       ["Nº", "Fecha", "Estado", "Origen", "Método", "Cliente", "Producto", "Formato", "Cantidad", "Precio ud.", "Coste ud.", "Total pedido", "Envío"],
       ...pedidos.flatMap((p) =>
@@ -552,6 +596,8 @@ export function ContabilidadPanel() {
           <div className="flex gap-1 rounded-full border border-carbon/[0.07] bg-white p-1">
             {(
               [
+                ["dia", "Día"],
+                ["semana", "Semana"],
                 ["mes", "Mes"],
                 ["anio", "Año"],
                 ["todo", "Todo"],
@@ -570,6 +616,33 @@ export function ContabilidadPanel() {
               </button>
             ))}
           </div>
+          {(modo === "dia" || modo === "semana") && (
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => moverDia(-1)}
+                aria-label={modo === "dia" ? "Día anterior" : "Semana anterior"}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-carbon/[0.12] bg-white text-stone hover:text-carbon"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <input
+                type="date"
+                value={dia}
+                onChange={(e) => e.target.value && setDia(e.target.value)}
+                className={cn(inputClass, "min-w-0 appearance-none")}
+                aria-label={modo === "dia" ? "Día" : "Cualquier día de la semana"}
+              />
+              <button
+                type="button"
+                onClick={() => moverDia(1)}
+                aria-label={modo === "dia" ? "Día siguiente" : "Semana siguiente"}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-carbon/[0.12] bg-white text-stone hover:text-carbon"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
           {modo === "mes" && (
             <input type="month" value={mes} onChange={(e) => e.target.value && setMes(e.target.value)} className={inputClass} aria-label="Mes" />
           )}
@@ -958,18 +1031,23 @@ function NuevoGasto({ onChange }: { onChange: () => void }) {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   });
   const [concepto, setConcepto] = useState("");
+  const [otroTipo, setOtroTipo] = useState("");
   const [categoria, setCategoria] = useState<Gasto["categoria"]>("mercancia");
   const [importe, setImporte] = useState("");
   const [saving, setSaving] = useState(false);
   const [hecho, setHecho] = useState<string | null>(null);
   const n = Number(importe.replace(",", "."));
-  const valido = importe.trim() !== "" && Number.isFinite(n) && n > 0;
+  const esOtro = categoria === "otros";
+  const valido = importe.trim() !== "" && Number.isFinite(n) && n > 0 && (!esOtro || otroTipo.trim() !== "");
 
   async function add(e: FormEvent) {
     e.preventDefault();
     if (!valido) return;
     setSaving(true);
-    const texto = concepto.trim() || CATEGORIA_GASTO[categoria];
+    // En «Otros» el tipo se escribe a mano y va delante del concepto.
+    const texto = (
+      esOtro ? [otroTipo.trim(), concepto.trim()].filter(Boolean).join(" · ") : concepto.trim() || CATEGORIA_GASTO[categoria]
+    ).slice(0, 200);
     const { error } = await amwayDb().from("amway_gastos").insert({ fecha: fechaG, concepto: texto, categoria, importe_eur: n });
     setSaving(false);
     if (error) {
@@ -977,6 +1055,7 @@ function NuevoGasto({ onChange }: { onChange: () => void }) {
       return;
     }
     setConcepto("");
+    setOtroTipo("");
     setImporte("");
     setHecho(`${eur(n)} · ${texto}`);
     setTimeout(() => setHecho(null), 4000);
@@ -1017,44 +1096,61 @@ function NuevoGasto({ onChange }: { onChange: () => void }) {
 
       {open && (
         <form onSubmit={add} className="mt-4 flex flex-col gap-3">
-          <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label="Tipo de gasto">
-            {(Object.entries(CATEGORIA_GASTO) as [Gasto["categoria"], string][]).map(([v, label]) => (
-              <button
-                key={v}
-                type="button"
-                role="radio"
-                aria-checked={categoria === v}
-                onClick={() => setCategoria(v)}
-                className={cn(
-                  "rounded-full border px-3 py-1.5 text-xs font-medium transition",
-                  categoria === v ? "border-carbon bg-carbon text-cream" : "border-carbon/[0.12] text-stone hover:border-carbon/25 hover:text-carbon"
-                )}
-              >
-                {label}
-              </button>
-            ))}
+          <div className="grid gap-2 sm:grid-cols-2">
+            <select
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value as Gasto["categoria"])}
+              className={cn(inputClass, "w-full min-w-0")}
+              aria-label="Tipo de gasto"
+            >
+              {(Object.entries(CATEGORIA_GASTO) as [Gasto["categoria"], string][]).map(([v, label]) => (
+                <option key={v} value={v}>
+                  {label}
+                </option>
+              ))}
+            </select>
+            {esOtro && (
+              <input
+                value={otroTipo}
+                onChange={(e) => setOtroTipo(e.target.value)}
+                placeholder="¿Qué gasto es? (p. ej. gestoría)"
+                maxLength={80}
+                autoFocus
+                className={cn(inputClass, "w-full min-w-0")}
+                aria-label="Qué gasto es"
+                required
+              />
+            )}
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-[10rem_10rem_minmax(0,1fr)_auto]">
-            <label className="relative">
+          {/* minmax(0,…) y min-w-0: en iPhone el campo de fecha tiene un ancho
+              mínimo propio y, sin ellos, se sale de la tarjeta. */}
+          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-2 sm:grid-cols-[10rem_11rem_minmax(0,1fr)_auto]">
+            <label className="relative min-w-0">
               <span className="sr-only">Importe</span>
               <input
                 inputMode="decimal"
-                autoFocus
                 value={importe}
                 onChange={(e) => setImporte(e.target.value.replace(/[^\d.,]/g, ""))}
                 placeholder="0,00"
-                className={cn(inputClass, "w-full pr-8 text-right text-base font-medium tabular-nums")}
+                className={cn(inputClass, "w-full min-w-0 pr-8 text-right text-base font-medium tabular-nums")}
                 required
               />
               <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-stone">€</span>
             </label>
-            <input type="date" value={fechaG} onChange={(e) => setFechaG(e.target.value)} className={cn(inputClass, "w-full")} aria-label="Fecha" required />
+            <input
+              type="date"
+              value={fechaG}
+              onChange={(e) => setFechaG(e.target.value)}
+              className={cn(inputClass, "block w-full min-w-0 max-w-full appearance-none")}
+              aria-label="Fecha"
+              required
+            />
             <input
               value={concepto}
               onChange={(e) => setConcepto(e.target.value)}
               placeholder="Concepto (opcional)"
               maxLength={200}
-              className={cn(inputClass, "col-span-2 w-full sm:col-span-1")}
+              className={cn(inputClass, "col-span-2 w-full min-w-0 sm:col-span-1")}
             />
             <button type="submit" disabled={saving || !valido} className={cn(btnPrimary, "col-span-2 justify-center disabled:opacity-40 sm:col-span-1")}>
               {saving ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} Guardar gasto

@@ -63,7 +63,19 @@ export interface Gasto {
   id: string;
   fecha: string;
   concepto: string;
-  categoria: "mercancia" | "envios" | "publicidad" | "comisiones" | "material" | "otros";
+  categoria:
+    | "mercancia"
+    | "muestras"
+    | "envios"
+    | "publicidad"
+    | "comisiones"
+    | "material"
+    | "cuota"
+    | "transporte"
+    | "telefono"
+    | "web"
+    | "formacion"
+    | "otros";
   importe_eur: number;
   notas: string | null;
 }
@@ -115,11 +127,17 @@ export const METODO_PAGO: Record<MetodoPago, string> = {
 };
 
 export const CATEGORIA_GASTO: Record<Gasto["categoria"], string> = {
-  mercancia: "Compra de mercancía",
-  envios: "Envíos",
-  publicidad: "Publicidad",
+  mercancia: "Compra de mercancía (Amway)",
+  muestras: "Muestras y regalos a clientes",
+  envios: "Envíos y mensajería",
+  publicidad: "Publicidad (Instagram, Facebook…)",
   comisiones: "Comisiones (Stripe, banco…)",
   material: "Material / embalaje",
+  cuota: "Cuota de socio Amway",
+  transporte: "Desplazamientos y gasolina",
+  telefono: "Teléfono e internet",
+  web: "Web, dominio y apps",
+  formacion: "Formación y eventos",
   otros: "Otros",
 };
 

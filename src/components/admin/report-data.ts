@@ -300,12 +300,16 @@ export function ventasPor(pedidos: Pedido[], key: "category" | "brand") {
     .map(([label, value]) => ({ label, value }));
 }
 
+// Las 4 categorías de la tienda: XS Energy vive dentro de Nutrición.
 export const CATEGORIA_LABEL: Record<string, string> = {
   nutricion: "Nutrición",
-  "xs-energy": "XS Energy",
+  "xs-energy": "Nutrición",
   belleza: "Belleza",
+  "cuidado-personal": "Cuidado personal",
   hogar: "Hogar",
 };
+
+export const categoriaTienda = (c: string) => (c === "xs-energy" ? "nutricion" : c);
 
 export function variacion(actual: number, anterior: number): number | null {
   if (!anterior) return actual ? null : 0;
