@@ -3,23 +3,31 @@
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
   Bell,
   CalendarClock,
   Check,
+  ChevronDown,
   ChevronRight,
   ClipboardList,
   CreditCard,
+  Hash,
+  Layers,
+  LayoutGrid,
   MessageCircle,
+  Package,
   Share2,
   ShieldCheck,
   ShoppingBag,
   Star,
   Store,
+  Tag,
+  type LucideIcon,
 } from "lucide-react";
 import type { Product } from "@/data/types";
-import { cheapestVariantIndex, productImageSrc } from "@/data/types";
+import { cheapestVariantIndex, productImageSrc, variantKind } from "@/data/types";
 import { SITE, waProductLink } from "@/data/site-config";
 import { formatEUR } from "@/lib/currency";
 import { track } from "@/lib/analytics";
@@ -164,6 +172,66 @@ function ShareButton({ product }: { product: Product }) {
   );
 }
 
+// Descripción, ficha y recogida en pestañas, justo debajo de la compra:
+// todo a la vista sin tener que bajar hasta el final de la página.
+function ProductTabs({ tabs }: { tabs: { id: string; label: string; content: ReactNode }[] }) {
+  const [active, setActive] = useState(tabs[0].id);
+  const current = tabs.find((t) => t.id === active) ?? tabs[0];
+
+  return (
+    <section className="mt-8">
+      <div
+        role="tablist"
+        aria-label="Información del producto"
+        className="flex gap-1 rounded-full bg-linen/70 p-1 ring-1 ring-carbon/[0.05]"
+      >
+        {tabs.map((t) => {
+          const selected = t.id === active;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              id={`tab-${t.id}`}
+              aria-selected={selected}
+              aria-controls={`panel-${t.id}`}
+              onClick={() => setActive(t.id)}
+              className={cn(
+                "relative flex-1 rounded-full px-3 py-2.5 text-xs font-medium transition-colors sm:text-sm",
+                selected ? "text-cream" : "text-stone hover:text-carbon"
+              )}
+            >
+              {selected && (
+                <motion.span
+                  layoutId="product-tab"
+                  className="absolute inset-0 rounded-full bg-carbon shadow-sm"
+                  transition={{ type: "spring", duration: 0.45, bounce: 0.15 }}
+                />
+              )}
+              <span className="relative">{t.label}</span>
+            </button>
+          );
+        })}
+      </div>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={current.id}
+          role="tabpanel"
+          id={`panel-${current.id}`}
+          aria-labelledby={`tab-${current.id}`}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="px-1 pt-6"
+        >
+          {current.content}
+        </motion.div>
+      </AnimatePresence>
+    </section>
+  );
+}
+
 export function ProductDetail({
   product,
   categoryLabel,
@@ -186,6 +254,7 @@ export function ProductDetail({
   const rating = catalog.valoracion(product.id);
   const imageSrc = productImageSrc(product);
   const hasOptions = product.variants.length > 1;
+  const kind = variantKind(product);
   const skus = Array.from(new Set(product.variants.map((v) => v.sku).filter(Boolean)));
   const canBuy = price != null && !agotado;
   const [lead, body] = splitLead(product.description);
@@ -249,29 +318,124 @@ export function ProductDetail({
       </button>
     );
 
-  const specs: { label: string; value: ReactNode }[] = [
-    { label: "Marca", value: product.brand },
+  const kindPlural = kind === "Formato" ? "formatos" : `${kind.toLowerCase()}s`;
+
+  const specs: { icon: LucideIcon; label: string; value: ReactNode }[] = [
+    { icon: Tag, label: "Marca", value: product.brand },
     {
+      icon: LayoutGrid,
       label: "Categoría",
       value: (
-        <>
-          <Link href={categoryHref} className="underline-offset-4 hover:underline">
-            {categoryLabel}
-          </Link>{" "}
-          · {product.subcategory}
-        </>
+        <Link href={categoryHref} className="underline-offset-4 hover:underline">
+          {categoryLabel}
+        </Link>
       ),
     },
-    { label: hasOptions ? "Formatos" : "Formato", value: product.variants.map((v) => v.size).join(" · ") },
+    { icon: Layers, label: "Gama", value: product.subcategory },
+    {
+      icon: Package,
+      label: hasOptions ? `${kind === "Formato" ? "Formatos" : `${kind}s`}` : kind,
+      value: hasOptions ? `${product.variants.length} opciones` : variant.size,
+    },
     ...(skus.length > 0
-      ? [{ label: skus.length > 1 ? "Referencias" : "Referencia", value: <span className="tabular-nums">{skus.join(" · ")}</span> }]
+      ? [
+          {
+            icon: Hash,
+            label: skus.length > 1 ? "Referencia elegida" : "Referencia",
+            value: <span className="tabular-nums">{variant.sku ?? skus[0]}</span>,
+          },
+        ]
       : []),
+    { icon: ShieldCheck, label: "Origen", value: "Original Amway" },
   ];
 
   const steps = [
-    { icon: ShoppingBag, title: "Añádelo a la cesta", text: "Elige el formato y las unidades que necesitas." },
+    { icon: ShoppingBag, title: "Añádelo a la cesta", text: `Elige ${kind.toLowerCase()} y las unidades que necesitas.` },
     { icon: CalendarClock, title: "Elige día y hora", text: `Al terminar el pedido, eliges cuándo pasar: ${SITE.horario.texto}.` },
     { icon: Store, title: `Recógelo en ${SITE.city}`, text: "Lo tenemos preparado. Paga con tarjeta en la web o en efectivo." },
+  ];
+
+  const tabs: { id: string; label: string; content: ReactNode }[] = [
+    {
+      id: "descripcion",
+      label: "Descripción",
+      content: (
+        <div>
+          {/* La entradilla ya va bajo el título; aquí, el resto del texto. */}
+          {body ? (
+            <p className="text-[15px] leading-relaxed text-carbon/75">{body}</p>
+          ) : (
+            <p className="text-pretty font-display text-xl leading-snug text-carbon sm:text-2xl">{lead}</p>
+          )}
+          {hasOptions && (
+            <div className="mt-6">
+              <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-stone">
+                {product.variants.length} {kindPlural}
+              </p>
+              <ul className="mt-2.5 flex flex-wrap gap-1.5">
+                {product.variants.map((v, i) => (
+                  <li key={i}>
+                    <button
+                      type="button"
+                      onClick={() => setVariantIndex(i)}
+                      className={cn(
+                        "rounded-full px-3 py-1 text-xs transition",
+                        i === variantIndex ? "bg-carbon text-cream" : "bg-linen/70 text-carbon/80 hover:bg-linen"
+                      )}
+                    >
+                      {v.size}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "ficha",
+      label: "Ficha técnica",
+      content: (
+        <dl className="grid grid-cols-1 gap-2.5 min-[420px]:grid-cols-2">
+          {specs.map(({ icon: Icon, label, value }) => (
+            <div key={label} className="flex min-w-0 items-start gap-3 rounded-2xl bg-white/70 p-4 ring-1 ring-carbon/[0.06]">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-forest/[0.08] text-forest">
+                <Icon size={15} />
+              </span>
+              <span className="min-w-0">
+                <dt className="text-[10px] font-medium uppercase tracking-[0.12em] text-stone">{label}</dt>
+                <dd className="mt-0.5 break-words text-sm font-medium text-carbon">{value}</dd>
+              </span>
+            </div>
+          ))}
+        </dl>
+      ),
+    },
+    {
+      id: "recogida",
+      label: "Recogida",
+      content: (
+        <div>
+          <ol className="relative space-y-5 before:absolute before:bottom-5 before:left-5 before:top-5 before:w-px before:bg-carbon/10">
+            {steps.map(({ icon: Icon, title, text }) => (
+              <li key={title} className="relative flex gap-4">
+                <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-carbon text-cream">
+                  <Icon size={17} />
+                </span>
+                <span className="min-w-0 pt-0.5">
+                  <span className="block text-sm font-medium text-carbon">{title}</span>
+                  <span className="mt-0.5 block text-sm leading-relaxed text-stone">{text}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-6 rounded-2xl bg-linen/60 px-4 py-3 text-xs leading-relaxed text-stone">
+            No hacemos envíos: preparamos tu pedido y lo recoges tú. Todos los precios incluyen IVA.
+          </p>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -289,22 +453,9 @@ export function ProductDetail({
           <span className="truncate text-carbon/70">{product.subcategory}</span>
         </nav>
 
-        <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-16">
+        <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-14">
           <div className="lg:sticky lg:top-28 lg:self-start">
             <ProductStage product={product} imageSrc={imageSrc} agotado={agotado} accent={accent} />
-
-            <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {[
-                { label: hasOptions ? "Formato elegido" : "Formato", value: variant.size },
-                { label: "Referencia", value: variant.sku ?? "—" },
-                { label: "Gama", value: product.subcategory },
-              ].map((s) => (
-                <div key={s.label} className="min-w-0 rounded-2xl bg-linen/60 px-4 py-3 ring-1 ring-carbon/5 [&:nth-child(3)]:max-sm:hidden">
-                  <dt className="text-[10px] font-medium uppercase tracking-[0.14em] text-stone">{s.label}</dt>
-                  <dd className="mt-1 truncate text-sm font-medium tabular-nums text-carbon">{s.value}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
 
           <div className="min-w-0">
@@ -317,14 +468,14 @@ export function ProductDetail({
               </Link>
               <ShareButton product={product} />
             </div>
-            <h1 className="mt-3 text-balance font-display text-[2rem] leading-[1.1] tracking-[-0.01em] text-carbon sm:text-[2.75rem]">
+            <h1 className="mt-3 text-balance font-display text-[2rem] leading-[1.1] tracking-[-0.01em] text-carbon sm:text-[2.6rem]">
               {product.name}
             </h1>
 
             {rating && (
               <a
                 href="/opiniones"
-                className="mt-4 inline-flex items-center gap-2 text-sm text-stone transition hover:text-carbon"
+                className="mt-3 inline-flex items-center gap-2 text-sm text-stone transition hover:text-carbon"
               >
                 <span className="flex" aria-hidden>
                   {[1, 2, 3, 4, 5].map((n) => (
@@ -341,13 +492,32 @@ export function ProductDetail({
               </a>
             )}
 
-            <div className="mt-7 rounded-[1.75rem] bg-white/70 p-5 shadow-[0_1px_0_rgba(28,26,22,0.04),0_20px_50px_-30px_rgba(28,26,22,0.25)] ring-1 ring-carbon/[0.06] sm:p-7">
+            {body && <p className="mt-4 text-pretty text-[15px] leading-relaxed text-carbon/70">{lead}</p>}
+
+            {/* Datos rápidos */}
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {[
+                ...(hasOptions ? [{ icon: Package, text: `${product.variants.length} ${kindPlural}` }] : []),
+                { icon: Layers, text: product.subcategory },
+                ...(variant.sku ? [{ icon: Hash, text: `Ref. ${variant.sku}` }] : []),
+              ].map(({ icon: Icon, text }) => (
+                <li
+                  key={text}
+                  className="flex items-center gap-1.5 rounded-full bg-linen/70 px-3 py-1.5 text-xs font-medium text-carbon/80 ring-1 ring-carbon/[0.05]"
+                >
+                  <Icon size={13} className="text-stone" />
+                  <span className="tabular-nums">{text}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-6 rounded-[1.75rem] bg-white/70 p-5 shadow-[0_1px_0_rgba(28,26,22,0.04),0_20px_50px_-30px_rgba(28,26,22,0.25)] ring-1 ring-carbon/[0.06] sm:p-7">
               <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
                 <div>
-                  <p className="font-display text-[2.6rem] leading-none tabular-nums text-carbon">
+                  <p className="font-display text-[2.4rem] leading-none tabular-nums text-carbon">
                     {price != null ? formatEUR(price) : "Consultar precio"}
                   </p>
-                  {price != null && <p className="mt-2 text-xs text-stone">IVA incluido · sin gastos de envío</p>}
+                  {price != null && <p className="mt-2 text-xs text-stone">IVA incluido · recogida en tienda</p>}
                 </div>
                 <p
                   className={cn(
@@ -365,9 +535,20 @@ export function ProductDetail({
                 </p>
               </div>
 
-              {hasOptions && (
-                <fieldset className="mt-7">
-                  <legend className="text-xs font-medium uppercase tracking-[0.14em] text-stone">Elige formato</legend>
+              <div className="mt-6 border-t border-carbon/[0.07] pt-5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-stone">
+                    {hasOptions ? `Elige ${kind.toLowerCase()}` : kind}
+                  </p>
+                  {hasOptions && <p className="text-xs tabular-nums text-stone">{product.variants.length} opciones</p>}
+                </div>
+
+                {!hasOptions ? (
+                  <p className="mt-2.5 inline-flex items-center gap-2 rounded-xl bg-linen/60 px-4 py-2.5 text-sm font-medium text-carbon">
+                    <Package size={15} className="text-stone" />
+                    {variant.size}
+                  </p>
+                ) : product.variants.length <= 6 ? (
                   <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
                     {product.variants.map((v, i) => {
                       const optionPrice = catalog.precio(product, i);
@@ -396,8 +577,34 @@ export function ProductDetail({
                       );
                     })}
                   </div>
-                </fieldset>
-              )}
+                ) : (
+                  // Muchas opciones (tonos): un desplegable en vez de una pared de botones.
+                  <div className="relative mt-3 flex h-14 items-center gap-3 rounded-2xl bg-cream-soft px-4 ring-1 ring-carbon/12 transition focus-within:ring-2 focus-within:ring-carbon/40 hover:ring-carbon/30">
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium text-carbon">{variant.size}</span>
+                      {variant.sku && <span className="block text-[11px] tabular-nums text-stone">Ref. {variant.sku}</span>}
+                    </span>
+                    <ChevronDown size={18} className="pointer-events-none shrink-0 text-carbon" />
+                    <select
+                      value={variantIndex}
+                      onChange={(e) => setVariantIndex(Number(e.target.value))}
+                      aria-label={`Elige ${kind.toLowerCase()} de ${product.name}`}
+                      className="absolute inset-0 w-full cursor-pointer appearance-none opacity-0"
+                      style={{ fontSize: 16 }}
+                    >
+                      {product.variants.map((v, i) => {
+                        const optionPrice = catalog.precio(product, i);
+                        return (
+                          <option key={i} value={i}>
+                            {v.size}
+                            {optionPrice != null ? ` — ${formatEUR(optionPrice)}` : ""}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                )}
+              </div>
 
               <div ref={ctaRef} className="mt-6 flex items-center gap-2">
                 {buyButton("h-14 min-w-0 flex-1 text-[15px]", "Añadir a la cesta")}
@@ -410,89 +617,30 @@ export function ProductDetail({
                   <span className="hidden sm:inline">Consultar</span>
                 </a>
               </div>
+
+              <ul className="mt-5 grid grid-cols-3 gap-2 border-t border-carbon/[0.07] pt-5">
+                {[
+                  { icon: Store, text: "Recogida en tienda" },
+                  { icon: CreditCard, text: "Tarjeta o efectivo" },
+                  { icon: ShieldCheck, text: "Garantía Amway" },
+                ].map(({ icon: Icon, text }) => (
+                  <li
+                    key={text}
+                    className="flex flex-col items-center gap-1.5 text-center text-[11px] leading-tight text-stone sm:flex-row sm:text-left"
+                  >
+                    <Icon size={16} className="shrink-0 text-forest" />
+                    {text}
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <ul className="mt-6 divide-y divide-carbon/[0.07] rounded-[1.75rem] ring-1 ring-carbon/[0.07]">
-              {[
-                { icon: Store, title: "Recogida en tienda", text: `En nuestro local de ${SITE.city}, ${SITE.horario.texto}` },
-                { icon: CreditCard, title: "Pago flexible", text: "Con tarjeta en la web o en efectivo al recoger" },
-                { icon: ShieldCheck, title: "Garantía Amway", text: "Producto original con garantía de satisfacción" },
-              ].map(({ icon: Icon, title, text }) => (
-                <li key={title} className="flex items-center gap-4 px-5 py-4">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-forest/[0.08] text-forest">
-                    <Icon size={18} />
-                  </span>
-                  <span className="min-w-0 text-sm">
-                    <span className="block font-medium text-carbon">{title}</span>
-                    <span className="block text-stone">{text}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <ProductTabs tabs={tabs} />
           </div>
         </div>
 
-        {/* Vista general + ficha técnica */}
-        <section aria-labelledby="vista-general" className="mt-24 grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-7">
-            <p id="vista-general" className="text-xs font-medium uppercase tracking-[0.22em] text-stone">
-              Vista general
-            </p>
-            <p className="mt-5 text-pretty font-display text-2xl leading-snug text-carbon sm:text-[1.9rem]">{lead}</p>
-            {body && <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-carbon/75">{body}</p>}
-          </div>
-          <div className="lg:col-span-5">
-            <div className="rounded-[1.75rem] bg-linen/70 p-6 ring-1 ring-carbon/5 sm:p-8">
-              <p className="text-xs font-medium uppercase tracking-[0.22em] text-stone">Ficha técnica</p>
-              <dl className="mt-4 divide-y divide-carbon/[0.08] text-sm">
-                {specs.map((s) => (
-                  <div key={s.label} className="grid grid-cols-[7.5rem_1fr] gap-4 py-3.5">
-                    <dt className="text-stone">{s.label}</dt>
-                    <dd className="min-w-0 text-carbon">{s.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </div>
-        </section>
-
-        {/* Cómo se compra */}
-        <section aria-labelledby="como-comprar" className="mt-24">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.22em] text-stone">Recogida y pago</p>
-              <h2 id="como-comprar" className="mt-3 font-display text-3xl text-carbon sm:text-4xl">
-                Así de fácil
-              </h2>
-            </div>
-            <p className="max-w-sm text-sm text-stone">
-              No hacemos envíos: preparamos tu pedido y lo recoges tú. Todos los precios incluyen IVA.
-            </p>
-          </div>
-          <ol className="mt-10 grid gap-4 md:grid-cols-3">
-            {steps.map(({ icon: Icon, title, text }, i) => (
-              <li
-                key={title}
-                className="group relative overflow-hidden rounded-[1.75rem] bg-white/60 p-7 ring-1 ring-carbon/[0.06] transition duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-35px_rgba(28,26,22,0.35)]"
-              >
-                <span
-                  aria-hidden
-                  className="absolute right-5 top-3 font-display text-[5.5rem] leading-none text-carbon/[0.04] transition-colors duration-500 group-hover:text-forest/[0.08]"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-carbon text-cream">
-                  <Icon size={20} />
-                </span>
-                <h3 className="mt-6 font-display text-xl text-carbon">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-stone">{text}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
-
         {/* Ayuda */}
-        <section className="relative mt-24 overflow-hidden rounded-[2rem] bg-forest px-7 py-12 text-cream sm:px-12 sm:py-14">
+        <section className="relative mt-20 overflow-hidden rounded-[2rem] bg-forest px-7 py-12 text-cream sm:px-12 sm:py-14">
           <div
             aria-hidden
             className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-forest-soft/40 blur-3xl"

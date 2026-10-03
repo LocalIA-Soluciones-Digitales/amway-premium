@@ -71,6 +71,18 @@ export function cheapestVariantIndex(p: Product): number {
   return best;
 }
 
+const MEASURE =
+  /\d+([.,]\d+)?\s*(ml|cl|l|g|kg|oz|litros?|sobres?|comprimidos|c[áa]psulas|latas?|barritas?|uds?\.?|unidades|piezas|perlas|tabletas|dosis)\b/i;
+
+// Qué es cada variante, para rotular el selector: tamaños, tonos de
+// maquillaje o sabores.
+export function variantKind(p: Product): "Formato" | "Tono" | "Sabor" | "Opción" {
+  if (p.variants.some((v) => MEASURE.test(v.size))) return "Formato";
+  if (p.category === "belleza") return "Tono";
+  if (p.category === "xs-energy" || p.category === "nutricion") return "Sabor";
+  return "Opción";
+}
+
 export function productImageSrc(p: Product): string | null {
   if (!p.image) return null;
   return p.image.includes("/") ? `/images/${p.image}` : `/images/catalog/${p.image}`;

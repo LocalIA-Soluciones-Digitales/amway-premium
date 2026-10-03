@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Bell, ChevronDown, ClipboardList, MessageCircle, Star } from "lucide-react";
 import type { Product } from "@/data/types";
-import { cheapestVariantIndex, productHref, productImageSrc } from "@/data/types";
+import { cheapestVariantIndex, productHref, productImageSrc, variantKind } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
 import { formatEUR } from "@/lib/currency";
 import { cn } from "@/lib/utils";
@@ -39,6 +39,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
   const rating = catalog.valoracion(product.id);
   const imageSrc = productImageSrc(product);
   const hasOptions = product.variants.length > 1;
+  const kind = variantKind(product);
 
   if (catalog.oculto(product.id)) return null;
 
@@ -110,23 +111,37 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
         </h3>
 
         <div className="mt-auto pt-3">
-          <p className="text-sm font-medium tabular-nums text-carbon">
+          <p className="text-[15px] font-semibold tabular-nums text-carbon">
             {price != null ? formatEUR(price) : "Consultar precio"}
           </p>
 
-          {/* Format row: plain text for one variant, a selector for several.
-              Same height either way so every card keeps the same rhythm. */}
-          <div className="relative mt-1 flex h-7 items-center border-b border-carbon/10">
-            <span className="min-w-0 flex-1 truncate text-xs text-stone">{variant.size}</span>
+          {/* Format row: a quiet info field for one variant, a real-looking
+              dropdown for several. Same height either way so every card
+              keeps the same rhythm. */}
+          <div
+            className={cn(
+              "relative mt-2.5 flex h-10 items-center gap-2 rounded-xl px-3 transition",
+              hasOptions
+                ? "bg-white ring-1 ring-carbon/12 focus-within:ring-2 focus-within:ring-carbon/40 hover:ring-carbon/30"
+                : "bg-linen/60"
+            )}
+          >
+            <span className="shrink-0 text-[10px] font-medium uppercase tracking-[0.12em] text-stone max-sm:sr-only">
+              {kind}
+            </span>
+            <span className="min-w-0 flex-1 truncate text-xs font-medium text-carbon sm:text-right">{variant.size}</span>
             {hasOptions && (
               <>
-                <ChevronDown size={14} className="pointer-events-none shrink-0 text-stone" />
+                <span className="flex shrink-0 items-center gap-1 border-l border-carbon/10 pl-2 text-[10px] tabular-nums text-stone">
+                  {product.variants.length}
+                  <ChevronDown size={14} className="pointer-events-none text-carbon" />
+                </span>
                 {/* Transparent native select on top: native picker on phones,
                     16px font so iOS never zooms, visual stays at text-xs. */}
                 <select
                   value={variantIndex}
                   onChange={(e) => setVariantIndex(Number(e.target.value))}
-                  aria-label={`Formato de ${product.name}`}
+                  aria-label={`${kind} de ${product.name}`}
                   className="absolute inset-0 w-full cursor-pointer appearance-none opacity-0"
                   style={{ fontSize: 16 }}
                 >
