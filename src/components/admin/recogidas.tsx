@@ -6,6 +6,7 @@ import { Check, ChevronDown, ChevronRight, HandCoins, MessageCircle, PackageChec
 import { fechaLarga, hoyMadrid, sumarDias } from "@/lib/recogida";
 import { cn } from "@/lib/utils";
 import { imagenDeItem, inicialesItem } from "./producto-item";
+import { estadoSinCerrar, mensajeSiguiente } from "./mensajes-cliente";
 import { Badge, METODO_PAGO, eur, waHref, type Pedido, type PedidoItem } from "./shared";
 
 // Agenda de recogidas: los pedidos agrupados por el día en que el cliente
@@ -273,6 +274,10 @@ export function FilaRecogida({
         .replace(/\./g, "")
     : null;
   const estado = hecho ? "bg-carbon/20" : preparado ? "bg-forest" : "bg-amber-400";
+  // WhatsApp con el mensaje que toca (confirmar / ya está listo / reseña);
+  // con la bolsa preparada se muestra como "Avisar", que es lo siguiente.
+  const aviso = mensajeSiguiente(p);
+  const avisarListo = preparado && !hecho && aviso.id === "listo";
 
   return (
     <div
@@ -332,7 +337,7 @@ export function FilaRecogida({
         {hecho ? (
           <button
             type="button"
-            onClick={() => onUpdate({ estado: p.metodo_pago === "efectivo" ? "pendiente" : "pagado" })}
+            onClick={() => onUpdate({ estado: estadoSinCerrar(p) })}
             className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-xs text-stone hover:bg-cream hover:text-carbon"
           >
             <Undo2 size={13} /> Deshacer
@@ -379,14 +384,20 @@ export function FilaRecogida({
               <Phone size={14} />
             </a>
             <a
-              href={waHref(p.cliente_telefono)}
+              href={waHref(p.cliente_telefono, aviso.texto)}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="WhatsApp"
-              title="WhatsApp"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-stone hover:bg-cream hover:text-forest"
+              aria-label={`WhatsApp: ${aviso.label}`}
+              title={`WhatsApp: ${aviso.label}`}
+              className={cn(
+                "flex h-9 items-center justify-center gap-1.5 rounded-full transition",
+                avisarListo
+                  ? "bg-forest/10 px-3 text-xs font-medium text-forest hover:bg-forest/15"
+                  : "w-9 text-stone hover:bg-cream hover:text-forest"
+              )}
             >
               <MessageCircle size={14} />
+              {avisarListo && "Avisar"}
             </a>
           </>
         )}

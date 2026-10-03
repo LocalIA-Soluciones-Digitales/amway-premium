@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { CalendarClock, Check, ClipboardCopy, HandCoins, MessageCircle, PackageCheck, Printer, Send, Trash2, Truck, XCircle } from "lucide-react";
 import { SITE } from "@/data/site-config";
-import { fechaLarga } from "@/lib/recogida";
 import { cn } from "@/lib/utils";
 import { FotoItem } from "./recogidas";
+import { cuandoRecoge, estadoSinCerrar, mensajesCliente } from "./mensajes-cliente";
 import { ESTADO_PEDIDO, METODO_PAGO, btnGhost, btnPrimary, eur, fecha, inputClass, waHref, type Pedido } from "./shared";
 
 const PASOS_ENVIO: { estado: Pedido["estado"]; label: string }[] = [
@@ -17,64 +17,6 @@ const PASOS_RECOGIDA: { estado: Pedido["estado"]; label: string }[] = [
   { estado: "pagado", label: "Pagado" },
   { estado: "entregado", label: "Recogido" },
 ];
-
-// "el martes 29 de septiembre a las 18:00 h"
-function cuandoRecoge(p: Pedido): string | null {
-  if (!p.recogida_fecha) return null;
-  return `el ${fechaLarga(p.recogida_fecha)}${p.recogida_hora ? ` a las ${p.recogida_hora} h` : ""}`;
-}
-
-function mensajes(p: Pedido) {
-  const nombre = p.cliente_nombre?.split(" ")[0] ?? "";
-  const lineas = p.items.map((i) => `• ${i.cantidad} × ${i.nombre}`).join("\n");
-  const cuando = cuandoRecoge(p);
-  const total =
-    p.estado === "pendiente" ? `Total a pagar al recoger: *${eur(p.total_eur)}*` : `Total: *${eur(p.total_eur)}* (pagado)`;
-  return [
-    cuando
-      ? {
-          id: "confirmar",
-          label: "Confirmar pedido y recogida",
-          texto: `Hola ${nombre}, soy de ${SITE.name}. Te confirmo tu pedido nº ${p.numero}:\n\n${lineas}\n\n${total}\n*Recogida:* ${cuando}\n\nTe paso por aquí la dirección exacta. ¡Gracias!`,
-        }
-      : {
-          id: "confirmar",
-          label: "Confirmar pedido",
-          texto: `Hola ${nombre}, soy de ${SITE.name}. ¡Gracias por tu pedido #${p.numero}! 🙌\n\n${lineas}\n\nTotal: ${eur(p.total_eur)}. Te aviso en cuanto salga.`,
-        },
-    cuando
-      ? {
-          id: "recordar",
-          label: "Recordar la recogida",
-          texto: `Hola ${nombre}, te recuerdo que tu pedido nº ${p.numero} está listo para recoger ${cuando}.${
-            p.estado === "pendiente" ? ` Son ${eur(p.total_eur)} en efectivo.` : ""
-          }\n\nSi te viene mal, dímelo y lo cambiamos sin problema.`,
-        }
-      : {
-          id: "enviado",
-          label: "Avisar del envío",
-          texto: `Hola ${nombre}, tu pedido #${p.numero} ya está en camino 📦${
-            p.seguimiento ? `\n\nNº de seguimiento: ${p.seguimiento}` : ""
-          }\n\nCualquier cosa, escríbeme por aquí.`,
-        },
-    ...(cuando
-      ? [
-          {
-            id: "listo",
-            label: "Avisar de que está preparado",
-            texto: `Hola ${nombre}, tu pedido nº ${p.numero} ya está preparado 🛍️ Te espero ${cuando}.${
-              p.estado === "pendiente" ? ` Recuerda: ${eur(p.total_eur)} en efectivo.` : ""
-            }`,
-          },
-        ]
-      : []),
-    {
-      id: "resena",
-      label: "Pedir una reseña",
-      texto: `Hola ${nombre}, ¿qué tal con tu pedido #${p.numero}? Si te apetece, me ayudaría muchísimo que dejaras tu opinión aquí: ${SITE.url}/opiniones ¡Gracias! 💚`,
-    },
-  ];
-}
 
 function imprimirAlbaran(p: Pedido) {
   const w = window.open("", "_blank", "width=720,height=900");
@@ -254,7 +196,7 @@ export function PedidoDetalle({
         <textarea
           defaultValue={p.notas ?? ""}
           onBlur={(e) => e.target.value !== (p.notas ?? "") && onUpdate({ notas: e.target.value || null })}
-          placeholder="Notas internas (incidencias, preferencias del cliente…)"
+          placeholder="Notas del pedido (ojo: el cliente las ve en su cuenta)"
           rows={2}
           className={cn(inputClass, "mt-4 h-auto w-full py-2")}
         />
@@ -331,7 +273,7 @@ export function PedidoDetalle({
               <MessageCircle size={13} /> Escribir por WhatsApp
             </p>
             <div className="flex flex-col gap-1">
-              {mensajes(p).map((m) => (
+              {mensajesCliente(p).map((m) => (
                 <a
                   key={m.id}
                   href={waHref(p.cliente_telefono!, m.texto)}
@@ -360,7 +302,7 @@ export function PedidoDetalle({
               <XCircle size={14} /> Cancelar
             </button>
           ) : (
-            <button type="button" onClick={() => onUpdate({ estado: "pagado" })} className={cn(btnGhost, "h-9 text-xs")}>
+            <button type="button" onClick={() => onUpdate({ estado: estadoSinCerrar(p) })} className={cn(btnGhost, "h-9 text-xs")}>
               Reactivar
             </button>
           )}
