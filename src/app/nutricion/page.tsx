@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CategoryHero } from "@/components/product/CategoryHero";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
-import { NutricionHighlights } from "@/components/nutricion/NutricionHighlights";
+import { CategoryHighlights } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
 
 export const metadata: Metadata = {
@@ -46,12 +46,7 @@ export default function NutricionPage() {
         waMessage="Hola, quiero información sobre los suplementos Nutrilite."
       />
 
-      <section className="bg-carbon-soft py-20">
-        <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <h2 className="font-display text-2xl text-cream sm:text-3xl">Nuestros imprescindibles</h2>
-          <NutricionHighlights items={highlights} />
-        </div>
-      </section>
+      <CategoryHighlights eyebrow="Selección Nutrilite™" title="Nuestros imprescindibles" accent="forest" items={highlights} />
 
       <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
         <h2 className="mb-8 font-display text-2xl text-carbon sm:text-3xl">

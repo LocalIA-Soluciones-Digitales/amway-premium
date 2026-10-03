@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CategoryHero } from "@/components/product/CategoryHero";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
-import { HogarHighlights } from "@/components/hogar/HogarHighlights";
+import { CategoryHighlights, type HighlightItem } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
 
 export const metadata: Metadata = {
@@ -19,28 +19,26 @@ export default function HogarPage() {
   const atmosphere = getProductById("atmosphere-sky")!;
   const icook = getProductById("icook-prestige")!;
 
-  const highlights = [
+  const highlights: HighlightItem[] = [
     {
       product: espring,
-      scene: "espring" as const,
       video: "/videos/espring/purifier-loop.mp4",
       poster: "/images/espring/purifier-loop-poster.webp",
       tag: "Agua purificada al instante",
+      link: { href: "/espring", label: "Descubre eSpring™ →" },
     },
     {
       product: atmosphere,
-      scene: "atmosphere" as const,
       video: "/videos/hogar/atmosphere-sky.mp4",
       poster: "/images/hogar/atmosphere-sky-poster.webp",
-      videoPosition: "center 40%",
+      position: "center 40%",
       tag: "Aire visiblemente más limpio",
     },
     {
       product: icook,
-      scene: "icook" as const,
       video: "/videos/hogar/icook.mp4",
       poster: "/images/hogar/icook-poster.webp",
-      videoPosition: "center 60%",
+      position: "center 60%",
       tag: "Cocina como un profesional",
     },
   ];
@@ -56,12 +54,7 @@ export default function HogarPage() {
         waMessage="Hola, quiero información sobre los productos para el hogar."
       />
 
-      <section className="bg-carbon-soft py-20">
-        <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <h2 className="font-display text-2xl text-cream sm:text-3xl">Tecnología para tu hogar</h2>
-          <HogarHighlights items={highlights} />
-        </div>
-      </section>
+      <CategoryHighlights eyebrow="Selección Hogar" title="Tecnología para tu hogar" accent="tech" items={highlights} />
 
       <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
         <h2 className="mb-8 font-display text-2xl text-carbon sm:text-3xl">

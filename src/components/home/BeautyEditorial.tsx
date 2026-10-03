@@ -6,7 +6,8 @@ import { ArrowUpRight } from "lucide-react";
 
 export function BeautyEditorial() {
   return (
-    <section className="bg-cream-soft">
+    // Con aire arriba y abajo: va entre dos bloques oscuros a sangre (XS y eSpring).
+    <section className="bg-cream-soft pb-16 sm:pb-24 lg:py-24">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-0 lg:grid-cols-12">
         <motion.div
           initial={{ opacity: 0, scale: 1.04 }}

@@ -41,9 +41,11 @@ export default function Home() {
       <CategoryShowcase />
       <BestSellers />
       <Manifesto />
+      {/* Oscuro → claro → oscuro: Artistry separa XS de eSpring para que dos
+          bloques a sangre no queden pegados. */}
       <XsEnergyMoment />
-      <FlagshipShowcase />
       <BeautyEditorial />
+      <FlagshipShowcase />
       <ProductDiscovery />
       <AboutSeller />
       <FinalCta />

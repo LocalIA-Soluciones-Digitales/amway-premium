@@ -4,12 +4,15 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
+// Por necesidad, no por categoría (eso ya lo hace «Cuatro mundos»): cada fila
+// abre el catálogo ya filtrado con ?q=, que lee ProductExplorer.
 const NEEDS = [
-  { label: "Energía", href: "/xs-energy", description: "Rendimiento, foco y recuperación." },
-  { label: "Bienestar", href: "/nutricion", description: "Vitaminas, proteína e inmunidad." },
-  { label: "Belleza", href: "/belleza", description: "Cuidado de la piel y maquillaje." },
-  { label: "Cuidado diario", href: "/cuidado-personal", description: "Cabello, cuerpo e higiene bucal." },
-  { label: "Hogar", href: "/hogar", description: "Agua, aire y cocina más limpios." },
+  { label: "Más energía", href: "/xs-energy", description: "Power Drinks, pre-entreno y recuperación." },
+  { label: "Defensas", href: "/nutricion?q=inmunologica#catalogo", description: "Apoyo inmunitario de origen vegetal." },
+  { label: "Control de peso", href: "/nutricion?q=control%20peso#catalogo", description: "Proteína, batidos y programas." },
+  { label: "Piel radiante", href: "/belleza?q=cuidado%20piel#catalogo", description: "Sérums y cremas Artistry™." },
+  { label: "Cabello sano", href: "/cuidado-personal?q=cabello#catalogo", description: "Champús y tratamientos Satinique™." },
+  { label: "Agua y aire puros", href: "/hogar?q=agua%20aire#catalogo", description: "Purificadores eSpring™ y Atmosphere™." },
 ];
 
 export function ProductDiscovery() {

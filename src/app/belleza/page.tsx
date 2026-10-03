@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CategoryHero } from "@/components/product/CategoryHero";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
-import { BellezaHighlights } from "@/components/belleza/BellezaHighlights";
+import { CategoryHighlights } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
 
 export const metadata: Metadata = {
@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 };
 
 const HIGHLIGHT_IDS = [
-  { id: "art-suero-desafiante", media: "suero-desafiante" },
-  { id: "longxevity-crema-enriquecida", media: "longxevity-crema" },
-  { id: "art-suero-vitamina-c", media: "suero-vitamina-c" },
+  { id: "art-suero-desafiante", media: "suero-desafiante", tag: "Antiedad intensivo" },
+  { id: "longxevity-crema-enriquecida", media: "longxevity-crema", tag: "Longevidad de la piel" },
+  { id: "art-suero-vitamina-c", media: "suero-vitamina-c", tag: "Luminosidad diaria" },
 ];
 
 export default function BellezaPage() {
@@ -27,6 +27,7 @@ export default function BellezaPage() {
           product,
           video: `/videos/belleza/${h.media}.mp4`,
           poster: `/images/belleza/${h.media}-poster.webp`,
+          tag: h.tag,
         }
       : null;
   }).filter((x): x is NonNullable<typeof x> => Boolean(x));
@@ -42,12 +43,7 @@ export default function BellezaPage() {
         waMessage="Hola, quiero información sobre los productos Artistry."
       />
 
-      <section className="bg-carbon-soft py-20">
-        <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <h2 className="font-display text-2xl text-cream sm:text-3xl">Iconos Artistry™</h2>
-          <BellezaHighlights items={highlights} />
-        </div>
-      </section>
+      <CategoryHighlights eyebrow="Selección Artistry™" title="Iconos de la gama" accent="gold" items={highlights} />
 
       <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
         <h2 className="mb-8 font-display text-2xl text-carbon sm:text-3xl">

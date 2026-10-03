@@ -9,14 +9,16 @@ export function XsEnergyMoment() {
     <section className="relative flex min-h-[85svh] items-center overflow-hidden bg-xs-ink">
       <div className="absolute inset-0">
         <Image
-          src="/images/editorial/xs-energy-tenista.webp"
-          alt="Energía y rendimiento XS"
+          src="/images/xs-energy/lifestyle/sky-drink.webp"
+          alt="Chico bebiendo una lata de XS al aire libre"
           fill
           sizes="100vw"
-          className="object-cover object-[80%_center]"
+          className="object-cover object-[75%_30%]"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-xs-ink)_0%,var(--color-xs-ink)_66%,rgba(12,13,16,0.5)_80%,rgba(12,13,16,0.15)_100%)]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-xs-ink/70 via-transparent to-xs-ink/40" />
+        {/* Móvil: velo uniforme para leer el titular sobre la foto. Escritorio:
+            tinta a la izquierda (texto) que se abre hacia la foto. */}
+        <div className="absolute inset-0 bg-xs-ink/70 lg:bg-transparent lg:bg-[linear-gradient(to_right,var(--color-xs-ink)_0%,var(--color-xs-ink)_30%,rgba(12,13,16,0.6)_55%,rgba(12,13,16,0)_80%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-xs-ink/80 via-transparent to-xs-ink/50" />
       </div>
 
       <div className="relative w-full px-6 py-28 sm:px-8 lg:py-36">
