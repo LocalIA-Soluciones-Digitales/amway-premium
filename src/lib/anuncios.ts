@@ -48,18 +48,60 @@ export async function reducirImagen(file: File, ladoMax = 1600): Promise<Blob | 
   } catch {
     return null;
   }
-  const escala = Math.min(1, ladoMax / Math.max(bitmap.width, bitmap.height));
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.round(bitmap.width * escala);
-  canvas.height = Math.round(bitmap.height * escala);
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return null;
-  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  const blob = await dibujarABlob(bitmap, bitmap.width, bitmap.height, ladoMax);
   bitmap.close();
+  return blob;
+}
+
+async function dibujarABlob(fuente: CanvasImageSource, ancho: number, alto: number, ladoMax: number): Promise<Blob | null> {
+  const escala = Math.min(1, ladoMax / Math.max(ancho, alto));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(ancho * escala);
+  canvas.height = Math.round(alto * escala);
+  const ctx = canvas.getContext("2d");
+  if (!ctx || !canvas.width || !canvas.height) return null;
+  ctx.drawImage(fuente, 0, 0, canvas.width, canvas.height);
   const aBlob = (tipo: string) => new Promise<Blob | null>((r) => canvas.toBlob(r, tipo, 0.85));
   const webp = await aBlob("image/webp");
   // Safari antiguo ignora WebP y devuelve PNG: entonces JPEG, que pesa menos.
   return webp?.type === "image/webp" ? webp : aBlob("image/jpeg");
+}
+
+// Lee un vídeo en el navegador antes de subirlo: su duración y un fotograma
+// para usarlo de portada (lo que se ve mientras el vídeo carga). Si el
+// navegador no puede abrirlo devuelve nulos y la subida sigue igual.
+export async function leerVideo(file: File): Promise<{ portada: Blob | null; duracion: number | null }> {
+  const url = URL.createObjectURL(file);
+  const v = document.createElement("video");
+  v.muted = true;
+  v.playsInline = true;
+  v.preload = "auto";
+  const esperar = (evento: "loadeddata" | "seeked") =>
+    new Promise<boolean>((res) => {
+      const t = setTimeout(() => res(false), 8000);
+      v.addEventListener(evento, () => (clearTimeout(t), res(true)), { once: true });
+      v.addEventListener("error", () => (clearTimeout(t), res(false)), { once: true });
+    });
+  try {
+    v.src = url;
+    if (!(await esperar("loadeddata"))) return { portada: null, duracion: null };
+    const duracion = Number.isFinite(v.duration) ? v.duration : null;
+    // Un poco después del inicio: el primer fotograma suele ser negro.
+    v.currentTime = Math.min(0.6, (duracion ?? 1) / 2);
+    if (!(await esperar("seeked"))) return { portada: null, duracion };
+    return { portada: await dibujarABlob(v, v.videoWidth, v.videoHeight, 1600), duracion };
+  } catch {
+    return { portada: null, duracion: null };
+  } finally {
+    v.removeAttribute("src");
+    URL.revokeObjectURL(url);
+  }
+}
+
+// El botón puede llevar a una página de la tienda (/ofertas) o a otra web.
+export function enlaceValido(enlace: string): boolean {
+  const e = enlace.trim();
+  return !e || e.startsWith("/") || /^(https?:\/\/\S+|tel:\+?[\d ]+|mailto:\S+@\S+)$/i.test(e);
 }
 
 // Lectura pública por REST, sin sesión: así nunca arrastra la del panel.

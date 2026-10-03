@@ -9,6 +9,7 @@ import {
   ClipboardList,
   Clock,
   HandCoins,
+  Megaphone,
   MessageSquareQuote,
   PackageCheck,
   PackageX,
@@ -22,6 +23,8 @@ import { APreparar, CabeceraGrupo, FilaRecogida, Miniaturas, agruparPorDia, esAc
 import type { Pendientes } from "./AdminApp";
 import { ColumnChart } from "./charts";
 import { calcular } from "./ContabilidadPanel";
+import { anuncioVigente, cargarEstadisticas, type EstadisticaAnuncio } from "./AnunciosPanel";
+import { imagenAnuncio, type Anuncio } from "@/lib/anuncios";
 import { PedidoDrawer } from "./PedidoDrawer";
 import { pedidosValidos, variacion } from "./report-data";
 import { Badge, Card, CardTitle, ESTADO_PEDIDO, Kpi, Loading, eur, fecha, type Gasto, type Pedido, type ProductoAjusteRow } from "./shared";
@@ -65,6 +68,7 @@ export function HoyPanel({
   const [gastosMes, setGastosMes] = useState<Gasto[]>([]);
   const [productos, setProductos] = useState<ProductoAjusteRow[]>([]);
   const [abierto, setAbierto] = useState<string | null>(null);
+  const [anuncio, setAnuncio] = useState<{ a: Anuncio | null; stats?: EstadisticaAnuncio; cola: number } | null>(null);
 
   // Recogidas de hoy (también las ya hechas), las atrasadas y las de mañana,
   // aunque el pedido se hiciera hace más de un mes.
@@ -99,6 +103,15 @@ export function HoyPanel({
       // Solo productos que siguen en el catálogo.
       setProductos(((pr.data as ProductoAjusteRow[] | null) ?? []).filter((r) => getProductById(r.product_id)));
     });
+  }, []);
+
+  useEffect(() => {
+    Promise.all([amwayDb().from("amway_anuncios").select("*").order("updated_at", { ascending: false }), cargarEstadisticas()]).then(
+      ([{ data }, st]) => {
+        const vigentes = ((data as Anuncio[] | null) ?? []).filter((a) => anuncioVigente(a));
+        setAnuncio({ a: vigentes[0] ?? null, stats: vigentes[0] ? st[vigentes[0].id] : undefined, cola: Math.max(0, vigentes.length - 1) });
+      }
+    );
   }, []);
 
   async function actualizar(id: string, cambios: Partial<Pedido>) {
@@ -356,6 +369,8 @@ export function HoyPanel({
                   </ul>
                 )}
               </Card>
+
+              {anuncio && <AnuncioEnWeb {...anuncio} onAbrir={() => onNavigate("anuncios")} />}
             </div>
           </div>
 
@@ -481,5 +496,45 @@ function Resumen({
       <span className="font-semibold tabular-nums">{n}</span>
       <span className="opacity-80">{plural && n !== 1 ? plural : label}</span>
     </span>
+  );
+}
+
+// Qué pop-up ven ahora los clientes al entrar en la web, y cómo funciona.
+function AnuncioEnWeb({ a, stats, cola, onAbrir }: { a: Anuncio | null; stats?: EstadisticaAnuncio; cola: number; onAbrir: () => void }) {
+  const imagen = a ? imagenAnuncio(a) : null;
+  return (
+    <Card>
+      <CardTitle
+        action={
+          <button type="button" onClick={onAbrir} className="text-xs text-forest hover:underline">
+            {a ? "Gestionar" : "Crear anuncio"}
+          </button>
+        }
+      >
+        Anuncio en la web
+      </CardTitle>
+      {a ? (
+        <button type="button" onClick={onAbrir} className="flex w-full items-center gap-3 text-left">
+          <span className="relative h-14 w-11 shrink-0 overflow-hidden rounded-lg bg-linen">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            {imagen && <img src={imagen} alt="" className={a.imagen_url ? "h-full w-full object-cover" : "h-full w-full object-contain p-1"} />}
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-medium text-carbon">{a.titulo}</span>
+            <span className="block text-xs text-stone">
+              {stats && stats.vistos > 0 ? `Visto por ${stats.vistos} · ${stats.clics} pulsaron el botón` : "Aún sin visitas registradas"}
+              {cola > 0 && ` · ${cola} más en cola`}
+            </span>
+          </span>
+        </button>
+      ) : (
+        <div className="flex items-center gap-3 text-sm text-stone">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cream text-stone">
+            <Megaphone size={16} />
+          </span>
+          Ahora no sale ningún anuncio al entrar en la web.
+        </div>
+      )}
+    </Card>
   );
 }

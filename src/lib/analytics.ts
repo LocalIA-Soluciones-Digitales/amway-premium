@@ -12,7 +12,9 @@ export type EventType =
   | "whatsapp_click"
   | "solicitud"
   | "resena"
-  | "asistente";
+  | "asistente"
+  | "anuncio_visto"
+  | "anuncio_click";
 export type SourceCategory = "google_ads" | "google_organic" | "social" | "referral" | "direct" | "other";
 export type DeviceType = "mobile" | "tablet" | "desktop";
 

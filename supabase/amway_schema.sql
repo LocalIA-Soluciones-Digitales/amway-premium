@@ -1232,6 +1232,29 @@ $$;
 revoke all on function public.amway_actividad_admins() from public, anon;
 grant execute on function public.amway_actividad_admins() to authenticated;
 
+-- Anuncios: cuánta gente ve cada pop-up y cuánta pulsa su botón (sesiones
+-- distintas, solo visitantes que aceptan cookies). La gestora no lee
+-- amway_visitas, así que se le da el recuento ya hecho.
+alter table public.amway_visitas drop constraint if exists amway_visitas_event_type_check;
+alter table public.amway_visitas add constraint amway_visitas_event_type_check
+  check (event_type in ('pageview', 'add_to_cart', 'cart_open', 'checkout_start', 'whatsapp_click', 'solicitud', 'resena', 'asistente', 'anuncio_visto', 'anuncio_click'));
+
+create or replace function public.amway_estadisticas_anuncios()
+returns table (anuncio_id text, vistos bigint, clics bigint)
+language sql stable security definer set search_path = public
+as $$
+  select v.label,
+         count(distinct v.session_id) filter (where v.event_type = 'anuncio_visto'),
+         count(distinct v.session_id) filter (where v.event_type = 'anuncio_click')
+  from public.amway_visitas v
+  where v.event_type in ('anuncio_visto', 'anuncio_click')
+    and v.label is not null
+    and public.amway_es_admin()
+  group by v.label;
+$$;
+revoke all on function public.amway_estadisticas_anuncios() from public, anon;
+grant execute on function public.amway_estadisticas_anuncios() to authenticated;
+
 -- ============================================================
 -- Pedidos: notas internas, nº de pedido con tarjeta y stock
 -- ============================================================
