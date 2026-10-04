@@ -63,13 +63,24 @@ type Filtro = "activos" | "anteriores" | "todos";
 
 const esActivo = (p: MiPedido) => p.estado !== "cancelado" && p.estado !== "entregado";
 
-function estadoVisible(p: MiPedido): { texto: string; tono: string } {
-  if (p.estado === "cancelado") return { texto: "Cancelado", tono: "bg-red-50 text-red-700" };
-  if (p.estado === "entregado") return { texto: "Recogido", tono: "bg-carbon/5 text-stone" };
-  if (p.estado === "enviado") return { texto: "Enviado", tono: "bg-sky-50 text-sky-800" };
-  if (p.preparado) return { texto: "Listo para recoger", tono: "bg-forest text-cream" };
-  if (p.estado === "pagado") return { texto: "Pagado · en preparación", tono: "bg-forest/10 text-forest" };
-  return { texto: "Confirmado · pagas al recoger", tono: "bg-amber-50 text-amber-800" };
+function estadoVisible(p: MiPedido): { texto: string; tono: string; punto: string } {
+  if (p.estado === "cancelado") return { texto: "Cancelado", tono: "bg-red-50 text-red-700", punto: "bg-red-500" };
+  if (p.estado === "entregado") return { texto: "Recogido", tono: "bg-carbon/[0.05] text-stone", punto: "bg-stone/60" };
+  if (p.estado === "enviado") return { texto: "Enviado", tono: "bg-sky-50 text-sky-800", punto: "bg-sky-500" };
+  if (p.preparado) return { texto: "Listo para recoger", tono: "bg-forest text-cream", punto: "bg-cream" };
+  if (p.estado === "pagado") return { texto: "Pagado · en preparación", tono: "bg-forest/10 text-forest", punto: "bg-forest" };
+  return { texto: "Confirmado · pagas al recoger", tono: "bg-amber-50 text-amber-800", punto: "bg-amber-500" };
+}
+
+// Pasos del seguimiento: 0 = confirmado, 1 = listo para recoger, 2 = recogido.
+const PASOS = ["Confirmado", "Listo para recoger", "Recogido"] as const;
+const pasoActual = (p: MiPedido) => (p.estado === "entregado" ? 2 : p.preparado ? 1 : 0);
+
+// { dia: "lun", num: "5", mes: "oct" } para la caja de la fecha de recogida.
+function fechaCaja(fecha: string) {
+  const d = new Date(`${fecha}T12:00:00Z`);
+  const f = (o: Intl.DateTimeFormatOptions) => d.toLocaleDateString("es-ES", { ...o, timeZone: "UTC" }).replace(".", "");
+  return { dia: f({ weekday: "short" }), num: f({ day: "numeric" }), mes: f({ month: "short" }) };
 }
 
 const fechaPedido = (iso: string) =>
@@ -255,11 +266,11 @@ function PedidosCliente({
               onClick={() => setFiltro(f)}
               aria-pressed={filtro === f}
               className={cn(
-                "h-9 rounded-full border px-4 text-xs font-medium capitalize transition",
+                "h-9 rounded-full border px-4 text-xs font-medium transition",
                 filtro === f ? "border-carbon bg-carbon text-cream" : "border-carbon/15 text-carbon hover:border-carbon/35"
               )}
             >
-              {f === "activos" ? "En curso" : f}
+              {f === "activos" ? "En curso" : f === "todos" ? "Todos" : "Anteriores"}
             </button>
           ))}
         </div>
@@ -330,7 +341,17 @@ function PedidoTarjeta({
   const [aviso, setAviso] = useState<string | null>(null);
   const [cancelando, setCancelando] = useState(false);
   const estado = estadoVisible(p);
+  const activo = esActivo(p);
+  const pasoN = pasoActual(p);
   const unidades = p.items.reduce((s, i) => s + i.cantidad, 0);
+  const caja = p.recogida_fecha ? fechaCaja(p.recogida_fecha) : null;
+  const miniaturas = p.items
+    .map((i) => (i.product_id ? getProductById(i.product_id) : undefined))
+    .filter((x): x is NonNullable<typeof x> => !!x)
+    .map((product) => productImageSrc(product))
+    .filter((src): src is string => !!src)
+    .slice(0, 3);
+  const resto = p.items.length - miniaturas.length;
 
   function repetir() {
     let fuera = 0;
@@ -373,25 +394,102 @@ function PedidoTarjeta({
   }.`;
 
   return (
-    <li className="overflow-hidden rounded-2xl border border-carbon/10 bg-white/70">
+    <li
+      className={cn(
+        "overflow-hidden rounded-2xl border bg-white/80 shadow-[0_1px_2px_rgba(28,26,22,0.04)] transition",
+        abierto ? "border-carbon/20" : "border-carbon/10 hover:border-carbon/20",
+        p.estado === "cancelado" && "opacity-70"
+      )}
+    >
       <button
         type="button"
         onClick={alternar}
         aria-expanded={abierto}
-        className="flex w-full items-center gap-4 p-4 text-left transition hover:bg-carbon/[0.02] sm:p-5"
+        className="flex w-full items-start gap-3.5 p-4 text-left transition hover:bg-carbon/[0.02] sm:gap-4 sm:p-5"
       >
+        {caja ? (
+          <span
+            className={cn(
+              "flex w-14 shrink-0 flex-col items-center rounded-xl py-1.5 leading-none",
+              activo ? "bg-carbon text-cream" : "bg-carbon/[0.05] text-stone"
+            )}
+            aria-hidden
+          >
+            <span className="text-[10px] uppercase tracking-wider opacity-70">{caja.dia}</span>
+            <span className="mt-1 font-display text-2xl tabular-nums">{caja.num}</span>
+            <span className="mt-0.5 text-[10px] uppercase tracking-wider opacity-70">{caja.mes}</span>
+          </span>
+        ) : (
+          <span className="flex h-[3.75rem] w-14 shrink-0 items-center justify-center rounded-xl bg-carbon/[0.05] text-stone" aria-hidden>
+            <Package size={18} />
+          </span>
+        )}
+
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-display text-lg text-carbon">Pedido nº {p.numero}</span>
-            <span className={cn("rounded-full px-2.5 py-0.5 text-[11px] font-medium", estado.tono)}>{estado.texto}</span>
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-stone">Pedido nº {p.numero}</p>
+              <p className="mt-0.5 truncate font-display text-lg leading-snug text-carbon">
+                {activo && p.recogida_fecha
+                  ? `Recogida a las ${p.recogida_hora} h`
+                  : p.items.length > 1
+                    ? `${p.items[0].nombre} y ${p.items.length - 1} más`
+                    : (p.items[0]?.nombre ?? "Pedido")}
+              </p>
+            </div>
+            <div className="shrink-0 text-right">
+              <p className="font-display text-lg tabular-nums leading-snug text-carbon">{formatEUR(Number(p.total_eur))}</p>
+              <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-stone">
+                {p.metodo_pago === "tarjeta" ? <CreditCard size={12} /> : <Banknote size={12} />}
+                {p.metodo_pago === "tarjeta" ? "Tarjeta" : "Efectivo"}
+              </p>
+            </div>
           </div>
-          <p className="mt-1 text-xs text-stone">
-            {fechaPedido(p.created_at)} · {unidades} {unidades === 1 ? "producto" : "productos"}
-            {p.recogida_fecha && esActivo(p) ? ` · recogida ${fechaLarga(p.recogida_fecha)}, ${p.recogida_hora} h` : ""}
-          </p>
+
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium", estado.tono)}>
+              <span className={cn("h-1.5 w-1.5 rounded-full", estado.punto)} />
+              {estado.texto}
+            </span>
+            {miniaturas.length > 0 && (
+              <span className="flex items-center">
+                {miniaturas.map((src, k) => (
+                  <span
+                    key={k}
+                    className="relative -ml-1.5 h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-linen first:ml-0"
+                  >
+                    <Image src={src} alt="" fill sizes="32px" className="object-contain p-0.5" />
+                  </span>
+                ))}
+                {resto > 0 && (
+                  <span className="-ml-1.5 flex h-8 min-w-8 items-center justify-center rounded-full border-2 border-white bg-carbon/[0.07] px-1 text-[10px] font-medium text-stone">
+                    +{resto}
+                  </span>
+                )}
+              </span>
+            )}
+            <span className="text-[11px] text-stone">Pedido el {fechaPedido(p.created_at)}</span>
+          </div>
+
+          {activo && p.estado !== "enviado" && (
+            <ol className="mt-3.5 grid grid-cols-3 gap-1.5" aria-label="Seguimiento del pedido">
+              {PASOS.map((paso, k) => (
+                <li key={paso} className="min-w-0">
+                  <span className={cn("block h-1 rounded-full", k <= pasoN ? "bg-forest" : "bg-carbon/10")} />
+                  <span
+                    className={cn(
+                      "mt-1.5 block truncate text-[10.5px]",
+                      k === pasoN ? "font-medium text-carbon" : k < pasoN ? "text-stone" : "text-stone/60"
+                    )}
+                  >
+                    {paso}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          )}
         </div>
-        <span className="font-medium tabular-nums text-carbon">{formatEUR(Number(p.total_eur))}</span>
-        <ChevronDown size={16} className={cn("shrink-0 text-stone transition-transform", abierto && "rotate-180")} />
+        <ChevronDown size={16} className={cn("mt-1 shrink-0 text-stone transition-transform", abierto && "rotate-180")} />
       </button>
 
       {abierto && (
@@ -402,8 +500,8 @@ function PedidoTarjeta({
               const src = product ? productImageSrc(product) : null;
               return (
                 <li key={idx} className="flex items-center gap-3 py-2.5">
-                  <div className="relative h-12 w-10 shrink-0 overflow-hidden rounded-md bg-linen">
-                    {src && <Image src={src} alt="" fill sizes="40px" className="object-contain p-1" />}
+                  <div className="relative h-14 w-12 shrink-0 overflow-hidden rounded-lg bg-linen">
+                    {src && <Image src={src} alt="" fill sizes="48px" className="object-contain p-1" />}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm text-carbon">{i.nombre}</p>
@@ -411,7 +509,7 @@ function PedidoTarjeta({
                       {[i.formato, i.sabor].filter(Boolean).join(" · ") || " "}
                     </p>
                   </div>
-                  <span className="text-xs tabular-nums text-stone">{i.cantidad} ×</span>
+                  <span className="rounded-full bg-carbon/[0.05] px-2 py-0.5 text-[11px] tabular-nums text-stone">× {i.cantidad}</span>
                   <span className="w-16 text-right text-sm tabular-nums text-carbon">
                     {formatEUR(Number(i.precio_eur) * i.cantidad)}
                   </span>
