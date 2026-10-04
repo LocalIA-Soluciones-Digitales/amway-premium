@@ -343,7 +343,6 @@ function PedidoTarjeta({
   const estado = estadoVisible(p);
   const activo = esActivo(p);
   const pasoN = pasoActual(p);
-  const unidades = p.items.reduce((s, i) => s + i.cantidad, 0);
   const caja = p.recogida_fecha ? fechaCaja(p.recogida_fecha) : null;
   const miniaturas = p.items
     .map((i) => (i.product_id ? getProductById(i.product_id) : undefined))
