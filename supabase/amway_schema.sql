@@ -53,7 +53,8 @@ $$;
 
 -- ---------- Ajustes por producto ----------
 -- precios_eur / costes_eur: {"<índice de formato>": importe}. Un formato
--- sin clave usa el precio de catálogo. stock null = sin control de stock.
+-- sin clave usa el precio de catálogo. Sin control de stock: todo está
+-- en tienda; «agotado» solo se marca a mano.
 
 create table if not exists public.amway_productos (
   product_id text primary key check (char_length(product_id) between 1 and 80),
@@ -61,7 +62,6 @@ create table if not exists public.amway_productos (
   costes_eur jsonb not null default '{}'::jsonb,
   agotado boolean not null default false,
   oculto boolean not null default false,
-  stock integer check (stock is null or stock >= 0),
   updated_at timestamptz not null default now()
 );
 alter table public.amway_productos enable row level security;
@@ -137,52 +137,6 @@ $$;
 drop trigger if exists amway_pedidos_costes on public.amway_pedidos;
 create trigger amway_pedidos_costes before insert on public.amway_pedidos
   for each row execute function public.amway_pedido_completar_costes();
-
--- Mueve el stock de los productos de un pedido (signo -1 descuenta, +1
--- repone). Solo toca productos con stock controlado; al llegar a 0 los
--- marca agotados, y al reponer por encima de 0 los vuelve a activar.
-create or replace function public.amway_mover_stock(p_items jsonb, p_signo integer)
-returns void language plpgsql security definer set search_path = public
-as $$
-declare
-  v_item jsonb;
-begin
-  for v_item in select * from jsonb_array_elements(p_items) loop
-    update public.amway_productos
-      set stock = greatest(0, stock + p_signo * coalesce((v_item ->> 'cantidad')::integer, 0)),
-          agotado = case
-            when greatest(0, stock + p_signo * coalesce((v_item ->> 'cantidad')::integer, 0)) = 0 then true
-            when p_signo > 0 then false
-            else agotado
-          end
-      where product_id = v_item ->> 'product_id' and stock is not null;
-  end loop;
-end;
-$$;
-revoke execute on function public.amway_mover_stock(jsonb, integer) from public, anon, authenticated;
-
-create or replace function public.amway_pedido_stock()
-returns trigger language plpgsql security definer set search_path = public
-as $$
-begin
-  if tg_op = 'INSERT' then
-    if new.estado <> 'cancelado' then
-      perform public.amway_mover_stock(new.items, -1);
-    end if;
-  elsif tg_op = 'UPDATE' then
-    if old.estado <> 'cancelado' and new.estado = 'cancelado' then
-      perform public.amway_mover_stock(old.items, 1);
-    elsif old.estado = 'cancelado' and new.estado <> 'cancelado' then
-      perform public.amway_mover_stock(new.items, -1);
-    end if;
-  end if;
-  return new;
-end;
-$$;
-
-drop trigger if exists amway_pedidos_stock on public.amway_pedidos;
-create trigger amway_pedidos_stock after insert or update of estado on public.amway_pedidos
-  for each row execute function public.amway_pedido_stock();
 
 -- El servidor Next.js registra aquí cada pago confirmado por Stripe.
 -- Protegida con un token de servidor (solo se guarda su hash) porque la
@@ -380,8 +334,7 @@ $$;
 
 -- ---------- Lectura pública para la tienda ----------
 -- Lo único que la web pública necesita: precios de venta ajustados,
--- agotados/ocultos y la valoración media por producto. Nunca costes ni
--- stock exacto. stable → se puede llamar por GET (cacheable por Next).
+-- agotados/ocultos y la valoración media por producto. Nunca costes. stable → se puede llamar por GET (cacheable por Next).
 
 create or replace function public.amway_catalogo_publico()
 returns jsonb
@@ -392,7 +345,7 @@ as $$
       select jsonb_agg(jsonb_build_object(
         'id', product_id,
         'precios', precios_eur,
-        'agotado', agotado or (stock is not null and stock <= 0),
+        'agotado', agotado,
         'oculto', oculto
       ))
       from public.amway_productos
@@ -410,7 +363,6 @@ $$;
 
 -- Las funciones de trigger no tienen por qué poder llamarse por la API.
 revoke execute on function public.amway_pedido_completar_costes() from public, anon, authenticated;
-revoke execute on function public.amway_pedido_stock() from public, anon, authenticated;
 revoke execute on function public.amway_set_updated_at() from public, anon, authenticated;
 
 -- Alta de administradores (el usuario se crea en Supabase → Authentication):
@@ -979,8 +931,7 @@ as $$
   where auth.uid() is not null and p.cliente_id = auth.uid();
 $$;
 
--- El cliente cancela un pedido en efectivo que aún no está preparado (el
--- trigger de stock repone las unidades).
+-- El cliente cancela un pedido en efectivo que aún no está preparado.
 create or replace function public.amway_cancelar_mi_pedido(p_numero bigint)
 returns boolean
 language plpgsql security definer set search_path = public
@@ -1261,7 +1212,7 @@ revoke all on function public.amway_estadisticas_anuncios() from public, anon;
 grant execute on function public.amway_estadisticas_anuncios() to authenticated;
 
 -- ============================================================
--- Pedidos: notas internas, nº de pedido con tarjeta y stock
+-- Pedidos: notas internas y nº de pedido con tarjeta
 -- ============================================================
 -- Notas de la gestora, separadas del comentario del cliente (`notas`, que
 -- el cliente ve en su cuenta). amway_mis_pedidos no las devuelve.
@@ -1297,18 +1248,11 @@ begin
 end;
 $$;
 
--- Productos con stock controlado que no llegan a lo pedido. Solo dice cuáles,
--- nunca cuántas unidades quedan.
-create or replace function public.amway_stock_insuficiente(p_items jsonb)
-returns text[]
-language sql stable security definer set search_path = public
-as $$
-  select coalesce(array_agg(p.product_id), '{}')
-  from (
-    select item ->> 'product_id' as product_id, sum(coalesce((item ->> 'cantidad')::integer, 0)) as cantidad
-    from jsonb_array_elements(case when jsonb_typeof(p_items) = 'array' then p_items else '[]'::jsonb end) item
-    group by 1
-  ) pedido
-  join public.amway_productos p on p.product_id = pedido.product_id
-  where p.stock is not null and p.stock < pedido.cantidad;
-$$;
+-- ============================================================
+-- Sin control de stock: Yuly lo tiene todo en tienda
+-- ============================================================
+drop trigger if exists amway_pedidos_stock on public.amway_pedidos;
+drop function if exists public.amway_pedido_stock();
+drop function if exists public.amway_mover_stock(jsonb, integer);
+drop function if exists public.amway_stock_insuficiente(jsonb);
+alter table public.amway_productos drop column if exists stock;

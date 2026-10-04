@@ -96,7 +96,7 @@ export function HoyPanel({
     Promise.all([
       db.from("amway_pedidos").select("*").gte("created_at", desde.toISOString()).order("created_at", { ascending: false }).limit(5000),
       db.from("amway_gastos").select("*").gte("fecha", new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10)),
-      db.from("amway_productos").select("*").or("agotado.eq.true,stock.lte.3"),
+      db.from("amway_productos").select("*").eq("agotado", true),
     ]).then(([p, g, pr]) => {
       setPedidos((p.data as Pedido[] | null) ?? []);
       setGastosMes((g.data as Gasto[] | null) ?? []);
@@ -188,7 +188,6 @@ export function HoyPanel({
 
   const nombreMes = new Date().toLocaleDateString("es-ES", { month: "long" });
   const agotados = productos.filter((p) => p.agotado);
-  const pocoStock = productos.filter((p) => !p.agotado && p.stock != null && p.stock <= 3);
 
   const tareas = [
     { tab: "pedidos" as const, n: pendientes.pedidos, label: "Pedidos por preparar, entregar o cobrar", icon: Truck },
@@ -348,22 +347,22 @@ export function HoyPanel({
                 >
                   Disponibilidad
                 </CardTitle>
-                {agotados.length === 0 && pocoStock.length === 0 ? (
+                {agotados.length === 0 ? (
                   <div className="flex items-center gap-3 text-sm text-stone">
                     <span className="flex h-9 w-9 items-center justify-center rounded-full bg-forest/10 text-forest">
                       <PackageCheck size={16} />
                     </span>
-                    Todo disponible, nada con poco stock.
+                    Todo disponible.
                   </div>
                 ) : (
                   <ul className="flex flex-col divide-y divide-carbon/[0.06] text-sm">
-                    {[...agotados, ...pocoStock].slice(0, 6).map((p) => (
+                    {agotados.slice(0, 6).map((p) => (
                       <li key={p.product_id} className="flex items-center justify-between gap-3 py-2">
                         <span className="flex min-w-0 items-center gap-2 text-carbon">
                           <PackageX size={14} className="shrink-0 text-stone" />
                           <span className="truncate">{getProductById(p.product_id)?.name ?? p.product_id}</span>
                         </span>
-                        {p.agotado ? <Badge tone="red">Agotado</Badge> : <Badge tone="amber">Quedan {p.stock}</Badge>}
+                        <Badge tone="red">Agotado</Badge>
                       </li>
                     ))}
                   </ul>

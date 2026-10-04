@@ -26,10 +26,10 @@ import { Dialog } from "@/components/ui/Dialog";
 import { CATEGORIA_LABEL, categoriaTienda } from "./report-data";
 import { Badge, Empty, Loading, btnGhost, btnPrimary, eur, inputClass, revalidarTienda, type ProductoAjusteRow } from "./shared";
 
-type Filtro = "todos" | "en-web" | "agotados" | "ocultos" | "poco-stock" | "sin-coste";
+type Filtro = "todos" | "en-web" | "agotados" | "ocultos" | "sin-coste";
 
 function emptyRow(productId: string): ProductoAjusteRow {
-  return { product_id: productId, precios_eur: {}, costes_eur: {}, agotado: false, oculto: false, stock: null };
+  return { product_id: productId, precios_eur: {}, costes_eur: {}, agotado: false, oculto: false };
 }
 
 // Importe con coma decimal, como lo escribe y lee la vendedora.
@@ -53,7 +53,7 @@ function margen(p: Product, row: ProductoAjusteRow, i: number): number | null {
 }
 
 type Vista = "lista" | "tarjetas";
-type Orden = "nombre" | "precio" | "margen" | "stock";
+type Orden = "nombre" | "precio" | "margen";
 const VISTA_KEY = "amway_premium_admin_vista_productos";
 const PLEGADOS_KEY = "amway_premium_admin_gamas_plegadas";
 
@@ -68,7 +68,6 @@ function minMargen(p: Product, r: ProductoAjusteRow) {
 }
 
 const sinCoste = (p: Product, r: ProductoAjusteRow) => p.variants.some((_, i) => r.costes_eur[String(i)] == null);
-const pocoStock = (r: ProductoAjusteRow) => !r.agotado && r.stock != null && r.stock <= 3;
 
 // Color de cada gama (solo un punto de referencia visual).
 const GAMA_COLOR: Record<string, string> = {
@@ -185,7 +184,6 @@ export function ProductosPanel({ session }: { session: Session }) {
             costes_eur: r.costes_eur,
             agotado: r.agotado,
             oculto: r.oculto,
-            stock: r.stock,
             ...(r.dias_duracion !== undefined && { dias_duracion: r.dias_duracion }),
           }))
         )
@@ -219,7 +217,6 @@ export function ProductosPanel({ session }: { session: Session }) {
       enWeb: cuenta((_, r) => !r.oculto && !r.agotado),
       agotados: cuenta((_, r) => r.agotado),
       ocultos: cuenta((_, r) => r.oculto),
-      pocoStock: cuenta((_, r) => pocoStock(r)),
       sinCoste: cuenta(sinCoste),
       margenMedio: margenes.length ? margenes.reduce((a, b) => a + b, 0) / margenes.length : null,
     };
@@ -231,7 +228,6 @@ export function ProductosPanel({ session }: { session: Session }) {
       if (filtro === "en-web") return !r.oculto && !r.agotado;
       if (filtro === "agotados") return r.agotado;
       if (filtro === "ocultos") return r.oculto;
-      if (filtro === "poco-stock") return pocoStock(r);
       if (filtro === "sin-coste") return sinCoste(p, r);
       return true;
     },
@@ -264,7 +260,6 @@ export function ProductosPanel({ session }: { session: Session }) {
       const rb = rowOf(b.id);
       if (orden === "precio") return num(minPrecio(a, ra), Infinity) - num(minPrecio(b, rb), Infinity);
       if (orden === "margen") return num(minMargen(a, ra), Infinity) - num(minMargen(b, rb), Infinity);
-      if (orden === "stock") return num(ra.stock, Infinity) - num(rb.stock, Infinity);
       return a.name.localeCompare(b.name, "es");
     });
   }, [rows, rowOf, gama, coincide, pasaFiltro, orden]);
@@ -347,7 +342,6 @@ export function ProductosPanel({ session }: { session: Session }) {
     { f: "en-web", label: "A la venta en la web", value: resumen.enWeb },
     { f: "agotados", label: "Agotados", value: resumen.agotados, tone: resumen.agotados ? "text-red-600" : undefined },
     { f: "ocultos", label: "Ocultos en la web", value: resumen.ocultos },
-    { f: "poco-stock", label: "Poco stock (≤ 3)", value: resumen.pocoStock, tone: resumen.pocoStock ? "text-amber-700" : undefined },
     { f: "sin-coste", label: "Sin coste", value: resumen.sinCoste, tone: resumen.sinCoste ? "text-amber-700" : undefined },
   ];
   const pctWeb = resumen.total ? (resumen.enWeb / resumen.total) * 100 : 0;
@@ -360,7 +354,7 @@ export function ProductosPanel({ session }: { session: Session }) {
         <div className="min-w-0">
           <h2 className="font-display text-[1.75rem] leading-tight text-carbon">Productos</h2>
           <p className="mt-1 text-sm text-stone">
-            <span className="font-medium text-carbon">{resumen.total} productos</span> en {GAMAS.length} gamas. Precio, coste y stock se
+            <span className="font-medium text-carbon">{resumen.total} productos</span> en {GAMAS.length} gamas. Precio y coste se
             editan en la propia lista; la tienda se actualiza sola.
           </p>
         </div>
@@ -461,7 +455,6 @@ export function ProductosPanel({ session }: { session: Session }) {
               <option value="nombre">Ordenar por nombre</option>
               <option value="precio">Por precio</option>
               <option value="margen">Por margen (menor primero)</option>
-              <option value="stock">Por stock (menor primero)</option>
             </select>
             <button
               type="button"
@@ -525,13 +518,12 @@ export function ProductosPanel({ session }: { session: Session }) {
       ) : (
         <div className="flex flex-col gap-3">
           {vista === "lista" && (
-            <div className="hidden grid-cols-[2.25rem_minmax(0,1fr)_7.5rem_7.5rem_5rem_4.5rem_5.5rem_5.5rem_2.5rem] items-center gap-2 px-4 text-[10px] font-semibold uppercase tracking-[0.12em] text-stone lg:grid">
+            <div className="hidden grid-cols-[2.25rem_minmax(0,1fr)_7.5rem_7.5rem_5rem_5.5rem_5.5rem_2.5rem] items-center gap-2 px-4 text-[10px] font-semibold uppercase tracking-[0.12em] text-stone lg:grid">
               <span />
               <span>Producto</span>
               <span className="text-right">Precio venta</span>
               <span className="text-right">Coste</span>
               <span className="text-right">Margen</span>
-              <span className="text-center">Stock</span>
               <span className="text-center">Disponible</span>
               <span className="text-center">En la web</span>
               <span />
@@ -813,7 +805,7 @@ function FilaProducto({
   return (
     <div
       className={cn(
-        "grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-2 px-4 py-2 transition hover:bg-cream/40 lg:grid-cols-[2.25rem_minmax(0,1fr)_7.5rem_7.5rem_5rem_4.5rem_5.5rem_5.5rem_2.5rem]",
+        "grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-2 px-4 py-2 transition hover:bg-cream/40 lg:grid-cols-[2.25rem_minmax(0,1fr)_7.5rem_7.5rem_5rem_5.5rem_5.5rem_2.5rem]",
         selected && "bg-cream/70",
         row.oculto && "bg-carbon/[0.015]"
       )}
@@ -888,13 +880,6 @@ function FilaProducto({
       </div>
       <div className="hidden justify-end lg:flex">
         <MargenPill m={m} />
-      </div>
-      <div className="hidden justify-center lg:flex">
-        {row.stock == null ? (
-          <span className="text-xs text-stone/60">—</span>
-        ) : (
-          <Badge tone={row.stock === 0 ? "red" : row.stock <= 3 ? "amber" : "green"}>{row.stock}</Badge>
-        )}
       </div>
 
       {/* Interruptores: en el móvil, en una segunda línea */}
@@ -1026,7 +1011,6 @@ function ProductoCard({
         <div className="absolute right-3 top-3 flex flex-wrap justify-end gap-1">
           {row.agotado && <Badge tone="red">Agotado</Badge>}
           {row.oculto && <Badge>Oculto</Badge>}
-          {row.stock != null && <Badge tone={row.stock <= 3 ? "amber" : "green"}>Stock {row.stock}</Badge>}
         </div>
       </div>
 
@@ -1077,7 +1061,6 @@ function EditorProducto({
 }) {
   const [precios, setPrecios] = useState(product.variants.map((_, i) => fmtNum(row.precios_eur[String(i)])));
   const [costes, setCostes] = useState(product.variants.map((_, i) => fmtNum(row.costes_eur[String(i)])));
-  const [stock, setStock] = useState(row.stock?.toString() ?? "");
   const [dias, setDias] = useState(row.dias_duracion?.toString() ?? "");
   const [saving, setSaving] = useState(false);
 
@@ -1093,14 +1076,12 @@ function EditorProducto({
       const n = parseEur(v);
       if (n != null) costes_eur[String(i)] = n;
     });
-    const s = stock.trim() === "" ? null : Math.max(0, Math.floor(Number(stock)));
     const d = dias.trim() === "" ? null : Math.min(365, Math.max(1, Math.floor(Number(dias))));
     const dias_duracion = Number.isFinite(d as number) ? d : null;
     await onSave({
       ...row,
       precios_eur,
       costes_eur,
-      stock: Number.isFinite(s as number) ? s : null,
       ...((row.dias_duracion !== undefined || dias_duracion != null) && { dias_duracion }),
     });
     setSaving(false);
@@ -1167,23 +1148,6 @@ function EditorProducto({
       <p className="mt-2 text-xs text-stone">Deja el precio vacío para usar el de catálogo. El coste solo lo ves tú: sirve para calcular márgenes y beneficio.</p>
 
       <div className="mt-5 grid gap-3 rounded-2xl bg-white p-4 sm:grid-cols-[1fr_auto] sm:items-center">
-        <div>
-          <p className="text-sm font-medium text-carbon">Control de stock</p>
-          <p className="text-xs text-stone">
-            Unidades disponibles. Cada venta descuenta sola y al llegar a 0 el producto se marca agotado. Vacío = sin control.
-          </p>
-        </div>
-        <input
-          inputMode="numeric"
-          value={stock}
-          onChange={(e) => setStock(e.target.value.replace(/\D/g, ""))}
-          placeholder="Sin control"
-          aria-label="Stock"
-          className={cn(inputClass, "w-36 tabular-nums")}
-        />
-      </div>
-
-      <div className="mt-3 grid gap-3 rounded-2xl bg-white p-4 sm:grid-cols-[1fr_auto] sm:items-center">
         <div>
           <p className="text-sm font-medium text-carbon">Duración de una unidad</p>
           <p className="text-xs text-stone">

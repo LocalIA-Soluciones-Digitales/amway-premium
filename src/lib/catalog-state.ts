@@ -2,7 +2,7 @@ import { amwayRpc } from "@/lib/amway-db";
 import { variantPriceEur, type Product } from "@/data/types";
 
 // Lo que el panel de gestión puede cambiar de cada producto, tal y como lo
-// devuelve amway_catalogo_publico() (nunca incluye costes ni stock exacto).
+// devuelve amway_catalogo_publico() (nunca incluye costes).
 export interface ProductoAjuste {
   id: string;
   precios: Record<string, number>;

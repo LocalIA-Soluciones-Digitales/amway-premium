@@ -11,7 +11,6 @@ export const RECOGIDA = {
   horaMin: SITE.horario.apertura,
   horaMax: SITE.horario.cierre,
   intervaloMin: 30,
-  antelacionMin: 60, // si es hoy, la hora tiene que quedar a 1 h vista
   maxDias: 60, // hasta cuándo se puede apartar
 } as const;
 
@@ -58,13 +57,14 @@ const aMinutos = (hora: string) => Number(hora.slice(0, 2)) * 60 + Number(hora.s
 const cerradoEse = (fecha: string) => (RECOGIDA.cerrado as readonly number[]).includes(diaSemana(fecha));
 
 // Horas que se ofrecen para una fecha: huecos de media hora dentro del
-// horario, ninguno si ese día cierra, y hoy solo los que aún llegan a tiempo.
+// horario, ninguno si ese día cierra, y hoy desde la hora actual en adelante
+// (todo está en tienda, así que se puede recoger en cuanto se compra).
 export function horasDisponibles(fecha: string, now = new Date()): string[] {
   const hoy = ahoraMadrid(now);
   if (fecha < hoy.fecha || cerradoEse(fecha)) return [];
   const out: string[] = [];
   for (let m = aMinutos(RECOGIDA.horaMin); m <= aMinutos(RECOGIDA.horaMax); m += RECOGIDA.intervaloMin) {
-    if (fecha === hoy.fecha && m < hoy.minutos + RECOGIDA.antelacionMin) continue;
+    if (fecha === hoy.fecha && m < hoy.minutos) continue;
     out.push(`${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`);
   }
   return out;
@@ -86,12 +86,12 @@ export function rangoFechas(now = new Date()): { min: string; max: string } {
   return { min: hoy, max: sumarDias(hoy, RECOGIDA.maxDias) };
 }
 
-// Una hora concreta vale si cae en el horario y, si es hoy, aún da tiempo.
+// Una hora concreta vale si cae en el horario y, si es hoy, no ha pasado.
 export function horaValida(fecha: string, hora: string, now = new Date()): boolean {
   if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(hora)) return false;
   if (hora < RECOGIDA.horaMin || hora > RECOGIDA.horaMax) return false;
   const hoy = ahoraMadrid(now);
-  return fecha !== hoy.fecha || aMinutos(hora) >= hoy.minutos + RECOGIDA.antelacionMin;
+  return fecha !== hoy.fecha || aMinutos(hora) >= hoy.minutos;
 }
 
 // Un día abierto de hoy a +60 días y una hora dentro del horario.

@@ -20,7 +20,7 @@ Añade productos desde el catálogo y ajusta las cantidades. Si un producto se a
 
 - Solo se pueden pulsar los días que abre la tienda (los domingos salen tachados).
 - Las horas van de media en media hora, dentro del horario de 9:00 a 19:00.
-- Si es para hoy, la hora tiene que quedar al menos a 1 hora vista, para que dé tiempo a prepararlo.
+- Si es para hoy, se puede elegir cualquier hora desde ese momento: todo está en tienda, así que se puede recoger en cuanto se compra (por ejemplo, compra el lunes a las 9:00 y lo recoge a las 9:30 o a las 10:00).
 - Se puede reservar hasta con 60 días de antelación.
 
 ### Paso 3 · Forma de pago y datos
@@ -128,7 +128,7 @@ Al tocar un pedido se abre su ficha completa:
 - **Comentario del cliente** (recuadro amarillo): lo que escribió al pedir.
 - **Notas internas:** solo las ve Yuly; el cliente **nunca** las ve.
 - Datos de contacto y día de recogida, con la opción de **cambiarlo** si el cliente avisa de un imprevisto.
-- Botones para cobrar o marcar como pagado, plantillas de WhatsApp, **albarán** para imprimir y **cancelar** (el stock se repone solo).
+- Botones para cobrar o marcar como pagado, plantillas de WhatsApp, **albarán** para imprimir y **cancelar**.
 
 ### Ventas que no vienen de la web
 
@@ -142,8 +142,7 @@ Al tocar un pedido se abre su ficha completa:
 |---|---|
 | Precios | Se recalculan siempre en el servidor con los precios del panel. El cliente no puede modificarlos. |
 | Día y hora | Se vuelven a comprobar al confirmar: no se acepta un domingo ni una hora que ya ha pasado. |
-| Agotados y stock | Un producto agotado o oculto no se puede pedir. Si un producto tiene stock controlado, no se aceptan más unidades de las que quedan. |
-| Stock | Al registrar el pedido se descuentan las unidades. Al cancelarlo, se reponen. |
+| Agotados | Un producto marcado a mano como agotado u oculto no se puede pedir. No hay control de unidades: todo está en tienda. |
 | Pago con tarjeta | El pedido se apunta cuando Stripe confirma el cobro, aunque el cliente cierre la pestaña. Nunca se apunta dos veces. |
 | Avisos al móvil | Uno por pedido, aunque el registro se haga dos veces (página de agradecimiento y aviso de Stripe). |
 | Abusos | Como mucho 30 pedidos en efectivo por hora desde la web. |
@@ -154,7 +153,7 @@ Al tocar un pedido se abre su ficha completa:
 ```
 Efectivo:  Pendiente de pago ──(Preparar)──► Listo para recoger ──(Cobrado)──► Recogido
 Tarjeta:   Pagado ──────────────(Preparar)──► Listo para recoger ──(Recogido)─► Recogido
-En cualquier momento: Cancelar → Cancelado (se repone el stock; «Reactivar» lo devuelve)
+En cualquier momento: Cancelar → Cancelado («Reactivar» lo devuelve)
 ```
 
 ---
@@ -163,7 +162,6 @@ En cualquier momento: Cancelar → Cancelado (se repone el stock; «Reactivar» 
 
 1. **Notas internas privadas.** Antes, lo que Yuly escribía en «Notas internas» se guardaba en el mismo sitio que el comentario del cliente, y el cliente lo veía en su cuenta. Ahora son dos cosas separadas: el comentario del cliente sale en amarillo y las notas internas son solo para Yuly.
 2. **Nº de pedido también con tarjeta.** La página de agradecimiento y el WhatsApp de los pagos con tarjeta ya muestran el nº de pedido, igual que en efectivo. Así es fácil encontrarlo en el panel.
-3. **Sin vender lo que no hay.** Si un producto tiene stock controlado y se piden más unidades de las que quedan, la web avisa al cliente en vez de aceptar el pedido.
-4. **WhatsApp con el mensaje que toca** en cada fila de la agenda, y botón **«Avisar»** al preparar la bolsa. Antes el chat se abría vacío y era fácil olvidarse de avisar.
-5. **Reactivar un pedido en efectivo** cancelado lo devuelve a «pendiente de cobro». Antes se quedaba como pagado sin haberse cobrado.
-6. Pequeños arreglos: el botón «Avisar» ya cabe en la pantalla del móvil, y el calendario pone «Octubre de 2026» en vez de «Octubre De 2026».
+3. **WhatsApp con el mensaje que toca** en cada fila de la agenda, y botón **«Avisar»** al preparar la bolsa. Antes el chat se abría vacío y era fácil olvidarse de avisar.
+4. **Reactivar un pedido en efectivo** cancelado lo devuelve a «pendiente de cobro». Antes se quedaba como pagado sin haberse cobrado.
+5. Pequeños arreglos: el botón «Avisar» ya cabe en la pantalla del móvil, y el calendario pone «Octubre de 2026» en vez de «Octubre De 2026».

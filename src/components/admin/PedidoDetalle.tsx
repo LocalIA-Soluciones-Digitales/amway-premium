@@ -304,7 +304,7 @@ export function PedidoDetalle({
           {!cancelado ? (
             <button
               type="button"
-              onClick={() => confirm(`¿Cancelar el pedido #${p.numero}? Se repondrá el stock.`) && onUpdate({ estado: "cancelado" })}
+              onClick={() => confirm(`¿Cancelar el pedido #${p.numero}?`) && onUpdate({ estado: "cancelado" })}
               className={cn(btnGhost, "h-9 text-xs")}
             >
               <XCircle size={14} /> Cancelar

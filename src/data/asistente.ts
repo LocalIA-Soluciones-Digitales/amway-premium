@@ -103,8 +103,8 @@ export const INTENTOS: Record<string, Intento> = {
   listo: {
     pregunta: "¿Cuándo estará listo?",
     respuesta: [
-      "Todo lo que puedes añadir a la cesta está disponible, así que lo tendrás preparado para el día y la hora que elijas.",
-      "Tú eliges el día y la hora de recogida al hacer el pedido en la cesta.",
+      "Todo lo que puedes añadir a la cesta lo tenemos en tienda, así que puedes recogerlo en cuanto lo compras, dentro del horario de apertura.",
+      "Tú eliges el día y la hora de recogida al hacer el pedido en la cesta: puede ser hoy mismo.",
     ],
     claves: ["tarda", "plazo", "listo", "preparad", "urgente", "cuando estara", "cuando lo tengo", "para hoy", "para manana"],
     acciones: [
@@ -117,8 +117,7 @@ export const INTENTOS: Record<string, Intento> = {
   disponibilidad: {
     pregunta: "¿Tenéis stock?",
     respuesta: [
-      "La web muestra la disponibilidad actualizada: si un producto se puede añadir a la cesta, lo tenemos.",
-      "Los marcados como «Agotado» están pendientes de reposición.",
+      "Sí: todo lo que se puede añadir a la cesta lo tenemos en tienda, listo para recoger.",
     ],
     claves: ["stock", "disponib", "hay", "quedan", "existenc", "tenei"],
     acciones: [
@@ -215,7 +214,7 @@ export const INTENTOS: Record<string, Intento> = {
     pregunta: "Recogida y entrega",
     respuesta: [
       `Recogida en nuestro local de ${SITE.city}, ${SITE.horario.texto}.`,
-      "Eliges el día y la hora al hacer el pedido en la cesta.",
+      "Eliges el día y la hora al hacer el pedido en la cesta. Puedes recogerlo desde el momento en que lo compras.",
       "Si te surge un imprevisto, avísanos y lo cambiamos sin problema.",
     ],
     claves: ["recog", "entreg", "horario", "hora", "dia", "cuando paso", "recoger el pedido", "recoger mi pedido"],
