@@ -121,17 +121,6 @@ export default function SobreNosotrosPage() {
                 className="object-cover object-[60%_center]"
               />
             </div>
-            <div className="absolute -bottom-8 -left-2 hidden w-40 overflow-hidden rounded-2xl border-4 border-cream shadow-[0_20px_50px_rgba(28,26,22,0.18)] sm:block lg:-left-10 lg:w-48">
-              <div className="relative aspect-[4/5]">
-                <Image
-                  src="/images/nosotros/pedido-a-mano.webp"
-                  alt="Manos envolviendo un pedido en papel kraft"
-                  fill
-                  sizes="12rem"
-                  className="object-cover"
-                />
-              </div>
-            </div>
             <div className="glass-strong absolute -top-4 right-4 flex items-center gap-3 rounded-2xl px-4 py-3 shadow-[0_12px_40px_rgba(28,26,22,0.12)] sm:right-6">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-forest text-cream">
                 <Sparkles size={16} />
