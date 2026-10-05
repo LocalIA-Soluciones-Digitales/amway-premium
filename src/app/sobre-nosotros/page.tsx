@@ -113,12 +113,12 @@ export default function SobreNosotrosPage() {
           <div className="relative">
             <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-linen sm:aspect-[5/4]">
               <Image
-                src="/images/nosotros/tienda-atencion.webp"
-                alt="Dependiente sonriendo mientras atiende a una clienta en el mostrador"
+                src="/images/nosotros/yuly-mostrador.webp"
+                alt="Yuly en el local de Barakaldo mostrando las bebidas XS Energy sobre el mostrador"
                 fill
                 priority
                 sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-cover object-[55%_center]"
+                className="object-cover object-[60%_center]"
               />
             </div>
             <div className="absolute -bottom-8 -left-2 hidden w-40 overflow-hidden rounded-2xl border-4 border-cream shadow-[0_20px_50px_rgba(28,26,22,0.18)] sm:block lg:-left-10 lg:w-48">
@@ -157,13 +157,13 @@ export default function SobreNosotrosPage() {
       {/* Quién te atiende */}
       <section className="bg-linen">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-8 sm:py-28 lg:grid-cols-2 lg:gap-20">
-          <div className="relative order-2 aspect-square overflow-hidden rounded-[2rem] lg:order-1">
+          <div className="relative order-2 aspect-[4/5] overflow-hidden rounded-[2rem] lg:order-1">
             <Image
-              src="/images/nosotros/quien-te-atiende.webp"
-              alt="Mujer sonriente sentada junto a una ventana"
+              src="/images/nosotros/yuly-clienta.webp"
+              alt="Yuly entregando una caja de barritas XS Energy a una clienta en el local"
               fill
               sizes="(min-width: 1024px) 45vw, 100vw"
-              className="object-cover object-[48%_center]"
+              className="object-cover object-[center_30%]"
             />
           </div>
           <div className="order-1 lg:order-2">
@@ -176,8 +176,8 @@ export default function SobreNosotrosPage() {
               no un centro de atención.
             </h2>
             <p className="mt-6 text-base leading-relaxed text-stone sm:text-lg">
-              Detrás de {SITE.name} hay una sola persona en {SITE.city} que responde cada mensaje,
-              prepara cada pedido y conoce el catálogo de memoria.
+              Detrás de {SITE.name} está Yuly, en {SITE.city}: responde cada mensaje, prepara cada
+              pedido y te lo entrega en mano en el local.
             </p>
             <blockquote className="mt-8 border-l-2 border-gold pl-5 font-display text-xl leading-snug text-carbon sm:text-2xl">
               “Si tienes dudas sobre qué producto elegir, la cantidad recomendada o la recogida,
