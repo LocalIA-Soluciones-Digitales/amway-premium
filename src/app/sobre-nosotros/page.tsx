@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Image from "next/image";
 import {
   ArrowDown,
@@ -71,7 +72,28 @@ const STEPS = [
   },
 ];
 
-const eyebrowClass = "text-xs font-medium uppercase tracking-[0.25em] text-forest";
+function Eyebrow({
+  index,
+  children,
+  tone = "light",
+}: {
+  index: string;
+  children: ReactNode;
+  tone?: "light" | "dark";
+}) {
+  const dark = tone === "dark";
+  return (
+    <p className="flex items-center gap-4 text-[11px] font-medium uppercase tracking-[0.32em]">
+      <span
+        className={`font-display text-base italic normal-case tracking-normal ${dark ? "text-gold-soft" : "text-gold"}`}
+      >
+        {index}
+      </span>
+      <span className={`h-px w-10 ${dark ? "bg-cream/30" : "bg-carbon/20"}`} />
+      <span className={dark ? "text-cream" : "text-carbon"}>{children}</span>
+    </p>
+  );
+}
 
 export default function SobreNosotrosPage() {
   return (
@@ -80,10 +102,13 @@ export default function SobreNosotrosPage() {
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-8 sm:pb-20">
         <div className="grid items-center gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-forest/15 bg-forest/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-forest">
-              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-              Nosotros · {SITE.city}
-            </p>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Eyebrow index="01">Nosotros</Eyebrow>
+              <p className="text-[11px] uppercase tracking-[0.28em] text-stone">
+                {SITE.city}, {SITE.region}
+                <span className="ml-3 hidden text-stone-soft sm:inline">43°17′N · 2°59′O</span>
+              </p>
+            </div>
             <h1 className="mt-6 font-display text-5xl leading-[1.02] text-carbon sm:text-6xl lg:text-7xl">
               Calidad americana,
               <br />
@@ -193,7 +218,7 @@ export default function SobreNosotrosPage() {
             </div>
           </div>
           <div className="order-1 lg:order-2">
-            <p className={eyebrowClass}>Quién te atiende</p>
+            <Eyebrow index="02">Quién te atiende</Eyebrow>
             <h2 className="mt-5 font-display text-4xl leading-[1.05] text-carbon sm:text-5xl">
               Una persona real,
               <br />
@@ -238,7 +263,7 @@ export default function SobreNosotrosPage() {
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-8 sm:py-28">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
-            <p className={eyebrowClass}>Por qué elegirnos</p>
+            <Eyebrow index="03">Por qué elegirnos</Eyebrow>
             <h2 className="mt-5 font-display text-4xl leading-[1.05] text-carbon sm:text-5xl">
               Lo mejor de Amway, sin intermediarios.
             </h2>
@@ -250,13 +275,13 @@ export default function SobreNosotrosPage() {
         </div>
 
         <div className="mt-14 grid gap-5 lg:grid-cols-3 lg:grid-rows-2">
-          <article className="group relative min-h-[26rem] overflow-hidden rounded-[2rem] lg:col-span-2 lg:row-span-2 lg:min-h-[36rem]">
+          <article className="group relative min-h-[26rem] overflow-hidden rounded-[2rem] lg:col-span-2 lg:row-span-2 lg:min-h-[40rem]">
             <Image
               src="/images/nosotros/clienta-local.webp"
               alt="Yuly entregando suplementos Nutrilite a una clienta en su local de Barakaldo"
               fill
               sizes="(min-width: 1024px) 66vw, 100vw"
-              className="object-cover object-[center_25%] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              className="object-cover object-[center_17%] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-carbon/85 via-carbon/20 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-7 sm:p-10">
@@ -301,9 +326,9 @@ export default function SobreNosotrosPage() {
       {/* Cómo funciona */}
       <section className="bg-forest text-cream">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-8 sm:py-24">
-          <p className="text-xs font-medium uppercase tracking-[0.25em] text-gold-soft">
+          <Eyebrow index="04" tone="dark">
             Cómo funciona
-          </p>
+          </Eyebrow>
           <h2 className="mt-5 max-w-2xl font-display text-4xl leading-[1.05] sm:text-5xl">
             Tres pasos, sin complicaciones.
           </h2>
@@ -328,7 +353,7 @@ export default function SobreNosotrosPage() {
       <section id="contacto" className="scroll-mt-24 mx-auto max-w-7xl px-4 py-20 sm:px-8 sm:py-28">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
           <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-forest">Contacto</p>
+            <Eyebrow index="05">Contacto</Eyebrow>
             <h2 className="mt-5 font-display text-4xl leading-[1.05] text-carbon sm:text-5xl">
               Hablemos de tu bienestar.
             </h2>
