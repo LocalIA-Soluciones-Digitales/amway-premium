@@ -171,6 +171,25 @@ export function track(eventType: EventType, label?: string, path?: string) {
 // Errores de la web pública: no guardan datos personales, así que se
 // registran sin depender del consentimiento (interés legítimo técnico).
 let reportedThisPage = 0;
+
+type ErrorTemprano = [mensaje: string, detalle: string | null];
+declare global {
+  interface Window {
+    __amwayErrores?: ErrorTemprano[];
+  }
+}
+
+// Envía lo que el script del layout guardó durante la carga y, a partir de
+// ahí, cada error nuevo según llega.
+export function atenderErroresTempranos() {
+  const cola = window.__amwayErrores;
+  if (!cola) return;
+  for (const [m, d] of cola.splice(0)) reportError(m, d ?? undefined);
+  cola.push = (...nuevos: ErrorTemprano[]) => {
+    for (const [m, d] of nuevos) reportError(m, d ?? undefined);
+    return 0;
+  };
+}
 export function reportError(mensaje: string, detalle?: string) {
   if (typeof window === "undefined" || reportedThisPage >= 5) return;
   if (window.location.pathname.startsWith("/admin")) return;

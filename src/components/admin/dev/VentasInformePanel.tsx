@@ -22,8 +22,7 @@ import {
   downloadCsv,
   eur,
   type Gasto,
-  type Pedido,
-} from "../shared";
+  type Pedido, traerTodo } from "../shared";
 import { DIAS_LARGOS, mapaCalor, pctTxt, picoMapa, prever } from "./analitica";
 import { RANGOS } from "./InformesPanel";
 import { Hallazgos, TablaMetricas, type Hallazgo } from "./ui";
@@ -52,14 +51,18 @@ export function VentasInformePanel() {
     const db = amwayDb();
     Promise.all([
       // Todo el histórico: hace falta para clientes, recurrencia y previsión.
-      db.from("amway_pedidos").select("*").order("created_at").limit(10000),
-      db.from("amway_gastos").select("*").gte("fecha", desde.toISOString().slice(0, 10)).limit(5000),
-      db.from("amway_visitas").select("session_id").eq("event_type", "pageview").gte("created_at", desde.toISOString()).limit(100000),
+      traerTodo<Pedido>((a, b) => db.from("amway_pedidos").select("*").order("created_at").order("id").range(a, b)),
+      traerTodo<Gasto>((a, b) =>
+        db.from("amway_gastos").select("*").gte("fecha", desde.toISOString().slice(0, 10)).order("fecha").order("id").range(a, b)
+      ),
+      traerTodo<{ session_id: string }>((a, b) =>
+        db.from("amway_visitas").select("session_id").eq("event_type", "pageview").gte("created_at", desde.toISOString()).order("id").range(a, b)
+      ),
     ]).then(([p, g, v]) => {
       setDatos({
-        todos: (p.data as Pedido[] | null) ?? [],
-        gastos: (g.data as Gasto[] | null) ?? [],
-        sesiones: new Set(((v.data as { session_id: string }[] | null) ?? []).map((x) => x.session_id)).size,
+        todos: p,
+        gastos: g,
+        sesiones: new Set(v.map((x) => x.session_id)).size,
       });
     });
   }, [dias]);

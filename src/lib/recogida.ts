@@ -7,7 +7,8 @@ import { SITE } from "@/data/site-config";
 export const RECOGIDA = {
   zona: "Europe/Madrid",
   cerrado: SITE.horario.cerrado,
-  // Solo dentro del horario del local, en huecos de media hora.
+  // Solo dentro del horario del local, en huecos de media hora. La última
+  // es media hora antes de cerrar: a la hora de cierre ya no se atiende.
   horaMin: SITE.horario.apertura,
   horaMax: SITE.horario.cierre,
   intervaloMin: 30,
@@ -54,16 +55,26 @@ export function sumarDias(fecha: string, n: number): string {
 const diaSemana = (fecha: string) => new Date(`${fecha}T12:00:00Z`).getUTCDay();
 const aMinutos = (hora: string) => Number(hora.slice(0, 2)) * 60 + Number(hora.slice(3, 5));
 
-const cerradoEse = (fecha: string) => (RECOGIDA.cerrado as readonly number[]).includes(diaSemana(fecha));
+// Festivos nacionales fijos (cierra aunque caigan entre semana). Los
+// autonómicos, locales y vacaciones los pone la gestora en el panel
+// (amway_cierres) y llegan como `cierres` desde el catálogo público.
+const FESTIVOS_NACIONALES = ["01-01", "01-06", "05-01", "08-15", "10-12", "11-01", "12-06", "12-08", "12-25"];
+
+export type Cierres = readonly string[];
+
+const cerradoEse = (fecha: string, cierres: Cierres) =>
+  (RECOGIDA.cerrado as readonly number[]).includes(diaSemana(fecha)) ||
+  FESTIVOS_NACIONALES.includes(fecha.slice(5)) ||
+  cierres.includes(fecha);
 
 // Horas que se ofrecen para una fecha: huecos de media hora dentro del
 // horario, ninguno si ese día cierra, y hoy desde la hora actual en adelante
 // (todo está en tienda, así que se puede recoger en cuanto se compra).
-export function horasDisponibles(fecha: string, now = new Date()): string[] {
+export function horasDisponibles(fecha: string, now = new Date(), cierres: Cierres = []): string[] {
   const hoy = ahoraMadrid(now);
-  if (fecha < hoy.fecha || cerradoEse(fecha)) return [];
+  if (fecha < hoy.fecha || cerradoEse(fecha, cierres)) return [];
   const out: string[] = [];
-  for (let m = aMinutos(RECOGIDA.horaMin); m <= aMinutos(RECOGIDA.horaMax); m += RECOGIDA.intervaloMin) {
+  for (let m = aMinutos(RECOGIDA.horaMin); m < aMinutos(RECOGIDA.horaMax); m += RECOGIDA.intervaloMin) {
     if (fecha === hoy.fecha && m < hoy.minutos) continue;
     out.push(`${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`);
   }
@@ -71,11 +82,11 @@ export function horasDisponibles(fecha: string, now = new Date()): string[] {
 }
 
 // Días en los que se puede recoger: abiertos y con alguna hora libre.
-export function diasRecogida(now = new Date()): string[] {
+export function diasRecogida(now = new Date(), cierres: Cierres = []): string[] {
   const { min, max } = rangoFechas(now);
   const out: string[] = [];
   for (let fecha = min; fecha <= max; fecha = sumarDias(fecha, 1)) {
-    if (horasDisponibles(fecha, now).length > 0) out.push(fecha);
+    if (horasDisponibles(fecha, now, cierres).length > 0) out.push(fecha);
   }
   return out;
 }
@@ -89,17 +100,21 @@ export function rangoFechas(now = new Date()): { min: string; max: string } {
 // Una hora concreta vale si cae en el horario y, si es hoy, no ha pasado.
 export function horaValida(fecha: string, hora: string, now = new Date()): boolean {
   if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(hora)) return false;
-  if (hora < RECOGIDA.horaMin || hora > RECOGIDA.horaMax) return false;
+  if (hora < RECOGIDA.horaMin || hora >= RECOGIDA.horaMax) return false;
   const hoy = ahoraMadrid(now);
   return fecha !== hoy.fecha || aMinutos(hora) >= hoy.minutos;
 }
 
 // Un día abierto de hoy a +60 días y una hora dentro del horario.
-export function recogidaValida(r: Partial<Recogida> | null | undefined, now = new Date()): r is Recogida {
+export function recogidaValida(
+  r: Partial<Recogida> | null | undefined,
+  now = new Date(),
+  cierres: Cierres = []
+): r is Recogida {
   if (!r || typeof r.fecha !== "string" || typeof r.hora !== "string") return false;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(r.fecha) || Number.isNaN(Date.parse(`${r.fecha}T12:00:00Z`))) return false;
   const { min, max } = rangoFechas(now);
-  return r.fecha >= min && r.fecha <= max && !cerradoEse(r.fecha) && horaValida(r.fecha, r.hora, now);
+  return r.fecha >= min && r.fecha <= max && !cerradoEse(r.fecha, cierres) && horaValida(r.fecha, r.hora, now);
 }
 
 // "martes 29 de septiembre"

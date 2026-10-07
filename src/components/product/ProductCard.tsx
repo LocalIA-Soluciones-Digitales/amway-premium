@@ -164,7 +164,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
               <AddToCartButton
                 productId={product.id}
                 variantIndex={variantIndex}
-                ariaLabel={`Añadir ${product.name} a la cesta`}
+                ariaLabel={`Añadir a la cesta: ${product.name}`}
                 className="min-w-0 flex-1 bg-carbon text-cream hover:bg-carbon-soft"
               />
             ) : (

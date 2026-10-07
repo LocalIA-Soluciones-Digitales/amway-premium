@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LEGAL, SITE } from "@/data/site-config";
 import { Dato, EnlacesLegales, LegalPage } from "@/components/legal/LegalPage";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/privacidad", {
   title: "Política de privacidad",
   description: `Qué datos tratamos en ${SITE.name}, para qué, con quién los compartimos y cómo ejercer tus derechos.`,
-};
+});
 
 export default function PrivacidadPage() {
   return (

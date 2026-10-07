@@ -19,18 +19,28 @@ export interface Valoracion {
 export interface CatalogoPublico {
   productos: ProductoAjuste[];
   valoraciones: Valoracion[];
+  // Días de cierre puestos desde el panel (YYYY-MM-DD, de hoy a 90 días).
+  cierres: string[];
 }
 
-export const CATALOGO_VACIO: CatalogoPublico = { productos: [], valoraciones: [] };
+export const CATALOGO_VACIO: CatalogoPublico = { productos: [], valoraciones: [], cierres: [] };
+
+const FECHA = /^\d{4}-\d{2}-\d{2}$/;
 
 export async function fetchCatalogoPublico(
   init?: RequestInit & { next?: { revalidate?: number; tags?: string[] } }
 ): Promise<CatalogoPublico> {
   try {
-    const data = await amwayRpc<CatalogoPublico>("amway_catalogo_publico", undefined, init);
+    // Los cierres van aparte: si su función aún no existe en la base de
+    // datos (migración sin aplicar), el catálogo se sirve igual.
+    const [data, cierres] = await Promise.all([
+      amwayRpc<CatalogoPublico>("amway_catalogo_publico", undefined, init),
+      amwayRpc<unknown>("amway_cierres_publicos", undefined, init).catch(() => []),
+    ]);
     return {
       productos: Array.isArray(data?.productos) ? data.productos : [],
       valoraciones: Array.isArray(data?.valoraciones) ? data.valoraciones : [],
+      cierres: Array.isArray(cierres) ? cierres.filter((d): d is string => typeof d === "string" && FECHA.test(d)) : [],
     };
   } catch {
     // Sin base de datos la tienda sigue funcionando con el catálogo base.

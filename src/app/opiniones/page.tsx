@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { ArrowDown, MessageSquareReply, PenLine, ShieldCheck } from "lucide-react";
 import { ResenasSection } from "@/components/catalog/ResenasSection";
 import { PageHero, heroPrimaryClass, heroSecondaryClass } from "@/components/layout/PageHero";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/opiniones", {
   title: "Opiniones de clientes",
   description:
     "Lo que opinan nuestros clientes de la tienda y de los productos Amway: Nutrilite, XS Energy, Artistry, eSpring y más.",
-};
+});
 
 const PROMISES = [
   {

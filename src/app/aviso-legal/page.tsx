@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE } from "@/data/site-config";
 import { DatosTitular, EnlacesLegales, LegalPage } from "@/components/legal/LegalPage";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/aviso-legal", {
   title: "Aviso legal",
   description: `Quién está detrás de ${SITE.name}, cómo contactar y condiciones de uso de la web.`,
-};
+});
 
 export default function AvisoLegalPage() {
   return (

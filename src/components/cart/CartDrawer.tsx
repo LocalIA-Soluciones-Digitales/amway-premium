@@ -92,8 +92,11 @@ export function CartDrawer() {
   useEffect(() => setIntento(null), [items]);
 
   // Recalculado en cada apertura: los huecos de hoy caducan con la hora.
-  const dias = useMemo(() => (isOpen ? diasRecogida() : []), [isOpen]);
-  const horas = useMemo(() => (fecha ? horasDisponibles(fecha) : []), [fecha]);
+  const dias = useMemo(() => (isOpen ? diasRecogida(new Date(), catalog.cierres) : []), [isOpen, catalog.cierres]);
+  const horas = useMemo(
+    () => (fecha ? horasDisponibles(fecha, new Date(), catalog.cierres) : []),
+    [fecha, catalog.cierres]
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -152,7 +155,7 @@ export function CartDrawer() {
       setError("Elige el día y la hora a la que pasarás a recogerlo.");
       return;
     }
-    if (!recogidaValida({ fecha, hora })) {
+    if (!recogidaValida({ fecha, hora }, new Date(), catalog.cierres)) {
       setError("Esa hora ya no está disponible. Elige otra, por favor.");
       return;
     }

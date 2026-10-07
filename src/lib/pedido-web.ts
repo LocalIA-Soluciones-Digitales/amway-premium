@@ -56,7 +56,13 @@ export async function validarPedidoWeb(body: unknown): Promise<ResultadoPedido> 
     return { ok: false, error: "Indica un teléfono válido.", status: 400 };
   }
 
-  const catalog = indexCatalogo(await fetchCatalogoPublico({ cache: "no-store" }));
+  const publico = await fetchCatalogoPublico({ cache: "no-store" });
+  // Festivo o cierre puesto en el panel: el calendario ya no lo ofrece, pero
+  // una cesta abierta desde antes (o una petición a mano) podría traerlo.
+  if (!recogidaValida(recogida, new Date(), publico.cierres)) {
+    return { ok: false, error: "Ese día el local está cerrado. Elige otro día de recogida.", status: 400 };
+  }
+  const catalog = indexCatalogo(publico);
   const lineas: LineaPedido[] = [];
 
   for (const line of requested) {
@@ -80,7 +86,11 @@ export async function validarPedidoWeb(body: unknown): Promise<ResultadoPedido> 
     const quantity = Number.isInteger(line.quantity)
       ? Math.min(MAX_QUANTITY_PER_LINE, Math.max(1, line.quantity as number))
       : 1;
-    lineas.push({ product, variant, variantIndex, flavor, quantity, eurPrice });
+    // La misma referencia repetida en varias líneas se junta, y el tope de
+    // unidades vale para el total (si no, 50 líneas × 20 se lo saltaban).
+    const igual = lineas.find((l) => l.product.id === product.id && l.variantIndex === variantIndex && l.flavor === flavor);
+    if (igual) igual.quantity = Math.min(MAX_QUANTITY_PER_LINE, igual.quantity + quantity);
+    else lineas.push({ product, variant, variantIndex, flavor, quantity, eurPrice });
   }
 
   const total = Math.round(lineas.reduce((s, l) => s + l.eurPrice * l.quantity, 0) * 100) / 100;

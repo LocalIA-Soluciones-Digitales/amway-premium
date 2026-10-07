@@ -24,6 +24,8 @@ const groupOf = (c: CategorySlug): CategorySlug => (c === "xs-energy" ? "nutrici
 const normalize = (s: string) =>
   s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 
+const POR_PAGINA = 24;
+
 export function ProductExplorer({
   products,
   subcategories,
@@ -41,6 +43,10 @@ export function ProductExplorer({
   const [brand, setBrand] = useState<string | null>(null);
   const [sort, setSort] = useState<"relevancia" | "precio-asc" | "precio-desc">("relevancia");
   const [solicitudOpen, setSolicitudOpen] = useState(false);
+  // Pintar las 300+ tarjetas de golpe dejaba el móvil bloqueado ~2 s
+  // (casi 9.000 nodos). Se muestran por tandas; cada filtro vuelve a la
+  // primera. Las fichas siguen enlazadas desde el sitemap y las categorías.
+  const [limite, setLimite] = useState(POR_PAGINA);
   const catalog = useCatalogState();
 
   // /catalogo?q=… llega ya filtrado (enlaces del asistente). Se lee al montar
@@ -50,6 +56,10 @@ export function ProductExplorer({
     const q = new URLSearchParams(window.location.search).get("q");
     if (q) setQuery(q.slice(0, 80));
   }, []);
+
+  useEffect(() => {
+    setLimite(POR_PAGINA);
+  }, [query, category, subcategory, brand, sort]);
 
   const visible = useMemo(
     () => products.filter((p) => !catalog.oculto(p.id)),
@@ -283,10 +293,25 @@ export function ProductExplorer({
           filtered.length === 0 && "hidden"
         )}
       >
-        {filtered.map((p, i) => (
+        {filtered.slice(0, limite).map((p, i) => (
           <ProductCard key={p.id} product={p} index={i} />
         ))}
       </div>
+
+      {filtered.length > limite && (
+        <div className="mt-12 flex flex-col items-center gap-3">
+          <p className="text-xs uppercase tracking-wider text-stone">
+            Viendo {limite} de {filtered.length}
+          </p>
+          <button
+            type="button"
+            onClick={() => setLimite((n) => n + POR_PAGINA)}
+            className="rounded-full border border-carbon/15 px-6 py-3 text-sm font-medium text-carbon transition hover:border-carbon/40"
+          >
+            Ver {Math.min(POR_PAGINA, filtered.length - limite)} productos más
+          </button>
+        </div>
+      )}
 
       {filtered.length === 0 && (
         <div className="mt-8 rounded-2xl border border-carbon/10 px-6 py-16 text-center">

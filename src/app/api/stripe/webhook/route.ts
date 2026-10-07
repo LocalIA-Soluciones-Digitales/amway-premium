@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { registrarPedidoStripe } from "@/lib/amway-pedidos";
+import { registrarErrorServidor } from "@/lib/amway-db";
 
 // Opcional: si se configura STRIPE_WEBHOOK_SECRET (evento
 // checkout.session.completed), el pedido se registra aunque el cliente
@@ -26,6 +27,7 @@ export async function POST(request: NextRequest) {
       await registrarPedidoStripe(event.data.object.id);
     } catch (e) {
       console.error("No se pudo registrar el pedido", e);
+      await registrarErrorServidor("Webhook de Stripe: pago cobrado sin pedido registrado", e, "/api/stripe/webhook");
       return NextResponse.json({ error: "No se pudo registrar el pedido." }, { status: 500 });
     }
   }

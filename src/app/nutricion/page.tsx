@@ -3,12 +3,13 @@ import { CategoryHero } from "@/components/product/CategoryHero";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
 import { CategoryHighlights } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/nutricion", {
   title: "Nutrición Nutrilite™ — Vitaminas, minerales y proteínas",
   description:
     "Nutrilite™: vitaminas, minerales, proteínas, sustitutivos de comida y complementos para hombres, mujeres y niños. Productos originales Amway.",
-};
+});
 
 const XS_LINK = { href: "/xs-energy", label: "Descubre XS™ →" };
 

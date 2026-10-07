@@ -94,7 +94,7 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
               <AddToCartButton
                 productId={flavor.productId}
                 flavor={flavorLabel}
-                ariaLabel={`Añadir ${flavorLabel} a la cesta`}
+                ariaLabel={`Añadir a la cesta: ${flavorLabel}`}
                 className="bg-cream font-semibold text-carbon hover:bg-white"
                 stepperClassName="w-28 border border-cream/40 bg-transparent text-cream hover:bg-transparent"
               />

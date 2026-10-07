@@ -3,12 +3,13 @@ import { CategoryHero } from "@/components/product/CategoryHero";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
 import { CategoryHighlights } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/belleza", {
   title: "Artistry™ Belleza — Skincare, LongXevity y maquillaje",
   description:
     "Artistry Skin Nutrition™, Artistry LongXevity™, Artistry Studio™, Artistry Labs™ y maquillaje Artistry™. Ciencia de la piel con atención personal en Barakaldo.",
-};
+});
 
 const HIGHLIGHT_IDS = [
   { id: "art-suero-desafiante", media: "suero-desafiante", tag: "Antiedad intensivo" },

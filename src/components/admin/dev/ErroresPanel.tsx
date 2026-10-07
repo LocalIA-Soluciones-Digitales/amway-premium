@@ -5,7 +5,7 @@ import { Bug, ChevronDown, Clock, Copy, FileCode2, Globe, Monitor, RefreshCw, Sm
 import { amwayDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
 import { BarList, ColumnChart, Sparkline } from "../charts";
-import { Badge, Card, CardTitle, Empty, Loading, PanelHeader, btnGhost } from "../shared";
+import { Badge, Card, CardTitle, Empty, Loading, PanelHeader, btnGhost, traerTodo } from "../shared";
 import { haceCuanto } from "./analitica";
 import { Hallazgos, type Hallazgo } from "./ui";
 
@@ -134,15 +134,18 @@ export function ErroresPanel() {
     const db = amwayDb();
     const [e, v] = await Promise.all([
       db.from("amway_errores").select("*").order("created_at", { ascending: false }).limit(2000),
-      db
-        .from("amway_visitas")
-        .select("session_id")
-        .eq("event_type", "pageview")
-        .gte("created_at", new Date(Date.now() - 7 * DIA).toISOString())
-        .limit(100000),
+      traerTodo<{ session_id: string }>((a, b) =>
+        db
+          .from("amway_visitas")
+          .select("session_id")
+          .eq("event_type", "pageview")
+          .gte("created_at", new Date(Date.now() - 7 * DIA).toISOString())
+          .order("id")
+          .range(a, b)
+      ),
     ]);
     setRows((e.data as ErrorRow[] | null) ?? []);
-    setSesiones7(new Set(((v.data as { session_id: string }[] | null) ?? []).map((x) => x.session_id)).size);
+    setSesiones7(new Set(v.map((x) => x.session_id)).size);
     setCargando(false);
   }, []);
 

@@ -27,7 +27,8 @@ import { anuncioVigente, cargarEstadisticas, type EstadisticaAnuncio } from "./A
 import { imagenAnuncio, type Anuncio } from "@/lib/anuncios";
 import { PedidoDrawer } from "./PedidoDrawer";
 import { pedidosValidos, variacion } from "./report-data";
-import { Badge, Card, CardTitle, ESTADO_PEDIDO, Kpi, Loading, eur, fecha, type Gasto, type Pedido, type ProductoAjusteRow } from "./shared";
+import { Badge, Card, CardTitle, ESTADO_PEDIDO, Kpi, Loading, eur, fecha, type Gasto, type Pedido, type ProductoAjusteRow, traerTodo } from "./shared";
+import { CierresCard } from "./CierresCard";
 
 export type GestionTab = "hoy" | "pedidos" | "clientes" | "productos" | "solicitudes" | "contabilidad" | "resenas" | "anuncios";
 
@@ -94,11 +95,13 @@ export function HoyPanel({
     const desde = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const db = amwayDb();
     Promise.all([
-      db.from("amway_pedidos").select("*").gte("created_at", desde.toISOString()).order("created_at", { ascending: false }).limit(5000),
+      traerTodo<Pedido>((a, b) =>
+        db.from("amway_pedidos").select("*").gte("created_at", desde.toISOString()).order("created_at", { ascending: false }).order("id").range(a, b)
+      ),
       db.from("amway_gastos").select("*").gte("fecha", new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10)),
       db.from("amway_productos").select("*").eq("agotado", true),
     ]).then(([p, g, pr]) => {
-      setPedidos((p.data as Pedido[] | null) ?? []);
+      setPedidos(p);
       setGastosMes((g.data as Gasto[] | null) ?? []);
       // Solo productos que siguen en el catálogo.
       setProductos(((pr.data as ProductoAjusteRow[] | null) ?? []).filter((r) => getProductById(r.product_id)));
@@ -370,6 +373,7 @@ export function HoyPanel({
               </Card>
 
               {anuncio && <AnuncioEnWeb {...anuncio} onAbrir={() => onNavigate("anuncios")} />}
+              <CierresCard />
             </div>
           </div>
 

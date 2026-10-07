@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { SITE } from "@/data/site-config";
 import { EnlacesLegales, LegalPage } from "@/components/legal/LegalPage";
 import { ConfigurarCookies } from "@/components/legal/ConfigurarCookies";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/cookies", {
   title: "Política de cookies",
   description: `Qué guarda ${SITE.name} en tu navegador y cómo cambiar tu elección.`,
-};
+});
 
 const TECNICAS: [string, string, string][] = [
   ["amway_premium_cesta_v1", "Los productos de tu cesta", "Hasta que vacíes la cesta o borres los datos del navegador"],

@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
 import { PRODUCTS, getBrands } from "@/data/products";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/catalogo", {
   title: "Catálogo completo",
   description:
     "Explora todo el catálogo Amway: Nutrilite, XS Energy, Artistry, Satinique, g&h, Glister, eSpring, Atmosphere e iCook. Busca por categoría, marca o precio.",
-};
+});
 
 const ALL_SUBCATEGORIES = Array.from(new Set(PRODUCTS.map((p) => p.subcategory)));
 

@@ -3,11 +3,12 @@ import Link from "next/link";
 import { LEGAL } from "@/data/site-config";
 import { EnlacesLegales, LegalPage } from "@/components/legal/LegalPage";
 import { FormularioDesistimiento } from "@/components/legal/FormularioDesistimiento";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/desistimiento", {
   title: "Desistir de un pedido",
   description: "Comunica aquí que desistes de tu compra en los 14 días siguientes a la recogida.",
-};
+});
 
 export default async function DesistimientoPage({ searchParams }: { searchParams: Promise<{ pedido?: string }> }) {
   const { pedido } = await searchParams;

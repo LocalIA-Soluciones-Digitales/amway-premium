@@ -32,7 +32,9 @@ export function EnergyScrollStory() {
   const layerToggleRef = useRef<"a" | "b">("a");
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const lenis = useLenis();
+  // Lenis smooths the scroll position, so ScrollTrigger is told on every
+  // Lenis frame (the global SmoothScroll no longer loads GSAP).
+  const lenis = useLenis(() => ScrollTrigger.update());
 
   useEffect(() => {
     if (!wrapperRef.current) return;

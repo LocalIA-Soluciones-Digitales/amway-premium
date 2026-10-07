@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CATEGORY_META, PRODUCTS, getProductById } from "@/data/products";
-import { productHref, productImageSrc, priceFrom, type Product } from "@/data/types";
+import { productHref, productImageSrc, type Product } from "@/data/types";
+import { estaAgotado, fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
 import { SITE } from "@/data/site-config";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -58,7 +59,15 @@ export default async function ProductPage({ params }: PageProps<"/producto/[id]"
 
   const category = CATEGORY_META[product.category];
   const image = productImageSrc(product);
-  const price = priceFrom(product);
+  // Precio y disponibilidad del panel (los mismos que ve el cliente), no los
+  // de catálogo: Google compara el precio del marcado con el de la página.
+  // Misma petición y caché que el layout, así que no añade otra consulta.
+  const catalogo = indexCatalogo(await fetchCatalogoPublico({ next: { revalidate: 60, tags: ["amway-catalogo"] } }));
+  const precios = product.variants
+    .map((_, i) => precioVenta(catalogo, product, i))
+    .filter((x): x is number => x != null);
+  const price = precios.length > 0 ? Math.min(...precios) : null;
+  const url = `${SITE.url}${productHref(product)}`;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -74,16 +83,31 @@ export default async function ProductPage({ params }: PageProps<"/producto/[id]"
             "@type": "Offer",
             priceCurrency: "EUR",
             price: price.toFixed(2),
-            availability: "https://schema.org/InStock",
-            url: `${SITE.url}${productHref(product)}`,
+            availability: estaAgotado(catalogo, product.id)
+              ? "https://schema.org/OutOfStock"
+              : "https://schema.org/InStock",
+            // Solo recogida en el local de Barakaldo.
+            availableDeliveryMethod: "https://schema.org/OnSitePickup",
+            url,
           }
         : undefined,
+  };
+  // Las mismas migas que se ven encima de la ficha.
+  const breadcrumbs = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Catálogo", item: `${SITE.url}/catalogo` },
+      { "@type": "ListItem", position: 2, name: category.label, item: `${SITE.url}${category.href}` },
+      { "@type": "ListItem", position: 3, name: product.name, item: url },
+    ],
   };
   const relatedProducts = related(product);
 
   return (
     <div className="pt-28 sm:pt-32">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
 
       <ProductDetail
         product={product}

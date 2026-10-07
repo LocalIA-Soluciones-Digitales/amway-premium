@@ -9,7 +9,10 @@ import { BeautyEditorial } from "@/components/home/BeautyEditorial";
 import { ProductDiscovery } from "@/components/home/ProductDiscovery";
 import { AboutSeller } from "@/components/home/AboutSeller";
 import { FinalCta } from "@/components/home/FinalCta";
+import type { Metadata } from "next";
 import { SITE } from "@/data/site-config";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function Home() {
   const jsonLd = {
@@ -27,7 +30,14 @@ export default function Home() {
     },
     telephone: `+${SITE.whatsapp}`,
     url: SITE.url,
-    priceRange: "$$-$$$",
+    priceRange: "€€",
+    // Mismo horario que el calendario de recogida (SITE.horario).
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: SITE.horario.apertura,
+      closes: SITE.horario.cierre,
+    },
   };
 
   return (

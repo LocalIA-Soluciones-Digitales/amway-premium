@@ -5,12 +5,13 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { HeroFacts, PageHero, heroPrimaryClass, heroSecondaryClass } from "@/components/layout/PageHero";
 import { PRODUCTS } from "@/data/products";
 import { waLink, WA_PRESETS } from "@/data/site-config";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/ofertas", {
   title: "Novedades y destacados",
   description:
     "Los últimos lanzamientos y productos más destacados del catálogo Amway: novedades Nutrilite, Artistry y XS Energy.",
-};
+});
 
 function SectionHeader({
   eyebrow,

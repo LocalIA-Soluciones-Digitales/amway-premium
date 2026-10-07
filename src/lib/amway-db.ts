@@ -98,3 +98,15 @@ export async function dentroDelLimite(accion: string, ip: string | null, max: nu
     return true;
   }
 }
+
+// Fallos del servidor que la gestora o el desarrollador deben ver en el
+// panel (pestaña Errores), no solo en los logs de Vercel: sobre todo un
+// pedido que no se ha podido registrar. Nunca lanza.
+export async function registrarErrorServidor(mensaje: string, error: unknown, ruta: string): Promise<void> {
+  const detalle = error instanceof Error ? `${error.message}\n${error.stack ?? ""}` : String(error);
+  await amwayRpc(
+    "amway_registrar_error",
+    { p_mensaje: `[servidor] ${mensaje}`, p_detalle: detalle.slice(0, 4000), p_path: ruta, p_user_agent: "servidor" },
+    { cache: "no-store" }
+  ).catch(() => undefined);
+}

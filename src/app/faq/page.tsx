@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { FaqAccordion } from "@/components/faq/FaqAccordion";
 import { waLink, WA_PRESETS } from "@/data/site-config";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/faq", {
   title: "Preguntas frecuentes",
   description:
     "Resolvemos tus dudas sobre pedidos, envíos, precios y autenticidad de los productos Amway.",
-};
+});
 
 export default function FaqPage() {
   return (

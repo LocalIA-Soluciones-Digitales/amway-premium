@@ -10,6 +10,8 @@ const MEDIA_CACHE = "public, max-age=604800, stale-while-revalidate=86400";
 // completa va primero en modo «solo informe» para ver en la consola qué
 // bloquearía sin romper nada; cuando esté limpia, pasarla a la cabecera real.
 const SUPABASE = "https://ukhfaphloxlszomccgde.supabase.co";
+const VERCEL_HOST = "amway-premium.vercel.app";
+type Redirect = Awaited<ReturnType<NonNullable<NextConfig["redirects"]>>>[number];
 const CSP_INFORME = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",
@@ -53,7 +55,22 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     // Nosotros y Contacto viven ahora en una sola página.
-    return [{ source: "/contacto", destination: "/sobre-nosotros#contacto", permanent: true }];
+    const redirects: Redirect[] = [{ source: "/contacto", destination: "/sobre-nosotros#contacto", permanent: true }];
+    // Con el dominio definitivo configurado (NEXT_PUBLIC_SITE_URL), el de
+    // Vercel deja de servir páginas: 308 al dominio para que Google no
+    // indexe dos copias de la web. /api/* queda fuera para no romper un
+    // webhook de Stripe que aún apunte al dominio de Vercel (Stripe no
+    // sigue redirecciones).
+    const site = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+    if (site && new URL(site).hostname !== VERCEL_HOST) {
+      redirects.push({
+        source: "/:path((?!api/).*)",
+        has: [{ type: "host", value: VERCEL_HOST }],
+        destination: `${site}/:path`,
+        permanent: true,
+      });
+    }
+    return redirects;
   },
 };
 

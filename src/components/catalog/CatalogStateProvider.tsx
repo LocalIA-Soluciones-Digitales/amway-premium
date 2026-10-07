@@ -18,6 +18,8 @@ interface CatalogStateValue {
   agotado: (productId: string) => boolean;
   oculto: (productId: string) => boolean;
   valoracion: (productId: string) => Valoracion | undefined;
+  // Días de cierre del panel para el calendario de recogida.
+  cierres: string[];
   refrescar: () => Promise<void>;
 }
 
@@ -45,6 +47,7 @@ export function CatalogStateProvider({ initial, children }: { initial: CatalogoP
       agotado: (id) => estaAgotado(index, id),
       oculto: (id) => estaOculto(index, id),
       valoracion: (id) => index.valoracion(id),
+      cierres: data.cierres,
       refrescar,
     };
   }, [data, refrescar]);

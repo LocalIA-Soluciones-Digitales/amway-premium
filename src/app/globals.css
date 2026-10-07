@@ -5,7 +5,7 @@
   --color-cream: #f7f4ee;
   --color-cream-soft: #fbf9f5;
   --color-linen: #efe9dd;
-  --color-stone: #8a8271;
+  --color-stone: #6e6757; /* AA (≥4,5:1) sobre crema, lino y blanco; antes #8a8271 (3,2–3,8:1) */
   --color-stone-soft: #b7ae9b;
   --color-carbon: #1c1a16;
   --color-carbon-soft: #2c2822;
@@ -75,6 +75,17 @@
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-14px); }
+  }
+  /* Hero de la home: CSS puro para que el texto se pinte con el HTML, sin
+     esperar al JavaScript (era lo que retrasaba el LCP en móvil). Empieza
+     en 0.01 y no en 0: un elemento con opacidad 0 no cuenta para el LCP. */
+  @keyframes hero-word {
+    from { opacity: 0.01; transform: translateY(110%) rotate(2deg); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes hero-fade-up {
+    from { opacity: 0.01; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
   }
   @keyframes pulse-slow {
     0%, 100% { opacity: 0.35; }

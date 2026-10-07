@@ -5,12 +5,13 @@ import { CategoryHero } from "@/components/product/CategoryHero";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
 import { CategoryHighlights, type HighlightItem } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/cuidado-personal", {
   title: "Cuidado personal — Satinique™, g&h™ y glister™",
   description:
     "Champús y acondicionadores Satinique™, cuidado corporal g&h™ e higiene bucal glister™. Productos originales Amway con atención personal en Barakaldo.",
-};
+});
 
 // Uno por marca. El vídeo va en /videos/cuidado-personal/<media>.mp4 con su
 // póster en /images/cuidado-personal/<media>-poster.webp; mientras no estén,

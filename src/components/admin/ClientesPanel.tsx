@@ -8,7 +8,7 @@ import { SITE } from "@/data/site-config";
 import { amwayDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
 import { pedidosValidos } from "./report-data";
-import { Badge, Card, CardTitle, Empty, Loading, PanelHeader, Segmented, Stat, clienteKey, eur, fecha, inputClass, waHref, type Pedido } from "./shared";
+import { Badge, Card, CardTitle, Empty, Loading, PanelHeader, Segmented, Stat, clienteKey, eur, fecha, inputClass, waHref, type Pedido, traerTodo } from "./shared";
 
 const HECHOS_KEY = "amway_premium_recompra_hechos";
 
@@ -65,12 +65,9 @@ export function ClientesPanel() {
 
   useEffect(() => {
     setHechos(leerHechos());
-    amwayDb()
-      .from("amway_pedidos")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(10000)
-      .then(({ data }) => setPedidos((data as Pedido[] | null) ?? []));
+    void traerTodo<Pedido>((a, b) =>
+      amwayDb().from("amway_pedidos").select("*").order("created_at", { ascending: false }).order("id").range(a, b)
+    ).then(setPedidos);
   }, []);
 
   const { clientes, recompras } = useMemo(() => {

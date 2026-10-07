@@ -6,6 +6,7 @@ import { fechaLarga } from "@/lib/recogida";
 import { mensajePedido } from "@/lib/mensaje-pedido";
 import { ClearCartOnMount } from "@/components/cart/ClearCartOnMount";
 import { registrarPedidoStripe } from "@/lib/amway-pedidos";
+import { registrarErrorServidor } from "@/lib/amway-db";
 
 export const metadata: Metadata = {
   title: "Pedido confirmado",
@@ -21,8 +22,12 @@ export default async function CheckoutExitoPage({
   // Deja el pedido apuntado en el panel de gestión. Si falla (sin token,
   // Supabase caído) el cliente ya ha pagado: la página se muestra igual.
   const pedido = session_id
-    ? await registrarPedidoStripe(session_id).catch((e) => {
+    ? await registrarPedidoStripe(session_id).catch(async (e) => {
+        // Un session_id inventado o caducado no es un fallo nuestro: solo
+        // se avisa cuando Stripe sí conoce la sesión.
+        if ((e as { code?: string }).code === "resource_missing") return null;
         console.error("No se pudo registrar el pedido", e);
+        await registrarErrorServidor("Pago con tarjeta sin pedido registrado (página de éxito)", e, "/checkout/exito");
         return null;
       })
     : null;

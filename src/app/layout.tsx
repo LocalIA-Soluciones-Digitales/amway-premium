@@ -65,6 +65,11 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+// Guarda en window.__amwayErrores los errores desde el primer instante;
+// <Analytics> los envía al montar y desde entonces sustituye `push` por el
+// envío directo (ver analytics.ts → atenderErroresTempranos).
+const CAPTURA_ERRORES = `(function(){var q=window.__amwayErrores=[];function p(m,d){if(q.length<10)q.push([String(m||"Error").slice(0,500),d?String(d).slice(0,4000):null])}window.addEventListener("error",function(e){p(e.message,e.error&&e.error.stack)});window.addEventListener("unhandledrejection",function(e){var r=e.reason;p(r&&r.message||r,r&&r.stack)})})();`;
+
 export const viewport: Viewport = {
   themeColor: "#f7f4ee",
   width: "device-width",
@@ -83,6 +88,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${fraunces.variable} antialiased`}
     >
       <body className="grain min-h-screen flex flex-col bg-cream">
+        {/* Antes que nada: los errores de la carga y de la hidratación ocurren
+            antes de que monte <Analytics>, que es quien los envía. */}
+        <script dangerouslySetInnerHTML={{ __html: CAPTURA_ERRORES }} />
         <a
           href="#main-content"
           className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-carbon px-5 py-2.5 text-sm font-medium text-cream transition-transform focus-visible:translate-y-0"

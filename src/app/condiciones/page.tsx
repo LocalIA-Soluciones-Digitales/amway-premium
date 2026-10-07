@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LEGAL, SITE } from "@/data/site-config";
 import { Dato, DatosTitular, EnlacesLegales, LegalPage } from "@/components/legal/LegalPage";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/condiciones", {
   title: "Condiciones de compra",
   description: `Cómo comprar en ${SITE.name}: precios, pago, recogida, desistimiento, devoluciones y garantía.`,
-};
+});
 
 export default function CondicionesPage() {
   return (

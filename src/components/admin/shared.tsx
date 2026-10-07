@@ -425,3 +425,22 @@ export async function revalidarTienda(accessToken: string): Promise<void> {
     headers: { Authorization: `Bearer ${accessToken}` },
   }).catch(() => undefined);
 }
+
+// La API de Supabase devuelve como mucho 1.000 filas por petición aunque se
+// pida .limit(10000): sin paginar, contabilidad, clientes e informes se
+// quedaban cortos en silencio al crecer. Pide tandas de 1.000 (con un orden
+// estable) hasta que no queden o se llegue al tope.
+const TANDA = 1000;
+export async function traerTodo<T>(
+  consulta: (desde: number, hasta: number) => PromiseLike<{ data: unknown; error: unknown }>,
+  tope = 100_000
+): Promise<T[]> {
+  const out: T[] = [];
+  for (let desde = 0; desde < tope; desde += TANDA) {
+    const { data, error } = await consulta(desde, Math.min(desde + TANDA, tope) - 1);
+    if (error || !Array.isArray(data)) break;
+    out.push(...(data as T[]));
+    if (data.length < TANDA) break;
+  }
+  return out;
+}

@@ -3,12 +3,13 @@ import { CategoryHero } from "@/components/product/CategoryHero";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
 import { CategoryHighlights, type HighlightItem } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/hogar", {
   title: "Hogar — eSpring™, Atmosphere™ e iCook™",
   description:
     "Purificadores de agua eSpring™, tratamiento de aire Atmosphere™, utensilios de cocina iCook™ y limpieza Amway Home™. Tecnología para un hogar más limpio.",
-};
+});
 
 export default function HogarPage() {
   const products = getProductsByCategory("hogar");

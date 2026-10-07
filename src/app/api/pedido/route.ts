@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { amwayRpc, clienteDeRequest, faltaFuncion, ipDeRequest } from "@/lib/amway-db";
+import { amwayRpc, clienteDeRequest, faltaFuncion, ipDeRequest, registrarErrorServidor } from "@/lib/amway-db";
 import { validarPedidoWeb } from "@/lib/pedido-web";
 import { avisarPedidoNuevo } from "@/lib/push";
 
@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
   } catch (e) {
     console.error("No se pudo registrar el pedido en efectivo", e);
     const saturado = e instanceof Error && e.message.includes("demasiados pedidos");
+    if (!saturado) await registrarErrorServidor("No se pudo registrar un pedido en efectivo", e, "/api/pedido");
     return NextResponse.json(
       {
         error: saturado

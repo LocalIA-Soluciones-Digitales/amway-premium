@@ -43,8 +43,7 @@ import {
   fecha,
   inputClass,
   type Gasto,
-  type Pedido,
-} from "./shared";
+  type Pedido, traerTodo } from "./shared";
 
 // Stripe (tarjetas europeas estándar): 1,5 % + 0,25 € por cobro. Es una
 // estimación para el cálculo; la cifra exacta está en el panel de Stripe.
@@ -245,11 +244,11 @@ export function ContabilidadPanel() {
   const cargar = useCallback(async () => {
     const db = amwayDb();
     const [p, g] = await Promise.all([
-      db.from("amway_pedidos").select("*").order("created_at", { ascending: false }).limit(10000),
-      db.from("amway_gastos").select("*").order("fecha", { ascending: false }).limit(10000),
+      traerTodo<Pedido>((a, b) => db.from("amway_pedidos").select("*").order("created_at", { ascending: false }).order("id").range(a, b)),
+      traerTodo<Gasto>((a, b) => db.from("amway_gastos").select("*").order("fecha", { ascending: false }).order("id").range(a, b)),
     ]);
-    setTodosPedidos((p.data as Pedido[] | null) ?? []);
-    setTodosGastos((g.data as Gasto[] | null) ?? []);
+    setTodosPedidos(p);
+    setTodosGastos(g);
   }, []);
 
   useEffect(() => {

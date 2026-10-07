@@ -22,7 +22,7 @@ import {
   type Rango,
   type Visita,
 } from "../report-data";
-import { Card, CardTitle, Empty, Loading, PanelHeader, Segmented, Stat, btnGhost, dec } from "../shared";
+import { Card, CardTitle, Empty, Loading, PanelHeader, Segmented, Stat, btnGhost, dec, traerTodo } from "../shared";
 import { DIAS_LARGOS, anomalias, mapaCalor, pctTxt, picoMapa, prever } from "./analitica";
 import { Hallazgos, MiniBarra, TablaMetricas, type Hallazgo } from "./ui";
 
@@ -128,12 +128,15 @@ export function InformesPanel() {
     desdePrevio.setDate(desdePrevio.getDate() - dias);
     const db = amwayDb();
     Promise.all([
-      db
-        .from("amway_visitas")
-        .select("session_id, event_type, path, label, referrer, source_category, utm_campaign, device_type, is_returning, created_at")
-        .gte("created_at", desdePrevio.toISOString())
-        .order("created_at", { ascending: true })
-        .limit(100000),
+      traerTodo<Visita>((a, b) =>
+        db
+          .from("amway_visitas")
+          .select("session_id, event_type, path, label, referrer, source_category, utm_campaign, device_type, is_returning, created_at")
+          .gte("created_at", desdePrevio.toISOString())
+          .order("created_at", { ascending: true })
+          .order("id")
+          .range(a, b)
+      ),
       db
         .from("amway_pedidos")
         .select("created_at")
@@ -141,7 +144,7 @@ export function InformesPanel() {
         .in("estado", ["pagado", "enviado", "entregado"])
         .gte("created_at", desdePrevio.toISOString()),
     ]).then(([v, p]) => {
-      const todas = (v.data as Visita[] | null) ?? [];
+      const todas = v;
       const ped = (p.data as { created_at: string }[] | null) ?? [];
       setDatos({
         actual: todas.filter((x) => new Date(x.created_at) >= desde),

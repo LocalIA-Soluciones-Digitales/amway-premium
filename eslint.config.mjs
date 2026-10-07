@@ -12,7 +12,8 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    ignores: [".next/**", "out/**", "build/**", "next-env.d.ts"],
+    // CiaoEnergy, XS Energy y eSpring: material de referencia sin versionar.
+    ignores: [".next/**", "out/**", "build/**", "next-env.d.ts", "CiaoEnergy/**", "XS Energy/**", "eSpring/**"],
   },
 ];
 

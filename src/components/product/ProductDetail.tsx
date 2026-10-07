@@ -300,7 +300,7 @@ export function ProductDetail({
         productId={product.id}
         variantIndex={variantIndex}
         label={label}
-        ariaLabel={`Añadir ${product.name} a la cesta`}
+        ariaLabel={`Añadir a la cesta: ${product.name}`}
         className={cn("bg-carbon text-sm text-cream hover:bg-carbon-soft", className)}
       />
     ) : (

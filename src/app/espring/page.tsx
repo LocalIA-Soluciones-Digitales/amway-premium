@@ -8,12 +8,13 @@ import { SpringScience } from "@/components/espring/SpringScience";
 import { SpringConnected } from "@/components/espring/SpringConnected";
 import { SpringMaintenance } from "@/components/espring/SpringMaintenance";
 import { getEspringProducts, getSubcategories, getBrands } from "@/data/products";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/espring", {
   title: "eSpring™ — Purificador de agua LED UV-C",
   description:
     "El nuevo Sistema de Tratamiento de Agua eSpring™: filtra más de 170 contaminantes y elimina el 99,9999 % de las bacterias con tecnología LED UV-C. Descubre la ciencia, la app conectada y el catálogo completo.",
-};
+});
 
 export default function EspringPage() {
   const products = getEspringProducts();

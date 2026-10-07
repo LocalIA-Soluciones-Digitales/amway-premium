@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Cookie } from "lucide-react";
 import Link from "next/link";
-import { ABRIR_COOKIES, getConsent, reportError, setConsent, track } from "@/lib/analytics";
+import { ABRIR_COOKIES, atenderErroresTempranos, getConsent, setConsent, track } from "@/lib/analytics";
 
 // Pageviews on every route change, WhatsApp clicks anywhere on the page,
 // global error capture, and the consent banner that gates all of it.
@@ -34,19 +34,10 @@ export function Analytics() {
       const a = (e.target as HTMLElement | null)?.closest?.("a");
       if (a?.href && /wa\.me|whatsapp\.com/.test(a.href)) track("whatsapp_click", a.getAttribute("aria-label") ?? undefined);
     };
-    const onError = (e: ErrorEvent) => reportError(e.message || "Error", e.error?.stack);
-    const onRejection = (e: PromiseRejectionEvent) => {
-      const r = e.reason;
-      reportError(r instanceof Error ? r.message : String(r ?? "Promesa rechazada"), r instanceof Error ? r.stack : undefined);
-    };
     document.addEventListener("click", onClick, { capture: true });
-    window.addEventListener("error", onError);
-    window.addEventListener("unhandledrejection", onRejection);
-    return () => {
-      document.removeEventListener("click", onClick, { capture: true });
-      window.removeEventListener("error", onError);
-      window.removeEventListener("unhandledrejection", onRejection);
-    };
+    // Los errores los recoge el script del layout desde la carga.
+    atenderErroresTempranos();
+    return () => document.removeEventListener("click", onClick, { capture: true });
   }, []);
 
   function decide(v: "aceptadas" | "rechazadas") {

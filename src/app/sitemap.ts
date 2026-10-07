@@ -24,14 +24,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const pages: MetadataRoute.Sitemap = routes.map((route) => ({
+    // Sin lastModified: poner «ahora» en cada URL a cada visita del
+    // rastreador le enseña a Google a ignorar la fecha.
     url: `${SITE.url}${route}`,
-    lastModified: new Date(),
     changeFrequency: route === "" ? "weekly" : "monthly",
     priority: route === "" ? 1 : 0.7,
   }));
   const products: MetadataRoute.Sitemap = PRODUCTS.map((p) => ({
     url: `${SITE.url}${productHref(p)}`,
-    lastModified: new Date(),
     changeFrequency: "monthly",
     priority: 0.6,
   }));

@@ -16,13 +16,13 @@ import {
 } from "lucide-react";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { waLink, WA_PRESETS, SITE } from "@/data/site-config";
+import { conRuta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = conRuta("/sobre-nosotros", {
   title: "Nosotros y contacto",
   description:
     "Distribuidores independientes de Amway en Barakaldo, Bizkaia. Productos originales Amway, atención personal por WhatsApp y recogida en nuestro local.",
-  alternates: { canonical: "/sobre-nosotros" },
-};
+});
 
 const HIGHLIGHTS = [
   { icon: ShieldCheck, label: "100% originales" },
