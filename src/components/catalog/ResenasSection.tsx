@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { CheckCircle2, Loader2, MessageSquareQuote, Star } from "lucide-react";
+import { AvisoPrivacidad } from "@/components/legal/AvisoPrivacidad";
 import { PRODUCTS } from "@/data/products";
 import { amwayDb } from "@/lib/amway-db";
 import { track } from "@/lib/analytics";
@@ -265,6 +266,11 @@ function ResenaForm() {
           />
 
           {error && <p role="alert" className="text-sm text-xs-red">{error}</p>}
+
+          <AvisoPrivacidad
+            finalidad="publicar tu opinión con el nombre que escribas aquí (puedes usar solo tu nombre de pila o iniciales)"
+            extra="Al enviarla aceptas que se publique; puedes pedir que la retiremos cuando quieras."
+          />
 
           <button
             type="submit"

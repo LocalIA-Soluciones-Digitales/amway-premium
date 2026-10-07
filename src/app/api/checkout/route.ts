@@ -4,13 +4,21 @@ import { stripe } from "@/lib/stripe";
 import { eurToCents } from "@/lib/currency";
 import { productImageSrc } from "@/data/types";
 import { validarPedidoWeb } from "@/lib/pedido-web";
-import { clienteDeRequest } from "@/lib/amway-db";
+import { clienteDeRequest, dentroDelLimite, ipDeRequest } from "@/lib/amway-db";
 
 export async function POST(request: NextRequest) {
   if (!stripe) {
     return NextResponse.json(
       { error: "El pago con tarjeta todavía no está activado. Puedes elegir pagar en efectivo al recoger." },
       { status: 503 }
+    );
+  }
+
+  // Cada intento crea una sesión de pago en Stripe: freno por IP.
+  if (!(await dentroDelLimite("checkout", ipDeRequest(request), 10, 600))) {
+    return NextResponse.json(
+      { error: "Has hecho muchos intentos seguidos. Espera unos minutos o escríbenos por WhatsApp." },
+      { status: 429 }
     );
   }
 

@@ -22,7 +22,8 @@ import {
 } from "lucide-react";
 import { getProductById } from "@/data/products";
 import { productImageSrc, type Product } from "@/data/types";
-import { SITE, waLink } from "@/data/site-config";
+import { LEGAL, SITE, waLink } from "@/data/site-config";
+import { AvisoPrivacidad } from "@/components/legal/AvisoPrivacidad";
 import { formatEUR } from "@/lib/currency";
 import { track } from "@/lib/analytics";
 import { mensajePedido } from "@/lib/mensaje-pedido";
@@ -83,6 +84,12 @@ export function CartDrawer() {
   const [telefono, setTelefono] = useState("");
   const [notas, setNotas] = useState("");
   const [hecho, setHecho] = useState<{ numero: number; total: number; mensaje: string } | null>(null);
+  const [recordado, setRecordado] = useState(false);
+  // Un identificador por intento de pedido: si el envío se repite (doble
+  // clic, reintento de red), el servidor devuelve el mismo pedido.
+  const [intento, setIntento] = useState<string | null>(null);
+  // Si cambia la cesta, es otro pedido.
+  useEffect(() => setIntento(null), [items]);
 
   // Recalculado en cada apertura: los huecos de hoy caducan con la hora.
   const dias = useMemo(() => (isOpen ? diasRecogida() : []), [isOpen]);
@@ -115,6 +122,7 @@ export function CartDrawer() {
       const c = JSON.parse(localStorage.getItem(CONTACTO_KEY) ?? "null");
       if (typeof c?.nombre === "string") setNombre(c.nombre);
       if (typeof c?.telefono === "string") setTelefono(c.telefono);
+      if (c?.nombre || c?.telefono) setRecordado(true);
     } catch {}
   }, []);
 
@@ -152,7 +160,10 @@ export function CartDrawer() {
     setError(null);
     try {
       localStorage.setItem(CONTACTO_KEY, JSON.stringify({ nombre: nombre.trim(), telefono: telefono.trim() }));
+      setRecordado(true);
     } catch {}
+    const idIntento = intento ?? crypto.randomUUID();
+    if (!intento) setIntento(idIntento);
     // Completa el perfil con lo que falte, para el próximo pedido.
     if (session && perfil && (!perfil.nombre || !perfil.telefono)) {
       void guardarPerfil({ nombre: perfil.nombre || nombre, telefono: perfil.telefono || telefono });
@@ -163,6 +174,7 @@ export function CartDrawer() {
       recogida: { fecha, hora },
       cliente: { nombre: nombre.trim(), telefono: telefono.trim() },
       notas: notas.trim(),
+      intento: idIntento,
     });
 
     // Efectivo: la pestaña de WhatsApp se abre ya, dentro del clic, para que
@@ -204,6 +216,7 @@ export function CartDrawer() {
       if (waTab) waTab.location.href = waLink(mensaje);
       setHecho({ numero: data.numero, total: data.total, mensaje });
       setPaso("hecho");
+      setIntento(null);
       setNotas("");
       clearCesta();
     } catch (err) {
@@ -283,7 +296,8 @@ export function CartDrawer() {
                   <strong className="font-medium text-carbon">{formatEUR(hecho.total)}</strong> en efectivo al recogerlo.
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-stone">
-                  Envíanos el resumen por WhatsApp para confirmarte el pedido y la dirección de recogida.
+                  Tu pedido ya está registrado. {LEGAL.domicilio ? `Recógelo en ${LEGAL.domicilio}. ` : ""}Si quieres,
+                  envíanos el resumen por WhatsApp (se abre la app con el mensaje escrito; lo envías tú).
                 </p>
                 <a
                   href={waLink(hecho.mensaje)}
@@ -516,6 +530,25 @@ export function CartDrawer() {
                         className={cn(fieldClass, "h-auto resize-none py-3")}
                       />
                     </div>
+                    {recordado && (
+                      <p className="mt-2 text-[11px] text-stone">
+                        Recordamos tu nombre y teléfono en este dispositivo para el próximo pedido.{" "}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            try {
+                              localStorage.removeItem(CONTACTO_KEY);
+                            } catch {}
+                            setRecordado(false);
+                            setNombre("");
+                            setTelefono("");
+                          }}
+                          className="underline underline-offset-2 hover:text-carbon"
+                        >
+                          Olvidarlos
+                        </button>
+                      </p>
+                    )}
                   </Seccion>
                 </div>
 
@@ -529,6 +562,20 @@ export function CartDrawer() {
                       ? `Recogida el ${fechaLarga(fecha)} a las ${hora} h.`
                       : "Elige día y hora de recogida."}
                   </p>
+
+                  <p className="mt-3 text-[11px] leading-relaxed text-stone">
+                    Al confirmar aceptas las{" "}
+                    <Link href="/condiciones" target="_blank" className="underline underline-offset-2 hover:text-carbon">
+                      condiciones de compra
+                    </Link>{" "}
+                    (incluye el derecho de desistimiento de 14 días y la garantía).
+                    {metodo === "efectivo" && " Después se abrirá WhatsApp con el resumen por si quieres enviárnoslo."}
+                  </p>
+                  <AvisoPrivacidad
+                    className="mt-1.5"
+                    finalidad="gestionar tu pedido y la recogida"
+                    extra={metodo === "tarjeta" ? "El pago lo procesa Stripe." : undefined}
+                  />
 
                   {error && (
                     <p role="alert" className="mt-4 rounded-lg bg-carbon/5 px-3 py-2 text-xs leading-snug text-carbon">
@@ -546,9 +593,11 @@ export function CartDrawer() {
                     ) : metodo === "tarjeta" ? (
                       <CreditCard size={16} />
                     ) : (
-                      <MessageCircle size={16} />
+                      <Banknote size={16} />
                     )}
-                    {metodo === "tarjeta" ? `Pagar ${formatEUR(subtotal)} con tarjeta` : "Confirmar pedido por WhatsApp"}
+                    {metodo === "tarjeta"
+                      ? `Pagar ${formatEUR(subtotal)} con tarjeta`
+                      : `Hacer pedido · pago al recoger (${formatEUR(subtotal)})`}
                   </button>
                 </footer>
               </form>

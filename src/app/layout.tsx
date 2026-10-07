@@ -32,18 +32,17 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   manifest: "/manifest.webmanifest",
   title: {
-    default: `${SITE.name} — Productos Amway Premium de Estados Unidos`,
+    default: `${SITE.name} — Distribuidora independiente de productos Amway`,
     template: `%s · ${SITE.name}`,
   },
   description:
-    "Distribuidor independiente de productos originales Amway importados de Estados Unidos: Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook. Atención personalizada en Barakaldo, Bizkaia.",
+    "Distribuidora independiente de productos originales Amway: Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook. Atención personalizada en Barakaldo, Bizkaia.",
   keywords: [
     "Amway Barakaldo",
     "Productos Amway Bizkaia",
     "Productos Amway España",
     "Nutrilite España",
     "XS Energy España",
-    "Productos americanos en España",
     "Suplementos premium",
     "Filtro de agua eSpring España",
     "Purificador Atmosphere",
@@ -54,9 +53,9 @@ export const metadata: Metadata = {
     locale: "es_ES",
     url: SITE.url,
     siteName: SITE.name,
-    title: `${SITE.name} — Productos Amway Premium de Estados Unidos`,
+    title: `${SITE.name} — Distribuidora independiente de productos Amway`,
     description:
-      "Nutrición, belleza, hogar y salud con la calidad Amway. Importación directa desde Estados Unidos, servicio local en Barakaldo.",
+      "Nutrición, belleza y hogar con productos originales Amway. Distribuidora independiente con atención y recogida en Barakaldo.",
   },
   twitter: {
     card: "summary_large_image",

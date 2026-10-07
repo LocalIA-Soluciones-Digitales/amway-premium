@@ -5,7 +5,37 @@ import type { NextConfig } from "next";
 // versión anterior en la caché de los navegadores (hasta 7 días).
 const MEDIA_CACHE = "public, max-age=604800, stale-while-revalidate=86400";
 
+// Cabeceras de seguridad para toda la web. frame-ancestors/X-Frame-Options
+// impiden incrustar la tienda o el panel en otra web (clickjacking). La CSP
+// completa va primero en modo «solo informe» para ver en la consola qué
+// bloquearía sin romper nada; cuando esté limpia, pasarla a la cabecera real.
+const SUPABASE = "https://ukhfaphloxlszomccgde.supabase.co";
+const CSP_INFORME = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  `img-src 'self' data: blob: ${SUPABASE}`,
+  `media-src 'self' blob: ${SUPABASE}`,
+  `connect-src 'self' ${SUPABASE} wss://ukhfaphloxlszomccgde.supabase.co`,
+  "font-src 'self'",
+  "worker-src 'self' blob:",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "form-action 'self'",
+].join("; ");
+
+const SECURITY_HEADERS = [
+  { key: "Content-Security-Policy", value: "frame-ancestors 'none'; base-uri 'self'; object-src 'none'" },
+  { key: "Content-Security-Policy-Report-Only", value: CSP_INFORME },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
+];
+
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   images: {
     // AVIF pesa bastante menos que WebP a igual calidad; los navegadores que
     // no lo soportan siguen recibiendo WebP.
@@ -16,6 +46,7 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      { source: "/:path*", headers: SECURITY_HEADERS },
       { source: "/videos/:path*", headers: [{ key: "Cache-Control", value: MEDIA_CACHE }] },
       { source: "/images/:path*", headers: [{ key: "Cache-Control", value: MEDIA_CACHE }] },
     ];

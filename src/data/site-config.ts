@@ -1,7 +1,6 @@
 export const SITE = {
   name: "Amway Barakaldo",
-  legalNote:
-    "Distribuidor independiente de productos originales Amway, importados de Estados Unidos.",
+  legalNote: "Distribuidora independiente de productos originales Amway. No es una tienda oficial de Amway.",
   url: "https://amwaybarakaldo.es",
   locale: "es-ES",
   city: "Barakaldo",
@@ -20,6 +19,23 @@ export const SITE = {
     texto: "de lunes a sábado, de 9:00 a 19:00",
   },
 } as const;
+
+// Titular de la tienda (aviso legal, privacidad y condiciones). Lo exige la
+// LSSI (art. 10) y la ley de consumidores (art. 97 TRLGDCU) antes de vender.
+// Los campos a null se muestran como «pendiente» en las páginas legales:
+// hay que rellenarlos con los datos reales antes de abrir al público.
+export const LEGAL = {
+  titular: null as string | null, // nombre y apellidos o razón social
+  nif: null as string | null,
+  domicilio: null as string | null, // dirección del local (también es la de recogida)
+  registro: null as string | null, // solo si es sociedad: Registro Mercantil, tomo, folio…
+  email: SITE.email,
+  emailPrivacidad: SITE.email,
+  telefono: null as string | null, // teléfono de atención (puede ser el de WhatsApp)
+  actualizado: "7 de octubre de 2026",
+} as const;
+
+export const PENDIENTE = "[pendiente de completar]";
 
 // ¿Estamos atendiendo ahora mismo? (hora de Madrid, sea cual sea la del
 // visitante).

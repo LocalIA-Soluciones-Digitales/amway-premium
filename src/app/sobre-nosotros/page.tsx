@@ -10,8 +10,8 @@ import {
   MapPin,
   MessageCircle,
   PackageCheck,
-  Plane,
   ShieldCheck,
+  Store,
   Sparkles,
 } from "lucide-react";
 import { ContactForm } from "@/components/contact/ContactForm";
@@ -20,13 +20,13 @@ import { waLink, WA_PRESETS, SITE } from "@/data/site-config";
 export const metadata: Metadata = {
   title: "Nosotros y contacto",
   description:
-    "Distribuidores independientes de Amway en Barakaldo, Bizkaia. Productos originales de Estados Unidos, atención personal por WhatsApp y recogida en nuestro local.",
+    "Distribuidores independientes de Amway en Barakaldo, Bizkaia. Productos originales Amway, atención personal por WhatsApp y recogida en nuestro local.",
   alternates: { canonical: "/sobre-nosotros" },
 };
 
 const HIGHLIGHTS = [
   { icon: ShieldCheck, label: "100% originales" },
-  { icon: Plane, label: "Importado de EE. UU." },
+  { icon: Store, label: "Distribuidora independiente" },
   { icon: PackageCheck, label: "Recogida en Barakaldo" },
   { icon: MessageCircle, label: "Atención por WhatsApp" },
 ];
@@ -42,15 +42,15 @@ const SIDE_POINTS = [
     image: "/images/nosotros/origen-natural.webp",
     alt: "Cápsulas de suplemento junto a naranjas y limas cortadas",
     eyebrow: "Origen",
-    title: "Importación desde Estados Unidos",
-    text: "El catálogo oficial de Amway US: Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook.",
+    title: "Catálogo Amway completo",
+    text: "Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook, en tienda y por encargo.",
   },
   {
     image: "/images/nosotros/garantia-capsulas.webp",
     alt: "Bote abierto con cápsulas sobre una mesa blanca",
     eyebrow: "Garantía",
     title: "Productos genuinos",
-    text: "Sin imitaciones ni reenvasados: cada producto llega sellado y con la garantía Amway.",
+    text: "Sin imitaciones ni reenvasados: cada producto llega sellado de fábrica y con su garantía legal.",
   },
 ];
 
@@ -116,7 +116,7 @@ export default function SobreNosotrosPage() {
             </h1>
             <p className="mt-7 max-w-xl text-base leading-relaxed text-stone sm:text-lg">
               {SITE.name} nace en {SITE.city}, {SITE.region}, con una misión sencilla: acercar la
-              calidad de los productos Amway de Estados Unidos a cada hogar, con un trato
+              calidad de los productos Amway a cada hogar, con un trato
               cercano y honesto.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">

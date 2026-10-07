@@ -81,7 +81,8 @@ export interface Gasto {
 
 export interface Solicitud {
   id: string;
-  tipo: "agotado" | "encargo" | "otro";
+  tipo: "agotado" | "encargo" | "otro" | "desistimiento";
+  pedido_numero?: number | null;
   product_id: string | null;
   producto_nombre: string;
   formato: string | null;

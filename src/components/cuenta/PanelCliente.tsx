@@ -579,6 +579,14 @@ function PedidoTarjeta({
                 {cancelando ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />} Cancelar pedido
               </button>
             )}
+            {(p.estado === "entregado" || p.estado === "pagado") && (
+              <Link
+                href={`/desistimiento?pedido=${p.numero}`}
+                className="inline-flex h-10 items-center gap-2 rounded-full px-4 text-xs font-medium text-stone transition hover:bg-carbon/5 hover:text-carbon"
+              >
+                Desistir del contrato
+              </Link>
+            )}
           </div>
         </div>
       )}
@@ -898,7 +906,7 @@ function PerfilCliente() {
   async function borrarDatos() {
     if (
       !window.confirm(
-        "Se borrarán tus datos de perfil y tus pedidos dejarán de estar en tu cuenta (la tienda los conserva para su contabilidad). ¿Continuar?"
+        "Se borrará tu cuenta (email, contraseña y perfil). Los pedidos dejarán de estar vinculados a ti; la tienda conserva sus datos solo para la contabilidad, como exige la ley. ¿Continuar?"
       )
     )
       return;

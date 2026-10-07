@@ -5,9 +5,9 @@ import { CategoryHighlights } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
 
 export const metadata: Metadata = {
-  title: "Nutrición Nutrilite™ — Vitaminas, proteínas e inmunidad",
+  title: "Nutrición Nutrilite™ — Vitaminas, minerales y proteínas",
   description:
-    "Nutrilite™: vitaminas, proteínas, salud digestiva, inmunológica, huesos, corazón, control de peso y nutrición para hombres, mujeres y niños. Productos originales importados de EE. UU.",
+    "Nutrilite™: vitaminas, minerales, proteínas, sustitutivos de comida y complementos para hombres, mujeres y niños. Productos originales Amway.",
 };
 
 const XS_LINK = { href: "/xs-energy", label: "Descubre XS™ →" };

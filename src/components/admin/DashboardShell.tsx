@@ -8,11 +8,13 @@ import {
   ExternalLink,
   KeyRound,
   LogOut,
+  ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
 import { SITE } from "@/data/site-config";
 import { cn } from "@/lib/utils";
 import { CambiarContrasena } from "./CambiarContrasena";
+import { DosPasosDialog } from "./DosPasos";
 
 export interface ShellTab<T extends string> {
   id: T;
@@ -54,6 +56,7 @@ export function DashboardShell<T extends string>({
   children: ReactNode;
 }) {
   const [pwOpen, setPwOpen] = useState(false);
+  const [mfaOpen, setMfaOpen] = useState(false);
   // En tablet y móvil no caben todas las pestañas: la activa se desplaza a la
   // vista para que siempre se vea dónde estás.
   const navRef = useRef<HTMLElement>(null);
@@ -163,6 +166,15 @@ export function DashboardShell<T extends string>({
               </button>
               <button
                 type="button"
+                onClick={() => setMfaOpen(true)}
+                aria-label="Verificación en dos pasos"
+                title="Verificación en dos pasos"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-carbon/10 bg-white text-stone transition hover:border-carbon/25 hover:text-carbon"
+              >
+                <ShieldCheck size={15} />
+              </button>
+              <button
+                type="button"
                 onClick={onSignOut}
                 aria-label="Cerrar sesión"
                 title="Cerrar sesión"
@@ -193,6 +205,7 @@ export function DashboardShell<T extends string>({
         open={pwOpen}
         onClose={() => setPwOpen(false)}
       />
+      <DosPasosDialog open={mfaOpen} onClose={() => setMfaOpen(false)} />
     </div>
   );
 }

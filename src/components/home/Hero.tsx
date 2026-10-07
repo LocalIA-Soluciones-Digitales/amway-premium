@@ -53,7 +53,7 @@ export function Hero() {
             transition={{ delay: 0.1, duration: 0.6 }}
             className="text-sm font-medium uppercase tracking-[0.3em] text-cream/70"
           >
-            Importado directamente de Estados Unidos
+            Productos originales Amway · Barakaldo
           </motion.p>
 
           <h1

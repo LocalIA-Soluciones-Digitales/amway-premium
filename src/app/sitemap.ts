@@ -16,6 +16,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/opiniones",
     "/sobre-nosotros",
     "/faq",
+    "/aviso-legal",
+    "/privacidad",
+    "/cookies",
+    "/condiciones",
+    "/desistimiento",
   ];
 
   const pages: MetadataRoute.Sitemap = routes.map((route) => ({

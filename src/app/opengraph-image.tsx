@@ -44,7 +44,7 @@ export default async function OgImage() {
           </div>
         </div>
         <div style={{ display: "flex", fontSize: 64, marginTop: 24, maxWidth: 900, lineHeight: 1.1 }}>
-          Productos Premium de Estados Unidos para tu Bienestar
+          Productos originales Amway con atención personal
         </div>
         <div style={{ display: "flex", fontSize: 26, marginTop: 32, color: "#b7ae9b" }}>
           Nutrición · Belleza · Hogar · XS Energy

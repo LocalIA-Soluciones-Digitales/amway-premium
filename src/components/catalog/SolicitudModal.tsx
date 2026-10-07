@@ -6,6 +6,7 @@ import type { Product } from "@/data/types";
 import { amwayDb } from "@/lib/amway-db";
 import { track } from "@/lib/analytics";
 import { Dialog, fieldClass } from "@/components/ui/Dialog";
+import { AvisoPrivacidad } from "@/components/legal/AvisoPrivacidad";
 
 export type SolicitudTipo = "agotado" | "encargo" | "otro";
 
@@ -188,6 +189,8 @@ export function SolicitudModal({
           />
 
           {error && <p role="alert" className="text-sm text-xs-red">{error}</p>}
+
+          <AvisoPrivacidad finalidad="responder a tu solicitud y avisarte cuando tengamos el producto" extra="Los guardamos 12 meses." />
 
           <button
             type="submit"

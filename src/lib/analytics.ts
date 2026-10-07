@@ -29,10 +29,21 @@ const SOCIAL_HOSTS = ["facebook.com", "instagram.com", "x.com", "twitter.com", "
 
 export type Consent = "aceptadas" | "rechazadas";
 
+// El banner se puede volver a abrir desde el pie o la política de cookies.
+export const ABRIR_COOKIES = "amway:abrir-cookies";
+
+// La elección vale 24 meses (criterio de la AEPD); después se vuelve a pedir.
+const CONSENT_MAX_MS = 730 * 24 * 3600 * 1000;
+
 export function getConsent(): Consent | null {
   try {
-    const v = localStorage.getItem(CONSENT_KEY);
-    return v === "aceptadas" || v === "rechazadas" ? v : null;
+    const raw = localStorage.getItem(CONSENT_KEY);
+    if (!raw) return null;
+    // Formato "aceptadas:1791394759343". Sin fecha (elecciones antiguas) se da por reciente.
+    const [v, t] = raw.split(":");
+    if (v !== "aceptadas" && v !== "rechazadas") return null;
+    if (t && Date.now() - Number(t) > CONSENT_MAX_MS) return null;
+    return v;
   } catch {
     return null;
   }
@@ -40,7 +51,7 @@ export function getConsent(): Consent | null {
 
 export function setConsent(v: Consent) {
   try {
-    localStorage.setItem(CONSENT_KEY, v);
+    localStorage.setItem(CONSENT_KEY, `${v}:${Date.now()}`);
     if (v === "rechazadas") {
       localStorage.removeItem(VISITOR_KEY);
       sessionStorage.removeItem(SESSION_KEY);

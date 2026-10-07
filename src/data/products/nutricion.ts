@@ -241,7 +241,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Control de peso",
     description:
-      "El sustituto perfecto para 1-2 comidas diarias que te ayuda a alcanzar tus objetivos de pérdida de peso y estilo de vida sano.",
+      "Sustitutivo de comida para control de peso. Sustituir dos de las comidas principales del día por un sustitutivo de comida, en el marco de una dieta baja en calorías, contribuye a perder peso.",
     variants: [{ sku: "121056", size: "14 barritas", price: 62.04 }],
     image: "espana/bodykey-barrita.webp",
   },
@@ -252,7 +252,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Control de peso",
     description:
-      "El sustituto perfecto para 1-2 comidas diarias que te ayuda a alcanzar tus objetivos de pérdida de peso y estilo de vida sano.",
+      "Sustitutivo de comida para control de peso. Sustituir dos de las comidas principales del día por un sustitutivo de comida, en el marco de una dieta baja en calorías, contribuye a perder peso.",
     variants: [{ sku: "121057", size: "14 barritas", price: 62.04 }],
     image: "espana/barrita-sustitutiva-comida-bodykey-by-nutrilite.webp",
   },
@@ -505,7 +505,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Packs y programas",
     description:
-      "Un componente esencial del Programa de Depuración del Organismo Nutrilite* es este conjunto que contiene productos especialmente seleccionados* de Nutrilite, la marca n.º 1 del mundo en ventas de vitaminas y complementos alimenticios**, y que se ofrece con un 10 % de descuento. * Con el complemento Cardo Mariano Nutrilite, ya que contribuye a que el organismo se depure. El Programa de depuración del organismo Nutrilite es un programa holístico de estilo de vida saludable de 21 días que ofrece orientación nutricional, recomendaciones de actividad física, consejos de hidratación y herramientas para una mentalidad positiva. ** Fuente: Euromonitor International Ltd. Vitaminas y Complementos Alimenticios, Word GBN, valor al por menor (precio de venta al por menor), análisis en %, 2022. Datos basados en una investigación adaptada realizada entre abril y agosto de 2022.",
+      "Un componente esencial del Programa de Depuración del Organismo Nutrilite* es este conjunto que contiene productos especialmente seleccionados* de Nutrilite, la marca n.º 1 del mundo en ventas de vitaminas y complementos alimenticios**. * Con el complemento Cardo Mariano Nutrilite. El Programa de depuración del organismo Nutrilite es un programa holístico de estilo de vida saludable de 21 días que ofrece orientación nutricional, recomendaciones de actividad física, consejos de hidratación y herramientas para una mentalidad positiva. ** Fuente: Euromonitor International Ltd. Vitaminas y Complementos Alimenticios, Word GBN, valor al por menor (precio de venta al por menor), análisis en %, 2022. Datos basados en una investigación adaptada realizada entre abril y agosto de 2022.",
     variants: [{ sku: "317514", size: "1 conjunto", price: 169.93 }],
     image: "espana/body-cleansing-refill-repuesto.webp",
   },
@@ -615,7 +615,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Packs y programas",
     description:
-      "Ideal para los jóvenes profesionales y los apasionados de la aventura, este exclusivo Conjunto Vitalidad Nutrilite con un 5 % de descuento incluye los productos Vitamina C Plus, Omega-3 Triple Strength y Vitamina B Plus Nutrilite. ¡Disfruta de más energía, vigor y vitalidad todos los días!",
+      "Ideal para los jóvenes profesionales y los apasionados de la aventura, este exclusivo Conjunto Vitalidad Nutrilite incluye los productos Vitamina C Plus, Omega-3 Triple Strength y Vitamina B Plus Nutrilite.",
     variants: [{ sku: "326042", size: "1 conjunto", price: 70.32 }],
     image: "espana/conjunto-vitalidad.webp",
   },
@@ -670,7 +670,7 @@ export const nutricionProducts: Product[] = [
     category: "nutricion",
     subcategory: "Salud inmunológica",
     description:
-      "Nutrilite™ Immuno son jugosas gominolas con sabor a frambuesa con vitamina C y cinc, que contribuyen al funcionamiento normal de tu sistema inmunitario, y extracto de baya de saúco, que apoya las defensas naturales del cuerpo.",
+      "Nutrilite™ Immuno son jugosas gominolas con sabor a frambuesa con vitamina C y cinc, que contribuyen al funcionamiento normal de tu sistema inmunitario, y extracto de baya de saúco.",
     variants: [{ sku: "126149", size: "60 comprimidos", price: 26.53 }],
     image: "espana/immuno.webp",
   },

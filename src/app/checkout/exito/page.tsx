@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
-import { waLink, WA_PRESETS } from "@/data/site-config";
+import { LEGAL, waLink, WA_PRESETS } from "@/data/site-config";
 import { fechaLarga } from "@/lib/recogida";
 import { mensajePedido } from "@/lib/mensaje-pedido";
 import { ClearCartOnMount } from "@/components/cart/ClearCartOnMount";
@@ -56,7 +56,8 @@ export default async function CheckoutExitoPage({
         {recogida
           ? ` Te esperamos el ${fechaLarga(recogida.fecha)} a las ${recogida.hora} h.`
           : ""}{" "}
-        Envíanos el resumen por WhatsApp y te confirmamos la dirección de recogida.
+        {LEGAL.domicilio ? `Recógelo en ${LEGAL.domicilio}. ` : ""}Guarda el número de pedido. Si quieres, envíanos
+        el resumen por WhatsApp.
       </p>
       <div className="mt-9 flex flex-wrap justify-center gap-4">
         <a

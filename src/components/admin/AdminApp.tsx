@@ -23,6 +23,7 @@ import { amwayDb } from "@/lib/amway-db";
 import { hoyMadrid } from "@/lib/recogida";
 import { SITE } from "@/data/site-config";
 import { AdminLogin } from "./AdminLogin";
+import { PedirCodigo, necesitaCodigo } from "./DosPasos";
 import { DashboardShell, type ShellTab } from "./DashboardShell";
 import { HoyPanel, type GestionTab } from "./HoyPanel";
 import { PedidosPanel } from "./PedidosPanel";
@@ -101,6 +102,8 @@ export function AdminApp() {
   const [loading, setLoading] = useState(true);
   const [rol, setRol] = useState<Rol | null | undefined>(undefined);
   const [nombre, setNombre] = useState<string | null>(null);
+  // La cuenta tiene la verificación en dos pasos y falta el código.
+  const [pideCodigo, setPideCodigo] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     const db = amwayDb();
@@ -126,12 +129,16 @@ export function AdminApp() {
   useEffect(() => {
     if (!session) {
       setRol(undefined);
+      setPideCodigo(undefined);
       return;
     }
-    void comprobarRol();
+    void necesitaCodigo().then((pide) => {
+      setPideCodigo(pide);
+      if (!pide) void comprobarRol();
+    });
   }, [session, comprobarRol]);
 
-  if (loading || (session && rol === undefined)) {
+  if (loading || (session && (pideCodigo === undefined || (!pideCodigo && rol === undefined)))) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream">
         <Loading />
@@ -140,6 +147,18 @@ export function AdminApp() {
   }
 
   if (!session) return <AdminLogin />;
+
+  if (pideCodigo) {
+    return (
+      <PedirCodigo
+        email={session.user.email}
+        onVerificado={() => {
+          setPideCodigo(false);
+          void comprobarRol();
+        }}
+      />
+    );
+  }
 
   if (!rol) {
     return (

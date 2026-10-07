@@ -18,7 +18,7 @@ export default function Home() {
     name: SITE.name,
     image: `${SITE.url}/images/editorial/hero-bienestar.webp`,
     description:
-      "Distribuidor independiente de productos originales Amway importados de Estados Unidos: Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook.",
+      "Distribuidora independiente de productos originales Amway: Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook.",
     address: {
       "@type": "PostalAddress",
       addressLocality: SITE.city,

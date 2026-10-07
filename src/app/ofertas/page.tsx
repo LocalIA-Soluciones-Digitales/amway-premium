@@ -57,7 +57,7 @@ export default function OfertasPage() {
             Lo último, <span className="italic text-gold-soft">recién llegado.</span>
           </>
         }
-        description="Los lanzamientos más recientes y los productos más solicitados, tal y como aparecen en el catálogo oficial de Estados Unidos."
+        description="Los lanzamientos más recientes y los productos más solicitados, tal y como aparecen en el catálogo de Amway."
         photo="/images/xs-energy/lifestyle/sky-drink.webp"
         photoPosition="75% center"
         actions={
@@ -82,7 +82,7 @@ export default function OfertasPage() {
           items={[
             { value: String(news.length), label: "Novedades en catálogo" },
             { value: String(flagship.length), label: "Productos insignia" },
-            { value: "EE. UU.", label: "Originales importados" },
+            { value: "100 %", label: "Productos originales" },
           ]}
         />
       </PageHero>
@@ -110,8 +110,8 @@ export default function OfertasPage() {
                 ¿Buscas algo que no ves aquí?
               </h2>
               <p className="mt-3 text-base leading-relaxed text-cream/75">
-                Traemos cualquier producto del catálogo de Amway US. Escríbenos y te decimos precio y
-                plazo sin compromiso.
+                Si buscas un producto Amway que no está en la web, escríbenos y te decimos si podemos
+                conseguirlo, su precio y el plazo, sin compromiso.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">

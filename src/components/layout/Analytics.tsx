@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Cookie } from "lucide-react";
-import { getConsent, reportError, setConsent, track } from "@/lib/analytics";
+import Link from "next/link";
+import { ABRIR_COOKIES, getConsent, reportError, setConsent, track } from "@/lib/analytics";
 
 // Pageviews on every route change, WhatsApp clicks anywhere on the page,
 // global error capture, and the consent banner that gates all of it.
@@ -16,6 +17,13 @@ export function Analytics() {
   useEffect(() => {
     if (!pathname?.startsWith("/admin")) setAskConsent(getConsent() === null);
   }, [pathname]);
+
+  // «Configurar cookies» (pie de página y política de cookies).
+  useEffect(() => {
+    const abrir = () => setAskConsent(true);
+    window.addEventListener(ABRIR_COOKIES, abrir);
+    return () => window.removeEventListener(ABRIR_COOKIES, abrir);
+  }, []);
 
   useEffect(() => {
     if (pathname) track("pageview", undefined, pathname);
@@ -67,14 +75,17 @@ export function Analytics() {
             <p className="font-display text-lg leading-none">Tu privacidad</p>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-cream/75">
-            Usamos cookies propias para saber qué páginas y productos interesan más y mejorar la tienda. No las
-            compartimos con nadie.
+            Si aceptas, guardamos en tu navegador unas estadísticas propias (qué páginas y productos interesan
+            más) para mejorar la tienda. Sin publicidad ni terceros. Puedes cambiarlo cuando quieras.{" "}
+            <Link href="/cookies" className="underline underline-offset-2 hover:text-cream">
+              Más información
+            </Link>
           </p>
           <div className="mt-5 grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => decide("rechazadas")}
-              className="rounded-full border border-cream/20 px-4 py-2.5 text-sm font-medium text-cream/85 transition hover:border-cream/40 hover:bg-cream/10"
+              className="rounded-full bg-cream px-4 py-2.5 text-sm font-semibold text-carbon transition hover:bg-white"
             >
               Rechazar
             </button>

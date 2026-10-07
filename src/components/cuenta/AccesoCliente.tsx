@@ -4,6 +4,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { CheckCircle2, Eye, EyeOff, History, Loader2, Repeat, UserRound, Zap } from "lucide-react";
 import { clienteDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
+import { AvisoPrivacidad } from "@/components/legal/AvisoPrivacidad";
 
 export type ModoAcceso = "entrar" | "registro" | "recuperar";
 
@@ -249,9 +250,11 @@ export function AccesoCliente({ modoInicial = "entrar" }: { modoInicial?: ModoAc
             </button>
 
             {modo === "registro" && (
-              <p className="text-center text-[11px] leading-relaxed text-stone">
-                Usamos tus datos solo para gestionar tus pedidos. Puedes borrarlos desde tu perfil.
-              </p>
+              <AvisoPrivacidad
+                className="text-center"
+                finalidad="gestionar tu cuenta y tus pedidos y, solo si marcas la casilla, enviarte ofertas y novedades"
+                extra="Puedes borrar tu cuenta desde tu perfil."
+              />
             )}
             {modo === "entrar" && (
               <button

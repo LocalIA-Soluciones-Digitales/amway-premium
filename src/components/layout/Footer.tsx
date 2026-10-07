@@ -1,6 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SITE, waLink, WA_PRESETS } from "@/data/site-config";
+import { ConfigurarCookies } from "@/components/legal/ConfigurarCookies";
+
+const LEGAL_LINKS = [
+  { href: "/aviso-legal", label: "Aviso legal" },
+  { href: "/privacidad", label: "Privacidad" },
+  { href: "/cookies", label: "Cookies" },
+  { href: "/condiciones", label: "Condiciones de compra" },
+  { href: "/desistimiento", label: "Desistir de un pedido" },
+];
 
 const COLUMNS: { title: string; links: { href: string; label: string }[] }[] = [
   {
@@ -73,11 +82,19 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {SITE.name} · {SITE.city}, {SITE.region}, {SITE.country}
           </p>
-          <p>
-            Amway™, Nutrilite™, Artistry™, XS™, eSpring™, Atmosphere™ e iCook™ son marcas
-            registradas de Amway Corp. Este es un negocio de distribución independiente.
-          </p>
+          <nav aria-label="Información legal" className="flex flex-wrap gap-x-4 gap-y-2">
+            {LEGAL_LINKS.map((l) => (
+              <Link key={l.href} href={l.href} className="transition-colors hover:text-cream">
+                {l.label}
+              </Link>
+            ))}
+            <ConfigurarCookies className="transition-colors hover:text-cream" />
+          </nav>
         </div>
+        <p className="mt-4 text-xs leading-relaxed text-cream/40">
+          Distribuidora independiente: no somos una tienda oficial de Amway. Amway™, Nutrilite™, Artistry™, XS™,
+          eSpring™, Atmosphere™ e iCook™ son marcas de sus titulares.
+        </p>
       </div>
     </footer>
   );

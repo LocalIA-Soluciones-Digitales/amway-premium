@@ -13,7 +13,7 @@ const PROMISES = [
   {
     icon: ShieldCheck,
     title: "Revisadas una a una",
-    text: "Leemos cada opinión antes de publicarla para que solo veas experiencias reales.",
+    text: "Leemos cada opinión antes de publicarla y solo descartamos las ofensivas, publicitarias o ajenas a la tienda. No comprobamos que quien opina haya comprado.",
   },
   {
     icon: MessageSquareReply,
@@ -37,7 +37,7 @@ export default function OpinionesPage() {
             Lo que dicen <span className="italic text-gold-soft">nuestros clientes.</span>
           </>
         }
-        description="Opiniones reales de quienes ya compran con nosotros en Barakaldo. Si ya has probado algo, tu experiencia ayuda a otros a elegir."
+        description="Opiniones de quienes nos visitan y prueban nuestros productos. Si ya has probado algo, tu experiencia ayuda a otros a elegir."
         photo="/images/nosotros/opiniones-hero.webp"
         photoPosition="100% 35%"
         actions={

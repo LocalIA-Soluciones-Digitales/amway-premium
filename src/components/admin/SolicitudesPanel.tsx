@@ -10,6 +10,7 @@ const TIPO: Record<Solicitud["tipo"], { label: string; tone: "red" | "blue" | "v
   agotado: { label: "Avisar cuando vuelva", tone: "red" },
   encargo: { label: "Encargo", tone: "blue" },
   otro: { label: "Producto fuera de catálogo", tone: "violet" },
+  desistimiento: { label: "Desistimiento · 14 días", tone: "red" },
 };
 
 export function SolicitudesPanel({ onChange }: { onChange: () => void }) {
@@ -121,7 +122,9 @@ export function SolicitudesPanel({ onChange }: { onChange: () => void }) {
                       s.telefono,
                       s.tipo === "agotado"
                         ? `Hola ${s.nombre}, ya tenemos disponible ${s.producto_nombre}. ¿Te lo reservamos?`
-                        : `Hola ${s.nombre}, te escribimos por tu solicitud de ${s.producto_nombre}.`
+                        : s.tipo === "desistimiento"
+                          ? `Hola ${s.nombre}, hemos recibido tu desistimiento del pedido nº ${s.pedido_numero ?? ""}. Te explicamos cómo hacer la devolución y el reembolso.`
+                          : `Hola ${s.nombre}, te escribimos por tu solicitud de ${s.producto_nombre}.`
                     )}
                     target="_blank"
                     rel="noopener noreferrer"

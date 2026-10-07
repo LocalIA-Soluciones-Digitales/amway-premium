@@ -8,7 +8,7 @@ import { SITE } from "@/data/site-config";
 const FAQS = [
   {
     q: "¿Los productos son 100% originales?",
-    a: "Sí. Todos nuestros productos son originales Amway, importados directamente de Estados Unidos, con la misma calidad, packaging y garantía de satisfacción que en origen.",
+    a: "Sí. Todos nuestros productos son originales Amway, sellados de fábrica. Somos una distribuidora independiente, no una tienda oficial de Amway. Además de la garantía legal de 3 años, el fabricante puede ofrecer sus propias garantías: lo tienes en las condiciones de compra.",
   },
   {
     q: "¿Cómo hago un pedido?",
@@ -24,7 +24,7 @@ const FAQS = [
   },
   {
     q: "¿Qué pasa si un producto no está disponible?",
-    a: "Te avisamos por WhatsApp y te proponemos alternativas o el plazo estimado de reposición según el catálogo Amway US.",
+    a: "Te avisamos por WhatsApp y te proponemos alternativas o el plazo estimado de reposición.",
   },
   {
     q: "¿Ofrecéis asesoramiento personalizado?",

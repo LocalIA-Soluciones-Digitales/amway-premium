@@ -89,6 +89,7 @@ export const INTENTOS: Record<string, Intento> = {
     pregunta: "¿Puedo cambiar o cancelar un pedido?",
     respuesta: [
       "Sí. Escríbenos cuanto antes por WhatsApp con tu nombre y el número de pedido, y lo ajustamos contigo: productos, día u hora de recogida.",
+      "Y si ya lo has recogido, tienes 14 días para desistir de la compra (salvo productos de higiene, cosmética o alimentación que se hayan abierto).",
     ],
     claves: ["cancel", "anul", "modific", "cambiar pedido", "cambiar el pedido", "equivoc", "error", "devol", "devuelv"],
     acciones: [
@@ -97,6 +98,7 @@ export const INTENTOS: Record<string, Intento> = {
         mensaje: "Hola, me gustaría modificar/cancelar mi pedido. Mi nombre es ",
         label: "Gestionar mi pedido",
       },
+      { tipo: "enlace", href: "/desistimiento", label: "Desistir de un pedido" },
       { tipo: "tema", id: "pedido", label: "Volver a pedidos" },
     ],
   },
@@ -129,7 +131,7 @@ export const INTENTOS: Record<string, Intento> = {
   agotado: {
     pregunta: "¿Cuándo repondréis un agotado?",
     respuesta: [
-      "Importamos de Estados Unidos, así que el plazo depende del catálogo Amway de allí.",
+      "El plazo depende de cuándo lo repone Amway.",
       "Dinos qué producto es y te damos el plazo estimado o te proponemos una alternativa equivalente.",
     ],
     claves: ["agotad", "repon", "reposicion", "sin stock", "no hay", "vuelve", "volvera"],
@@ -144,7 +146,7 @@ export const INTENTOS: Record<string, Intento> = {
   encargo: {
     pregunta: "¿Podéis traer algo que no está en la web?",
     respuesta: [
-      "Trabajamos con el catálogo Amway de Estados Unidos. Si buscas un producto concreto que no ves en la web, dinos cuál y te confirmamos si podemos conseguirlo, su precio y el plazo.",
+      "Si buscas un producto Amway concreto que no ves en la web, dinos cuál y te confirmamos si podemos conseguirlo, su precio y el plazo.",
     ],
     claves: ["no esta en la web", "no aparece", "no lo encuentro", "traer", "conseguir", "encargar", "catalogo americano", "otro producto"],
     acciones: [
@@ -267,7 +269,7 @@ export const INTENTOS: Record<string, Intento> = {
   originales: {
     pregunta: "¿Son productos originales?",
     respuesta: [
-      "Sí, 100 %. Son productos Amway originales importados directamente de Estados Unidos, con el mismo packaging y la misma calidad que en origen.",
+      "Sí, 100 %. Son productos Amway originales, sellados de fábrica. Somos una distribuidora independiente, no una tienda oficial de Amway.",
       SITE.legalNote,
     ],
     claves: ["origin", "autentic", "falso", "falsific", "imitacion", "fiar", "estados unidos", "import"],
@@ -280,7 +282,7 @@ export const INTENTOS: Record<string, Intento> = {
   garantia: {
     pregunta: "¿Tienen garantía?",
     respuesta: [
-      "Sí, todos los productos mantienen la garantía de satisfacción Amway.",
+      "Sí: todos tienen la garantía legal de 3 años, y respondemos nosotros. El fabricante puede ofrecer además sus propias garantías.",
       "Si tienes cualquier problema con un producto, escríbenos y lo resolvemos contigo.",
     ],
     claves: ["garant", "roto", "defect", "no funciona", "problema", "reclam", "satisfac"],

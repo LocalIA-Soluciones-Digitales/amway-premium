@@ -29,7 +29,7 @@ export function CambiarContrasena({ email, open, onClose }: { email?: string; op
   async function submit(e: FormEvent) {
     e.preventDefault();
     setError(null);
-    if (nueva.length < 6) return setError("La nueva contraseña debe tener al menos 6 caracteres.");
+    if (nueva.length < 10) return setError("La nueva contraseña debe tener al menos 10 caracteres.");
     if (nueva !== repetir) return setError("Las contraseñas nuevas no coinciden.");
     if (nueva === actual) return setError("La nueva contraseña debe ser distinta de la actual.");
     if (!email) return setError("No se pudo identificar la cuenta.");
@@ -86,7 +86,7 @@ export function CambiarContrasena({ email, open, onClose }: { email?: string; op
               id="pw-nueva"
               type="password"
               required
-              minLength={6}
+              minLength={10}
               autoComplete="new-password"
               value={nueva}
               onChange={(e) => setNueva(e.target.value)}

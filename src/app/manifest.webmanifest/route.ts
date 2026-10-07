@@ -11,7 +11,7 @@ export function GET() {
     name: `${SITE.name} — Productos Amway Premium`,
     short_name: SITE.name,
     description:
-      "Distribuidor independiente de productos originales Amway importados de Estados Unidos.",
+      "Distribuidora independiente de productos originales Amway.",
     start_url: "/",
     display: "standalone",
     background_color: "#f7f4ee",

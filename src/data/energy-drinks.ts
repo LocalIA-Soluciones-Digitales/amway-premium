@@ -41,7 +41,7 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     line: "XS™ Power Drink+",
     productId: "xs-power-drink-ginger",
     tag: "Vitamina C + Zinc",
-    benefit: "Aporta energía y ayuda a mantener las defensas inmunitarias.",
+    benefit: "Con vitamina C y zinc, que contribuyen al funcionamiento normal del sistema inmunitario.",
     image: "ginger-passion-fruit.webp",
     accent: "#c9932a",
     accentSoft: "rgba(201,147,42,0.5)",
@@ -98,8 +98,8 @@ export const ENERGY_FACTS = [
   {
     id: "immune",
     value: "Vitamina C + Zinc",
-    label: "defensas inmunitarias",
-    detail: "XS™ Power Drink+ aporta energía y ayuda a mantener las defensas inmunitarias.",
+    label: "sistema inmunitario",
+    detail: "La vitamina C y el zinc de XS™ Power Drink+ contribuyen al funcionamiento normal del sistema inmunitario.",
   },
   {
     id: "clean",

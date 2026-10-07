@@ -8,7 +8,7 @@ import { ArrowUpRight } from "lucide-react";
 // abre el catálogo ya filtrado con ?q=, que lee ProductExplorer.
 const NEEDS = [
   { label: "Más energía", href: "/xs-energy", description: "Power Drinks, pre-entreno y recuperación." },
-  { label: "Defensas", href: "/nutricion?q=inmunologica#catalogo", description: "Apoyo inmunitario de origen vegetal." },
+  { label: "Vitaminas y minerales", href: "/nutricion?q=inmunologica#catalogo", description: "Vitamina C, D, zinc y más para tu día a día." },
   { label: "Control de peso", href: "/nutricion?q=control%20peso#catalogo", description: "Proteína, batidos y programas." },
   { label: "Piel radiante", href: "/belleza?q=cuidado%20piel#catalogo", description: "Sérums y cremas Artistry™." },
   { label: "Cabello sano", href: "/cuidado-personal?q=cabello#catalogo", description: "Champús y tratamientos Satinique™." },

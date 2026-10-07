@@ -10,7 +10,7 @@ import { getBrands, getProductsByCategory, getSubcategories } from "@/data/produ
 export const metadata: Metadata = {
   title: "XS Energy™ — Power Drinks, fuerza y recuperación",
   description:
-    "XS™ Power Drink y Power Water+ en seis sabores reales, más pre-entrenamiento, creatina, proteínas y recuperación deportiva. Nutrición deportiva Amway importada de Estados Unidos.",
+    "XS™ Power Drink y Power Water+ en seis sabores reales, más pre-entrenamiento, creatina, proteínas y recuperación deportiva. Nutrición deportiva Amway.",
 };
 
 export default function XsEnergyPage() {

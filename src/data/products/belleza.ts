@@ -641,7 +641,7 @@ export const bellezaProducts: Product[] = [
     category: "belleza",
     subcategory: "Cuidado de la piel",
     description:
-      "¡Prepárate para una jornada ajetreada con productos de belleza diseñados para despertar tu piel y empezar la mañana con plenitud - con un 5 % de descuento.",
+      "¡Prepárate para una jornada ajetreada con productos de belleza diseñados para despertar tu piel y empezar la mañana con plenitud.",
     variants: [{ sku: "316099", size: "1 conjunto", price: 73.26 }],
     image: "espana/art-studio-empieza-manana.webp",
   },
@@ -652,7 +652,7 @@ export const bellezaProducts: Product[] = [
     category: "belleza",
     subcategory: "Cuidado de la piel",
     description:
-      "Un conjunto de cuidado de la piel hidratante que actúa las 24 horas, proporcionando altos niveles de hidratación, con un 5 % de descuento.",
+      "Un conjunto de cuidado de la piel hidratante que actúa las 24 horas, proporcionando altos niveles de hidratación.",
     variants: [{ sku: "319401", size: "1 conjunto", price: 115.79 }],
     image: "espana/hidratante-moisturisation-power.webp",
   },
@@ -784,7 +784,7 @@ export const bellezaProducts: Product[] = [
     category: "belleza",
     subcategory: "Cuidado de la piel",
     description:
-      "Un conjunto de cuidado de la piel reafirmarnte e hidratante que combate los signos del envejecimiento avanzado, con un 5 % de descuento.",
+      "Un conjunto de cuidado de la piel reafirmarnte e hidratante que combate los signos del envejecimiento avanzado.",
     variants: [{ sku: "319402", size: "1 conjunto", price: 209.17 }],
     image: "espana/reafirmante-moisturisation-power.webp",
   },
@@ -795,7 +795,7 @@ export const bellezaProducts: Product[] = [
     category: "belleza",
     subcategory: "Cuidado de la piel",
     description:
-      "Un conjunto de cuidado de la piel regenerador e hidratante que actúa las 24 horas, reactivando la capacidad natural de la piel para parecer más joven y saludable, con un 5 % de descuento.",
+      "Un conjunto de cuidado de la piel regenerador e hidratante que actúa las 24 horas, reactivando la capacidad natural de la piel para parecer más joven y saludable.",
     variants: [{ sku: "319400", size: "1 conjunto", price: 201.56 }],
     image: "espana/regenerador-moisturisation-power.webp",
   },
@@ -806,7 +806,7 @@ export const bellezaProducts: Product[] = [
     category: "belleza",
     subcategory: "Cuidado de la piel",
     description:
-      "Rutina de Belleza Saludable Hidratante Artistry Skin Nutrition permite mantener una piel juvenil, radiante, suave y fresca con un 5 % de descuento.",
+      "Rutina de Belleza Saludable Hidratante Artistry Skin Nutrition permite mantener una piel juvenil, radiante, suave y fresca.",
     variants: [{ sku: "319392", size: "1 conjunto", price: 147.18 }],
     image: "espana/rutina-belleza-saludable-hidratante.webp",
   },
@@ -817,7 +817,7 @@ export const bellezaProducts: Product[] = [
     category: "belleza",
     subcategory: "Cuidado de la piel",
     description:
-      "Rutina de Belleza Saludable Reafirmante Artistry Skin Nutrition trata los signos avanzados del envejecimiento, incluidas arrugas profundas, con un 5 % de descuento.",
+      "Rutina de Belleza Saludable Reafirmante Artistry Skin Nutrition trata los signos avanzados del envejecimiento, incluidas arrugas profundas.",
     variants: [{ sku: "319398", size: "1 conjunto", price: 207.79 }],
     image: "espana/rutina-belleza-saludable-reafirmante.webp",
   },
@@ -828,7 +828,7 @@ export const bellezaProducts: Product[] = [
     category: "belleza",
     subcategory: "Cuidado de la piel",
     description:
-      "Rutina de Belleza Saludable Regeneradora Artistry Skin Nutrition, que contribuye a reducir los primeros signos del envejecimiento y favorece que la piel tenga un aspecto juvenil, con un 5 % de descuento.",
+      "Rutina de Belleza Saludable Regeneradora Artistry Skin Nutrition, que contribuye a reducir los primeros signos del envejecimiento y favorece que la piel tenga un aspecto juvenil.",
     variants: [{ sku: "319385", size: "1 conjunto", price: 200.17 }],
     image: "espana/rutina-belleza-saludable-regeneradora.webp",
   },

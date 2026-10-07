@@ -5,7 +5,7 @@ import { waLink, WA_PRESETS } from "@/data/site-config";
 export const metadata: Metadata = {
   title: "Preguntas frecuentes",
   description:
-    "Resolvemos tus dudas sobre pedidos, envíos, precios y autenticidad de los productos Amway importados de Estados Unidos.",
+    "Resolvemos tus dudas sobre pedidos, envíos, precios y autenticidad de los productos Amway.",
 };
 
 export default function FaqPage() {
