@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { ArrowDown, MessageSquareReply, PenLine, ShieldCheck } from "lucide-react";
 import { ResenasSection } from "@/components/catalog/ResenasSection";
 import { PageHero, heroPrimaryClass, heroSecondaryClass } from "@/components/layout/PageHero";
@@ -68,6 +69,32 @@ export default function OpinionesPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="bg-linen">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 sm:px-8 sm:py-20 md:grid-cols-[minmax(0,26rem)_1fr] md:gap-16">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
+            <Image
+              src="/images/nosotros/clienta-estudio.webp"
+              alt="Yuly junto a una clienta con sus suplementos Nutrilite"
+              fill
+              sizes="(min-width: 768px) 26rem, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <div>
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-forest">
+              Clientas reales
+            </p>
+            <h2 className="mt-5 font-display text-4xl leading-[1.05] text-carbon sm:text-5xl">
+              Cada pedido, entregado en mano.
+            </h2>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-stone sm:text-lg">
+              Quienes compran con nosotros pasan por el local de Barakaldo, recogen su pedido y
+              resuelven sus dudas en persona. Esas son las experiencias que encontrarás aquí.
+            </p>
+          </div>
+        </div>
       </section>
 
       <section id="opiniones" className="scroll-mt-24 mx-auto max-w-7xl px-6 py-16 sm:px-8 sm:py-20">

@@ -37,8 +37,8 @@ const POINTS = [
     text: "Traemos el catálogo oficial de Amway US: Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook.",
   },
   {
-    image: "/images/nosotros/bizkaia-ria.webp",
-    alt: "La ría de Bilbao con el museo Guggenheim y el puente de La Salve",
+    image: "/images/nosotros/clienta-local.webp",
+    alt: "Yuly entregando suplementos Nutrilite a una clienta en su local de Barakaldo",
     eyebrow: "Cercanía",
     title: "Servicio local en Barakaldo",
     text: "Asesoramos en persona o por WhatsApp y preparamos cada pedido a mano para que lo recojas en nuestro local.",
