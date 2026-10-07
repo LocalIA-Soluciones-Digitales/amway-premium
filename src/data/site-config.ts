@@ -64,8 +64,16 @@ export function atendiendoAhora(now = new Date()): boolean {
   return !(cerrado as readonly number[]).includes(dia) && hora >= apertura && hora < cierre;
 }
 
+// Enlace de WhatsApp con el mensaje ya escrito. Va directo a
+// api.whatsapp.com y no a wa.me: la redirección de wa.me cambia cada emoji
+// por «�» (comprobado: 👋 llega como %EF%BF%BD) y el resumen del pedido
+// llegaba lleno de símbolos rotos.
+export function waUrl(telefono: string, texto?: string): string {
+  return `https://api.whatsapp.com/send?phone=${telefono}${texto ? `&text=${encodeURIComponent(texto)}` : ""}`;
+}
+
 export function waLink(message: string): string {
-  return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
+  return waUrl(SITE.whatsapp, message);
 }
 
 export const WA_PRESETS = {

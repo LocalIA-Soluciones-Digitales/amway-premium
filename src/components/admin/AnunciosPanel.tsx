@@ -753,7 +753,7 @@ function AnuncioForm({
           <p className="-mt-2 text-xs text-stone sm:col-span-2">
             {accion
               ? `Si lo dejas vacío, el botón «${accion.texto}» ${
-                  accion.href.startsWith("https://wa.me")
+                  accion.href.startsWith("https://api.whatsapp.com")
                     ? tipo === "evento"
                       ? "abre WhatsApp para reservar plaza"
                       : "abre WhatsApp"

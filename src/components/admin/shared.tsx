@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { formatEUR } from "@/lib/currency";
+import { waUrl } from "@/data/site-config";
 import { Sparkline } from "./charts";
 
 // ---------- Tipos de las tablas amway_* ----------
@@ -175,11 +176,11 @@ export function fecha(iso: string, withTime = false): string {
   });
 }
 
-// "6 12 34 56 78" / "+34 612…" → enlace wa.me con prefijo español por defecto.
+// "6 12 34 56 78" / "+34 612…" → enlace de WhatsApp con prefijo español por defecto.
 export function waHref(telefono: string, texto?: string): string {
   let digits = telefono.replace(/\D/g, "");
   if (digits.length === 9) digits = `34${digits}`;
-  return `https://wa.me/${digits}${texto ? `?text=${encodeURIComponent(texto)}` : ""}`;
+  return waUrl(digits, texto);
 }
 
 export function toCsv(rows: (string | number | null | undefined)[][]): string {

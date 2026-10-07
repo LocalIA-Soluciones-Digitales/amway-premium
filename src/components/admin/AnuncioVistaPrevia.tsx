@@ -46,7 +46,7 @@ export function AnuncioVistaPrevia({ anuncio, onClose }: { anuncio: Anuncio | nu
     setAviso(
       href.includes("calendar.google.com")
         ? "Este botón guarda el evento en el calendario del cliente."
-        : href.startsWith("https://wa.me")
+        : href.startsWith("https://api.whatsapp.com")
           ? "Este botón abre WhatsApp con un mensaje ya escrito para ti."
           : `Este botón lleva a ${href.startsWith("/") ? `${SITE.url.replace(/^https?:\/\//, "")}${href}` : href}`
     );
