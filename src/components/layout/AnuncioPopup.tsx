@@ -10,29 +10,16 @@ import { getConsent, track } from "@/lib/analytics";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { AnuncioTarjeta } from "./AnuncioTarjeta";
 
-const VISTOS_KEY = "amway-anuncios-vistos";
 const SESION_KEY = "amway-anuncio-sesion";
 // Ni en el pago ni en la cuenta: ahí el pop-up solo estorba.
 const RUTAS_SIN_ANUNCIO = ["/admin", "/checkout", "/cuenta"];
 
-// Un anuncio editado en el panel cuenta como nuevo: vuelve a salir.
-const claveVisto = (a: Anuncio) => `${a.id}:${a.updated_at}`;
-
-function leerVistos(): string[] {
+// Cerrado vale solo para esta visita: al volver a abrir la web sale otra vez.
+function marcarVisto() {
   try {
-    const v = JSON.parse(localStorage.getItem(VISTOS_KEY) ?? "[]") as unknown;
-    return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
-  } catch {
-    return [];
-  }
-}
-
-function marcarVisto(a: Anuncio) {
-  try {
-    localStorage.setItem(VISTOS_KEY, JSON.stringify([claveVisto(a), ...leerVistos()].slice(0, 30)));
     sessionStorage.setItem(SESION_KEY, "1");
   } catch {
-    // storage blocked: it just shows again next visit
+    // storage blocked: it may show again on the next page
   }
 }
 
@@ -44,9 +31,9 @@ function yaSalioEnEstaVisita(): boolean {
   }
 }
 
-// Pop-up con el anuncio vigente más reciente que el visitante aún no ha
-// cerrado. Como mucho uno por visita, y un momento después de entrar para
-// no tapar la primera impresión de la página.
+// Pop-up con el anuncio vigente más reciente. Sale en cada visita (aunque se
+// cerrara en otra), como mucho una vez por visita, y un momento después de
+// entrar para no tapar la primera impresión de la página.
 export function AnuncioPopup() {
   const pathname = useRuta();
   const [anuncio, setAnuncio] = useState<Anuncio | null>(null);
@@ -75,8 +62,7 @@ export function AnuncioPopup() {
         return;
       }
       const lista = await fetchAnunciosActivos();
-      const vistos = new Set(leerVistos());
-      const elegido = (pedido && lista.find((a) => a.id === pedido)) || lista.find((a) => !vistos.has(claveVisto(a)));
+      const elegido = (pedido && lista.find((a) => a.id === pedido)) || lista[0];
       if (cancelado || !elegido) return;
       forzado.current = elegido.id === pedido;
       if (!forzado.current) track("anuncio_visto", elegido.id);
@@ -93,9 +79,9 @@ export function AnuncioPopup() {
   }, []);
 
   const cerrar = useCallback(() => {
-    if (anuncio) marcarVisto(anuncio);
+    marcarVisto();
     setOpen(false);
-  }, [anuncio]);
+  }, []);
 
   const pulsarBoton = useCallback(() => {
     if (anuncio && !forzado.current) track("anuncio_click", anuncio.id);
