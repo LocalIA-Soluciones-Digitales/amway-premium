@@ -69,7 +69,7 @@ export function Analytics() {
             Si aceptas, guardamos en tu navegador unas estadísticas propias (qué páginas y productos interesan
             más) para mejorar la tienda. Sin publicidad ni terceros. Puedes cambiarlo cuando quieras.{" "}
             <Link href="/cookies" className="underline underline-offset-2 hover:text-cream">
-              Más información
+              Política de cookies
             </Link>
           </p>
           <div className="mt-5 grid grid-cols-2 gap-2">
