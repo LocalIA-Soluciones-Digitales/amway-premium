@@ -72,7 +72,8 @@ export function AnuncioTarjeta({
             // columna de su ancho. Siempre se ven enteros; si algo sobra, lo
             // rellena la misma imagen difuminada.
             proporcion
-              ? "aspect-[var(--r)] max-h-[60svh] @2xl:aspect-auto @2xl:max-h-none @2xl:min-h-[32rem] @2xl:w-[min(calc(32rem*var(--r)),55%)]"
+              ? // w-full: sin él Safari estrecha el hueco al topar con max-h.
+                "aspect-[var(--r)] max-h-[60svh] w-full @2xl:aspect-auto @2xl:max-h-none @2xl:min-h-[32rem] @2xl:w-[min(calc(32rem*var(--r)),55%)]"
               : "h-60 @2xl:h-auto @2xl:min-h-[26rem] @2xl:w-[44%]"
           )}
         >
