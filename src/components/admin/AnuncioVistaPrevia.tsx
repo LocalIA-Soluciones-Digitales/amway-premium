@@ -104,7 +104,7 @@ export function AnuncioVistaPrevia({ anuncio, onClose }: { anuncio: Anuncio | nu
           <WebDeFondo ordenador={dispositivo === "ordenador"} />
           <div className="absolute inset-0 bg-carbon/45 backdrop-blur-[3px]" />
           <div className="absolute inset-0 flex items-end justify-center @2xl:items-center @2xl:p-6">
-            <AnuncioTarjeta anuncio={anuncio} onCerrar={onClose} className="max-h-[92%] @2xl:max-w-3xl" />
+            <AnuncioTarjeta anuncio={anuncio} onCerrar={onClose} className="max-h-[92%] @2xl:max-w-4xl" />
           </div>
           {aviso && (
             <div className="absolute inset-x-3 top-3 z-20 flex items-start gap-2 rounded-2xl bg-carbon px-4 py-3 text-xs text-cream shadow-lg">

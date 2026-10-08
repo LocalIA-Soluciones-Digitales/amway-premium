@@ -50,6 +50,9 @@ export function AnuncioTarjeta({
     <div
       className={cn(
         "relative flex w-full flex-col overflow-hidden overflow-y-auto overscroll-contain rounded-t-3xl bg-cream-soft shadow-2xl @2xl:flex-row @2xl:rounded-3xl",
+        // En ordenador, con foto o vídeo subidos, la tarjeta mide lo que su alto
+        // y el texto, si no cabe, se desplaza dentro de su columna.
+        proporcion && "@2xl:h-[min(40rem,88dvh)] @2xl:overflow-y-hidden",
         className
       )}
     >
@@ -67,25 +70,15 @@ export function AnuncioTarjeta({
           style={proporcion ? ({ "--r": proporcion } as CSSProperties) : undefined}
           className={cn(
             "relative shrink-0 overflow-hidden bg-linen",
-            // La foto o el vídeo subidos marcan la forma del hueco: en móvil todo
-            // el ancho con su alto (hasta 60% de la pantalla), en ordenador una
-            // columna de su ancho. Siempre se ven enteros; si algo sobra, lo
-            // rellena la misma imagen difuminada.
+            // La foto o el vídeo subidos marcan la forma del hueco, para que llenen
+            // de borde a borde sin márgenes: en móvil todo el ancho y su alto; en
+            // ordenador todo el alto de la tarjeta y su ancho (hasta el 60%; más
+            // allá, p. ej. una foto muy apaisada, se recorta un poco).
             proporcion
-              ? // w-full: sin él Safari estrecha el hueco al topar con max-h.
-                "aspect-[var(--r)] max-h-[60svh] w-full @2xl:aspect-auto @2xl:max-h-none @2xl:min-h-[32rem] @2xl:w-[min(calc(32rem*var(--r)),55%)]"
+              ? "aspect-[var(--r)] w-full @2xl:aspect-auto @2xl:h-full @2xl:w-[min(calc(min(40rem,88dvh)*var(--r)),60%)]"
               : "h-60 @2xl:h-auto @2xl:min-h-[26rem] @2xl:w-[44%]"
           )}
         >
-          {anuncio.imagen_url && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={anuncio.imagen_url}
-              alt=""
-              aria-hidden
-              className="absolute inset-0 h-full w-full scale-110 object-cover opacity-70 blur-2xl"
-            />
-          )}
           {video ? (
             // Con «reducir movimiento» se queda quieto en la portada.
             <video
@@ -102,7 +95,7 @@ export function AnuncioTarjeta({
                 if (v && v.readyState >= 1) medir(video, v.videoWidth, v.videoHeight);
               }}
               onLoadedMetadata={(e) => medir(video, e.currentTarget.videoWidth, e.currentTarget.videoHeight)}
-              className="absolute inset-0 h-full w-full object-contain"
+              className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
             // Imágenes subidas al panel (Supabase) o de public/: <img> sirve para ambas.
@@ -117,14 +110,14 @@ export function AnuncioTarjeta({
                 if (anuncio.imagen_url) medir(anuncio.imagen_url, e.currentTarget.naturalWidth, e.currentTarget.naturalHeight);
               }}
               className={
-                anuncio.imagen_url ? "absolute inset-0 h-full w-full object-contain" : "absolute inset-0 h-full w-full object-contain p-8"
+                anuncio.imagen_url ? "absolute inset-0 h-full w-full object-cover" : "absolute inset-0 h-full w-full object-contain p-8"
               }
             />
           )}
         </div>
       )}
 
-      <div className="flex flex-1 flex-col px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-7 @2xl:px-9 @2xl:py-10">
+      <div className="flex flex-1 flex-col px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-7 @2xl:min-h-0 @2xl:overflow-y-auto @2xl:px-9 @2xl:py-10">
         <p className="pr-12 text-[11px] uppercase tracking-[0.24em] text-forest">{TIPO_ANUNCIO[anuncio.tipo].eyebrow}</p>
         <h2 id="anuncio-titulo" className="mt-3 pr-8 font-display text-3xl leading-[1.08] text-carbon @2xl:text-[2.35rem]">
           {anuncio.titulo || "Título del anuncio"}

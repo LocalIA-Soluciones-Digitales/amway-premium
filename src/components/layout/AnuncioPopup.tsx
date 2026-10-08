@@ -140,7 +140,7 @@ export function AnuncioPopup() {
               exit={{ opacity: 0, y: 24, scale: 0.98 }}
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               data-lenis-prevent
-              className="relative flex w-full @2xl:max-w-3xl"
+              className="relative flex w-full @2xl:max-w-4xl"
             >
               <AnuncioTarjeta
                 anuncio={anuncio}
