@@ -53,7 +53,19 @@ export function AnuncioTarjeta({
       </button>
 
       {(imagen || video) && (
-        <div className="relative h-60 shrink-0 bg-linen @2xl:h-auto @2xl:min-h-[26rem] @2xl:w-[44%]">
+        <div className="relative h-60 shrink-0 overflow-hidden bg-linen @2xl:h-auto @2xl:min-h-[26rem] @2xl:w-[44%]">
+          {/* En ordenador la foto o el vídeo subidos se ven enteros (un cartel no
+              pierde los bordes) y el hueco sobrante se rellena con la misma imagen
+              difuminada. En móvil siguen ocupando todo el ancho. */}
+          {anuncio.imagen_url && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={anuncio.imagen_url}
+              alt=""
+              aria-hidden
+              className="absolute inset-0 hidden h-full w-full scale-110 object-cover opacity-70 blur-2xl @2xl:block"
+            />
+          )}
           {video ? (
             // Con «reducir movimiento» se queda quieto en la portada.
             <video
@@ -66,7 +78,7 @@ export function AnuncioTarjeta({
               autoPlay={!reducirMovimiento}
               preload="auto"
               aria-hidden
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover @2xl:object-contain"
             />
           ) : (
             // Imágenes subidas al panel (Supabase) o de public/: <img> sirve para ambas.
@@ -75,7 +87,9 @@ export function AnuncioTarjeta({
               src={imagen!}
               alt=""
               className={
-                anuncio.imagen_url ? "absolute inset-0 h-full w-full object-cover" : "absolute inset-0 h-full w-full object-contain p-8"
+                anuncio.imagen_url
+                  ? "absolute inset-0 h-full w-full object-cover @2xl:object-contain"
+                  : "absolute inset-0 h-full w-full object-contain p-8"
               }
             />
           )}
