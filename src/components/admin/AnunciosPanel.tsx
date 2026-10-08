@@ -334,46 +334,62 @@ function SelectorArchivo({
   accept,
   ocupado,
   onFile,
+  quitar,
   children,
 }: {
   accept: string;
   ocupado: boolean;
   onFile: (f: File) => void;
+  quitar?: { texto: string; onClick: () => void };
   children: ReactNode;
 }) {
   const [encima, setEncima] = useState(false);
   return (
-    <label
-      onDragOver={(e) => {
-        e.preventDefault();
-        setEncima(true);
-      }}
-      onDragLeave={() => setEncima(false)}
-      onDrop={(e) => {
-        e.preventDefault();
-        setEncima(false);
-        const f = e.dataTransfer.files?.[0];
-        if (f && !ocupado) onFile(f);
-      }}
-      className={cn(
-        "relative flex h-36 cursor-pointer flex-col items-center justify-center gap-1.5 overflow-hidden rounded-2xl border border-dashed text-center text-xs text-stone transition",
-        encima ? "border-forest bg-forest/5" : "border-carbon/15 bg-white hover:border-carbon/30",
-        ocupado && "pointer-events-none"
-      )}
-    >
-      {children}
-      <input
-        type="file"
-        accept={accept}
-        className="sr-only"
-        disabled={ocupado}
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) onFile(f);
-          e.target.value = "";
+    <div className="relative">
+      <label
+        onDragOver={(e) => {
+          e.preventDefault();
+          setEncima(true);
         }}
-      />
-    </label>
+        onDragLeave={() => setEncima(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setEncima(false);
+          const f = e.dataTransfer.files?.[0];
+          if (f && !ocupado) onFile(f);
+        }}
+        className={cn(
+          "relative flex h-36 cursor-pointer flex-col items-center justify-center gap-1.5 overflow-hidden rounded-2xl border border-dashed text-center text-xs text-stone transition",
+          encima ? "border-forest bg-forest/5" : "border-carbon/15 bg-white hover:border-carbon/30",
+          ocupado && "pointer-events-none"
+        )}
+      >
+        {children}
+        <input
+          type="file"
+          accept={accept}
+          className="sr-only"
+          disabled={ocupado}
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) onFile(f);
+            e.target.value = "";
+          }}
+        />
+      </label>
+      {/* Fuera del <label>: dentro abriría el selector de archivos. */}
+      {quitar && !ocupado && (
+        <button
+          type="button"
+          onClick={quitar.onClick}
+          aria-label={quitar.texto}
+          title={quitar.texto}
+          className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-carbon/75 text-cream transition hover:bg-red-600"
+        >
+          <Trash2 size={15} />
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -652,7 +668,12 @@ function AnuncioForm({
       <Paso n={3} titulo="Foto o vídeo">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <SelectorArchivo accept="image/*" ocupado={subiendo !== null} onFile={(f) => void subirImagen(f)}>
+            <SelectorArchivo
+              accept="image/*"
+              ocupado={subiendo !== null}
+              onFile={(f) => void subirImagen(f)}
+              quitar={imagenUrl ? { texto: "Eliminar foto", onClick: () => setImagenUrl("") } : undefined}
+            >
               {imagenPrevia ? (
                 <>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -677,18 +698,18 @@ function AnuncioForm({
                 </>
               )}
             </SelectorArchivo>
-            <div className="mt-1.5 flex items-start justify-between gap-2 text-xs text-stone">
-              <span>{producto && !imagenUrl ? "Ahora se usa la del producto." : "Vertical o cuadrada. Se ajusta sola."}</span>
-              {imagenUrl && (
-                <button type="button" className="shrink-0 hover:text-carbon" onClick={() => setImagenUrl("")}>
-                  Quitar
-                </button>
-              )}
-            </div>
+            <p className="mt-1.5 text-xs text-stone">
+              {producto && !imagenUrl ? "Ahora se usa la del producto." : "Vertical o cuadrada. Se ajusta sola."}
+            </p>
           </div>
 
           <div>
-            <SelectorArchivo accept="video/mp4,video/quicktime,video/webm,.mov" ocupado={subiendo !== null} onFile={(f) => void subirVideo(f)}>
+            <SelectorArchivo
+              accept="video/mp4,video/quicktime,video/webm,.mov"
+              ocupado={subiendo !== null}
+              onFile={(f) => void subirVideo(f)}
+              quitar={videoUrl ? { texto: "Eliminar vídeo", onClick: () => setVideoUrl("") } : undefined}
+            >
               {videoUrl ? (
                 <>
                   <video src={videoUrl} muted loop autoPlay playsInline className="absolute inset-0 h-full w-full object-cover" />
@@ -709,14 +730,7 @@ function AnuncioForm({
                 </>
               )}
             </SelectorArchivo>
-            <div className="mt-1.5 flex items-start justify-between gap-2 text-xs text-stone">
-              <span>Pocos segundos, hasta {VIDEO_MAX_MB} MB. En bucle y sin sonido.</span>
-              {videoUrl && (
-                <button type="button" className="shrink-0 hover:text-carbon" onClick={() => setVideoUrl("")}>
-                  Quitar
-                </button>
-              )}
-            </div>
+            <p className="mt-1.5 text-xs text-stone">Pocos segundos, hasta {VIDEO_MAX_MB} MB. En bucle y sin sonido.</p>
           </div>
         </div>
         {aviso && <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">{aviso}</p>}
