@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { AMWAY_DB_KEY, AMWAY_DB_URL } from "@/lib/amway-db";
+import { AMWAY_DB_KEY, AMWAY_DB_URL, amwayRpc } from "@/lib/amway-db";
 import { stripe } from "@/lib/stripe";
 import { SITE } from "@/data/site-config";
 
@@ -37,6 +37,18 @@ export async function GET(request: NextRequest) {
     return data;
   });
   if (!ping.ok || ping.valor !== true) return NextResponse.json({ error: "No autorizado." }, { status: 403 });
+
+  // Lo que lee la tienda (como visitante): si falla, la web no se rompe
+  // pero ignora precios, agotados, ocultos y cierres del panel.
+  const publico = await Promise.all(
+    ["amway_catalogo_publico", "amway_cierres_publicos"].map((fn) =>
+      amwayRpc(fn, undefined, { cache: "no-store" }).then(
+        () => null,
+        (e) => (e instanceof Error ? e.message : String(e)).slice(0, 300)
+      )
+    )
+  );
+  const catalogoError = publico.filter(Boolean).join(" · ") || null;
 
   const stripeKey = process.env.STRIPE_SECRET_KEY ?? "";
   const webhookUrl = `${SITE.url}${RUTA_WEBHOOK}`;
@@ -118,6 +130,7 @@ export async function GET(request: NextRequest) {
     region: process.env.VERCEL_REGION ?? null,
     node: process.version,
     dbMs: ping.ms,
+    catalogoError,
     stripeInfo,
   });
 }

@@ -33,7 +33,9 @@ export function CatalogStateProvider({ initial, children }: { initial: CatalogoP
   const refrescar = useCallback(async () => {
     const fresh = await fetchCatalogoPublico({ cache: "no-store" });
     // A failed fetch returns the shared empty object: keep what we had.
-    if (fresh !== CATALOGO_VACIO) setData(fresh);
+    if (fresh === CATALOGO_VACIO) return;
+    // Solo llegaron los cierres: el resto se queda como estaba.
+    setData((prev) => (fresh.incompleto ? { ...prev, cierres: fresh.cierres } : fresh));
   }, []);
 
   useEffect(() => {

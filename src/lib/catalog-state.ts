@@ -21,31 +21,53 @@ export interface CatalogoPublico {
   valoraciones: Valoracion[];
   // Días de cierre puestos desde el panel (YYYY-MM-DD, de hoy a 90 días).
   cierres: string[];
+  // El catálogo no se pudo leer pero los cierres sí: productos y
+  // valoraciones vienen vacíos y no deben pisar los que ya se tenían.
+  incompleto?: boolean;
 }
 
 export const CATALOGO_VACIO: CatalogoPublico = { productos: [], valoraciones: [], cierres: [] };
 
 const FECHA = /^\d{4}-\d{2}-\d{2}$/;
 
+// Un fallo del catálogo no rompe la tienda (sirve el catálogo base), así
+// que sin esto pasaría desapercibido: queda en la pestaña Errores del
+// panel, como mucho una vez cada 15 minutos por instancia del servidor.
+let ultimoAviso = 0;
+async function avisarFallo(e: unknown): Promise<void> {
+  if (typeof window !== "undefined" || Date.now() - ultimoAviso < 15 * 60_000) return;
+  ultimoAviso = Date.now();
+  // No usa registrarErrorServidor: su cache "no-store" volvería dinámicas
+  // las páginas estáticas que se generan mientras el catálogo falla.
+  const detalle = e instanceof Error ? e.message : String(e);
+  await amwayRpc("amway_registrar_error", {
+    p_mensaje: "[servidor] La tienda no puede leer el catálogo del panel (precios, agotados, ocultos)",
+    p_detalle: detalle.slice(0, 4000),
+    p_path: "catalogo",
+    p_user_agent: "servidor",
+  }).catch(() => undefined);
+}
+
 export async function fetchCatalogoPublico(
   init?: RequestInit & { next?: { revalidate?: number; tags?: string[] } }
 ): Promise<CatalogoPublico> {
-  try {
-    // Los cierres van aparte: si su función aún no existe en la base de
-    // datos (migración sin aplicar), el catálogo se sirve igual.
-    const [data, cierres] = await Promise.all([
-      amwayRpc<CatalogoPublico>("amway_catalogo_publico", undefined, init),
-      amwayRpc<unknown>("amway_cierres_publicos", undefined, init).catch(() => []),
-    ]);
-    return {
-      productos: Array.isArray(data?.productos) ? data.productos : [],
-      valoraciones: Array.isArray(data?.valoraciones) ? data.valoraciones : [],
-      cierres: Array.isArray(cierres) ? cierres.filter((d): d is string => typeof d === "string" && FECHA.test(d)) : [],
-    };
-  } catch {
-    // Sin base de datos la tienda sigue funcionando con el catálogo base.
-    return CATALOGO_VACIO;
-  }
+  // Catálogo y cierres por separado: si falla uno, el otro se sigue
+  // aplicando (un cierre del panel no puede perderse por un fallo ajeno).
+  const [data, cierres] = await Promise.all([
+    amwayRpc<CatalogoPublico>("amway_catalogo_publico", undefined, init).catch(async (e) => {
+      await avisarFallo(e);
+      return null;
+    }),
+    amwayRpc<unknown>("amway_cierres_publicos", undefined, init).catch(() => null),
+  ]);
+  // Sin base de datos la tienda sigue funcionando con el catálogo base.
+  if (!data && !cierres) return CATALOGO_VACIO;
+  return {
+    productos: Array.isArray(data?.productos) ? data.productos : [],
+    valoraciones: Array.isArray(data?.valoraciones) ? data.valoraciones : [],
+    cierres: Array.isArray(cierres) ? cierres.filter((d): d is string => typeof d === "string" && FECHA.test(d)) : [],
+    ...(!data && { incompleto: true }),
+  };
 }
 
 export interface CatalogIndex {

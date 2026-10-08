@@ -37,6 +37,7 @@ interface StripeInfo {
 interface Estado {
   stripe: "live" | "test" | null;
   webhook: boolean;
+  catalogoError?: string | null;
   webhookUrl: string;
   pedidosToken: boolean;
   push: boolean;
@@ -158,6 +159,11 @@ export function EstadoPanel({ session }: { session: Session }) {
   const problemas: { nivel: "error" | "aviso"; texto: string }[] = [];
   if (estado === "error") problemas.push({ nivel: "error", texto: "No responde /api/admin/estado." });
   if (ok) {
+    if (ok.catalogoError)
+      problemas.push({
+        nivel: "error",
+        texto: `La tienda no puede leer el catálogo del panel: no se aplican precios, agotados, ocultos ni cierres (${ok.catalogoError}).`,
+      });
     if (!ok.stripe) problemas.push({ nivel: "error", texto: "Falta STRIPE_SECRET_KEY: el pago con tarjeta no funciona." });
     if (si?.error) problemas.push({ nivel: "error", texto: `Stripe responde con error: ${si.error}` });
     if (si?.sinRegistrar.length)
