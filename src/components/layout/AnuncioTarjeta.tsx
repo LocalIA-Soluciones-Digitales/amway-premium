@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback, useState, type CSSProperties } from "react";
 import { ArrowRight, CalendarDays, CalendarPlus, Clock, MapPin, X } from "lucide-react";
 import {
   TIPO_ANUNCIO,
@@ -36,6 +37,15 @@ export function AnuncioTarjeta({
   const horario = horarioEvento(anuncio);
   const esEvento = anuncio.tipo === "evento";
 
+  // Proporción (ancho / alto) de la foto o el vídeo que se está mostrando,
+  // guardada junto a su dirección para no usar la de un archivo anterior.
+  const [medida, setMedida] = useState<{ src: string; r: number } | null>(null);
+  const medir = useCallback((src: string, ancho: number, alto: number) => {
+    if (ancho > 0 && alto > 0) setMedida((m) => (m?.src === src && m.r === ancho / alto ? m : { src, r: ancho / alto }));
+  }, []);
+  const srcActual = video ?? anuncio.imagen_url ?? null;
+  const proporcion = medida && medida.src === srcActual ? medida.r : null;
+
   return (
     <div
       className={cn(
@@ -53,17 +63,26 @@ export function AnuncioTarjeta({
       </button>
 
       {(imagen || video) && (
-        <div className="relative h-60 shrink-0 overflow-hidden bg-linen @2xl:h-auto @2xl:min-h-[26rem] @2xl:w-[44%]">
-          {/* En ordenador la foto o el vídeo subidos se ven enteros (un cartel no
-              pierde los bordes) y el hueco sobrante se rellena con la misma imagen
-              difuminada. En móvil siguen ocupando todo el ancho. */}
+        <div
+          style={proporcion ? ({ "--r": proporcion } as CSSProperties) : undefined}
+          className={cn(
+            "relative shrink-0 overflow-hidden bg-linen",
+            // La foto o el vídeo subidos marcan la forma del hueco: en móvil todo
+            // el ancho con su alto (hasta 60% de la pantalla), en ordenador una
+            // columna de su ancho. Siempre se ven enteros; si algo sobra, lo
+            // rellena la misma imagen difuminada.
+            proporcion
+              ? "aspect-[var(--r)] max-h-[60svh] @2xl:aspect-auto @2xl:max-h-none @2xl:min-h-[32rem] @2xl:w-[min(calc(32rem*var(--r)),55%)]"
+              : "h-60 @2xl:h-auto @2xl:min-h-[26rem] @2xl:w-[44%]"
+          )}
+        >
           {anuncio.imagen_url && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={anuncio.imagen_url}
               alt=""
               aria-hidden
-              className="absolute inset-0 hidden h-full w-full scale-110 object-cover opacity-70 blur-2xl @2xl:block"
+              className="absolute inset-0 h-full w-full scale-110 object-cover opacity-70 blur-2xl"
             />
           )}
           {video ? (
@@ -78,7 +97,11 @@ export function AnuncioTarjeta({
               autoPlay={!reducirMovimiento}
               preload="auto"
               aria-hidden
-              className="absolute inset-0 h-full w-full object-cover @2xl:object-contain"
+              ref={(v) => {
+                if (v && v.readyState >= 1) medir(video, v.videoWidth, v.videoHeight);
+              }}
+              onLoadedMetadata={(e) => medir(video, e.currentTarget.videoWidth, e.currentTarget.videoHeight)}
+              className="absolute inset-0 h-full w-full object-contain"
             />
           ) : (
             // Imágenes subidas al panel (Supabase) o de public/: <img> sirve para ambas.
@@ -86,10 +109,14 @@ export function AnuncioTarjeta({
             <img
               src={imagen!}
               alt=""
+              ref={(img) => {
+                if (img?.complete && anuncio.imagen_url) medir(anuncio.imagen_url, img.naturalWidth, img.naturalHeight);
+              }}
+              onLoad={(e) => {
+                if (anuncio.imagen_url) medir(anuncio.imagen_url, e.currentTarget.naturalWidth, e.currentTarget.naturalHeight);
+              }}
               className={
-                anuncio.imagen_url
-                  ? "absolute inset-0 h-full w-full object-cover @2xl:object-contain"
-                  : "absolute inset-0 h-full w-full object-contain p-8"
+                anuncio.imagen_url ? "absolute inset-0 h-full w-full object-contain" : "absolute inset-0 h-full w-full object-contain p-8"
               }
             />
           )}
