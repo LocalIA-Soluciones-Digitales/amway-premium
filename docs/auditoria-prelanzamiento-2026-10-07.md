@@ -487,3 +487,73 @@ Sin riesgos de coste relevantes: páginas estáticas en CDN, imágenes con cach�
 - Refactor de paneles grandes solo cuando se modifiquen.
 - Limpieza de filas huérfanas (L-08), `lastModified` real en sitemap (L-02), título de 404 (L-01).
 - Turnstile en formularios públicos si aparece spam.
+
+---
+
+# FASE 2 — Implementación y verificación (7–8 de octubre de 2026)
+
+Dos sesiones trabajaron en paralelo: `95cb875` (legal, seguridad, límites por IP e idempotencia, MFA del panel) y `0a9146e`, `e48e414`, `30de58c`, `cca5e38`, `3f3abf2` (este informe).
+
+## Estado de los hallazgos
+
+| ID | Estado | Detalle |
+|---|---|---|
+| C-01 Stripe en test | ⏳ **Tuyo** | Cambiar claves a live en Vercel (ver «Paso a producción de Stripe») |
+| C-02 Webhook | ⏳ **Tuyo** | El código está listo; falta darlo de alta en Stripe y poner `STRIPE_WEBHOOK_SECRET` |
+| C-03 Legal | ✅ páginas creadas (95cb875) · ⏳ rellenar `LEGAL` en `site-config.ts` (titular, NIF, domicilio) y revisión profesional |
+| C-04 Dominio | ✅ `SITE.url` sale de `NEXT_PUBLIC_SITE_URL` (hoy, el de Vercel: canonical/sitemap ya no apuntan a un dominio inexistente) + 308 automático del dominio de Vercel al definitivo · ⏳ `NEXT_PUBLIC_CONTACT_EMAIL` cuando exista el buzón |
+| C-05 Marca Amway | ⚠️ Ver respuesta sobre el dominio: no usar «amway» sin permiso escrito |
+| A-01 Spam de pedidos | ✅ código (95cb875) · ⏳ **se activa al aplicar `20261007_auditoria_prelanzamiento.sql`** (probado: sin ella, la misma clave de intento crea 2 pedidos) |
+| A-02 Cabeceras | ✅ verificado en producción (X-Frame-Options, nosniff, Referrer/Permissions-Policy, CSP frame-ancestors + CSP en modo informe) |
+| A-03 Región | ✅ `dub1` verificado (`X-Vercel-Id: cdg1::dub1`). Validación de pedido 0,66–1,25 s → **0,19–0,23 s**; checkout → ~0,62 s |
+| A-04 Rendimiento móvil | ✅ parcial (tabla abajo) |
+| A-05 Monitorización | ✅ errores capturados desde la carga (probado), fallos de registro de pedidos a la tabla de errores, `/api/salud` · ⏳ crear el monitor en UptimeRobot |
+| A-06 Hidratación #418 | ✅ **causa encontrada y arreglada**: la ISR renderiza la portada con ruta `/index`; `useRuta()` la normaliza. 0 errores en Lighthouse tras regenerar |
+| A-07 Festivos | ✅ festivos nacionales fijos + días cerrados desde el panel (pestaña Hoy) + validación en servidor; última franja 18:30. Probado en producción: 12-oct, 8-dic y 19:00 → 400 · ⏳ la tabla del panel necesita `20261007b_cierres_y_numero.sql` |
+| A-08 Dirección | ⏳ **Tuyo**: dato de negocio (dirección/mapa) |
+| M-01–M-03 SEO | ✅ canonical y og:url por página, JSON-LD con precio/agotado reales + BreadcrumbList + OnSitePickup, horario en LocalBusiness |
+| M-04 Stock en BBDD | ⏳ en la migración de 95cb875 |
+| M-06 Panel truncado | ✅ `traerTodo()` pagina de 1.000 en 1.000 (contabilidad, clientes, informes, errores, Hoy) |
+| M-07 Idempotencia | ✅ código (95cb875) · ⏳ migración |
+| M-10 Lint | ✅ `npm run lint` limpio |
+| M-11 Dependencias | ✅ next 15.5.27, `npm audit` → 0 vulnerabilidades |
+| M-12 Contraste | ✅ token `stone` AA, pie, marcas y botones de WhatsApp |
+| M-14 Índice `numero` | ⏳ en `20261007b` |
+| L-01, L-02, L-03, L-05, L-06 | ✅ |
+| **Nuevo N-01** WhatsApp rompía los emojis | ✅ `wa.me` convierte cada emoji en «�» al redirigir (comprobado con curl); ahora se enlaza directo a `api.whatsapp.com/send` |
+| **Nuevo N-02** Link «Más información» del banner | ✅ «Política de cookies» (SEO link-text) |
+
+## Rendimiento (Lighthouse 12 móvil, media de 2 pasadas, producción)
+
+| Página | Antes | Después | TBT antes → después | Otros |
+|---|---|---|---|---|
+| Home | 55 | 58 | 1.016 → 798 ms | LCP 5,9 → 5,1 s; sin error de hidratación |
+| Catálogo | 49 | **74** | 2.298 → **502 ms** | DOM 8.843 → ~900 nodos |
+| Ficha | 70 | 76 | 444 → 372 ms | Accesibilidad 100 |
+| Nosotros | 73 | 67–76 (variable) | 233 → 769 ms | CLS 0,191 → **0** |
+
+Lo que queda en la home es JavaScript de React/framer-motion y el tamaño del HTML; mejorarlo más exige trocear componentes de animación (mejora de 1–3 meses, no bloquea).
+
+## Pruebas E2E realizadas en producción (con escritura en BBDD)
+
+| Test | Resultado |
+|---|---|
+| Pago con tarjeta (Stripe test 4242) → página de éxito → pedido nº 16 en BBDD (precio, coste, recogida, aviso push) | **PASS** |
+| Recargar la página de éxito 3 veces | **PASS** (1 solo pedido) |
+| Panel: pedido 16 aparece en la agenda → Preparar → Recogido (`entregado`) | **PASS** |
+| Efectivo con doble clic → pedido nº 17, 1 sola petición, push enviado, WhatsApp abierto con el resumen | **PASS** (emojis rotos → arreglado N-01) |
+| Notas con `<script>`, ñ, €, emoji → guardadas tal cual y mostradas como texto en el panel | **PASS** (sin XSS) |
+| Consulta «¿cómo va mi pedido?» con teléfono correcto / incorrecto | **PASS** (datos / `null`) |
+| 2 pedidos simultáneos | **PASS** (nº 18 y 19, sin errores) |
+| Misma clave de intento dos veces | **FAIL hasta aplicar la migración** (crea 2) |
+| Cancelar desde el panel (pide confirmación) | **PASS** (`cancelado`) |
+| Login del panel (rol desarrollador → vista gestión) | **PASS** |
+
+**Datos de prueba creados:** pedidos nº 16, 17, 18 y 19 (nombres «PRUEBA QA …», teléfono 600 000 000) y 1 error «QA prueba captura temprana». Bórralos (o vacía errores desde el panel) antes de abrir.
+
+## Paso a producción de Stripe (checklist)
+1. Vercel → Production: `STRIPE_SECRET_KEY = sk_live_…`.
+2. Stripe (modo live) → Webhooks → endpoint `https://<dominio>/api/stripe/webhook`, eventos `checkout.session.completed` y `checkout.session.async_payment_succeeded` → copiar `whsec_…` a `STRIPE_WEBHOOK_SECRET`.
+3. Activar Bizum/Apple Pay/Google Pay en live si se quieren; revisar descriptor del extracto.
+4. Redeploy → panel → Desarrollo → Estado: las dos tarjetas rojas deben desaparecer.
+5. Compra real de 1–2 € con tu tarjeta, comprobar que llega al panel, y reembolsarla desde Stripe.
