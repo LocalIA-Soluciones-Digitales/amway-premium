@@ -2,7 +2,8 @@
 
 import { ReactLenis, useLenis } from "lenis/react";
 import { useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { useRuta } from "@/hooks/useRuta";
+
 // Lenis only re-measures its scroll limit when <html> resizes. Watch the
 // body too, so content that grows after load (images, hydration, lazy
 // sections) never leaves a stale limit that clamps scrolling mid-page.
@@ -37,7 +38,7 @@ function LenisResizeWatcher() {
 // links to an anchor (#contacto…), which scroll to it themselves.
 function ScrollToTopOnNavigate() {
   const lenis = useLenis();
-  const pathname = usePathname();
+  const pathname = useRuta();
   const fromHistory = useRef(false);
   const first = useRef(true);
 

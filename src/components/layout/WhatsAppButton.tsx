@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRuta } from "@/hooks/useRuta";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowUp,
@@ -116,7 +116,7 @@ export function WhatsAppButton() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pathname = usePathname();
+  const pathname = useRuta();
   const { openCesta, isOpen: cestaAbierta, totalUnits, isLoaded } = useCesta();
   const catalog = useCatalogState();
 

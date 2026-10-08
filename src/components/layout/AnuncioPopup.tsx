@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { usePathname } from "next/navigation";
+import { useRuta } from "@/hooks/useRuta";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { fetchAnunciosActivos, type Anuncio } from "@/lib/anuncios";
@@ -48,7 +48,7 @@ function yaSalioEnEstaVisita(): boolean {
 // cerrado. Como mucho uno por visita, y un momento después de entrar para
 // no tapar la primera impresión de la página.
 export function AnuncioPopup() {
-  const pathname = usePathname();
+  const pathname = useRuta();
   const [anuncio, setAnuncio] = useState<Anuncio | null>(null);
   const [open, setOpen] = useState(false);
   // Abierto con /?anuncio=<id> desde el panel: no cuenta en las estadísticas.

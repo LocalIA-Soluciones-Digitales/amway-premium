@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRuta } from "@/hooks/useRuta";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Menu, MessageCircle, ShieldUser, X } from "lucide-react";
@@ -46,7 +46,7 @@ const DARK_HERO_ROUTES = new Set([
 ]);
 
 export function Header() {
-  const pathname = usePathname();
+  const pathname = useRuta();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);

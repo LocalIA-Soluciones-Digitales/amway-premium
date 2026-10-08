@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useRuta } from "@/hooks/useRuta";
 import { AnimatePresence, motion } from "framer-motion";
 import { Cookie } from "lucide-react";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import { ABRIR_COOKIES, atenderErroresTempranos, getConsent, setConsent, track }
 // Pageviews on every route change, WhatsApp clicks anywhere on the page,
 // global error capture, and the consent banner that gates all of it.
 export function Analytics() {
-  const pathname = usePathname();
+  const pathname = useRuta();
   const [askConsent, setAskConsent] = useState(false);
   const [consentVersion, setConsentVersion] = useState(0);
 
