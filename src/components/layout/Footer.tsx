@@ -53,7 +53,7 @@ export function Footer() {
               href={waLink(WA_PRESETS.general)}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#25D366]/90"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-medium text-carbon transition hover:bg-[#25D366]/90"
             >
               Hablar por WhatsApp
             </a>
@@ -78,7 +78,7 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-16 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-cream/40 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-16 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-cream/60 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {SITE.name} · {SITE.city}, {SITE.region}, {SITE.country}
           </p>
@@ -91,7 +91,7 @@ export function Footer() {
             <ConfigurarCookies className="transition-colors hover:text-cream" />
           </nav>
         </div>
-        <p className="mt-4 text-xs leading-relaxed text-cream/40">
+        <p className="mt-4 text-xs leading-relaxed text-cream/60">
           Distribuidora independiente: no somos una tienda oficial de Amway. Amway™, Nutrilite™, Artistry™, XS™,
           eSpring™, Atmosphere™ e iCook™ son marcas de sus titulares.
         </p>

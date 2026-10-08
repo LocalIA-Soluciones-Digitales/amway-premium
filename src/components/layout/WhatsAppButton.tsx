@@ -383,7 +383,7 @@ export function WhatsAppButton() {
                 rel="noopener noreferrer"
                 onClick={() => alWhatsApp("cabecera")}
                 aria-label="Hablar por WhatsApp"
-                className="inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#25D366] px-2 text-xs font-medium text-white transition hover:bg-[#1fbe5b] min-[400px]:px-3"
+                className="inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#25D366] px-2 text-xs font-medium text-carbon transition hover:bg-[#1fbe5b] min-[400px]:px-3"
               >
                 <MessageCircle size={14} />
                 <span className="hidden min-[400px]:inline">WhatsApp</span>
@@ -672,7 +672,7 @@ function TarjetaProducto({ productId, onWhatsApp }: { productId: string; onWhats
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => onWhatsApp(`agotado:${productId}`)}
-        className={`${accionBase} bg-[#25D366] text-white hover:bg-[#1fbe5b]`}
+        className={`${accionBase} bg-[#25D366] text-carbon hover:bg-[#1fbe5b]`}
       >
         Avisarme
       </a>
@@ -684,7 +684,7 @@ function TarjetaProducto({ productId, onWhatsApp }: { productId: string; onWhats
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => onWhatsApp(`precio:${productId}`)}
-        className={`${accionBase} bg-[#25D366] text-white hover:bg-[#1fbe5b]`}
+        className={`${accionBase} bg-[#25D366] text-carbon hover:bg-[#1fbe5b]`}
       >
         Pedir precio
       </a>
@@ -847,7 +847,7 @@ function Chip({
           target="_blank"
           rel="noopener noreferrer"
           onClick={onWhatsApp}
-          className="inline-flex items-center gap-1 rounded-full bg-[#25D366] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-[#1fbe5b]"
+          className="inline-flex items-center gap-1 rounded-full bg-[#25D366] px-3 py-1.5 text-xs font-medium text-carbon transition hover:bg-[#1fbe5b]"
         >
           {accion.label}
           <ArrowUpRight size={12} />

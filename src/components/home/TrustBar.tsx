@@ -9,7 +9,7 @@ export function TrustBar() {
           {loop.map((brand, i) => (
             <span
               key={`${brand}-${i}`}
-              className="font-display text-2xl tracking-tight text-carbon/35 sm:text-3xl"
+              className="font-display text-2xl tracking-tight text-carbon/50 sm:text-3xl"
             >
               {brand}
             </span>
