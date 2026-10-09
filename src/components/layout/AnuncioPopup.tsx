@@ -32,8 +32,7 @@ function yaSalioEnEstaVisita(): boolean {
 }
 
 // Pop-up con el anuncio vigente más reciente. Sale en cada visita (aunque se
-// cerrara en otra), como mucho una vez por visita, y un momento después de
-// entrar para no tapar la primera impresión de la página.
+// cerrara en otra), como mucho una vez por visita, nada más entrar.
 export function AnuncioPopup() {
   const pathname = useRuta();
   const [anuncio, setAnuncio] = useState<Anuncio | null>(null);
@@ -55,13 +54,15 @@ export function AnuncioPopup() {
     if (bloqueada || (!pedido && yaSalioEnEstaVisita())) return;
     let cancelado = false;
     let t: ReturnType<typeof setTimeout>;
+    // Se pide nada más entrar y sale en cuanto llega.
+    const peticion = fetchAnunciosActivos();
     const mostrar = async () => {
       // Primera visita: no apilar el anuncio sobre el banner de cookies.
       if (!pedido && getConsent() === null) {
-        t = setTimeout(mostrar, 1200);
+        t = setTimeout(mostrar, 300);
         return;
       }
-      const lista = await fetchAnunciosActivos();
+      const lista = await peticion;
       const elegido = (pedido && lista.find((a) => a.id === pedido)) || lista[0];
       if (cancelado || !elegido) return;
       forzado.current = elegido.id === pedido;
@@ -69,7 +70,7 @@ export function AnuncioPopup() {
       setAnuncio(elegido);
       setOpen(true);
     };
-    t = setTimeout(mostrar, pedido ? 500 : 1800);
+    void mostrar();
     return () => {
       cancelado = true;
       clearTimeout(t);
