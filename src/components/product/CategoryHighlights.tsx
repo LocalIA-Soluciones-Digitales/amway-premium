@@ -48,7 +48,7 @@ export function CategoryHighlights({
   if (visible.length === 0) return null;
 
   return (
-    <section className="border-b border-carbon/10 bg-cream-soft py-20 sm:py-28">
+    <section className="border-b border-carbon/10 bg-cream-soft pb-10 pt-16 sm:pb-20 sm:pt-24">
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <div className="flex items-end justify-between gap-6">
           <div>

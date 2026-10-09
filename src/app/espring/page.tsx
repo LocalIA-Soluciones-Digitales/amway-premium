@@ -43,7 +43,7 @@ export default function EspringPage() {
 
       <SpringMaintenance />
 
-      <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
+      <section id="catalogo" className="mx-auto max-w-7xl scroll-mt-28 px-6 pb-20 pt-10 sm:px-8 sm:pt-16">
         <h2 className="mb-2 font-display text-2xl text-carbon sm:text-3xl">
           Catálogo eSpring™ completo
         </h2>

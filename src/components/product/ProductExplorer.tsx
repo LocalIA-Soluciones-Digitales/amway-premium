@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { ArrowRight, ChevronDown, Search, X } from "lucide-react";
 import type { CategorySlug, Product } from "@/data/types";
@@ -25,6 +25,62 @@ const normalize = (s: string) =>
   s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 
 const POR_PAGINA = 24;
+
+const SORT_LABELS = {
+  relevancia: "Relevancia",
+  "precio-asc": "Menor precio",
+  "precio-desc": "Mayor precio",
+} as const;
+
+// Desplegable con la etiqueta y el valor a la vista. El select nativo va
+// invisible encima: conserva el menú del sistema (la rueda en iOS) y con sus
+// 16 px Safari no hace zoom al tocarlo; el texto visible se recorta con «…».
+function FilterSelect({
+  label,
+  display,
+  active,
+  value,
+  onChange,
+  className,
+  children,
+}: {
+  label: string;
+  display: string;
+  active: boolean;
+  value: string;
+  onChange: (v: string) => void;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative flex h-14 min-w-0 flex-col justify-center rounded-2xl border pl-4 pr-9 transition focus-within:ring-4 focus-within:ring-forest/10",
+        active ? "border-forest/50 bg-forest/[0.06]" : "border-carbon/10 bg-cream-soft hover:border-carbon/25",
+        className
+      )}
+    >
+      <span
+        className={cn(
+          "text-[10px] font-medium uppercase leading-none tracking-[0.16em]",
+          active ? "text-forest" : "text-stone"
+        )}
+      >
+        {label}
+      </span>
+      <span className="mt-1.5 truncate text-sm leading-tight text-carbon">{display}</span>
+      <ChevronDown size={15} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-stone" />
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-label={label}
+        className="absolute inset-0 h-full w-full cursor-pointer appearance-none rounded-2xl text-base opacity-0"
+      >
+        {children}
+      </select>
+    </div>
+  );
+}
 
 export function ProductExplorer({
   products,
@@ -89,13 +145,25 @@ export function ProductExplorer({
     return brands.filter((b) => present.has(b));
   }, [brands, category, inCategory]);
 
-  // Subcategory chips (solo en las páginas de categoría), each with its product count.
-  const chips = useMemo(() => {
-    if (showCategories) return [];
-    return subcategories
-      .map((s) => ({ name: s, count: inCategory.filter((p) => p.subcategory === s).length }))
-      .filter((c) => c.count > 0);
-  }, [inCategory, showCategories, subcategories]);
+  // Opciones del desplegable de tipo, solo las que tienen productos en lo que
+  // se está viendo. En el catálogo completo sin categoría elegida se agrupan
+  // por categoría para que la lista larga se lea de un vistazo.
+  const subOptions = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const p of inCategory) counts.set(p.subcategory, (counts.get(p.subcategory) ?? 0) + 1);
+    const items = subcategories.filter((s) => counts.has(s)).map((name) => ({ name, count: counts.get(name)! }));
+    if (!showCategories || category) return [{ group: null, items }];
+    const groups = new Map<CategorySlug, typeof items>();
+    for (const item of items) {
+      const g = groupOf(inCategory.find((p) => p.subcategory === item.name)!.category);
+      groups.set(g, [...(groups.get(g) ?? []), item]);
+    }
+    return CATEGORY_TILES.filter(({ slug }) => groups.has(slug)).map(({ slug }) => ({
+      group: CATEGORY_META[slug].label,
+      items: groups.get(slug)!,
+    }));
+  }, [inCategory, subcategories, showCategories, category]);
+  const subCount = subOptions.reduce((n, g) => n + g.items.length, 0);
 
   const filtered = useMemo(() => {
     // Cheapest selling price, including any price set in the admin panel.
@@ -137,23 +205,10 @@ export function ProductExplorer({
     setBrand(null);
   };
 
-  const selectClass =
-    "h-12 w-full min-w-0 cursor-pointer appearance-none truncate rounded-full border border-carbon/10 bg-cream-soft pl-5 pr-10 text-base text-carbon transition hover:border-carbon/25 focus:border-forest focus:outline-none sm:text-sm";
-  const chevron = (
-    <ChevronDown size={15} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-stone" />
-  );
-  const chipClass = (active: boolean) =>
-    cn(
-      "flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm transition",
-      active
-        ? "border-carbon bg-carbon text-cream"
-        : "border-carbon/10 bg-cream-soft text-carbon hover:border-carbon/30"
-    );
-
   return (
     <div>
       {showCategories && (
-        <div className="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:grid-cols-4 sm:gap-4">
           {CATEGORY_TILES.map(({ slug, image }) => {
             const active = category === slug;
             return (
@@ -194,97 +249,120 @@ export function ProductExplorer({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-[1fr_auto_auto] sm:gap-4">
-        <div className="relative col-span-2 sm:col-span-1">
-          <Search size={17} className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-stone" />
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <form
+          role="search"
+          onSubmit={(e) => {
+            e.preventDefault();
+            // En móvil, «Buscar» en el teclado lo cierra para dejar ver los resultados.
+            (document.activeElement as HTMLElement | null)?.blur();
+          }}
+          className="relative min-w-0 flex-1"
+        >
+          <Search size={18} className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-stone" />
           <input
             type="search"
+            enterKeyHint="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Busca un producto, necesidad o marca…"
+            placeholder="Busca producto o necesidad"
             aria-label="Buscar productos"
-            className="h-12 w-full rounded-full border border-carbon/10 bg-cream-soft pl-12 pr-11 text-base text-carbon placeholder:text-stone/70 transition hover:border-carbon/25 focus:border-forest focus:outline-none sm:text-sm [&::-webkit-search-cancel-button]:hidden"
+            className="h-14 w-full rounded-2xl border border-carbon/10 bg-cream-soft pl-12 pr-12 text-base text-carbon placeholder:text-stone/60 transition hover:border-carbon/25 focus:border-forest focus:outline-none focus:ring-4 focus:ring-forest/10 sm:text-sm [&::-webkit-search-cancel-button]:hidden"
           />
           {query && (
             <button
               type="button"
               onClick={() => setQuery("")}
               aria-label="Borrar búsqueda"
-              className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-stone transition hover:bg-carbon/5 hover:text-carbon"
+              className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-carbon/5 text-stone transition hover:bg-carbon/10 hover:text-carbon"
             >
               <X size={15} />
             </button>
           )}
-        </div>
+        </form>
 
-        <div className="relative min-w-0 sm:w-48">
-          <select
-            value={brand ?? ""}
-            onChange={(e) => setBrand(e.target.value || null)}
-            aria-label="Marca"
-            className={selectClass}
-          >
-            <option value="">Todas las marcas</option>
-            {brandOptions.map((b) => (
-              <option key={b} value={b}>
-                {b}
-              </option>
-            ))}
-          </select>
-          {chevron}
-        </div>
+        {(subCount > 1 || brandOptions.length > 1) && (
+          <div className={cn("grid gap-3 sm:flex", subCount > 1 && brandOptions.length > 1 ? "grid-cols-2" : "grid-cols-1")}>
+            {subCount > 1 && (
+              <FilterSelect
+                label={showCategories ? "Tipo" : "Categoría"}
+                display={subcategory ?? "Todas"}
+                active={subcategory !== null}
+                value={subcategory ?? ""}
+                onChange={(v) => setSubcategory(v || null)}
+                className="sm:w-56"
+              >
+                <option value="">Todas</option>
+                {subOptions.map(({ group, items }) => {
+                  const options = items.map((o) => (
+                    <option key={o.name} value={o.name}>
+                      {o.name} ({o.count})
+                    </option>
+                  ));
+                  return group ? (
+                    <optgroup key={group} label={group}>
+                      {options}
+                    </optgroup>
+                  ) : (
+                    options
+                  );
+                })}
+              </FilterSelect>
+            )}
+            {brandOptions.length > 1 && (
+              <FilterSelect
+                label="Marca"
+                display={brand ?? "Todas"}
+                active={brand !== null}
+                value={brand ?? ""}
+                onChange={(v) => setBrand(v || null)}
+                className="sm:w-48"
+              >
+                <option value="">Todas</option>
+                {brandOptions.map((b) => (
+                  <option key={b} value={b}>
+                    {b}
+                  </option>
+                ))}
+              </FilterSelect>
+            )}
+          </div>
+        )}
+      </div>
 
-        <div className="relative min-w-0 sm:w-56">
+      <div className="mt-6 flex items-center justify-between gap-4 border-t border-carbon/10 pt-4">
+        <div className="flex min-w-0 items-center gap-3">
+          <p className="truncate text-xs uppercase tracking-wider text-stone" aria-live="polite">
+            {filtered.length} producto{filtered.length === 1 ? "" : "s"}
+            {category && ` en ${CATEGORY_META[category].label}`}
+          </p>
+          {hasFilters && (
+            <button
+              type="button"
+              onClick={clearAll}
+              className="flex shrink-0 items-center gap-1 text-xs font-medium text-forest transition hover:text-carbon"
+            >
+              <X size={12} />
+              Limpiar
+            </button>
+          )}
+        </div>
+        <label className="relative flex shrink-0 cursor-pointer items-center gap-1 text-sm text-carbon">
+          <span className="text-stone">Ordenar:</span>
+          <span className="font-medium">{SORT_LABELS[sort]}</span>
+          <ChevronDown size={14} className="text-stone" />
+          {/* Select invisible encima: menú nativo y 16 px para que iOS no haga zoom. */}
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as typeof sort)}
             aria-label="Ordenar por"
-            className={selectClass}
+            className="absolute inset-0 cursor-pointer appearance-none text-base opacity-0"
           >
-            <option value="relevancia">Ordenar: relevancia</option>
-            <option value="precio-asc">Precio: menor a mayor</option>
-            <option value="precio-desc">Precio: mayor a menor</option>
+            <option value="relevancia">Relevancia</option>
+            <option value="precio-asc">Precio: de menor a mayor</option>
+            <option value="precio-desc">Precio: de mayor a menor</option>
           </select>
-          {chevron}
-        </div>
-      </div>
-
-      {chips.length > 1 && (
-        <div className="-mx-6 mt-5 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
-          <button type="button" onClick={() => setSubcategory(null)} className={chipClass(subcategory === null)}>
-            Todo
-          </button>
-          {chips.map((c) => (
-            <button
-              key={c.name}
-              type="button"
-              onClick={() => setSubcategory(subcategory === c.name ? null : c.name)}
-              className={chipClass(subcategory === c.name)}
-            >
-              {c.name}
-              <span className={cn("text-xs", subcategory === c.name ? "text-cream/60" : "text-stone")}>
-                {c.count}
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="mt-8 flex items-center justify-between gap-4 border-t border-carbon/10 pt-5">
-        <p className="text-xs uppercase tracking-wider text-stone">
-          {filtered.length} producto{filtered.length === 1 ? "" : "s"}
-          {category && ` en ${CATEGORY_META[category].label}`}
-        </p>
-        {hasFilters && (
-          <button
-            type="button"
-            onClick={clearAll}
-            className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-forest transition hover:text-carbon"
-          >
-            <X size={13} />
-            Limpiar filtros
-          </button>
-        )}
+        </label>
       </div>
 
       <div

@@ -46,8 +46,8 @@ export default function BellezaPage() {
 
       <CategoryHighlights eyebrow="Selección Artistry™" title="Iconos de la gama" accent="gold" items={highlights} />
 
-      <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20 sm:px-8">
-        <h2 className="mb-8 font-display text-2xl text-carbon sm:text-3xl">
+      <section id="catalogo" className="mx-auto max-w-7xl scroll-mt-28 px-6 pb-20 pt-10 sm:px-8 sm:pt-16">
+        <h2 className="mb-6 font-display text-2xl text-carbon sm:mb-8 sm:text-3xl">
           Catálogo Belleza completo
         </h2>
         <ProductExplorer products={products} subcategories={subcategories} brands={brands} />
