@@ -43,6 +43,11 @@ export function EnergyScrollStory() {
     if (!wrapperRef.current) return;
     const wrapper = wrapperRef.current;
 
+    // En el móvil las latas se separan más: a 42vw asomaban dos o tres a la
+    // vez; a 80vw la vecina queda fuera de la pantalla mientras no se cambia.
+    const spread = () => (window.innerWidth < 1024 ? 80 : 42);
+    let gap = spread();
+
     function applyStage(progress: number) {
       const continuous = progress * (N - 1);
 
@@ -50,8 +55,8 @@ export function EnergyScrollStory() {
         if (!el) return;
         const delta = i - continuous;
         const absDelta = Math.min(Math.abs(delta), 1.6);
-        const opacity = Math.max(0, 1 - absDelta * 0.85);
-        const x = delta * 42;
+        const opacity = Math.max(0, 1 - absDelta * (gap > 42 ? 1.1 : 0.85));
+        const x = delta * gap;
         const scale = 1 - Math.min(Math.abs(delta), 1) * 0.32;
         const rotate = delta * 12;
         el.style.transform = `translate3d(${x}vw, 0, 0) scale(${scale}) rotate(${rotate}deg)`;
@@ -66,16 +71,45 @@ export function EnergyScrollStory() {
       }
     }
 
+    // En el móvil el scroll es nativo (Lenis no lo suaviza con el dedo) y
+    // llega a saltos: las latas se pintaban a trompicones. El progreso pasa
+    // por una interpolación corta, así el movimiento sigue al dedo con
+    // inercia, y al soltar se asienta en la lata más cercana.
+    const smooth = { p: 0 };
+    const follow = gsap.quickTo(smooth, "p", {
+      duration: 0.6,
+      ease: "power3.out",
+      onUpdate: () => applyStage(smooth.p),
+    });
+
+    // La barra de Safari al aparecer y esconderse cambia el alto de la
+    // ventana; sin esto ScrollTrigger lo recalcula todo y la lata da un salto.
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
     const trigger = ScrollTrigger.create({
       trigger: wrapper,
       start: "top top",
       end: "bottom bottom",
-      onUpdate: (self) => applyStage(self.progress),
+      onUpdate: (self) => follow(self.progress),
+      // Solo en pantallas táctiles: en el ordenador Lenis lleva el scroll y
+      // un segundo desplazamiento automático se pelearía con él.
+      snap: window.matchMedia("(pointer: coarse)").matches
+        ? { snapTo: 1 / (N - 1), duration: { min: 0.25, max: 0.6 }, delay: 0.12, ease: "power2.inOut" }
+        : undefined,
     });
 
+    const onResize = () => {
+      gap = spread();
+      applyStage(smooth.p);
+    };
+    window.addEventListener("resize", onResize);
     applyStage(0);
 
-    return () => trigger.kill();
+    return () => {
+      trigger.kill();
+      gsap.killTweensOf(smooth);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   // Chrome (background photo, color wash, headline) reacts only to discrete
