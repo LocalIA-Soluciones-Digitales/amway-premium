@@ -79,6 +79,18 @@ export const ENERGY_FLAVORS: EnergyFlavor[] = [
     accent: "#543c78",
     accentSoft: "rgba(84,60,120,0.5)",
   },
+  {
+    id: "peach-guava",
+    name: "Elite Focus",
+    flavorEs: "Melocotón y Guayaba",
+    line: "XS™ Focus Power Drink",
+    productId: "bebida-focus-power-drink-melocoton-guayaba",
+    tag: "Cafeína natural · Ginseng",
+    benefit: "Sin azúcar, con cafeína natural de granos de café verde, ginseng, vitaminas del grupo B y magnesio.",
+    image: "peach-guava.webp",
+    accent: "#d0525c",
+    accentSoft: "rgba(208,82,92,0.5)",
+  },
 ];
 
 // Real, verbatim-sourced facts — used for the typographic benefit reveals.

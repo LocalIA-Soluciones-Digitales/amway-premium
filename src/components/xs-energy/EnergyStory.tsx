@@ -5,7 +5,6 @@ import { waLink } from "@/data/site-config";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { ENERGY_FLAVORS } from "@/data/energy-drinks";
 import { EnergyScrollStory } from "./EnergyScrollStory";
-import { EnergyFlavorSwipe } from "./EnergyFlavorSwipe";
 
 function EnergyStoryStatic() {
   return (
@@ -60,10 +59,7 @@ export function EnergyStory() {
       {reducedMotion ? (
         <EnergyStoryStatic />
       ) : (
-        <>
-          <EnergyScrollStory />
-          <EnergyFlavorSwipe />
-        </>
+        <EnergyScrollStory />
       )}
     </div>
   );

@@ -10,14 +10,17 @@ import { ENERGY_FLAVORS } from "@/data/energy-drinks";
 const N = ENERGY_FLAVORS.length;
 
 // One real lifestyle photo per chapter, chosen to feature that flavor's can
-// where the source photography allows it (see ASSETS_NEEDED.md).
+// where the source photography allows it (see ASSETS_NEEDED.md). Las fotos
+// son apaisadas: en el móvil, en vertical, el recorte centrado de la primera
+// solo dejaba pared lisa; cada una lleva el encuadre que mantiene a la vista
+// a la persona o la lata.
 const CHAPTER_BG = [
-  "office-laptop.webp",
-  "ginger-mountain.webp",
-  "hero-mountain-toast.webp",
-  "cheers-closeup.webp",
-  "friends-bench.webp",
-  "cheers-cooler.webp",
+  { src: "office-laptop.webp", position: "28% 50%" },
+  { src: "ginger-mountain.webp", position: "52% 50%" },
+  { src: "hero-mountain-toast.webp", position: "50% 50%" },
+  { src: "cheers-closeup.webp", position: "62% 50%" },
+  { src: "friends-bench.webp", position: "40% 50%" },
+  { src: "cheers-cooler.webp", position: "78% 50%" },
 ];
 
 export function EnergyScrollStory() {
@@ -111,10 +114,12 @@ export function EnergyScrollStory() {
   }, [activeIndex]);
 
   function goTo(i: number) {
-    if (!wrapperRef.current || !lenis) return;
-    const range = wrapperRef.current.offsetHeight - window.innerHeight;
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    const range = wrapper.offsetHeight - window.innerHeight;
     const offset = (i / (N - 1)) * range;
-    lenis.scrollTo(wrapperRef.current, { offset, duration: 1.4 });
+    if (lenis) lenis.scrollTo(wrapper, { offset, duration: 1.4 });
+    else window.scrollTo({ top: wrapper.getBoundingClientRect().top + window.scrollY + offset, behavior: "smooth" });
   }
 
   const active = ENERGY_FLAVORS[activeIndex];
@@ -122,10 +127,10 @@ export function EnergyScrollStory() {
   return (
     <div
       ref={wrapperRef}
-      className="relative hidden lg:block"
-      style={{ height: `${N * 100}vh` }}
+      className="relative"
+      style={{ height: `${N * 90}svh` }}
     >
-      <div ref={stageRef} className="sticky top-0 h-screen w-full overflow-hidden bg-xs-ink">
+      <div ref={stageRef} className="sticky top-0 h-[100svh] w-full overflow-hidden bg-xs-ink">
         {ENERGY_FLAVORS.map((flavor, i) => (
           <div
             key={flavor.id}
@@ -136,11 +141,12 @@ export function EnergyScrollStory() {
             style={{ opacity: i === 0 ? 1 : 0 }}
           >
             <Image
-              src={`/images/xs-energy/lifestyle/${CHAPTER_BG[i]}`}
+              src={`/images/xs-energy/lifestyle/${CHAPTER_BG[i].src}`}
               alt=""
               fill
               sizes="100vw"
               className="scale-110 object-cover"
+              style={{ objectPosition: CHAPTER_BG[i].position }}
             />
           </div>
         ))}
@@ -148,17 +154,18 @@ export function EnergyScrollStory() {
         <div ref={washARef} className="absolute inset-0" style={{ opacity: 1 }} />
         <div ref={washBRef} className="absolute inset-0" style={{ opacity: 0 }} />
 
-        <div className="pointer-events-none absolute left-8 top-28 font-mono text-xs tracking-widest text-cream/40">
+        <div className="pointer-events-none absolute inset-x-0 top-28 px-6 text-center font-mono text-xs tracking-widest text-cream/50 sm:px-8 lg:text-left lg:text-cream/40">
           {String(activeIndex + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
+          {activeIndex < N - 1 && <span className="lg:hidden"> · Sigue bajando</span>}
         </div>
 
         <div
           ref={headlineRef}
           key={active.id}
-          className="pointer-events-none absolute inset-x-0 top-[38%] z-10 -translate-y-1/2 text-center"
+          className="pointer-events-none absolute inset-x-0 top-36 z-10 px-4 text-center lg:top-[38%] lg:-translate-y-1/2"
         >
           <span className="block overflow-hidden">
-            <span className="story-word inline-block font-display text-[11vw] italic uppercase leading-[0.85] text-cream/90">
+            <span className="story-word inline-block font-display text-[12vw] italic uppercase leading-[0.85] text-cream/90 lg:text-[11vw]">
               {active.name}
             </span>
           </span>
@@ -175,24 +182,22 @@ export function EnergyScrollStory() {
             ref={(el) => {
               canRefs.current[i] = el;
             }}
-            className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center will-change-transform"
+            className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center pb-[14svh] will-change-transform lg:pb-0"
           >
-            <div className="relative h-[52vh] w-[240px]">
+            <div className="relative h-[34svh] w-[170px] lg:h-[52vh] lg:w-[240px]">
               <Image
                 src={`/images/xs-energy/cans/${flavor.image}`}
                 alt={`XS™ ${flavor.name} sabor ${flavor.flavorEs}`}
                 fill
-                sizes="240px"
+                sizes="(max-width: 1023px) 170px, 240px"
                 className="object-contain drop-shadow-[0_35px_50px_rgba(0,0,0,0.55)]"
               />
             </div>
           </div>
         ))}
 
-        <div className="absolute inset-x-0 bottom-14 z-30 flex flex-col items-center gap-5 px-8">
-          <p className="max-w-md text-center text-sm leading-relaxed text-cream/65">{active.benefit}</p>
-
-          <div className="flex items-center gap-3 text-cream/70">
+        <div className="absolute inset-x-0 bottom-8 z-30 flex flex-col items-center gap-4 px-6 sm:px-8 lg:bottom-14 lg:gap-5">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-cream/70">
             <span className="text-xs font-semibold uppercase tracking-[0.3em]">{active.line}</span>
             {active.tag && (
               <span className="rounded-full border border-cream/25 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-cream">
@@ -200,6 +205,8 @@ export function EnergyScrollStory() {
               </span>
             )}
           </div>
+
+          <p className="min-h-[2.75rem] max-w-md text-center text-sm leading-relaxed text-cream/65">{active.benefit}</p>
 
           <a
             href={waLink(`Hola, quiero información sobre XS™ ${active.name} sabor ${active.flavorEs}.`)}
