@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarClock, Check, ClipboardCopy, HandCoins, MessageCircle, PackageCheck, Printer, Send, Trash2, Truck, XCircle } from "lucide-react";
+import { createPortal } from "react-dom";
+import { ArrowLeft, CalendarClock, Check, ClipboardCopy, HandCoins, MessageCircle, PackageCheck, Printer, Send, Trash2, Truck, XCircle } from "lucide-react";
 import { SITE } from "@/data/site-config";
 import { cn } from "@/lib/utils";
 import { FotoItem } from "./recogidas";
@@ -18,9 +19,7 @@ const PASOS_RECOGIDA: { estado: Pedido["estado"]; label: string }[] = [
   { estado: "entregado", label: "Recogido" },
 ];
 
-function imprimirAlbaran(p: Pedido) {
-  const w = window.open("", "_blank", "width=720,height=900");
-  if (!w) return;
+function albaranHtml(p: Pedido) {
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
   const filas = p.items
     .map(
@@ -30,7 +29,7 @@ function imprimirAlbaran(p: Pedido) {
         )}</td></tr>`
     )
     .join("");
-  w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Albarán #${p.numero}</title>
+  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Albarán #${p.numero}</title>
 <style>body{font:14px/1.5 system-ui,sans-serif;color:#1c1a16;margin:40px}h1{font:600 22px Georgia,serif;margin:0}
 .muted{color:#8a8271}table{width:100%;border-collapse:collapse;margin-top:24px}td,th{padding:8px 4px;border-bottom:1px solid #e8e2d6;text-align:left;vertical-align:top}
 .r{text-align:right}small{color:#8a8271}.box{margin-top:24px;padding:16px;border:1px solid #e8e2d6;border-radius:12px}.tot{font-weight:600;font-size:16px}</style></head>
@@ -45,8 +44,27 @@ ${p.recogida_fecha ? `<p style="margin-top:24px"><strong>Recogida:</strong> ${es
 <p class="muted" style="margin-top:32px">${
     p.estado === "pendiente" ? `Pago en ${METODO_PAGO[p.metodo_pago].toLowerCase()} al recoger` : `Pagado con ${METODO_PAGO[p.metodo_pago]}`
   }. ¡Gracias por tu compra!</p>
-<script>window.onload=()=>{window.print()}</script></body></html>`);
-  w.document.close();
+</body></html>`;
+}
+
+// El albarán se ve dentro de la app (no en una ventana nueva): en el móvil,
+// con la app instalada, una ventana nueva no tiene forma de volver atrás.
+function AlbaranVisor({ p, onClose }: { p: Pedido; onClose: () => void }) {
+  const [frame, setFrame] = useState<HTMLIFrameElement | null>(null);
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex flex-col bg-white">
+      <div className="flex items-center justify-between gap-2 border-b border-carbon/[0.08] px-4 pb-2 pt-[max(0.5rem,env(safe-area-inset-top))]">
+        <button type="button" onClick={onClose} className={cn(btnGhost, "h-9 text-xs")}>
+          <ArrowLeft size={14} /> Volver
+        </button>
+        <button type="button" onClick={() => frame?.contentWindow?.print()} className={cn(btnPrimary, "h-9 text-xs")}>
+          <Printer size={14} /> Imprimir
+        </button>
+      </div>
+      <iframe ref={setFrame} srcDoc={albaranHtml(p)} title={`Albarán #${p.numero}`} className="w-full flex-1 border-0" />
+    </div>,
+    document.body
+  );
 }
 
 // Día y hora de recogida, con opción de cambiarlos (el cliente avisa de un
@@ -128,6 +146,7 @@ export function PedidoDetalle({
 }) {
   const [seguimiento, setSeguimiento] = useState(p.seguimiento ?? "");
   const [copiado, setCopiado] = useState(false);
+  const [albaran, setAlbaran] = useState(false);
   const recoge = p.recogida_fecha != null;
   const PASOS = recoge ? PASOS_RECOGIDA : PASOS_ENVIO;
   const pasoActual = PASOS.findIndex((x) => x.estado === p.estado);
@@ -298,7 +317,7 @@ export function PedidoDetalle({
         )}
 
         <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={() => imprimirAlbaran(p)} className={cn(btnGhost, "h-9 text-xs")}>
+          <button type="button" onClick={() => setAlbaran(true)} className={cn(btnGhost, "h-9 text-xs")}>
             <Printer size={14} /> Albarán
           </button>
           {!cancelado ? (
@@ -320,6 +339,7 @@ export function PedidoDetalle({
         </div>
         <p className="text-[11px] text-stone">Estado actual: {ESTADO_PEDIDO[p.estado].label}</p>
       </div>
+      {albaran && <AlbaranVisor p={p} onClose={() => setAlbaran(false)} />}
     </div>
   );
 }
