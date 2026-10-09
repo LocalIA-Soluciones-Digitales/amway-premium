@@ -385,10 +385,10 @@ function Paneles({ session, rol, nombre }: { session: Session; rol: Rol; nombre:
   const tabs: ShellTab<GestionTab>[] = [
     { id: "hoy", label: "Hoy", icon: LayoutDashboard, badge: pendientes.recogidasHoy + pendientes.atrasados },
     { id: "pedidos", label: "Pedidos", icon: ShoppingBag, badge: pendientes.pedidos },
+    { id: "contabilidad", label: "Contabilidad", icon: BarChart3 },
     { id: "clientes", label: "Clientes", icon: UsersRound },
     { id: "productos", label: "Productos", icon: Package },
     { id: "solicitudes", label: "Solicitudes", icon: ClipboardList, badge: pendientes.solicitudes },
-    { id: "contabilidad", label: "Contabilidad", icon: BarChart3 },
     { id: "resenas", label: "Reseñas", icon: MessageSquareQuote, badge: pendientes.resenas },
     { id: "anuncios", label: "Anuncios", icon: Megaphone },
   ];
