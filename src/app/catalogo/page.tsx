@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
 import { PRODUCTS, getBrands } from "@/data/products";
 import { conRuta } from "@/lib/seo";
+import { SITE } from "@/data/site-config";
 
 export const metadata: Metadata = conRuta("/catalogo", {
   title: "Catálogo completo",
@@ -32,7 +33,7 @@ export default function CatalogoPage() {
         />
         <div className="mx-auto max-w-7xl px-6 py-20 sm:px-8 sm:py-28">
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-forest">
-            Catálogo Amway Barakaldo
+            Catálogo {SITE.name}
           </p>
           <h1 className="mt-5 max-w-2xl font-display text-5xl leading-[1.05] text-carbon sm:text-6xl">
             {PRODUCTS.length} productos originales Amway.

@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
+import { SITE } from "@/data/site-config";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -40,7 +41,7 @@ export default async function OgImage() {
             <img src={logoSrc} width={68} height={68} alt="" />
           </div>
           <div style={{ display: "flex", fontSize: 28, color: "#e4cba3", letterSpacing: 4 }}>
-            AMWAY BARAKALDO
+            {SITE.name.toUpperCase()}
           </div>
         </div>
         <div style={{ display: "flex", fontSize: 64, marginTop: 24, maxWidth: 900, lineHeight: 1.1 }}>

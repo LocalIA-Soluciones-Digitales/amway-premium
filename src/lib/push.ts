@@ -30,7 +30,7 @@ function configurar(): boolean {
   const privada = process.env.AMWAY_VAPID_PRIVATE_KEY;
   if (!privada) return false;
   if (!configurado) {
-    webpush.setVapidDetails(process.env.AMWAY_VAPID_SUBJECT ?? "mailto:hola@amwaybarakaldo.es", VAPID_PUBLIC_KEY, privada);
+    webpush.setVapidDetails(process.env.AMWAY_VAPID_SUBJECT ?? "mailto:hola@nutriyuly.com", VAPID_PUBLIC_KEY, privada);
     configurado = true;
   }
   return true;

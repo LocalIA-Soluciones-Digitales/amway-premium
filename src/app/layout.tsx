@@ -32,13 +32,16 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   manifest: "/manifest.webmanifest",
   title: {
-    default: `${SITE.name} — Distribuidora independiente de productos Amway`,
+    default: `${SITE.name} — ${SITE.tagline}`,
     template: `%s · ${SITE.name}`,
   },
   description:
-    "Distribuidora independiente de productos originales Amway: Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook. Atención personalizada en Barakaldo, Bizkaia.",
+    "Nutri Yuly: nutrición, belleza y hogar en Barakaldo. Distribuidora independiente de productos originales Amway (Nutrilite, Artistry, XS Energy, eSpring, Atmosphere, iCook) con atención personal y recogida en el local.",
   keywords: [
-    "Amway Barakaldo",
+    "Nutri Yuly",
+    "Nutrición Barakaldo",
+    "Belleza Barakaldo",
+    "Productos Amway Barakaldo",
     "Productos Amway Bizkaia",
     "Productos Amway España",
     "Nutrilite España",
@@ -53,13 +56,13 @@ export const metadata: Metadata = {
     locale: "es_ES",
     url: SITE.url,
     siteName: SITE.name,
-    title: `${SITE.name} — Distribuidora independiente de productos Amway`,
+    title: `${SITE.name} — ${SITE.tagline}`,
     description:
       "Nutrición, belleza y hogar con productos originales Amway. Distribuidora independiente con atención y recogida en Barakaldo.",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.name} — Productos Amway Premium`,
+    title: `${SITE.name} — ${SITE.tagline}`,
     description: "Nutrición, belleza, hogar y salud con la calidad Amway.",
   },
   robots: { index: true, follow: true },

@@ -1,5 +1,8 @@
 export const SITE = {
-  name: "Amway Barakaldo",
+  name: "Nutri Yuly",
+  // Acompaña siempre al nombre (portada, Google, redes): «Nutri» no debe
+  // hacer pensar que solo hay suplementos.
+  tagline: "Nutrición, belleza y hogar en Barakaldo",
   legalNote: "Distribuidora independiente de productos originales Amway. No es una tienda oficial de Amway.",
   // Dominio canónico (canonical, sitemap, Open Graph, JSON-LD). Hasta
   // conectar el definitivo es el de Vercel: apuntar a un dominio que aún no
@@ -16,7 +19,7 @@ export const SITE = {
   whatsapp: "34628409781",
   // El buzón tiene que existir antes de abrir: sale en el aviso legal y en
   // Nosotros. Se cambia con NEXT_PUBLIC_CONTACT_EMAIL al tener el dominio.
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hola@amwaybarakaldo.es",
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hola@nutriyuly.com",
   // Atención por WhatsApp y recogida en el local (hora de Madrid). No hay
   // envíos a domicilio: todos los pedidos se recogen en el local.
   horario: {

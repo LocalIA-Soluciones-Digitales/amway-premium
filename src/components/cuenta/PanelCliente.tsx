@@ -96,9 +96,9 @@ function descargarCalendario(p: MiPedido) {
   const ics = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Amway Barakaldo//Pedidos//ES",
+    `PRODID:-//${SITE.name}//Pedidos//ES`,
     "BEGIN:VEVENT",
-    `UID:pedido-${p.numero}@amwaybarakaldo.es`,
+    `UID:pedido-${p.numero}@nutriyuly.com`,
     `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").slice(0, 15)}Z`,
     `DTSTART;TZID=Europe/Madrid:${inicio}`,
     `DTEND;TZID=Europe/Madrid:${fin}`,

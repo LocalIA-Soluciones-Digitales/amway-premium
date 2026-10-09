@@ -8,7 +8,7 @@ export const dynamic = "force-static";
 
 export function GET() {
   const manifest: MetadataRoute.Manifest = {
-    name: `${SITE.name} — Productos Amway Premium`,
+    name: `${SITE.name} — ${SITE.tagline}`,
     short_name: SITE.name,
     description:
       "Distribuidora independiente de productos originales Amway.",
