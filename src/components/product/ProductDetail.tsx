@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import type { Product } from "@/data/types";
 import { cheapestVariantIndex, productImageSrc, variantKind } from "@/data/types";
+import { FormatoDestacado } from "./Formato";
 import { SITE, waProductLink } from "@/data/site-config";
 import { formatEUR } from "@/lib/currency";
 import { track } from "@/lib/analytics";
@@ -232,6 +233,103 @@ function ProductTabs({ tabs }: { tabs: { id: string; label: string; content: Rea
   );
 }
 
+// Más de esto se pliega: 15 tonos de golpe empujan el botón de compra fuera
+// de la pantalla en el móvil.
+const OPCIONES_VISIBLES = 8;
+
+// Opciones del producto (tonos, sabores o formatos) como botones a la vista:
+// se ve todo lo que hay y se elige de un toque, sin abrir un desplegable.
+// Los tonos numerados («101 Shell») destacan el número, que es como se piden.
+function SelectorOpciones({
+  product,
+  kind,
+  kindPlural,
+  value,
+  onChange,
+}: {
+  product: Product;
+  kind: string;
+  kindPlural: string;
+  value: number;
+  onChange: (i: number) => void;
+}) {
+  const catalog = useCatalogState();
+  const total = product.variants.length;
+  const [abierto, setAbierto] = useState(() => value >= OPCIONES_VISIBLES);
+  const plegable = total > OPCIONES_VISIBLES + 2;
+  const visibles = plegable && !abierto ? product.variants.slice(0, OPCIONES_VISIBLES) : product.variants;
+  const precios = product.variants.map((_, i) => catalog.precio(product, i));
+  // El precio solo se repite en cada botón si cambia de una opción a otra.
+  const preciosDistintos = new Set(precios.filter((p) => p != null)).size > 1;
+  const formatos = kind === "Formato";
+
+  return (
+    <div className="mt-3">
+      <div
+        role="radiogroup"
+        aria-label={`Elige ${kind.toLowerCase()} de ${product.name}`}
+        className={cn("grid gap-2", formatos ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2")}
+      >
+        {visibles.map((v, i) => {
+          const active = i === value;
+          const numerado = v.size.match(/^(\d{2,3})\s+(.+)$/);
+          return (
+            <button
+              key={i}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              onClick={() => onChange(i)}
+              className={cn(
+                "relative flex min-h-12 items-center gap-2 rounded-xl border px-3 py-2 text-left text-sm transition",
+                active
+                  ? "border-carbon bg-carbon text-cream shadow-md shadow-carbon/10"
+                  : "border-carbon/10 bg-cream-soft text-carbon hover:border-carbon/35"
+              )}
+            >
+              {numerado && (
+                <span
+                  className={cn(
+                    "shrink-0 rounded-md px-1.5 py-0.5 text-[11px] font-semibold tabular-nums",
+                    active ? "bg-cream/15 text-cream" : "bg-linen text-carbon/80"
+                  )}
+                >
+                  {numerado[1]}
+                </span>
+              )}
+              <span className="min-w-0 flex-1">
+                <span className="block leading-snug">{numerado ? numerado[2] : v.size}</span>
+                {preciosDistintos && precios[i] != null && (
+                  <span className={cn("block text-xs tabular-nums", active ? "text-cream/70" : "text-stone")}>
+                    {formatEUR(precios[i]!)}
+                  </span>
+                )}
+              </span>
+              {active && <Check size={14} className="shrink-0 text-cream/80" />}
+            </button>
+          );
+        })}
+      </div>
+      {plegable && (
+        <button
+          type="button"
+          onClick={() => setAbierto((a) => !a)}
+          aria-expanded={abierto}
+          className="mt-2.5 inline-flex items-center gap-1 text-sm font-medium text-carbon underline-offset-4 hover:underline"
+        >
+          {abierto ? "Ver menos" : `Ver los ${total} ${kindPlural}`}
+          <ChevronDown size={15} className={cn("transition-transform", abierto && "rotate-180")} />
+        </button>
+      )}
+      {product.variants[value]?.sku && (
+        <p className="mt-2 text-[11px] tabular-nums text-stone">
+          {kind} elegido: {product.variants[value].size} · Ref. {product.variants[value].sku}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function ProductDetail({
   product,
   categoryLabel,
@@ -366,29 +464,6 @@ export function ProductDetail({
             <p className="text-[15px] leading-relaxed text-carbon/75">{body}</p>
           ) : (
             <p className="text-pretty font-display text-xl leading-snug text-carbon sm:text-2xl">{lead}</p>
-          )}
-          {hasOptions && (
-            <div className="mt-6">
-              <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-stone">
-                {product.variants.length} {kindPlural}
-              </p>
-              <ul className="mt-2.5 flex flex-wrap gap-1.5">
-                {product.variants.map((v, i) => (
-                  <li key={i}>
-                    <button
-                      type="button"
-                      onClick={() => setVariantIndex(i)}
-                      className={cn(
-                        "rounded-full px-3 py-1 text-xs transition",
-                        i === variantIndex ? "bg-carbon text-cream" : "bg-linen/70 text-carbon/80 hover:bg-linen"
-                      )}
-                    >
-                      {v.size}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
           )}
         </div>
       ),
@@ -540,69 +615,23 @@ export function ProductDetail({
                   <p className="text-xs font-medium uppercase tracking-[0.14em] text-stone">
                     {hasOptions ? `Elige ${kind.toLowerCase()}` : kind}
                   </p>
-                  {hasOptions && <p className="text-xs tabular-nums text-stone">{product.variants.length} opciones</p>}
+                  {hasOptions && (
+                    <p className="min-w-0 truncate text-xs text-stone">
+                      {product.variants.length} {kindPlural}
+                    </p>
+                  )}
                 </div>
 
-                {!hasOptions ? (
-                  <p className="mt-2.5 inline-flex items-center gap-2 rounded-xl bg-linen/60 px-4 py-2.5 text-sm font-medium text-carbon">
-                    <Package size={15} className="text-stone" />
-                    {variant.size}
-                  </p>
-                ) : product.variants.length <= 6 ? (
-                  <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                    {product.variants.map((v, i) => {
-                      const optionPrice = catalog.precio(product, i);
-                      const active = i === variantIndex;
-                      return (
-                        <button
-                          key={i}
-                          type="button"
-                          onClick={() => setVariantIndex(i)}
-                          aria-pressed={active}
-                          className={cn(
-                            "relative rounded-2xl border px-4 py-3 text-left text-sm transition",
-                            active
-                              ? "border-carbon bg-carbon text-cream shadow-lg shadow-carbon/10"
-                              : "border-carbon/10 bg-cream-soft text-carbon hover:border-carbon/35"
-                          )}
-                        >
-                          {active && <Check size={14} className="absolute right-3 top-3 text-cream/80" />}
-                          <span className="block pr-4 font-medium">{v.size}</span>
-                          {optionPrice != null && (
-                            <span className={cn("mt-0.5 block text-xs tabular-nums", active ? "text-cream/70" : "text-stone")}>
-                              {formatEUR(optionPrice)}
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
+                {hasOptions ? (
+                  <SelectorOpciones
+                    product={product}
+                    kind={kind}
+                    kindPlural={kindPlural}
+                    value={variantIndex}
+                    onChange={setVariantIndex}
+                  />
                 ) : (
-                  // Muchas opciones (tonos): un desplegable en vez de una pared de botones.
-                  <div className="relative mt-3 flex h-14 items-center gap-3 rounded-2xl bg-cream-soft px-4 ring-1 ring-carbon/12 transition focus-within:ring-2 focus-within:ring-carbon/40 hover:ring-carbon/30">
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium text-carbon">{variant.size}</span>
-                      {variant.sku && <span className="block text-[11px] tabular-nums text-stone">Ref. {variant.sku}</span>}
-                    </span>
-                    <ChevronDown size={18} className="pointer-events-none shrink-0 text-carbon" />
-                    <select
-                      value={variantIndex}
-                      onChange={(e) => setVariantIndex(Number(e.target.value))}
-                      aria-label={`Elige ${kind.toLowerCase()} de ${product.name}`}
-                      className="absolute inset-0 w-full cursor-pointer appearance-none opacity-0"
-                      style={{ fontSize: 16 }}
-                    >
-                      {product.variants.map((v, i) => {
-                        const optionPrice = catalog.precio(product, i);
-                        return (
-                          <option key={i} value={i}>
-                            {v.size}
-                            {optionPrice != null ? ` — ${formatEUR(optionPrice)}` : ""}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
+                  <FormatoDestacado size={variant.size} precio={price} />
                 )}
               </div>
 
