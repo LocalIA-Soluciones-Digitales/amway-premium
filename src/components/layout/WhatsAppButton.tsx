@@ -12,6 +12,7 @@ import {
   MessageCircle,
   Plus,
   RotateCcw,
+  ShoppingBag,
   ThumbsDown,
   ThumbsUp,
   X,
@@ -122,7 +123,7 @@ export function WhatsAppButton() {
   const inputRef = useRef<HTMLInputElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = useRuta();
-  const { openCesta, isOpen: cestaAbierta, totalUnits, isLoaded } = useCesta();
+  const { openCesta, isOpen: cestaAbierta, totalUnits, isLoaded, cestaVersion, justAddedKey } = useCesta();
   const catalog = useCatalogState();
 
   const { mensajes, contexto } = conv;
@@ -520,6 +521,67 @@ export function WhatsAppButton() {
             <IconoBoton label="Cerrar aviso" onClick={() => setAviso(false)} compacto>
               <X size={14} />
             </IconoBoton>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {conCesta && !open && !cestaAbierta && !pathname.startsWith("/checkout") && (
+          <motion.div
+            key="cesta"
+            initial={{ opacity: 0, y: 12, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 12, scale: 0.8 }}
+            transition={{ type: "spring", stiffness: 420, damping: 28 }}
+            className="flex items-center gap-2"
+          >
+            {/* Confirmación breve junto al botón al añadir un producto. */}
+            <AnimatePresence>
+              {justAddedKey && (
+                <motion.span
+                  key="añadido"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+                  className="flex items-center gap-1.5 rounded-full bg-carbon px-3 py-1.5 text-xs font-medium text-cream shadow-lg shadow-carbon/20"
+                >
+                  <Check size={14} />
+                  Añadido a la cesta
+                </motion.span>
+              )}
+            </AnimatePresence>
+            <motion.button
+              type="button"
+              onClick={() => {
+                openCesta();
+                track("cart_open", "botón flotante");
+              }}
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.94 }}
+              aria-label={`Ver cesta (${totalUnits} producto${totalUnits === 1 ? "" : "s"})`}
+              className="relative flex h-12 w-12 items-center justify-center rounded-full bg-forest text-cream shadow-lg shadow-forest/30 sm:h-14 sm:w-14"
+            >
+              {/* Se vuelve a montar con cada producto añadido: la bolsa da un pequeño salto. */}
+              <motion.span
+                key={cestaVersion}
+                initial={cestaVersion > 0 ? { scale: 0.7, rotate: -12 } : false}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 500, damping: 14 }}
+                className="flex"
+              >
+                <ShoppingBag size={24} />
+              </motion.span>
+              <motion.span
+                key={`n-${totalUnits}`}
+                initial={{ scale: 0.6 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 600, damping: 16 }}
+                className="absolute -top-1 -right-1 flex h-6 min-w-6 items-center justify-center rounded-full border-2 border-cream-soft bg-[#25D366] px-1 text-[11px] font-semibold tabular-nums text-white"
+              >
+                {totalUnits > 99 ? "99+" : totalUnits}
+              </motion.span>
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
