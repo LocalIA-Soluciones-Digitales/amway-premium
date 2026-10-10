@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { SPRING_STORY, SPRING_STORY_SOURCES } from "@/data/espring-content";
 
 export function SpringStory() {

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRuta } from "@/hooks/useRuta";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import { ChevronDown, Menu, MessageCircle, ShieldUser, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/data/site-config";

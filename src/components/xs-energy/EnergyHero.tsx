@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { entrada } from "@/lib/entrada";
+import { m as motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { gsap } from "@/lib/gsap";
 import { waLink } from "@/data/site-config";
@@ -101,14 +102,12 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
         className="relative flex w-full max-w-7xl flex-col items-center gap-10 px-6 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-8"
       >
         <div className="flex flex-col items-center text-center lg:w-1/2 lg:items-start lg:text-left">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.05 }}
+          <p
+            style={entrada(0.05, 0.6)}
             className="text-sm font-bold uppercase tracking-[0.4em] text-xs-red"
           >
             XS™ Power Drinks
-          </motion.p>
+          </p>
 
           <h1
             ref={titleRef}
@@ -123,20 +122,16 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
             </span>
           </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1.15 }}
+          <p
+            style={entrada(1.15)}
             className="mt-6 max-w-md text-base leading-relaxed text-cream/60 sm:text-lg"
           >
             Sin azúcares añadidos, sin colorantes ni aromas artificiales.
             Celebramos {XS_ANNIVERSARY.years} años de aventura con seis sabores reales.
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1.3 }}
+          <div
+            style={entrada(1.3)}
             className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start"
           >
             <a
@@ -154,7 +149,7 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
             >
               WhatsApp
             </a>
-          </motion.div>
+          </div>
         </div>
 
         <div

@@ -2,13 +2,19 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import dynamic from "next/dynamic";
 import { useRuta } from "@/hooks/useRuta";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import { useLenis } from "lenis/react";
-import { fetchAnunciosActivos, type Anuncio } from "@/lib/anuncios";
+import type { Anuncio } from "@/lib/anuncios";
+import { fetchAnunciosActivos } from "@/lib/anuncios-activos";
 import { getConsent, track } from "@/lib/analytics";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-import { AnuncioTarjeta } from "./AnuncioTarjeta";
+
+// La tarjeta y lib/anuncios (que resuelve el producto del anuncio con el
+// catálogo completo) solo se descargan cuando hay un anuncio que enseñar.
+const cargarTarjeta = () => import("./AnuncioTarjeta");
+const AnuncioTarjeta = dynamic(() => cargarTarjeta().then((m) => m.AnuncioTarjeta), { ssr: false });
 
 const SESION_KEY = "amway-anuncio-sesion";
 // Ni en el pago ni en la cuenta: ahí el pop-up solo estorba.
@@ -65,6 +71,8 @@ export function AnuncioPopup() {
       const lista = await peticion;
       const elegido = (pedido && lista.find((a) => a.id === pedido)) || lista[0];
       if (cancelado || !elegido) return;
+      await cargarTarjeta();
+      if (cancelado) return;
       forzado.current = elegido.id === pedido;
       if (!forzado.current) track("anuncio_visto", elegido.id);
       setAnuncio(elegido);

@@ -1,15 +1,12 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { AMWAY_DB_KEY, AMWAY_DB_URL, CLIENTE_DB_LISTO, CLIENTE_STORAGE_KEY, amwayRpc } from "@/lib/amway-config";
 
 // Supabase compartido con otras webs del estudio: esta tienda solo toca
 // tablas/funciones con prefijo amway_ (ver supabase/amway_schema.sql) y usa
 // sus propios nombres de variables, nunca los de Arrantza (VITE_SUPABASE_*).
-// URL y clave publicable son públicas por diseño (acaban en el navegador),
-// así que se dejan como valor por defecto para que la tienda funcione aunque
-// falten en el entorno.
-export const AMWAY_DB_URL =
-  process.env.NEXT_PUBLIC_AMWAY_SUPABASE_URL ?? "https://ukhfaphloxlszomccgde.supabase.co";
-export const AMWAY_DB_KEY =
-  process.env.NEXT_PUBLIC_AMWAY_SUPABASE_ANON_KEY ?? "sb_publishable_CalLFpdGIixVv0fV3ic62w_fUH9qLqK";
+// Las constantes viven en amway-config.ts para que el código de todas las
+// páginas no arrastre supabase-js.
+export { AMWAY_DB_KEY, AMWAY_DB_URL, amwayRpc };
 
 let browserClient: SupabaseClient | null = null;
 
@@ -31,8 +28,9 @@ let clienteClient: SupabaseClient | null = null;
 export function clienteDb(): SupabaseClient {
   if (!clienteClient) {
     clienteClient = createClient(AMWAY_DB_URL, AMWAY_DB_KEY, {
-      auth: { storageKey: "amway-premium-cliente-auth", persistSession: true, autoRefreshToken: true },
+      auth: { storageKey: CLIENTE_STORAGE_KEY, persistSession: true, autoRefreshToken: true },
     });
+    if (typeof window !== "undefined") window.dispatchEvent(new Event(CLIENTE_DB_LISTO));
   }
   return clienteClient;
 }
@@ -54,20 +52,6 @@ export async function clienteDeRequest(request: Request): Promise<{ id: string; 
   } catch {
     return null;
   }
-}
-
-// Llamada RPC directa por REST (sin cliente ni sesión), para el servidor.
-export async function amwayRpc<T>(
-  fn: string,
-  args?: Record<string, unknown>,
-  init?: RequestInit & { next?: { revalidate?: number; tags?: string[] } }
-): Promise<T> {
-  const headers = { apikey: AMWAY_DB_KEY, "Content-Type": "application/json" };
-  const res = args
-    ? await fetch(`${AMWAY_DB_URL}/rest/v1/rpc/${fn}`, { method: "POST", headers, body: JSON.stringify(args), ...init })
-    : await fetch(`${AMWAY_DB_URL}/rest/v1/rpc/${fn}`, { headers, ...init });
-  if (!res.ok) throw new Error(`${fn}: ${res.status} ${await res.text()}`);
-  return res.json() as Promise<T>;
 }
 
 // IP del cliente que llega a la API (Vercel la pone en x-forwarded-for). Solo

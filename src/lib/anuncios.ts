@@ -1,4 +1,3 @@
-import { AMWAY_DB_KEY, AMWAY_DB_URL } from "@/lib/amway-db";
 import { getProductById, productHref, productImageSrc } from "@/data/products";
 import { WA_PRESETS, waLink } from "@/data/site-config";
 
@@ -102,21 +101,6 @@ export async function leerVideo(file: File): Promise<{ portada: Blob | null; dur
 export function enlaceValido(enlace: string): boolean {
   const e = enlace.trim();
   return !e || e.startsWith("/") || /^(https?:\/\/\S+|tel:\+?[\d ]+|mailto:\S+@\S+)$/i.test(e);
-}
-
-// Lectura pública por REST, sin sesión: así nunca arrastra la del panel.
-export async function fetchAnunciosActivos(): Promise<Anuncio[]> {
-  try {
-    const res = await fetch(`${AMWAY_DB_URL}/rest/v1/amway_anuncios?select=*&order=updated_at.desc&limit=10`, {
-      headers: { apikey: AMWAY_DB_KEY },
-      cache: "no-store",
-    });
-    if (!res.ok) return [];
-    const data = (await res.json()) as unknown;
-    return Array.isArray(data) ? (data as Anuncio[]) : [];
-  } catch {
-    return [];
-  }
 }
 
 // Imagen del anuncio: la subida desde el panel o, si no hay, la del producto.

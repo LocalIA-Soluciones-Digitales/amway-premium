@@ -1,7 +1,5 @@
-"use client";
-
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { entrada } from "@/lib/entrada";
 import { waLink } from "@/data/site-config";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -47,40 +45,23 @@ export function CategoryHero({
 
       <div className="relative w-full px-6 pb-16 pt-40 sm:px-8 sm:pb-20">
         <div className="mx-auto max-w-7xl">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          <p
+            style={entrada(0, 0.6)}
             className={cn(
               "text-sm font-medium uppercase tracking-[0.25em]",
               ACCENT_TEXT[accent]
             )}
           >
             {eyebrow}
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-4 max-w-3xl font-display text-5xl leading-[0.98] text-cream sm:text-7xl lg:text-8xl"
-          >
+          </p>
+          <h1 style={entrada(0.1)} className="mt-4 max-w-3xl font-display text-5xl leading-[0.98] text-cream sm:text-7xl lg:text-8xl">
             {title}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 max-w-xl text-base leading-relaxed text-cream/75 sm:text-lg"
-          >
+          </h1>
+          <p style={entrada(0.2)} className="mt-6 max-w-xl text-base leading-relaxed text-cream/75 sm:text-lg">
             {description}
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-9 flex flex-wrap gap-3"
-          >
+          <div style={entrada(0.3)} className="mt-9 flex flex-wrap gap-3">
             <a
               href="#catalogo"
               className="rounded-full bg-cream px-6 py-3 text-sm font-medium text-carbon transition hover:bg-white"
@@ -95,7 +76,7 @@ export function CategoryHero({
             >
               Consultar por WhatsApp
             </a>
-          </motion.div>
+          </div>
 
           {children}
         </div>

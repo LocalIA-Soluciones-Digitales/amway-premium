@@ -1,4 +1,4 @@
-import { amwayRpc } from "@/lib/amway-db";
+import { amwayRpc } from "@/lib/amway-config";
 import { formatEUR } from "@/lib/currency";
 import { fechaLarga } from "@/lib/recogida";
 

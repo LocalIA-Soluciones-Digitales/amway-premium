@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { SpringVideoMoment } from "./SpringVideoMoment";
 import { SPRING_FILTER_LAYERS, SPRING_SPECS } from "@/data/espring-content";
 

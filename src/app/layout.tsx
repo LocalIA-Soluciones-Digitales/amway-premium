@@ -8,7 +8,8 @@ import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { AnuncioPopup } from "@/components/layout/AnuncioPopup";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { ClienteProvider } from "@/components/cuenta/ClienteProvider";
-import { CartDrawer } from "@/components/cart/CartDrawer";
+import { CartDrawerDiferido } from "@/components/cart/CartDrawerDiferido";
+import { MotionProvider } from "@/components/layout/MotionProvider";
 import { CatalogStateProvider } from "@/components/catalog/CatalogStateProvider";
 import { StoreOnly } from "@/components/layout/StoreOnly";
 import { Analytics } from "@/components/layout/Analytics";
@@ -101,25 +102,27 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           Saltar al contenido
         </a>
         <SmoothScroll>
-          <CatalogStateProvider initial={catalogo}>
-            <ClienteProvider>
-              <CartProvider>
-                <StoreOnly>
-                  <Header />
-                </StoreOnly>
-                <main id="main-content" className="flex-1">
-                  {children}
-                </main>
-                <StoreOnly>
-                  <Footer />
-                  <WhatsAppButton />
-                  <AnuncioPopup />
-                </StoreOnly>
-                <CartDrawer />
-                <Analytics />
-              </CartProvider>
-            </ClienteProvider>
-          </CatalogStateProvider>
+          <MotionProvider>
+            <CatalogStateProvider initial={catalogo}>
+              <ClienteProvider>
+                <CartProvider>
+                  <StoreOnly>
+                    <Header />
+                  </StoreOnly>
+                  <main id="main-content" className="flex-1">
+                    {children}
+                  </main>
+                  <StoreOnly>
+                    <Footer />
+                    <WhatsAppButton />
+                    <AnuncioPopup />
+                  </StoreOnly>
+                  <CartDrawerDiferido />
+                  <Analytics />
+                </CartProvider>
+              </ClienteProvider>
+            </CatalogStateProvider>
+          </MotionProvider>
         </SmoothScroll>
       </body>
     </html>

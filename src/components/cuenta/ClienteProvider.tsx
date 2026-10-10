@@ -2,10 +2,26 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Session } from "@supabase/supabase-js";
-import { clienteDb } from "@/lib/amway-db";
+import { CLIENTE_DB_LISTO, CLIENTE_STORAGE_KEY } from "@/lib/amway-config";
+import { useRuta } from "@/hooks/useRuta";
 
 // Cuenta de cliente opcional: la cabecera, la cesta y /cuenta leen de aquí
 // la sesión y el perfil. Sin sesión todo funciona como invitado.
+
+// supabase-js (~60 KB) solo se descarga si hay algo que hacer con la cuenta:
+// una sesión guardada, estar en /cuenta (adonde llevan los enlaces de los
+// correos de alta y de contraseña) o alguien que va a entrar o registrarse
+// (clienteDb() avisa con CLIENTE_DB_LISTO). El resto de visitas, invitados
+// sin cuenta, no lo cargan nunca.
+const db = () => import("@/lib/amway-db").then((mod) => mod.clienteDb());
+
+function haySesionGuardada(): boolean {
+  try {
+    return localStorage.getItem(CLIENTE_STORAGE_KEY) !== null;
+  } catch {
+    return false;
+  }
+}
 
 export interface PerfilCliente {
   nombre: string;
@@ -30,16 +46,41 @@ export function ClienteProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [perfil, setPerfil] = useState<PerfilCliente | null>(null);
   const [cargando, setCargando] = useState(true);
+  const [activo, setActivo] = useState(false);
+  const ruta = useRuta();
 
   useEffect(() => {
-    const db = clienteDb();
-    db.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      if (!data.session) setCargando(false);
+    if (activo) return;
+    if (haySesionGuardada() || ruta.startsWith("/cuenta")) {
+      setActivo(true);
+      return;
+    }
+    setCargando(false);
+    const activar = () => setActivo(true);
+    window.addEventListener(CLIENTE_DB_LISTO, activar);
+    return () => window.removeEventListener(CLIENTE_DB_LISTO, activar);
+  }, [activo, ruta]);
+
+  useEffect(() => {
+    if (!activo) return;
+    let vivo = true;
+    let cancelar = () => {};
+    setCargando(true);
+    void db().then((cliente) => {
+      if (!vivo) return;
+      const { data } = cliente.auth.onAuthStateChange((_e, s) => setSession(s));
+      cancelar = () => data.subscription.unsubscribe();
+      cliente.auth.getSession().then(({ data }) => {
+        if (!vivo) return;
+        setSession(data.session);
+        if (!data.session) setCargando(false);
+      });
     });
-    const { data } = db.auth.onAuthStateChange((_e, s) => setSession(s));
-    return () => data.subscription.unsubscribe();
-  }, []);
+    return () => {
+      vivo = false;
+      cancelar();
+    };
+  }, [activo]);
 
   const userId = session?.user.id ?? null;
 
@@ -52,8 +93,8 @@ export function ClienteProvider({ children }: { children: ReactNode }) {
     }
     let vivo = true;
     (async () => {
-      const db = clienteDb();
-      const { data } = await db
+      const cliente = await db();
+      const { data } = await cliente
         .from("amway_clientes")
         .select("nombre, telefono, novedades, created_at")
         .eq("user_id", userId)
@@ -67,7 +108,7 @@ export function ClienteProvider({ children }: { children: ReactNode }) {
           telefono: texto(meta.telefono, 30) || null,
           novedades: meta.novedades === true,
         };
-        const { data: creado } = await db
+        const { data: creado } = await cliente
           .from("amway_clientes")
           .upsert(nuevo)
           .select("nombre, telefono, novedades, created_at")
@@ -95,7 +136,7 @@ export function ClienteProvider({ children }: { children: ReactNode }) {
         telefono: (cambios.telefono ?? perfil?.telefono ?? "").trim().slice(0, 30) || null,
         novedades: cambios.novedades ?? perfil?.novedades ?? false,
       };
-      const { error } = await clienteDb().from("amway_clientes").upsert(fila);
+      const { error } = await (await db()).from("amway_clientes").upsert(fila);
       if (error) return "No se pudieron guardar los cambios.";
       setPerfil((prev) => ({
         nombre: fila.nombre ?? "",
@@ -109,7 +150,7 @@ export function ClienteProvider({ children }: { children: ReactNode }) {
   );
 
   const cerrarSesion = useCallback(async () => {
-    await clienteDb().auth.signOut();
+    await (await db()).auth.signOut();
     setPerfil(null);
   }, []);
 

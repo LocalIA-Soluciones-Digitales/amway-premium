@@ -1,4 +1,4 @@
-import { amwayDb } from "@/lib/amway-db";
+import { rpcPublica } from "@/lib/amway-config";
 
 // Analítica propia (misma lógica que Arrantza: sesión, atribución "first
 // touch", dispositivo, visitante recurrente), con claves y tabla propias de
@@ -145,8 +145,7 @@ export function track(eventType: EventType, label?: string, path?: string) {
   if (window.location.pathname.startsWith("/admin")) return;
   try {
     const a = getAttribution();
-    void amwayDb()
-      .rpc("amway_registrar_visita", {
+    void rpcPublica("amway_registrar_visita", {
         p_session_id: getSessionId(),
         p_event_type: eventType,
         p_path: path ?? window.location.pathname,
@@ -158,11 +157,7 @@ export function track(eventType: EventType, label?: string, path?: string) {
         p_utm_campaign: a.utm_campaign,
         p_device_type: detectDevice(),
         p_is_returning: isReturning(),
-      })
-      .then(
-        () => undefined,
-        () => undefined
-      );
+      }).catch(() => undefined);
   } catch {
     // Analytics must never break navigation.
   }
@@ -194,15 +189,10 @@ export function reportError(mensaje: string, detalle?: string) {
   if (typeof window === "undefined" || reportedThisPage >= 5) return;
   if (window.location.pathname.startsWith("/admin")) return;
   reportedThisPage++;
-  void amwayDb()
-    .rpc("amway_registrar_error", {
-      p_mensaje: mensaje,
-      p_detalle: detalle ?? null,
-      p_path: window.location.pathname,
-      p_user_agent: navigator.userAgent,
-    })
-    .then(
-      () => undefined,
-      () => undefined
-    );
+  void rpcPublica("amway_registrar_error", {
+    p_mensaje: mensaje,
+    p_detalle: detalle ?? null,
+    p_path: window.location.pathname,
+    p_user_agent: navigator.userAgent,
+  }).catch(() => undefined);
 }

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { ArrowRight, ChevronDown, Search, X } from "lucide-react";
 import type { CategorySlug, Product } from "@/data/types";
-import { CATEGORY_META } from "@/data/products";
+import { CATEGORY_META } from "@/data/categorias";
 import { ProductCard } from "./ProductCard";
 import { cn } from "@/lib/utils";
 import { useCatalogState } from "@/components/catalog/CatalogStateProvider";

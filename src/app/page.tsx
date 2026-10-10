@@ -11,6 +11,7 @@ import { AboutSeller } from "@/components/home/AboutSeller";
 import { FinalCta } from "@/components/home/FinalCta";
 import type { Metadata } from "next";
 import { SITE } from "@/data/site-config";
+import { getProductById } from "@/data/products";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
@@ -55,7 +56,7 @@ export default function Home() {
           bloques a sangre no queden pegados. */}
       <XsEnergyMoment />
       <BeautyEditorial />
-      <FlagshipShowcase />
+      <FlagshipShowcase espring={getProductById("espring-mesón")!} />
       <ProductDiscovery />
       <AboutSeller />
       <FinalCta />

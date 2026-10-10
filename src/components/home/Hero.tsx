@@ -1,17 +1,9 @@
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { waLink, WA_PRESETS } from "@/data/site-config";
+import { entrada } from "@/lib/entrada";
 
 const TITLE_LINES = [["Bienestar"], ["para", "tu", "día", "a", "día"]];
-
-const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
-
-// Animado solo con CSS (keyframes hero-word / hero-fade-up en globals.css):
-// el texto llega pintado en el HTML y la animación arranca con él, sin
-// esperar a GSAP ni a la hidratación, que en móvil retrasaban el LCP ~3 s.
-function entrada(nombre: "hero-word" | "hero-fade-up", delay: number, duracion = 0.7) {
-  return { animation: `${nombre} ${duracion}s ${EASE} ${delay}s both` };
-}
 
 export function Hero() {
   let palabra = 0;
@@ -34,7 +26,7 @@ export function Hero() {
       <div className="relative w-full px-6 pb-20 pt-40 sm:px-8 sm:pb-24">
         <div className="mx-auto max-w-7xl">
           <p
-            style={entrada("hero-fade-up", 0, 0.6)}
+            style={entrada(0, 0.6)}
             className="text-sm font-medium uppercase tracking-[0.3em] text-cream/70"
           >
             Productos originales Amway · Barakaldo
@@ -45,7 +37,7 @@ export function Hero() {
               <span key={li} className="flex flex-wrap gap-x-4">
                 {line.map((w, i) => (
                   <span key={i} className="inline-block overflow-hidden">
-                    <span className="inline-block" style={entrada("hero-word", 0.1 + 0.06 * palabra++, 1.1)}>
+                    <span className="inline-block" style={entrada(0.1 + 0.06 * palabra++, 1.1, "hero-word")}>
                       {w}
                     </span>
                   </span>
@@ -55,14 +47,14 @@ export function Hero() {
           </h1>
 
           <p
-            style={entrada("hero-fade-up", 0.35)}
+            style={entrada(0.35)}
             className="mt-7 max-w-md text-base leading-relaxed text-cream/80 sm:text-lg"
           >
             Productos seleccionados de nutrición, belleza y cuidado del hogar,
             con atención personalizada en Barakaldo.
           </p>
 
-          <div style={entrada("hero-fade-up", 0.5)} className="mt-9 flex flex-wrap gap-4">
+          <div style={entrada(0.5)} className="mt-9 flex flex-wrap gap-4">
             <a
               href="/catalogo"
               className="rounded-full bg-cream px-7 py-3.5 text-sm font-medium text-carbon transition hover:bg-white"
@@ -82,7 +74,7 @@ export function Hero() {
       </div>
 
       <div
-        style={entrada("hero-fade-up", 1)}
+        style={entrada(1)}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 text-cream/70"
         aria-hidden="true"
       >

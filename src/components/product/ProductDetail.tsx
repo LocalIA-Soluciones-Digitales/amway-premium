@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import {
   ArrowRight,
   Bell,
@@ -622,7 +622,7 @@ export function ProductDetail({
                 {[
                   { icon: Store, text: "Recogida en tienda" },
                   { icon: CreditCard, text: "Tarjeta o efectivo" },
-                  { icon: ShieldCheck, text: "Garantía Amway" },
+                  { icon: ShieldCheck, text: "Producto original" },
                 ].map(({ icon: Icon, text }) => (
                   <li
                     key={text}

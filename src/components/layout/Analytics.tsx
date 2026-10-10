@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRuta } from "@/hooks/useRuta";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import { Cookie } from "lucide-react";
 import Link from "next/link";
 import { ABRIR_COOKIES, atenderErroresTempranos, getConsent, setConsent, track } from "@/lib/analytics";

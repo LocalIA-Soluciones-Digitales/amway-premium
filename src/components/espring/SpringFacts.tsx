@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { SPRING_FACTS } from "@/data/espring-content";
 
 export function SpringFacts() {

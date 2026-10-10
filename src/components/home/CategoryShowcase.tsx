@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { CATEGORY_META } from "@/data/products";
+import { CATEGORY_META } from "@/data/categorias";
 
 const TILES: {
   slug: "nutricion" | "belleza" | "cuidado-personal" | "hogar";

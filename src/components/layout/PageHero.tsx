@@ -1,10 +1,6 @@
-"use client";
-
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { entrada } from "@/lib/entrada";
 import type { ReactNode } from "react";
-
-const EASE = [0.16, 1, 0.3, 1] as const;
 
 // Full-bleed photographic hero for secondary pages. Its route must be listed
 // in the header's DARK_HERO_ROUTES so the header starts in its light-on-dark
@@ -44,51 +40,26 @@ export function PageHero({
 
       <div className="relative w-full px-6 pb-14 pt-40 sm:px-8 sm:pb-20">
         <div className="mx-auto max-w-7xl">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
-            className="text-sm font-medium uppercase tracking-[0.25em] text-gold-soft"
-          >
+          <p style={entrada(0, 0.6)} className="text-sm font-medium uppercase tracking-[0.25em] text-gold-soft">
             {eyebrow}
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
-            className="mt-4 max-w-3xl font-display text-5xl leading-[0.98] text-cream sm:text-7xl"
-          >
+          </p>
+          <h1 style={entrada(0.1)} className="mt-4 max-w-3xl font-display text-5xl leading-[0.98] text-cream sm:text-7xl">
             {title}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-            className="mt-6 max-w-xl text-base leading-relaxed text-cream/75 sm:text-lg"
-          >
+          </h1>
+          <p style={entrada(0.2)} className="mt-6 max-w-xl text-base leading-relaxed text-cream/75 sm:text-lg">
             {description}
-          </motion.p>
+          </p>
 
           {actions && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3, ease: EASE }}
-              className="mt-9 flex flex-wrap gap-3"
-            >
+            <div style={entrada(0.3)} className="mt-9 flex flex-wrap gap-3">
               {actions}
-            </motion.div>
+            </div>
           )}
 
           {children && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4, ease: EASE }}
-              className="mt-12"
-            >
+            <div style={entrada(0.4)} className="mt-12">
               {children}
-            </motion.div>
+            </div>
           )}
         </div>
       </div>

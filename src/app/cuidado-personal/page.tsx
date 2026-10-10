@@ -3,6 +3,7 @@ import path from "node:path";
 import type { Metadata } from "next";
 import { CategoryHero } from "@/components/product/CategoryHero";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
+import { paraExplorador } from "@/lib/explorador";
 import { CategoryHighlights, type HighlightItem } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
 import { conRuta } from "@/lib/seo";
@@ -59,7 +60,7 @@ export default function CuidadoPersonalPage() {
         <h2 className="mb-6 font-display text-2xl text-carbon sm:mb-8 sm:text-3xl">
           Catálogo Cuidado personal completo
         </h2>
-        <ProductExplorer products={products} subcategories={subcategories} brands={brands} />
+        <ProductExplorer products={paraExplorador(products)} subcategories={subcategories} brands={brands} />
       </section>
     </>
   );

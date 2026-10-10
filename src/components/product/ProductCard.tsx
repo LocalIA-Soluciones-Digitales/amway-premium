@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { ArrowUpRight, Bell, ChevronDown, ClipboardList, MessageCircle, Star } from "lucide-react";
 import type { Product } from "@/data/types";
 import { cheapestVariantIndex, productHref, productImageSrc, variantKind } from "@/data/types";

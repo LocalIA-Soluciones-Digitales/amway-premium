@@ -13,6 +13,9 @@ export function CuentaButton({ dark }: { dark: boolean }) {
   return (
     <Link
       href="/cuenta"
+      // Sin precarga: /cuenta trae supabase-js y el catálogo (~80 KB) y casi
+      // nadie la abre; precargarla desde la cabecera los bajaba en cada visita.
+      prefetch={false}
       aria-label={label}
       title={label}
       className={cn(

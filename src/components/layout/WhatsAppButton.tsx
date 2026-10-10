@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type Reac
 import Image from "next/image";
 import Link from "next/link";
 import { useRuta } from "@/hooks/useRuta";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import {
   ArrowUp,
   ArrowUpRight,
@@ -25,10 +25,10 @@ import {
   waDuda,
   type AccionAsistente,
 } from "@/data/asistente";
-import { CATEGORY_META, getProductById } from "@/data/products";
+import { CATEGORY_META } from "@/data/categorias";
+import { useProductos } from "@/hooks/useProductos";
 import { cheapestVariantIndex, productHref, productImageSrc, type CategorySlug } from "@/data/types";
 import { formatEUR } from "@/lib/currency";
-import { buscarProductos, consultaCatalogo } from "@/lib/asistente-productos";
 import { useCesta } from "@/components/cart/CartProvider";
 import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
 import { track } from "@/lib/analytics";
@@ -55,6 +55,11 @@ interface Conversacion {
 const STORAGE_KEY = "amway_asistente";
 const AVISO_KEY = "amway_asistente_aviso";
 const AVISO_MS = 40_000;
+
+// Buscador del asistente: lleva dentro el catálogo entero, así que se
+// descarga al abrir el panel, no con cada página.
+const cargarBuscador = () => import("@/lib/asistente-productos");
+
 const VACIA: Conversacion = { mensajes: [], contexto: { tipo: "inicio" } };
 
 // Intenciones en las que, si además se nombra un producto, lo útil es
@@ -184,7 +189,10 @@ export function WhatsAppButton() {
 
   function abrir() {
     setAviso(false);
-    if (!open) registrar("abrir");
+    if (!open) {
+      registrar("abrir");
+      void cargarBuscador();
+    }
     setOpen(!open);
   }
 
@@ -211,11 +219,12 @@ export function WhatsAppButton() {
     responder(intento.pregunta, intento.respuesta, contextoDeTema(id));
   }
 
-  function enviarTexto(e: FormEvent) {
+  async function enviarTexto(e: FormEvent) {
     e.preventDefault();
     const t = texto.trim();
     if (!t || escribiendo) return;
     setTexto("");
+    const { buscarProductos, consultaCatalogo } = await cargarBuscador();
 
     const intentos = buscarIntentos(t);
     const [mejor, segundo] = intentos;
@@ -651,7 +660,7 @@ function FormularioPedido({ onConsultar }: { onConsultar: (numero: number, telef
 function TarjetaProducto({ productId, onWhatsApp }: { productId: string; onWhatsApp: (origen: string) => void }) {
   const catalog = useCatalogState();
   const { addItem, items } = useCesta();
-  const product = getProductById(productId);
+  const product = useProductos()?.getProductById(productId);
   if (!product || catalog.oculto(productId)) return null;
 
   const variante = cheapestVariantIndex(product);

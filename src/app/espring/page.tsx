@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
+import { paraExplorador } from "@/lib/explorador";
 import { SpringHero } from "@/components/espring/SpringHero";
 import { SpringFacts } from "@/components/espring/SpringFacts";
 import { SpringVideoMoment } from "@/components/espring/SpringVideoMoment";
@@ -50,7 +51,7 @@ export default function EspringPage() {
         <p className="mb-8 max-w-2xl text-sm text-stone">
           Sistema encima o bajo el mesón, grifos de diseño y filtros de recambio originales.
         </p>
-        <ProductExplorer products={products} subcategories={subcategories} brands={brands} />
+        <ProductExplorer products={paraExplorador(products)} subcategories={subcategories} brands={brands} />
       </section>
     </>
   );

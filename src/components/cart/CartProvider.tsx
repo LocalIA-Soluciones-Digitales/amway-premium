@@ -10,8 +10,9 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { getProductById } from "@/data/products";
+import type { Product } from "@/data/types";
 import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
+import { useProductos } from "@/hooks/useProductos";
 
 // Same shape of logic as the Arrantza basket (localStorage-backed, cross-tab
 // sync, "just added" flash, version counter for the header bump), but with
@@ -30,16 +31,15 @@ export function cestaItemKey(item: Pick<CestaItem, "productId" | "variantIndex" 
   return `${item.productId}|${item.variantIndex}|${item.flavor}`;
 }
 
-// Drops anything the catalogue no longer has, so a stale basket from an
-// older deploy never reaches checkout with a missing product or format.
+// Forma válida de cada línea guardada. Si el producto o el formato siguen
+// existiendo se comprueba aparte (soloDisponibles), cuando llega el
+// catálogo: no hace falta descargarlo para saber si la cesta está vacía.
 function sanitize(raw: unknown): CestaItem[] {
   if (!Array.isArray(raw)) return [];
   const out: CestaItem[] = [];
   for (const i of raw) {
     if (!i || typeof i.productId !== "string") continue;
-    const product = getProductById(i.productId);
     const variantIndex = Number.isInteger(i.variantIndex) ? i.variantIndex : 0;
-    if (!product || !product.variants[variantIndex]) continue;
     const quantity = Number.isInteger(i.quantity) ? i.quantity : 1;
     out.push({
       productId: i.productId,
@@ -49,6 +49,13 @@ function sanitize(raw: unknown): CestaItem[] {
     });
   }
   return out;
+}
+
+// Drops anything the catalogue no longer has, so a stale basket from an
+// older deploy never reaches checkout with a missing product or format.
+function soloDisponibles(items: CestaItem[], producto: (id: string) => Product | undefined): CestaItem[] {
+  const out = items.filter((i) => !!producto(i.productId)?.variants[i.variantIndex]);
+  return out.length === items.length ? items : out;
 }
 
 function readStorage(): CestaItem[] {
@@ -85,6 +92,8 @@ interface CestaContextValue {
   unavailableKeys: Set<string>;
   justAddedKey: string | null;
   cestaVersion: number;
+  /** Producto de una línea; undefined mientras se descarga el catálogo. */
+  producto: (productId: string) => Product | undefined;
 }
 
 const CestaContext = createContext<CestaContextValue | null>(null);
@@ -97,12 +106,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cestaVersion, setCestaVersion] = useState(0);
   const justAddedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const catalog = useCatalogState();
+  const productos = useProductos(items.length > 0 || isOpen);
 
   // Read after mount (never during render) to avoid hydration mismatches.
   useEffect(() => {
     setItems(readStorage());
     setIsLoaded(true);
   }, []);
+
+  useEffect(() => {
+    if (productos) setItems((prev) => soloDisponibles(prev, productos.getProductById));
+  }, [productos, items]);
 
   useEffect(() => {
     if (isLoaded) writeStorage(items);
@@ -172,10 +186,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     let totalUnits = 0;
     let subtotal = 0;
     const unavailableKeys = new Set<string>();
+    const producto = (id: string) => productos?.getProductById(id);
     for (const i of items) {
-      const product = getProductById(i.productId);
-      const price = product ? catalog.precio(product, i.variantIndex) : null;
       totalUnits += i.quantity;
+      // Sin catálogo aún no se sabe el precio: ni suma ni se marca agotada.
+      if (!productos) continue;
+      const product = producto(i.productId);
+      const price = product ? catalog.precio(product, i.variantIndex) : null;
       if (price == null || catalog.agotado(i.productId) || catalog.oculto(i.productId)) {
         unavailableKeys.add(cestaItemKey(i));
       } else {
@@ -198,8 +215,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       unavailableKeys,
       justAddedKey,
       cestaVersion,
+      producto,
     };
-  }, [catalog, items, isLoaded, isOpen, openCesta, closeCesta, addItem, increase, decrease, removeItem, clearCesta, justAddedKey, cestaVersion]);
+  }, [catalog, productos, items, isLoaded, isOpen, openCesta, closeCesta, addItem, increase, decrease, removeItem, clearCesta, justAddedKey, cestaVersion]);
 
   return <CestaContext.Provider value={value}>{children}</CestaContext.Provider>;
 }

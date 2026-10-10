@@ -1,15 +1,14 @@
 "use client";
 
 import { useRef } from "react";
-import { motion } from "framer-motion";
-import { priceRangeLabel } from "@/data/types";
+import { m as motion } from "framer-motion";
+import { priceRangeLabel, type Product } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
-import { PRODUCTS } from "@/data/products";
 import { usePlayWhenVisible } from "@/hooks/usePlayWhenVisible";
 
-const ESPRING = PRODUCTS.find((p) => p.id === "espring-mesón")!;
-
-export function FlagshipShowcase() {
+// El eSpring llega como prop desde la página (servidor): importar el
+// catálogo aquí lo metería entero en el JavaScript de la portada.
+export function FlagshipShowcase({ espring }: { espring: Product }) {
   // Sin autoPlay: el vídeo está muy abajo en la home y autoPlay lo descargaba
   // entero al entrar. Solo se pide cuando la sección asoma.
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -23,7 +22,7 @@ export function FlagshipShowcase() {
           className="absolute inset-0 h-full w-full object-cover"
           src="/videos/espring/purifier-loop.mp4"
           poster="/images/espring/purifier-loop-poster.webp"
-          aria-label={`${ESPRING.name} filtrando agua`}
+          aria-label={`${espring.name} filtrando agua`}
           muted
           loop
           playsInline
@@ -52,14 +51,14 @@ export function FlagshipShowcase() {
             gota a gota.
           </h2>
           <p className="mt-6 max-w-md text-base leading-relaxed text-cream/75 sm:text-lg">
-            {ESPRING.description}
+            {espring.description}
           </p>
         </div>
 
         <div className="flex items-center gap-6 lg:shrink-0">
-          <span className="font-display text-2xl text-cream">{priceRangeLabel(ESPRING)}</span>
+          <span className="font-display text-2xl text-cream">{priceRangeLabel(espring)}</span>
           <a
-            href={waProductLink(ESPRING.name)}
+            href={waProductLink(espring.name)}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full bg-cream px-6 py-3 text-sm font-medium text-carbon transition hover:bg-white"

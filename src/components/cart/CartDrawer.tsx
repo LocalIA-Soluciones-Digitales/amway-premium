@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import { useLenis } from "lenis/react";
 import {
   ArrowLeft,
@@ -21,7 +21,6 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-import { getProductById } from "@/data/products";
 import { productImageSrc, type Product } from "@/data/types";
 import { LEGAL, SITE, waLink } from "@/data/site-config";
 import { AvisoPrivacidad } from "@/components/legal/AvisoPrivacidad";
@@ -47,8 +46,8 @@ type Paso = "cesta" | "datos" | "hecho";
 // Nombre y teléfono se recuerdan en este navegador para el próximo pedido.
 const CONTACTO_KEY = "amway_premium_contacto_v1";
 
-function lineDetails(item: CestaItem, priceOf: PriceOf) {
-  const product = getProductById(item.productId);
+function lineDetails(item: CestaItem, priceOf: PriceOf, producto: (id: string) => Product | undefined) {
+  const product = producto(item.productId);
   if (!product) return null;
   const variant = product.variants[item.variantIndex];
   if (!variant) return null;
@@ -68,7 +67,7 @@ function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) 
 }
 
 export function CartDrawer() {
-  const { items, isOpen, closeCesta, increase, decrease, removeItem, clearCesta, totalUnits, subtotal, unavailableKeys } =
+  const { items, isOpen, closeCesta, increase, decrease, removeItem, clearCesta, totalUnits, subtotal, unavailableKeys, producto } =
     useCesta();
   const catalog = useCatalogState();
   const { session, perfil, guardarPerfil } = useCliente();
@@ -151,7 +150,7 @@ export function CartDrawer() {
   }, [horas, hora]);
 
   const lineasValidas = items.flatMap((item) => {
-    const d = lineDetails(item, catalog.precio);
+    const d = lineDetails(item, catalog.precio, producto);
     return d && !unavailableKeys.has(cestaItemKey(item)) ? [{ item, ...d }] : [];
   });
 
@@ -356,7 +355,7 @@ export function CartDrawer() {
               <>
                 <ul data-lenis-prevent className="flex-1 divide-y divide-carbon/8 overflow-y-auto overscroll-contain px-6">
                   {items.map((item) => {
-                    const d = lineDetails(item, catalog.precio);
+                    const d = lineDetails(item, catalog.precio, producto);
                     if (!d) return null;
                     const key = cestaItemKey(item);
                     const unavailable = unavailableKeys.has(key);

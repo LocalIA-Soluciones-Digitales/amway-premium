@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { entrada } from "@/lib/entrada";
+import { m as motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { waLink } from "@/data/site-config";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
@@ -44,14 +45,12 @@ export function SpringHero({ waMessage }: { waMessage: string }) {
         style={{ opacity: reducedMotion ? 1 : contentOpacity }}
         className="relative flex w-full max-w-7xl flex-col px-6 sm:px-8"
       >
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.05 }}
+        <p
+          style={entrada(0.05, 0.6)}
           className="text-sm font-bold uppercase tracking-[0.4em] text-spring-blue"
         >
           eSpring™ · Tecnología LED UV-C
-        </motion.p>
+        </p>
 
         <h1
           className="pointer-events-none mt-6 max-w-3xl select-none font-display text-[13vw] italic leading-[0.92] text-cream sm:text-[7.5vw] lg:text-[6.2vw]"
@@ -59,14 +58,9 @@ export function SpringHero({ waMessage }: { waMessage: string }) {
         >
           {TITLE_WORDS.map((word, i) => (
             <span key={word} className="mr-[0.28em] inline-block overflow-hidden">
-              <motion.span
-                initial={{ y: "115%" }}
-                animate={{ y: "0%" }}
-                transition={{ duration: 0.9, delay: 0.15 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-                className="inline-block"
-              >
+              <span className="inline-block" style={entrada(0.15 + i * 0.07, 0.9, "hero-word")}>
                 {word}
-              </motion.span>
+              </span>
             </span>
           ))}
         </h1>
@@ -87,21 +81,17 @@ export function SpringHero({ waMessage }: { waMessage: string }) {
           />
         </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.85 }}
+        <p
+          style={entrada(0.85)}
           className="mt-7 max-w-lg text-base leading-relaxed text-cream/65 sm:text-lg"
         >
           De la marca n.º 1 del mundo en sistemas domésticos de tratamiento de agua*, el nuevo
           eSpring™ filtra más de 170 contaminantes y elimina el 99,9999 % de las bacterias, sin
           perder las sales minerales beneficiosas.
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1 }}
+        <div
+          style={entrada(1)}
           className="mt-8 flex flex-wrap items-center gap-4"
         >
           <a
@@ -119,7 +109,7 @@ export function SpringHero({ waMessage }: { waMessage: string }) {
           >
             WhatsApp
           </a>
-        </motion.div>
+        </div>
 
         <motion.p
           initial={{ opacity: 0 }}

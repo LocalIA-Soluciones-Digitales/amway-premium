@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { m as motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import { waLink } from "@/data/site-config";
 import { ENERGY_FLAVORS, type EnergyFlavor } from "@/data/energy-drinks";

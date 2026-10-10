@@ -45,41 +45,9 @@ export function getProductById(id: string): Product | undefined {
   return PRODUCTS.find((p) => p.id === id);
 }
 
-export const CATEGORY_META: Record<
-  CategorySlug,
-  { label: string; tagline: string; href: string; accent: string }
-> = {
-  nutricion: {
-    label: "Nutrición",
-    tagline: "Vitaminas, proteínas e inmunidad basadas en la ciencia de las plantas.",
-    href: "/nutricion",
-    accent: "forest",
-  },
-  "xs-energy": {
-    label: "XS Energy",
-    tagline: "Energía, fuerza y recuperación para tu mejor rendimiento.",
-    href: "/xs-energy",
-    accent: "xs",
-  },
-  belleza: {
-    label: "Belleza",
-    tagline: "Artistry™: cuidado de la piel y maquillaje.",
-    href: "/belleza",
-    accent: "gold",
-  },
-  "cuidado-personal": {
-    label: "Cuidado personal",
-    tagline: "Satinique™, g&h™ y glister™: cabello, cuerpo e higiene bucal.",
-    href: "/cuidado-personal",
-    accent: "gold",
-  },
-  hogar: {
-    label: "Hogar",
-    tagline: "Agua, aire y cocina más limpios con eSpring, Atmosphere e iCook.",
-    href: "/hogar",
-    accent: "tech",
-  },
-};
+// En un módulo aparte para que lo que solo necesita las categorías no
+// cargue los 315 productos en el navegador.
+export { CATEGORY_META } from "../categorias";
 
 export * from "../types";
 export { nutricionProducts, xsEnergyProducts, bellezaProducts, cuidadoPersonalProducts, hogarProducts };

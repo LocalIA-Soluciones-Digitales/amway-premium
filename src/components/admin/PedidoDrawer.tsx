@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { CalendarClock, X } from "lucide-react";
 import { PedidoDetalle } from "./PedidoDetalle";

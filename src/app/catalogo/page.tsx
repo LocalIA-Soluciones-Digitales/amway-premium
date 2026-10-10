@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
 import { PRODUCTS, getBrands } from "@/data/products";
 import { conRuta } from "@/lib/seo";
+import { paraExplorador } from "@/lib/explorador";
 import { SITE } from "@/data/site-config";
 
 export const metadata: Metadata = conRuta("/catalogo", {
@@ -47,7 +48,7 @@ export default function CatalogoPage() {
 
       <section className="mx-auto max-w-7xl px-6 pb-20 pt-10 sm:px-8 sm:pt-14">
         <ProductExplorer
-          products={PRODUCTS}
+          products={paraExplorador(PRODUCTS)}
           subcategories={ALL_SUBCATEGORIES}
           brands={brands}
           showCategories

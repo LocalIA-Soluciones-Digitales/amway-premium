@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { waLink, WA_PRESETS, SITE } from "@/data/site-config";
 
 export function FinalCta() {

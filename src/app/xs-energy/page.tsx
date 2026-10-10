@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
+import { paraExplorador } from "@/lib/explorador";
 import { EnergyHero } from "@/components/xs-energy/EnergyHero";
 import { EnergyFacts } from "@/components/xs-energy/EnergyFacts";
 import { EnergyVideoMoment } from "@/components/xs-energy/EnergyVideoMoment";
@@ -39,7 +40,7 @@ export default function XsEnergyPage() {
           Además de las bebidas de energía: pre-entrenamiento, creatina, proteínas y
           recuperación deportiva XS™.
         </p>
-        <ProductExplorer products={products} subcategories={subcategories} brands={brands} />
+        <ProductExplorer products={paraExplorador(products)} subcategories={subcategories} brands={brands} />
       </section>
     </>
   );

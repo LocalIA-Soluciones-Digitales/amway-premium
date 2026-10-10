@@ -1,4 +1,4 @@
-import { amwayRpc } from "@/lib/amway-db";
+import { amwayRpc } from "@/lib/amway-config";
 import { variantPriceEur, type Product } from "@/data/types";
 
 // Lo que el panel de gestión puede cambiar de cada producto, tal y como lo

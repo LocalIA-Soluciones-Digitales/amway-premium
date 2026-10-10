@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import { SITE, waLink, WA_PRESETS } from "@/data/site-config";
 

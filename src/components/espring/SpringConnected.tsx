@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { SPRING_APP_FEATURES } from "@/data/espring-content";
 
