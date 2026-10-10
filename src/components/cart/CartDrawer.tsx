@@ -82,6 +82,11 @@ export function CartDrawer() {
   const [metodo, setMetodo] = useState<MetodoPagoWeb>(SITE.pagoOnline ? "tarjeta" : "efectivo");
   // Aviso «estamos activando el pago online» al tocar Tarjeta sin Stripe activo.
   const [avisoPago, setAvisoPago] = useState(false);
+  // «Vaciar cesta» pide confirmación en el mismo sitio antes de borrar nada.
+  const [confirmarVaciar, setConfirmarVaciar] = useState(false);
+  useEffect(() => {
+    if (!isOpen) setConfirmarVaciar(false);
+  }, [isOpen]);
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
   const [notas, setNotas] = useState("");
@@ -422,6 +427,39 @@ export function CartDrawer() {
                       </li>
                     );
                   })}
+                  <li className="flex min-h-14 items-center justify-end py-3">
+                    {confirmarVaciar ? (
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-stone">¿Vaciar la cesta?</span>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmarVaciar(false)}
+                          className="rounded-full px-3 py-1.5 text-carbon transition hover:bg-carbon/5"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            clearCesta();
+                            setConfirmarVaciar(false);
+                          }}
+                          className="rounded-full bg-xs-red px-3 py-1.5 font-medium text-white transition hover:opacity-90"
+                        >
+                          Sí, vaciar
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setConfirmarVaciar(true)}
+                        className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-stone transition hover:bg-carbon/5 hover:text-carbon"
+                      >
+                        <Trash2 size={14} />
+                        Vaciar cesta
+                      </button>
+                    )}
+                  </li>
                 </ul>
 
                 <footer className="border-t border-carbon/10 px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-5">
