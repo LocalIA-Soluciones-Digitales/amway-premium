@@ -2,11 +2,13 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { m as motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import { waLink } from "@/data/site-config";
 import { ENERGY_FLAVORS, type EnergyFlavor } from "@/data/energy-drinks";
 import { getProductById } from "@/data/products";
+import { productHref } from "@/data/types";
 import { useCatalogState } from "@/components/catalog/CatalogStateProvider";
 import { formatEUR } from "@/lib/currency";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
@@ -55,8 +57,16 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
       />
       <Glow px={spx} py={spy} color={flavor.accentSoft} />
 
+      {product && (
+        <Link
+          href={productHref(product)}
+          aria-label={`Ver ${flavorLabel}`}
+          className="absolute inset-0 z-[5] rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream"
+        />
+      )}
+
       {flavor.tag && (
-        <span className="absolute left-3 top-3 z-10 rounded-full bg-cream/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide text-carbon">
+        <span className="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-cream/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide text-carbon">
           {flavor.tag}
         </span>
       )}
@@ -73,7 +83,7 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
         </div>
       </div>
 
-      <div className="relative flex shrink-0 flex-col justify-center bg-xs-ink/80 px-4 py-3 backdrop-blur-sm">
+      <div className="pointer-events-none relative z-10 flex shrink-0 flex-col justify-center bg-xs-ink/80 px-4 py-3 backdrop-blur-sm">
         <p className="line-clamp-2 font-display text-sm leading-tight text-cream sm:text-base">{flavor.name}</p>
         <p className="mt-0.5 line-clamp-2 text-xs uppercase leading-snug tracking-wide text-cream/55">{flavor.flavorEs}</p>
 
@@ -84,7 +94,7 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
             </p>
             {product && <p className="text-[10px] text-cream/50">{product.variants[0].size}</p>}
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="pointer-events-auto flex items-center gap-1.5">
             {agotado && (
               <span className="rounded-full bg-xs-red px-3 py-2 text-[10px] font-bold uppercase tracking-wide text-cream">
                 Agotado
@@ -128,7 +138,7 @@ function Glow({ px, py, color }: { px: MotionValue<number>; py: MotionValue<numb
 
 export function EnergyFlavorGrid() {
   return (
-    <section className="relative overflow-hidden bg-xs-ink py-24 sm:py-32">
+    <section id="sabores" className="relative scroll-mt-20 overflow-hidden bg-xs-ink py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
