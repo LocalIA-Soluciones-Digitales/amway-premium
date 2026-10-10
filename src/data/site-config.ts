@@ -16,9 +16,13 @@ export const SITE = {
   country: "España",
   // Línea definitiva del negocio (WhatsApp y teléfono).
   whatsapp: "34614036583",
-  // El buzón tiene que existir antes de abrir: sale en el aviso legal y en
-  // Nosotros. Se cambia con NEXT_PUBLIC_CONTACT_EMAIL al tener el dominio.
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hola@nutriyuly.com",
+  // Sale en el aviso legal y en Nosotros. Se puede cambiar con
+  // NEXT_PUBLIC_CONTACT_EMAIL sin tocar código.
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "marvinkendry1@gmail.com",
+  // Pago con tarjeta (Stripe) en la web. Mientras se configura, la cesta lo
+  // muestra como «Próximamente» y solo admite pagar al recoger. Se activa
+  // con NEXT_PUBLIC_PAGO_ONLINE=true en Vercel (y redeploy).
+  pagoOnline: process.env.NEXT_PUBLIC_PAGO_ONLINE === "true",
   // Atención por WhatsApp y recogida en el local (hora de Madrid). No hay
   // envíos a domicilio: todos los pedidos se recogen en el local.
   horario: {

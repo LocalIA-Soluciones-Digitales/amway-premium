@@ -5,9 +5,10 @@ import { eurToCents } from "@/lib/currency";
 import { productImageSrc } from "@/data/types";
 import { validarPedidoWeb } from "@/lib/pedido-web";
 import { clienteDeRequest, dentroDelLimite, ipDeRequest } from "@/lib/amway-db";
+import { SITE } from "@/data/site-config";
 
 export async function POST(request: NextRequest) {
-  if (!stripe) {
+  if (!SITE.pagoOnline || !stripe) {
     return NextResponse.json(
       { error: "El pago con tarjeta todavía no está activado. Puedes elegir pagar en efectivo al recoger." },
       { status: 503 }

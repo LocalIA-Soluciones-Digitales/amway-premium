@@ -15,6 +15,7 @@ import {
   MessageCircle,
   Minus,
   Plus,
+  ShieldCheck,
   ShoppingBag,
   Trash2,
   UserRound,
@@ -79,7 +80,9 @@ export function CartDrawer() {
 
   const [fecha, setFecha] = useState<string | null>(null);
   const [hora, setHora] = useState<string | null>(null);
-  const [metodo, setMetodo] = useState<MetodoPagoWeb>("tarjeta");
+  const [metodo, setMetodo] = useState<MetodoPagoWeb>(SITE.pagoOnline ? "tarjeta" : "efectivo");
+  // Aviso «estamos activando el pago online» al tocar Tarjeta sin Stripe activo.
+  const [avisoPago, setAvisoPago] = useState(false);
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
   const [notas, setNotas] = useState("");
@@ -103,7 +106,9 @@ export function CartDrawer() {
     lenis?.stop();
     document.documentElement.style.overflow = "hidden";
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeCesta();
+      if (e.key !== "Escape") return;
+      if (avisoPago) setAvisoPago(false);
+      else closeCesta();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {
@@ -111,13 +116,14 @@ export function CartDrawer() {
       document.documentElement.style.overflow = "";
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [isOpen, lenis, closeCesta]);
+  }, [isOpen, lenis, closeCesta, avisoPago]);
 
   useEffect(() => {
     if (isOpen) return;
     setError(null);
     setPaso("cesta");
     setHecho(null);
+    setAvisoPago(false);
   }, [isOpen]);
 
   useEffect(() => {
@@ -157,6 +163,10 @@ export function CartDrawer() {
     }
     if (!recogidaValida({ fecha, hora }, new Date(), catalog.cierres)) {
       setError("Esa hora ya no está disponible. Elige otra, por favor.");
+      return;
+    }
+    if (metodo === "tarjeta" && !SITE.pagoOnline) {
+      setAvisoPago(true);
       return;
     }
     setLoading(true);
@@ -421,7 +431,8 @@ export function CartDrawer() {
                     <span className="font-display text-2xl tabular-nums text-carbon">{formatEUR(subtotal)}</span>
                   </div>
                   <p className="mt-1 text-xs text-stone">
-                    Recogida en mano en {SITE.city}. Pagas con tarjeta o en efectivo al recoger.
+                    Recogida en mano en {SITE.city}.{" "}
+                    {SITE.pagoOnline ? "Pagas con tarjeta o en efectivo al recoger." : "Pagas al recoger tu pedido."}
                   </p>
                   <button
                     type="button"
@@ -456,24 +467,37 @@ export function CartDrawer() {
                           { value: "tarjeta", label: "Tarjeta", hint: "Pago seguro ahora", icon: CreditCard },
                           { value: "efectivo", label: "Efectivo", hint: "Pagas al recoger", icon: Banknote },
                         ] as const
-                      ).map((m) => (
-                        <button
-                          key={m.value}
-                          type="button"
-                          onClick={() => setMetodo(m.value)}
-                          aria-pressed={metodo === m.value}
-                          className={cn(
-                            "flex flex-col items-start gap-1 rounded-2xl border p-3.5 text-left transition",
-                            metodo === m.value
-                              ? "border-carbon bg-white ring-1 ring-carbon"
-                              : "border-carbon/15 bg-white hover:border-carbon/35"
-                          )}
-                        >
-                          <m.icon size={18} className="text-carbon" />
-                          <span className="mt-1 text-sm font-medium text-carbon">{m.label}</span>
-                          <span className="text-xs text-stone">{m.hint}</span>
-                        </button>
-                      ))}
+                      ).map((m) => {
+                        const proximamente = m.value === "tarjeta" && !SITE.pagoOnline;
+                        return (
+                          <button
+                            key={m.value}
+                            type="button"
+                            onClick={() => (proximamente ? setAvisoPago(true) : setMetodo(m.value))}
+                            aria-pressed={metodo === m.value}
+                            aria-haspopup={proximamente ? "dialog" : undefined}
+                            className={cn(
+                              "relative flex flex-col items-start gap-1 rounded-2xl border p-3.5 text-left transition",
+                              proximamente
+                                ? "border-dashed border-carbon/20 bg-white/50 hover:border-carbon/35"
+                                : metodo === m.value
+                                  ? "border-carbon bg-white ring-1 ring-carbon"
+                                  : "border-carbon/15 bg-white hover:border-carbon/35"
+                            )}
+                          >
+                            {proximamente && (
+                              <span className="absolute right-2.5 top-2.5 rounded-full bg-linen px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-stone">
+                                Próximamente
+                              </span>
+                            )}
+                            <m.icon size={18} className={proximamente ? "text-stone" : "text-carbon"} />
+                            <span className={cn("mt-1 text-sm font-medium", proximamente ? "text-stone" : "text-carbon")}>
+                              {m.label}
+                            </span>
+                            <span className="text-xs text-stone">{proximamente ? "Activándose" : m.hint}</span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </Seccion>
 
@@ -605,6 +629,83 @@ export function CartDrawer() {
                 </footer>
               </form>
             )}
+
+            <AnimatePresence>
+              {avisoPago && (
+                <div className="absolute inset-0 z-10 flex items-end sm:items-center sm:px-5">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    onClick={() => setAvisoPago(false)}
+                    className="absolute inset-0 bg-carbon/35 backdrop-blur-[2px]"
+                  />
+                  <motion.div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="aviso-pago-titulo"
+                    initial={{ opacity: 0, y: 32 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 24 }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative w-full rounded-t-3xl bg-cream-soft px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 shadow-2xl sm:rounded-3xl sm:pb-6"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setAvisoPago(false)}
+                      aria-label="Cerrar aviso"
+                      className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-stone transition hover:bg-carbon/5 hover:text-carbon"
+                    >
+                      <X size={17} />
+                    </button>
+
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-forest/10 text-forest">
+                      <ShieldCheck size={22} />
+                    </div>
+                    <p className="mt-5 inline-flex items-center gap-2 rounded-full bg-linen px-3 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-stone">
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-forest/60" />
+                        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-forest" />
+                      </span>
+                      Configurando pasarela
+                    </p>
+                    <h3 id="aviso-pago-titulo" className="mt-3 font-display text-2xl leading-tight text-carbon">
+                      Estamos activando el pago online
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-stone">
+                      Muy pronto podrás pagar con tarjeta, Apple Pay o Google Pay desde la web, con la seguridad de una
+                      pasarela certificada.
+                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-stone">
+                      Mientras tanto, haz tu pedido con normalidad: te lo reservamos para el día y la hora que elijas y lo
+                      pagas al recogerlo.
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMetodo("efectivo");
+                        setAvisoPago(false);
+                      }}
+                      className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-carbon text-sm font-medium text-cream transition hover:bg-carbon-soft"
+                    >
+                      <Banknote size={16} />
+                      Continuar con pago al recoger
+                    </button>
+                    <a
+                      href={waLink("Hola, quería hacer un pedido y tengo una duda sobre el pago.")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2.5 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-carbon/15 text-sm font-medium text-carbon transition hover:bg-carbon/5"
+                    >
+                      <MessageCircle size={16} />
+                      Consultar por WhatsApp
+                    </a>
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>
           </motion.aside>
         </div>
       )}
