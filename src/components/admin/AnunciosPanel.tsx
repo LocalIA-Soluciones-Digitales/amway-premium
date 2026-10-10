@@ -476,7 +476,7 @@ function AnuncioForm({
     setSubiendo("video");
     // Si no hay foto propia, un fotograma del vídeo hace de portada: es lo que
     // se ve mientras el vídeo carga (y si el cliente pide menos movimiento).
-    const { portada, duracion } = await leerVideo(file);
+    const { portada, duracion, ladoCorto } = await leerVideo(file);
     const [url, urlPortada] = await Promise.all([
       file.type === "video/webm" ? subir(file, "webm") : subir(new Blob([file], { type: "video/mp4" }), "mp4"),
       !imagenUrl && portada ? subir(portada, portada.type === "image/webp" ? "webp" : "jpg") : Promise.resolve(null),
@@ -485,7 +485,11 @@ function AnuncioForm({
     if (!url) return setError("No se pudo subir el vídeo. Inténtalo de nuevo.");
     setVideoUrl(url);
     if (urlPortada) setImagenUrl(urlPortada);
-    if (duracion && duracion > 30) {
+    // En el pop-up se ve a pantalla casi completa: por debajo de 720 px de
+    // lado corto el navegador lo amplía y se nota borroso.
+    if (ladoCorto && ladoCorto < 720) {
+      setAviso(`El vídeo es pequeño (${ladoCorto} px de ancho) y se verá algo borroso. Si puedes, súbelo exportado en 1080p.`);
+    } else if (duracion && duracion > 30) {
       setAviso(`El vídeo dura ${Math.round(duracion)} s. Se verá en bucle y sin sonido: los de menos de 15 s funcionan mejor.`);
     }
   }

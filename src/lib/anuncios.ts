@@ -69,7 +69,9 @@ async function dibujarABlob(fuente: CanvasImageSource, ancho: number, alto: numb
 // Lee un vídeo en el navegador antes de subirlo: su duración y un fotograma
 // para usarlo de portada (lo que se ve mientras el vídeo carga). Si el
 // navegador no puede abrirlo devuelve nulos y la subida sigue igual.
-export async function leerVideo(file: File): Promise<{ portada: Blob | null; duracion: number | null }> {
+export async function leerVideo(
+  file: File
+): Promise<{ portada: Blob | null; duracion: number | null; ladoCorto: number | null }> {
   const url = URL.createObjectURL(file);
   const v = document.createElement("video");
   v.muted = true;
@@ -83,14 +85,16 @@ export async function leerVideo(file: File): Promise<{ portada: Blob | null; dur
     });
   try {
     v.src = url;
-    if (!(await esperar("loadeddata"))) return { portada: null, duracion: null };
+    if (!(await esperar("loadeddata"))) return { portada: null, duracion: null, ladoCorto: null };
     const duracion = Number.isFinite(v.duration) ? v.duration : null;
-    // Un poco después del inicio: el primer fotograma suele ser negro.
-    v.currentTime = Math.min(0.6, (duracion ?? 1) / 2);
-    if (!(await esperar("seeked"))) return { portada: null, duracion };
-    return { portada: await dibujarABlob(v, v.videoWidth, v.videoHeight, 1600), duracion };
+    const ladoCorto = Math.min(v.videoWidth, v.videoHeight) || null;
+    // Ya entrado el vídeo: el primer fotograma suele ser negro y los primeros
+    // segundos traen a menudo un zoom o un barrido borroso de entrada.
+    v.currentTime = Math.min(2, (duracion ?? 1) / 2);
+    if (!(await esperar("seeked"))) return { portada: null, duracion, ladoCorto };
+    return { portada: await dibujarABlob(v, v.videoWidth, v.videoHeight, 1600), duracion, ladoCorto };
   } catch {
-    return { portada: null, duracion: null };
+    return { portada: null, duracion: null, ladoCorto: null };
   } finally {
     v.removeAttribute("src");
     URL.revokeObjectURL(url);
