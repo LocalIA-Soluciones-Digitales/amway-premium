@@ -46,7 +46,7 @@ export const INTENTOS: Record<string, Intento> = {
       "Muy fácil, en 3 pasos:",
       "1. Añade los productos a la cesta desde el catálogo.",
       `2. Elige el día y la hora a la que pasarás a recogerlo en ${SITE.city}.`,
-      "3. Paga con tarjeta en la web o en efectivo al recoger.",
+      SITE.pagoOnline ? "3. Paga con tarjeta en la web o en efectivo al recoger." : "3. Lo pagas al recogerlo.",
     ],
     claves: ["pedir", "comprar", "compra", "encarg", "cesta", "carrito", "hacer un pedido", "hago un pedido", "realizar un pedido", "hacer el pedido", "como se compra"],
     acciones: [
@@ -162,9 +162,12 @@ export const INTENTOS: Record<string, Intento> = {
   pagos: {
     pregunta: "Formas de pago",
     respuesta: [
-      "Eliges al confirmar el pedido:",
-      "• Tarjeta: pago seguro en la web.",
-      "• Efectivo: pagas en el momento de la recogida.",
+      ...(SITE.pagoOnline
+        ? ["Eliges al confirmar el pedido:", "• Tarjeta: pago seguro en la web.", "• Efectivo: pagas en el momento de la recogida."]
+        : [
+            "De momento pagas en el momento de la recogida.",
+            "Estamos activando el pago online con tarjeta, Apple Pay y Google Pay: muy pronto podrás pagar también desde la web.",
+          ]),
     ],
     claves: ["pag", "tarjet", "efectiv", "metodo", "forma de pago", "cobr"],
     acciones: [
@@ -176,6 +179,7 @@ export const INTENTOS: Record<string, Intento> = {
   seguro: {
     pregunta: "¿Es seguro pagar con tarjeta?",
     respuesta: [
+      ...(SITE.pagoOnline ? [] : ["El pago online se está activando: por ahora pagas al recoger. Cuando esté disponible:"]),
       "Sí. El pago se hace en la pasarela de Stripe, cifrado y con verificación de tu banco. Nosotros no vemos ni guardamos los datos de tu tarjeta.",
     ],
     claves: ["segur", "stripe", "fiable", "estafa", "datos de la tarjeta", "confianza"],
@@ -187,7 +191,7 @@ export const INTENTOS: Record<string, Intento> = {
   bizum: {
     pregunta: "¿Aceptáis Bizum o transferencia?",
     respuesta: [
-      "En la web puedes pagar con tarjeta o en efectivo al recoger. Si prefieres otro método, escríbenos y lo vemos contigo.",
+      `${SITE.pagoOnline ? "En la web puedes pagar con tarjeta o en efectivo al recoger" : "De momento se paga al recoger el pedido"}. Si prefieres otro método, escríbenos y lo vemos contigo.`,
     ],
     claves: ["bizum", "transferen", "paypal", "otro metodo", "plazos", "financ"],
     acciones: [

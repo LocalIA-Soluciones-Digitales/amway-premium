@@ -352,7 +352,7 @@ export function ProductDetail({
   const steps = [
     { icon: ShoppingBag, title: "Añádelo a la cesta", text: `Elige ${kind.toLowerCase()} y las unidades que necesitas.` },
     { icon: CalendarClock, title: "Elige día y hora", text: `Al terminar el pedido, eliges cuándo pasar: ${SITE.horario.texto}.` },
-    { icon: Store, title: `Recógelo en ${SITE.city}`, text: "Lo tenemos preparado. Paga con tarjeta en la web o en efectivo." },
+    { icon: Store, title: `Recógelo en ${SITE.city}`, text: SITE.pagoOnline ? "Lo tenemos preparado. Paga con tarjeta en la web o en efectivo." : "Lo tenemos preparado. Lo pagas al recogerlo." },
   ];
 
   const tabs: { id: string; label: string; content: ReactNode }[] = [
@@ -621,7 +621,7 @@ export function ProductDetail({
               <ul className="mt-5 grid grid-cols-3 gap-2 border-t border-carbon/[0.07] pt-5">
                 {[
                   { icon: Store, text: "Recogida en tienda" },
-                  { icon: CreditCard, text: "Tarjeta o efectivo" },
+                  { icon: CreditCard, text: SITE.pagoOnline ? "Tarjeta o efectivo" : "Pago al recoger" },
                   { icon: ShieldCheck, text: "Producto original" },
                 ].map(({ icon: Icon, text }) => (
                   <li

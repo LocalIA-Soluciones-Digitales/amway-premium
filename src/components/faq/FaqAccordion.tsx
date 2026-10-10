@@ -12,7 +12,7 @@ const FAQS = [
   },
   {
     q: "¿Cómo hago un pedido?",
-    a: "Añade los productos a la cesta, elige el día y la hora de recogida en nuestro local y paga con tarjeta en la web o en efectivo al recoger. Si lo prefieres, también puedes pedirlo por WhatsApp.",
+    a: `Añade los productos a la cesta, elige el día y la hora de recogida en nuestro local y ${SITE.pagoOnline ? "paga con tarjeta en la web o en efectivo al recoger" : "lo pagas al recogerlo"}. Si lo prefieres, también puedes pedirlo por WhatsApp.`,
   },
   {
     q: "¿Hacéis envíos a domicilio?",

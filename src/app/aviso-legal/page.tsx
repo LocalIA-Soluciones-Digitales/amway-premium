@@ -34,8 +34,8 @@ export default function AvisoLegalPage() {
 
       <h2>Qué ofrece la web</h2>
       <p>
-        Catálogo de productos con precio, pedido online con recogida en nuestro local y pago con tarjeta (a través
-        de Stripe) o en efectivo al recoger. No hacemos envíos a domicilio. Las condiciones de cada compra están en{" "}
+        Catálogo de productos con precio, pedido online con recogida en nuestro local y{" "}
+        {SITE.pagoOnline ? "pago con tarjeta (a través de Stripe) o en efectivo al recoger" : "pago al recoger"}. No hacemos envíos a domicilio. Las condiciones de cada compra están en{" "}
         <Link href="/condiciones">Condiciones de compra</Link>.
       </p>
 

@@ -48,12 +48,17 @@ export default function CondicionesPage() {
         <li>Añade productos a la cesta.</li>
         <li>Elige el día y la hora de recogida, la forma de pago y escribe tu nombre y teléfono.</li>
         <li>
-          Revisa el resumen y pulsa <strong>«Pagar … con tarjeta»</strong> o <strong>«Hacer pedido · pago al
-          recoger»</strong>. Ese botón confirma la compra y supone la obligación de pagarla.
+          Revisa el resumen y pulsa{" "}
+          {SITE.pagoOnline && (
+            <>
+              <strong>«Pagar … con tarjeta»</strong> o{" "}
+            </>
+          )}
+          <strong>«Hacer pedido · pago al recoger»</strong>. Ese botón confirma la compra y supone la obligación de pagarla.
         </li>
         <li>
-          Te mostramos el número de pedido en pantalla. Con tarjeta, Stripe te envía también el justificante del
-          pago. Si quieres, puedes enviarnos el resumen por WhatsApp, pero no es necesario para que el pedido sea
+          Te mostramos el número de pedido en pantalla.
+          {SITE.pagoOnline && " Con tarjeta, Stripe te envía también el justificante del pago."} Si quieres, puedes enviarnos el resumen por WhatsApp, pero no es necesario para que el pedido sea
           válido.
         </li>
       </ol>
@@ -65,10 +70,12 @@ export default function CondicionesPage() {
 
       <h2>Pago</h2>
       <ul>
-        <li>
-          <strong>Tarjeta</strong> (y otros métodos que ofrezca la pasarela, como Apple Pay o Google Pay): pago en
-          el momento a través de Stripe. No vemos ni guardamos los datos de tu tarjeta.
-        </li>
+        {SITE.pagoOnline && (
+          <li>
+            <strong>Tarjeta</strong> (y otros métodos que ofrezca la pasarela, como Apple Pay o Google Pay): pago en
+            el momento a través de Stripe. No vemos ni guardamos los datos de tu tarjeta.
+          </li>
+        )}
         <li>
           <strong>Efectivo</strong>: pagas al recoger. El pedido queda reservado para el día y la hora elegidos.
         </li>
