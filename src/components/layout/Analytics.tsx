@@ -57,36 +57,45 @@ export function Analytics() {
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           role="dialog"
           aria-label="Preferencias de cookies"
-          className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[55] mx-auto max-w-sm rounded-2xl border border-cream/10 bg-carbon/95 p-5 text-cream shadow-[0_20px_50px_rgba(28,26,22,0.35)] backdrop-blur-md sm:left-8 sm:right-auto sm:bottom-[calc(2rem+env(safe-area-inset-bottom))] sm:mx-0"
+          aria-describedby="cookies-texto"
+          // Móvil: tarjeta abajo. Ordenador: barra centrada y ancha, con margen
+          // a los lados para no tapar el botón de WhatsApp.
+          className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[55] mx-auto max-w-sm rounded-2xl border border-cream/10 bg-carbon/95 p-5 text-cream shadow-[0_24px_60px_rgba(28,26,22,0.4)] backdrop-blur-md sm:inset-x-24 sm:bottom-[calc(2rem+env(safe-area-inset-bottom))] sm:max-w-4xl sm:p-6 lg:px-8"
         >
-          <div className="flex items-center gap-3">
-            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-cream/10">
-              <Cookie size={17} className="text-gold-soft" />
-            </span>
-            <p className="font-display text-lg leading-none">Tu privacidad</p>
-          </div>
-          <p className="mt-3 text-sm leading-relaxed text-cream/75">
-            Si aceptas, guardamos en tu navegador unas estadísticas propias (qué páginas y productos interesan
-            más) para mejorar la tienda. Sin publicidad ni terceros. Puedes cambiarlo cuando quieras.{" "}
-            <Link href="/cookies" className="underline underline-offset-2 hover:text-cream">
-              Política de cookies
-            </Link>
-          </p>
-          <div className="mt-5 grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => decide("rechazadas")}
-              className="rounded-full bg-cream px-4 py-2.5 text-sm font-semibold text-carbon transition hover:bg-white"
-            >
-              Rechazar
-            </button>
-            <button
-              type="button"
-              onClick={() => decide("aceptadas")}
-              className="rounded-full bg-cream px-4 py-2.5 text-sm font-semibold text-carbon transition hover:bg-white"
-            >
-              Aceptar
-            </button>
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-10">
+            <div className="flex gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-cream/10 ring-1 ring-cream/10">
+                <Cookie size={18} className="text-gold-soft" />
+              </span>
+              <div>
+                <p className="font-display text-xl leading-tight">Tu privacidad, primero</p>
+                <p id="cookies-texto" className="mt-1.5 text-sm leading-relaxed text-cream/70">
+                  Con tu permiso guardamos en tu navegador unas estadísticas propias (qué páginas y productos
+                  interesan más) para mejorar la tienda. Sin publicidad ni terceros, y puedes cambiarlo cuando
+                  quieras.{" "}
+                  <Link href="/cookies" className="whitespace-nowrap text-cream underline underline-offset-4 hover:text-gold-soft">
+                    Política de cookies
+                  </Link>
+                </p>
+              </div>
+            </div>
+            {/* Mismo tamaño y peso para las dos opciones: rechazar tiene que ser tan fácil como aceptar. */}
+            <div className="grid shrink-0 grid-cols-2 gap-2.5 sm:ml-14 lg:ml-0 lg:w-80">
+              <button
+                type="button"
+                onClick={() => decide("rechazadas")}
+                className="h-11 rounded-full border border-cream/40 px-5 text-sm font-semibold text-cream transition hover:border-cream hover:bg-cream/10"
+              >
+                Rechazar
+              </button>
+              <button
+                type="button"
+                onClick={() => decide("aceptadas")}
+                className="h-11 rounded-full border border-cream bg-cream px-5 text-sm font-semibold text-carbon transition hover:bg-white"
+              >
+                Aceptar
+              </button>
+            </div>
           </div>
         </motion.div>
       )}
