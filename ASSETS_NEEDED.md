@@ -31,4 +31,4 @@ Esto sustituye por completo a las 8 latas de baja resolución de `public/images/
 
 ## 4. Número de WhatsApp de producción
 
-No es un asset visual, pero queda anotado aquí porque bloquea el lanzamiento real: `SITE.whatsapp` en `src/data/site-config.ts` sigue siendo el número de pruebas indicado por el propietario del sitio. Sustituir por el número definitivo del negocio antes de publicar.
+✅ Resuelto: `SITE.whatsapp` en `src/data/site-config.ts` ya es la línea definitiva del negocio (+34 614 036 583).

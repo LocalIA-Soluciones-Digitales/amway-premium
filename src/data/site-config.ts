@@ -14,9 +14,8 @@ export const SITE = {
   city: "Barakaldo",
   region: "Bizkaia",
   country: "España",
-  // Testing number provided by the site owner — replace with the definitive
-  // business line before going to production.
-  whatsapp: "34628409781",
+  // Línea definitiva del negocio (WhatsApp y teléfono).
+  whatsapp: "34614036583",
   // El buzón tiene que existir antes de abrir: sale en el aviso legal y en
   // Nosotros. Se cambia con NEXT_PUBLIC_CONTACT_EMAIL al tener el dominio.
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hola@nutriyuly.com",
