@@ -306,9 +306,15 @@ export function PedidoDetalle({
                   href={waHref(p.cliente_telefono!, m.texto)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => m.id === "resena" && !p.resena_pedida_at && onUpdate({ resena_pedida_at: new Date().toISOString() })}
                   className="flex items-center justify-between rounded-lg px-2.5 py-2 text-[13px] text-carbon transition hover:bg-cream"
                 >
-                  {m.label}
+                  <span>
+                    {m.label}
+                    {m.id === "resena" && p.resena_pedida_at && (
+                      <span className="ml-2 text-xs text-forest">· pedida el {fecha(p.resena_pedida_at)}</span>
+                    )}
+                  </span>
                   <Send size={13} className="text-stone" />
                 </a>
               ))}

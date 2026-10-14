@@ -571,6 +571,8 @@ alter table public.amway_visitas add constraint amway_visitas_event_type_check
 -- push_avisado_at: el aviso al móvil ya se envió (evita duplicados entre la
 -- página de éxito y el webhook de Stripe).
 alter table public.amway_pedidos add column if not exists preparado_at timestamptz;
+-- resena_pedida_at: cuándo se pidió la reseña de Google (panel → Reseñas).
+alter table public.amway_pedidos add column if not exists resena_pedida_at timestamptz;
 alter table public.amway_pedidos add column if not exists push_avisado_at timestamptz;
 
 -- Dispositivos con los avisos activados desde el panel (como

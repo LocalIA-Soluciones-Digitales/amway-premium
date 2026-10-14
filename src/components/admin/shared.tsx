@@ -43,6 +43,7 @@ export interface Pedido {
   recogida_fecha: string | null; // YYYY-MM-DD (recogida en mano)
   recogida_hora: string | null; // HH:MM
   preparado_at: string | null; // bolsa preparada para la recogida
+  resena_pedida_at?: string | null; // reseña de Google pedida por WhatsApp
   cliente_id?: string | null; // pedido hecho con la cuenta de cliente iniciada
   created_at: string;
 }

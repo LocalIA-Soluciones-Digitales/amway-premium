@@ -70,7 +70,7 @@ export function ResenasGoogle({ datos }: { datos: ResumenGoogle | null }) {
             </ul>
             {datos.total > datos.resenas.length && (
               <p className="mt-6 text-sm text-stone">
-                Aquí ves las {datos.resenas.length} más destacadas.{" "}
+                Aquí ves {datos.resenas.length} de ellas.{" "}
                 <a href={verTodas} target="_blank" rel="noopener noreferrer" className="font-medium text-carbon underline underline-offset-2">
                   Lee las {datos.total} en Google
                 </a>

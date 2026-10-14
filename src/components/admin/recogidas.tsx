@@ -278,6 +278,8 @@ export function FilaRecogida({
   // con la bolsa preparada se muestra como "Avisar", que es lo siguiente.
   const aviso = mensajeSiguiente(p);
   const avisarListo = preparado && !hecho && aviso.id === "listo";
+  // Recogido y sin pedir aún la reseña de Google: se destaca el botón.
+  const pedirResena = hecho && aviso.id === "resena" && !p.resena_pedida_at;
 
   return (
     <div
@@ -391,17 +393,21 @@ export function FilaRecogida({
               href={waHref(p.cliente_telefono, aviso.texto)}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => aviso.id === "resena" && !p.resena_pedida_at && onUpdate({ resena_pedida_at: new Date().toISOString() })}
               aria-label={`WhatsApp: ${aviso.label}`}
-              title={`WhatsApp: ${aviso.label}`}
+              title={aviso.id === "resena" && p.resena_pedida_at ? "Reseña ya pedida" : `WhatsApp: ${aviso.label}`}
               className={cn(
                 "flex h-9 items-center justify-center gap-1.5 rounded-full transition",
                 avisarListo
                   ? "bg-forest/10 px-3 text-xs font-medium text-forest hover:bg-forest/15"
-                  : "w-9 text-stone hover:bg-cream hover:text-forest"
+                  : pedirResena
+                    ? "bg-gold/15 px-3 text-xs font-medium text-carbon hover:bg-gold/25"
+                    : "w-9 text-stone hover:bg-cream hover:text-forest"
               )}
             >
-              <MessageCircle size={14} />
+              {aviso.id === "resena" && p.resena_pedida_at ? <Check size={14} /> : <MessageCircle size={14} />}
               {avisarListo && "Avisar"}
+              {pedirResena && "Pedir reseña"}
             </a>
           </>
         )}

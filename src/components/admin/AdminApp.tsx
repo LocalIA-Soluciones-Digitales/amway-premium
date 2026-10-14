@@ -30,7 +30,7 @@ import { PedidosPanel } from "./PedidosPanel";
 import { ClientesPanel } from "./ClientesPanel";
 import { ProductosPanel } from "./ProductosPanel";
 import { SolicitudesPanel } from "./SolicitudesPanel";
-import { ResenasPanel } from "./ResenasPanel";
+import { ResenasPanel, cargarParaResena } from "./ResenasPanel";
 import { ContabilidadPanel } from "./ContabilidadPanel";
 import { AnunciosPanel } from "./AnunciosPanel";
 import { InformesPanel } from "./dev/InformesPanel";
@@ -69,6 +69,7 @@ type DevTab = "informes" | "ventas" | "estado" | "errores" | "accesos";
 export interface Pendientes {
   pedidos: number;
   solicitudes: number;
+  resenas: number; // clientes que ya recogieron y a los que pedir reseña
   recogidasHoy: number;
   atrasados: number;
 }
@@ -185,7 +186,7 @@ function Paneles({ session, rol, nombre }: { session: Session; rol: Rol; nombre:
   const [vista, setVista] = useState<"gestion" | "desarrollo">(rol === "desarrollador" ? "desarrollo" : "gestion");
   const [gTab, setGTab] = useState<GestionTab>("hoy");
   const [dTab, setDTab] = useState<DevTab>("informes");
-  const [pendientes, setPendientes] = useState<Pendientes>({ pedidos: 0, solicitudes: 0, recogidasHoy: 0, atrasados: 0 });
+  const [pendientes, setPendientes] = useState<Pendientes>({ pedidos: 0, solicitudes: 0, resenas: 0, recogidasHoy: 0, atrasados: 0 });
   const [errores, setErrores] = useState(0);
   const [alertas, setAlertas] = useState<AlertaPedido[]>([]);
   // Pedido a desplegar al llegar desde un aviso (?pedido=…) o desde el toast.
@@ -223,15 +224,17 @@ function Paneles({ session, rol, nombre }: { session: Session; rol: Rol; nombre:
     const db = amwayDb();
     const hoy = hoyMadrid();
     const activos = ["pendiente", "pagado", "enviado"];
-    const [p, s, rh, at] = await Promise.all([
+    const [p, s, rh, at, paraResena] = await Promise.all([
       db.from("amway_pedidos").select("id", { count: "exact", head: true }).in("estado", ["pendiente", "pagado"]),
       db.from("amway_solicitudes").select("id", { count: "exact", head: true }).eq("estado", "pendiente"),
       db.from("amway_pedidos").select("id", { count: "exact", head: true }).in("estado", activos).eq("recogida_fecha", hoy),
       db.from("amway_pedidos").select("id", { count: "exact", head: true }).in("estado", activos).lt("recogida_fecha", hoy),
+      cargarParaResena(),
     ]);
     setPendientes({
       pedidos: p.count ?? 0,
       solicitudes: s.count ?? 0,
+      resenas: paraResena.length,
       recogidasHoy: rh.count ?? 0,
       atrasados: at.count ?? 0,
     });
@@ -386,7 +389,7 @@ function Paneles({ session, rol, nombre }: { session: Session; rol: Rol; nombre:
     { id: "clientes", label: "Clientes", icon: UsersRound },
     { id: "productos", label: "Productos", icon: Package },
     { id: "solicitudes", label: "Solicitudes", icon: ClipboardList, badge: pendientes.solicitudes },
-    { id: "resenas", label: "Reseñas", icon: MessageSquareQuote },
+    { id: "resenas", label: "Reseñas", icon: MessageSquareQuote, badge: pendientes.resenas },
     { id: "anuncios", label: "Anuncios", icon: Megaphone },
   ];
 
@@ -417,7 +420,7 @@ function Paneles({ session, rol, nombre }: { session: Session; rol: Rol; nombre:
       {gTab === "clientes" && <ClientesPanel />}
       {gTab === "productos" && <ProductosPanel session={session} />}
       {gTab === "solicitudes" && <SolicitudesPanel onChange={refrescarPendientes} />}
-      {gTab === "resenas" && <ResenasPanel />}
+      {gTab === "resenas" && <ResenasPanel session={session} onChange={refrescarPendientes} />}
       {gTab === "contabilidad" && <ContabilidadPanel />}
       {gTab === "anuncios" && <AnunciosPanel />}
       {toast}
