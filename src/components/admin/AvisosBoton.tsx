@@ -68,8 +68,8 @@ export function AvisosBoton() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        aria-label={activado ? "Avisos de pedidos activados" : "Activar avisos de pedidos"}
-        title={activado ? "Avisos de pedidos activados en este dispositivo" : "Activar avisos de pedidos"}
+        aria-label={activado ? "Avisos activados" : "Activar avisos"}
+        title={activado ? "Avisos activados en este dispositivo" : "Activar avisos de pedidos y solicitudes"}
         className={cn(
           "relative flex h-9 w-9 items-center justify-center rounded-full border transition",
           activado
@@ -84,10 +84,10 @@ export function AvisosBoton() {
       {open && (
         <div className="fixed inset-x-4 top-[calc(4.5rem+env(safe-area-inset-top))] z-40 rounded-2xl border border-carbon/[0.07] bg-white p-4 text-sm shadow-[0_20px_50px_rgba(28,26,22,0.16)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-80">
           <p className="flex items-center gap-2 font-medium text-carbon">
-            <Bell size={15} /> Avisos de pedidos nuevos
+            <Bell size={15} /> Avisos de pedidos y solicitudes
           </p>
           <p className="mt-1 text-xs leading-relaxed text-stone">
-            Te llega una notificación al móvil en cuanto alguien hace un pedido en la web, aunque tengas el panel cerrado.
+            Te llega una notificación al móvil en cuanto alguien hace un pedido en la web o pide un producto que no está en ella, aunque tengas el panel cerrado.
           </p>
 
           <div className="mt-3">
@@ -114,7 +114,7 @@ export function AvisosBoton() {
                   <button
                     type="button"
                     disabled={ocupado}
-                    onClick={() => confirm("¿Dejar de recibir avisos de pedidos en este dispositivo?") && void conCarga(desactivar)}
+                    onClick={() => confirm("¿Dejar de recibir avisos en este dispositivo?") && void conCarga(desactivar)}
                     className={cn(btnGhost, "h-9 flex-1 text-xs")}
                   >
                     Desactivar

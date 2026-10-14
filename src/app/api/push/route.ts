@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
   const { data } = await consulta;
   const { enviadas, caducadas } = await enviarPush((data as Destino[] | null) ?? [], {
     title: "🔔 Avisos activados",
-    body: "Así te llegará cada pedido nuevo de la web.",
+    body: "Así te llegará cada pedido y cada solicitud nueva de la web.",
     url: "/admin?tab=pedidos",
     tag: "prueba",
   });

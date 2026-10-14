@@ -393,17 +393,40 @@ export function ProductExplorer({
 
       {filtered.length === 0 && (
         <div className="mt-8 rounded-2xl border border-carbon/10 px-6 py-16 text-center">
-          <p className="font-display text-xl text-carbon">No hay productos con esos filtros.</p>
-          <p className="mt-2 text-sm text-stone">Prueba con otra palabra o quita algún filtro.</p>
-          {hasFilters && (
-            <button
-              type="button"
-              onClick={clearAll}
-              className="mt-6 rounded-full border border-carbon/15 px-5 py-2.5 text-sm font-medium text-carbon transition hover:border-carbon/40"
-            >
-              Limpiar filtros
-            </button>
+          {query.trim() ? (
+            <>
+              <p className="font-display text-xl text-carbon">No tenemos «{query.trim()}» en la web.</p>
+              <p className="mx-auto mt-2 max-w-md text-sm text-stone">
+                Pídenoslo y lo buscamos en el catálogo oficial de Amway: te decimos precio y plazo.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="font-display text-xl text-carbon">No hay productos con esos filtros.</p>
+              <p className="mt-2 text-sm text-stone">Prueba con otra palabra o quita algún filtro.</p>
+            </>
           )}
+          <div className="mt-6 flex flex-col items-center justify-center gap-2 sm:flex-row">
+            {query.trim() && (
+              <button
+                type="button"
+                onClick={() => setSolicitudOpen(true)}
+                className="flex items-center gap-2 rounded-full bg-carbon px-5 py-2.5 text-sm font-medium text-cream transition hover:bg-carbon-soft"
+              >
+                Solicitar este producto
+                <ArrowRight size={15} />
+              </button>
+            )}
+            {hasFilters && (
+              <button
+                type="button"
+                onClick={clearAll}
+                className="rounded-full border border-carbon/15 px-5 py-2.5 text-sm font-medium text-carbon transition hover:border-carbon/40"
+              >
+                Limpiar filtros
+              </button>
+            )}
+          </div>
         </div>
       )}
 
@@ -421,7 +444,12 @@ export function ProductExplorer({
           <ArrowRight size={15} />
         </button>
       </div>
-      <SolicitudModal open={solicitudOpen} onClose={() => setSolicitudOpen(false)} tipo="otro" />
+      <SolicitudModal
+        open={solicitudOpen}
+        onClose={() => setSolicitudOpen(false)}
+        tipo="otro"
+        productoInicial={query.trim()}
+      />
     </div>
   );
 }

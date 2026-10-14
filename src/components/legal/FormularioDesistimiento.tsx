@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { LEGAL, waLink } from "@/data/site-config";
 import { amwayRpc } from "@/lib/amway-db";
+import { avisarSolicitud } from "@/lib/aviso-solicitud";
 import { fieldClass } from "@/components/ui/Dialog";
 import { AvisoPrivacidad } from "@/components/legal/AvisoPrivacidad";
 
@@ -42,7 +43,10 @@ export function FormularioDesistimiento({ numeroInicial = "" }: { numeroInicial?
         { p_numero: n, p_telefono: telefono, p_nombre: nombre.trim(), p_email: email.trim(), p_motivo: motivo.trim() },
         { cache: "no-store" }
       );
-      if ("referencia" in r) setHecho(r);
+      if ("referencia" in r) {
+        setHecho(r);
+        avisarSolicitud();
+      }
       else if (r.error === "no_encontrado")
         setError("No encontramos un pedido con ese número y teléfono. Revisa los datos o escríbenos por email.");
       else if (r.error === "bloqueado")

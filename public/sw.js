@@ -1,6 +1,6 @@
 // Service worker del panel de gestión (solo controla /admin). No cachea
 // nada: existe para que el panel se pueda instalar como app en el móvil y
-// para recibir los avisos push de pedidos nuevos (ver src/lib/push.ts).
+// para recibir los avisos push de pedidos y solicitudes nuevas (ver src/lib/push.ts).
 
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim()));

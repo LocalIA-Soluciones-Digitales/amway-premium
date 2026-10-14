@@ -66,7 +66,7 @@ export function SolicitudesPanel({ onChange }: { onChange: () => void }) {
     <div>
       <PanelHeader
         title="Solicitudes"
-        description="Productos que piden los clientes (encargos y fuera de catálogo) y desistimientos."
+        description="Productos que piden los clientes y no están en la web, y desistimientos."
         actions={
           <Segmented
             value={filtro}

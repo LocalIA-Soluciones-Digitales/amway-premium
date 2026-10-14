@@ -131,3 +131,45 @@ export async function avisarPedidoNuevo(pedidoId: string | null | undefined): Pr
     console.error("No se pudo enviar el aviso del pedido", e);
   }
 }
+
+interface SolicitudAviso {
+  id: string;
+  tipo: string;
+  producto_nombre: string;
+  nombre: string;
+  pedido_numero: number | null;
+}
+
+export function textoAvisoSolicitudes(s: SolicitudAviso[]): AvisoPush {
+  const url = "/admin?tab=solicitudes";
+  if (s.length > 1) {
+    return { title: `📋 ${s.length} solicitudes nuevas`, body: s.map((x) => x.producto_nombre).join(" · "), url, tag: "solicitudes" };
+  }
+  const [x] = s;
+  if (x.tipo === "desistimiento") {
+    return { title: `↩️ Desistimiento del pedido #${x.pedido_numero ?? ""}`, body: `${x.nombre} quiere devolver su pedido`, url, tag: `solicitud-${x.id}` };
+  }
+  return { title: "📋 Solicitud de producto", body: `${x.nombre} busca «${x.producto_nombre}»`, url, tag: `solicitud-${x.id}` };
+}
+
+// Avisa de las solicitudes recién llegadas (productos que no están en la
+// web y desistimientos). La función SQL las reclama de forma atómica, así
+// que cada una se avisa una sola vez. Nunca lanza.
+export async function avisarSolicitudesNuevas(): Promise<void> {
+  const token = process.env.AMWAY_PEDIDOS_TOKEN;
+  if (!token || !pushConfigurado()) return;
+  try {
+    const res = await amwayRpc<{ solicitudes: SolicitudAviso[]; destinos: Destino[] } | null>(
+      "amway_push_solicitudes",
+      { p_token: token },
+      { cache: "no-store" }
+    );
+    if (!res?.solicitudes?.length) return;
+    const { caducadas } = await enviarPush(res.destinos, textoAvisoSolicitudes(res.solicitudes));
+    if (caducadas.length > 0) {
+      await amwayRpc("amway_push_caducadas", { p_token: token, p_endpoints: caducadas }, { cache: "no-store" });
+    }
+  } catch (e) {
+    console.error("No se pudo enviar el aviso de la solicitud", e);
+  }
+}

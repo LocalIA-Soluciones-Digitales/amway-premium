@@ -12,7 +12,7 @@ Recorrido completo de un pedido de la web, de principio a fin: lo que ve el clie
 
 <img src="proceso-de-pedido/01-cesta.jpg" width="300" alt="Cesta con dos productos y el subtotal">
 
-Añade productos desde el catálogo y ajusta las cantidades. Si un producto se agota mientras lo tiene en la cesta, aparece en rojo («Agotado · quítalo para continuar») y no puede seguir hasta quitarlo.
+Añade productos desde el catálogo y ajusta las cantidades. Si Yuly oculta un producto de la web mientras el cliente lo tiene en la cesta, aparece en rojo («No disponible · quítalo para continuar») y no puede seguir hasta quitarlo.
 
 ### Paso 2 · Día y hora de recogida
 
@@ -142,7 +142,7 @@ Al tocar un pedido se abre su ficha completa:
 |---|---|
 | Precios | Se recalculan siempre en el servidor con los precios del panel. El cliente no puede modificarlos. |
 | Día y hora | Se vuelven a comprobar al confirmar: no se acepta un domingo ni una hora que ya ha pasado. |
-| Agotados | Un producto marcado a mano como agotado u oculto no se puede pedir. No hay control de unidades: todo está en tienda. |
+| Disponibilidad | No hay control de stock: todo lo que está en la web está en tienda. Solo un producto oculto desde el panel no se puede pedir. |
 | Pago con tarjeta | El pedido se apunta cuando Stripe confirma el cobro, aunque el cliente cierre la pestaña. Nunca se apunta dos veces. |
 | Avisos al móvil | Uno por pedido, aunque el registro se haga dos veces (página de agradecimiento y aviso de Stripe). |
 | Abusos | Como mucho 30 pedidos en efectivo por hora desde la web. |

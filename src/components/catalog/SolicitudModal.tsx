@@ -5,6 +5,7 @@ import { CheckCircle2, Loader2 } from "lucide-react";
 import type { Product } from "@/data/types";
 import { amwayDb } from "@/lib/amway-db";
 import { track } from "@/lib/analytics";
+import { avisarSolicitud } from "@/lib/aviso-solicitud";
 import { Dialog, fieldClass } from "@/components/ui/Dialog";
 import { AvisoPrivacidad } from "@/components/legal/AvisoPrivacidad";
 
@@ -29,12 +30,15 @@ export function SolicitudModal({
   tipo,
   product,
   variantIndex = 0,
+  productoInicial = "",
 }: {
   open: boolean;
   onClose: () => void;
   tipo: SolicitudTipo;
   product?: Product;
   variantIndex?: number;
+  // Lo que buscó el cliente sin encontrarlo: se rellena para no reescribirlo.
+  productoInicial?: string;
 }) {
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -49,10 +53,11 @@ export function SolicitudModal({
   useEffect(() => {
     if (open) {
       setFormato(variantIndex);
+      if (productoInicial) setProductoLibre(productoInicial);
       setEstado("idle");
       setError(null);
     }
-  }, [open, variantIndex]);
+  }, [open, variantIndex, productoInicial]);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -79,6 +84,7 @@ export function SolicitudModal({
       return;
     }
     track("solicitud", product?.id ?? tipo);
+    avisarSolicitud();
     setEstado("ok");
   }
 
