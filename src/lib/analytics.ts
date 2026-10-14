@@ -187,6 +187,8 @@ export function atenderErroresTempranos() {
 }
 export function reportError(mensaje: string, detalle?: string) {
   if (typeof window === "undefined" || reportedThisPage >= 5) return;
+  // En `next dev` los fallos son del desarrollo, no de los visitantes.
+  if (process.env.NODE_ENV !== "production") return;
   if (window.location.pathname.startsWith("/admin")) return;
   reportedThisPage++;
   void rpcPublica("amway_registrar_error", {

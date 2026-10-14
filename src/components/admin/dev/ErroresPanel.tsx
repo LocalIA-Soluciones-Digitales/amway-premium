@@ -88,14 +88,14 @@ function pista(mensaje: string): string | null {
   if (/SyntaxError/i.test(mensaje)) return "El navegador no entiende parte del código: suele ser un navegador antiguo o un script externo.";
   if (/ChunkLoadError|Loading chunk|dynamically imported module/i.test(mensaje))
     return "No cargó un trozo de la web, normalmente porque se publicó una versión nueva mientras navegaba. Se arregla recargando.";
-  if (/Failed to fetch|NetworkError|Load failed/i.test(mensaje)) return "Fallo de conexión del visitante.";
+  if (/Failed to fetch|NetworkError|network error|Load failed/i.test(mensaje)) return "Fallo de conexión del visitante.";
   if (/ResizeObserver/i.test(mensaje)) return "Aviso inofensivo del navegador; se puede ignorar.";
   return null;
 }
 
 // Fallos que no dependen del código de la tienda: se ocultan por defecto.
 function esRuido(mensaje: string): boolean {
-  return /^Script error\.?$|ResizeObserver|Failed to fetch|NetworkError|Load failed|ChunkLoadError|Loading chunk|dynamically imported module|extension:\/\//i.test(
+  return /^Script error\.?$|ResizeObserver|Failed to fetch|NetworkError|network error|Load failed|ChunkLoadError|Loading chunk|dynamically imported module|extension:\/\//i.test(
     mensaje
   );
 }

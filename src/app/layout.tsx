@@ -72,7 +72,9 @@ export const metadata: Metadata = {
 // Guarda en window.__amwayErrores los errores desde el primer instante;
 // <Analytics> los envía al montar y desde entonces sustituye `push` por el
 // envío directo (ver analytics.ts → atenderErroresTempranos).
-const CAPTURA_ERRORES = `(function(){var q=window.__amwayErrores=[];function p(m,d){if(q.length<10)q.push([String(m||"Error").slice(0,500),d?String(d).slice(0,4000):null])}window.addEventListener("error",function(e){p(e.message,e.error&&e.error.stack)});window.addEventListener("unhandledrejection",function(e){var r=e.reason;p(r&&r.message||r,r&&r.stack)})})();`;
+// Si no carga un trozo de JavaScript (versión nueva publicada o red lenta),
+// recarga la página una vez como mucho por minuto para que no se quede rota.
+const CAPTURA_ERRORES = `(function(){var q=window.__amwayErrores=[];function r(m){if(!/ChunkLoadError|Loading chunk|dynamically imported module/i.test(m))return;try{var k="amway_recarga",t=Number(sessionStorage.getItem(k))||0;if(Date.now()-t<6e4)return;sessionStorage.setItem(k,String(Date.now()))}catch(e){return}setTimeout(function(){location.reload()},800)}function p(m,d){if(q.length<10)q.push([String(m||"Error").slice(0,500),d?String(d).slice(0,4000):null]);r(String(m)+" "+String(d))}window.addEventListener("error",function(e){p(e.message,e.error&&e.error.stack)});window.addEventListener("unhandledrejection",function(e){var r=e.reason;p(r&&r.message||r,r&&r.stack)})})();`;
 
 export const viewport: Viewport = {
   themeColor: "#f7f4ee",
