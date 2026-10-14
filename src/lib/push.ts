@@ -1,5 +1,6 @@
 import webpush from "web-push";
 import { amwayRpc } from "@/lib/amway-db";
+import { SITE } from "@/data/site-config";
 
 // Avisos push al móvil de la gestora cuando entra un pedido web (igual que
 // en Arrantza, pero enviados desde el propio servidor Next.js en vez de una
@@ -30,7 +31,7 @@ function configurar(): boolean {
   const privada = process.env.AMWAY_VAPID_PRIVATE_KEY;
   if (!privada) return false;
   if (!configurado) {
-    webpush.setVapidDetails(process.env.AMWAY_VAPID_SUBJECT ?? "mailto:hola@nutriyuly.com", VAPID_PUBLIC_KEY, privada);
+    webpush.setVapidDetails(process.env.AMWAY_VAPID_SUBJECT ?? `mailto:${SITE.email}`, VAPID_PUBLIC_KEY, privada);
     configurado = true;
   }
   return true;
