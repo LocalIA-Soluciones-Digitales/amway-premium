@@ -80,6 +80,19 @@ export function Hero() {
       >
         <ChevronDown size={22} className="animate-float" />
       </div>
+
+      {/* Crédito de LocalIA: abajo a la izquierda en móvil, a la derecha (junto al botón de WhatsApp) en pantallas grandes */}
+      <div
+        style={entrada(1)}
+        className="absolute bottom-6 left-6 text-left sm:bottom-9 sm:left-auto sm:right-28 sm:text-right"
+      >
+        <span className="block text-[10px] font-light tracking-wide text-cream/75">
+          Designed &amp; Developed by
+        </span>
+        <span className="mt-1 block text-[11px] font-medium tracking-wide text-cream">
+          Local<span className="font-bold text-gold-soft">IA</span>.
+        </span>
+      </div>
     </section>
   );
 }
