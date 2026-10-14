@@ -338,7 +338,7 @@ export function ProductDetail({
   const variant = product.variants[variantIndex];
   const price = catalog.precio(product, variantIndex);
   const rating = catalog.valoracion(product.id);
-  const imageSrc = productImageSrc(product);
+  const imageSrc = productImageSrc(product, variantIndex);
   const hasOptions = product.variants.length > 1;
   const kind = variantKind(product);
   const skus = Array.from(new Set(product.variants.map((v) => v.sku).filter(Boolean)));

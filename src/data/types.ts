@@ -16,6 +16,9 @@ export interface ProductVariant {
   // Precio al cliente en euros con IVA (lista de precios de Amway España);
   // null = no disponible en España, se consulta por WhatsApp.
   price: number | null;
+  // Foto propia del tono/sabor (misma convención que Product.image); si falta
+  // se muestra la del producto.
+  image?: string;
 }
 
 export interface Product {
@@ -83,9 +86,10 @@ export function variantKind(p: Product): "Formato" | "Tono" | "Sabor" | "Opción
   return "Opción";
 }
 
-export function productImageSrc(p: Product): string | null {
-  if (!p.image) return null;
-  return p.image.includes("/") ? `/images/${p.image}` : `/images/catalog/${p.image}`;
+export function productImageSrc(p: Product, variantIndex?: number): string | null {
+  const image = (variantIndex !== undefined && p.variants[variantIndex]?.image) || p.image;
+  if (!image) return null;
+  return image.includes("/") ? `/images/${image}` : `/images/catalog/${image}`;
 }
 
 // A product can go straight to Stripe Checkout only when its price is

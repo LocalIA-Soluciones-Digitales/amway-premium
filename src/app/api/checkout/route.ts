@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
   const origin = request.nextUrl.origin;
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = lineas.map((l) => {
-    const image = productImageSrc(l.product);
+    const image = productImageSrc(l.product, l.variantIndex);
     return {
       quantity: l.quantity,
       price_data: {

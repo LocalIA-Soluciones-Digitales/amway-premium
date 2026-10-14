@@ -364,7 +364,7 @@ export function CartDrawer() {
                     if (!d) return null;
                     const key = cestaItemKey(item);
                     const unavailable = unavailableKeys.has(key);
-                    const src = productImageSrc(d.product);
+                    const src = productImageSrc(d.product, item.variantIndex);
                     return (
                       <li key={key} className={cn("flex gap-4 py-5", unavailable && "opacity-60")}>
                         <div className="relative h-24 w-20 shrink-0 overflow-hidden bg-linen">
