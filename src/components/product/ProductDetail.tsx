@@ -427,19 +427,10 @@ export function ProductDetail({
   };
   const slides = slidesDe(variantIndex);
 
-  // Al cambiar de tono se sigue en la misma foto; si esa foto es igual en los
-  // dos tonos (p. ej. el envase), se salta a la primera que sí cambia, para
-  // que se vea el tono elegido.
+  // Al cambiar de tono o formato la galería vuelve siempre a la foto principal.
   function elegirVariante(i: number) {
-    const nuevas = slidesDe(i);
-    const actual = slides[slide]?.src;
-    let destino = Math.min(slide, Math.max(nuevas.length - 1, 0));
-    if (nuevas[destino]?.src === actual) {
-      const distinta = nuevas.findIndex((s, k) => s.src !== slides[k]?.src);
-      if (distinta >= 0) destino = distinta;
-    }
     setVariantIndex(i);
-    setSlide(destino);
+    setSlide(0);
   }
   const hasOptions = product.variants.length > 1;
   const kind = variantKind(product);
