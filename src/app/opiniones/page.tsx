@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { ArrowDown, MessageSquareReply, PenLine, ShieldCheck, Star } from "lucide-react";
-import { ResenasSection } from "@/components/catalog/ResenasSection";
+import { ArrowDown, BadgeCheck, MessageSquareReply, Star, Store } from "lucide-react";
+import { ResenasGoogle } from "@/components/catalog/ResenasGoogle";
+import { resenasGoogle } from "@/lib/google-resenas";
 import { PageHero, heroPrimaryClass, heroSecondaryClass } from "@/components/layout/PageHero";
 import { conRuta } from "@/lib/seo";
 import { SITE } from "@/data/site-config";
@@ -11,11 +12,14 @@ export const metadata: Metadata = conRuta("/opiniones", {
     "Lo que opinan nuestros clientes de la tienda y de los productos Amway: Nutrilite, XS Energy, Artistry, eSpring y más.",
 });
 
+// Las reseñas se leen de Google como mucho una vez al día.
+export const revalidate = 86400;
+
 const PROMISES = [
   {
-    icon: ShieldCheck,
-    title: "Revisadas una a una",
-    text: "Leemos cada opinión antes de publicarla y solo descartamos las ofensivas, publicitarias o ajenas a la tienda. No comprobamos que quien opina haya comprado.",
+    icon: BadgeCheck,
+    title: "Publicadas en Google",
+    text: "Las opiniones se escriben en nuestro perfil de Google y salen al momento. No las elegimos ni las filtramos.",
   },
   {
     icon: MessageSquareReply,
@@ -23,13 +27,14 @@ const PROMISES = [
     text: "Quien te atiende en la tienda es quien contesta a cada comentario.",
   },
   {
-    icon: PenLine,
-    title: "De la tienda o de un producto",
-    text: "Valora tu experiencia general o cuéntanos qué tal te ha ido un producto concreto.",
+    icon: Store,
+    title: "De quienes nos visitan",
+    text: `Clientes que recogen sus pedidos en nuestro local de ${SITE.city}.`,
   },
 ];
 
-export default function OpinionesPage() {
+export default async function OpinionesPage() {
+  const google = await resenasGoogle();
   return (
     <>
       <PageHero
@@ -39,16 +44,12 @@ export default function OpinionesPage() {
             Lo que dicen <span className="italic text-gold-soft">nuestros clientes.</span>
           </>
         }
-        description="Opiniones de quienes nos visitan y prueban nuestros productos. Si ya has probado algo, tu experiencia ayuda a otros a elegir."
+        description="Opiniones de quienes nos visitan, publicadas en nuestro perfil de Google. Si ya has probado algo, tu experiencia ayuda a otros a elegir."
         photo="/images/nosotros/opiniones-hero.webp"
         photoPosition="100% 35%"
         actions={
           <>
-            <a href="#opinar" className={heroPrimaryClass}>
-              <PenLine size={16} />
-              Dejar mi opinión
-            </a>
-            <a href={SITE.googleResenas} target="_blank" rel="noopener noreferrer" className={heroSecondaryClass}>
+            <a href={SITE.googleResenas} target="_blank" rel="noopener noreferrer" className={heroPrimaryClass}>
               <Star size={16} />
               Valorar en Google
             </a>
@@ -77,7 +78,7 @@ export default function OpinionesPage() {
       </section>
 
       <section id="opiniones" className="scroll-mt-24 mx-auto max-w-7xl px-6 py-16 sm:px-8 sm:py-20">
-        <ResenasSection />
+        <ResenasGoogle datos={google} />
       </section>
     </>
   );

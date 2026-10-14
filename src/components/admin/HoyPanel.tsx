@@ -10,7 +10,6 @@ import {
   Clock,
   HandCoins,
   Megaphone,
-  MessageSquareQuote,
   Truck,
 } from "lucide-react";
 import { amwayDb } from "@/lib/amway-db";
@@ -187,7 +186,6 @@ export function HoyPanel({
   const tareas = [
     { tab: "pedidos" as const, n: pendientes.pedidos, label: "Pedidos por preparar, entregar o cobrar", icon: Truck },
     { tab: "solicitudes" as const, n: pendientes.solicitudes, label: "Solicitudes sin contestar", icon: ClipboardList },
-    { tab: "resenas" as const, n: pendientes.resenas, label: "Reseñas por revisar", icon: MessageSquareQuote },
   ];
 
   const nHoy = grupoHoy ? resumenGrupo(grupoHoy.pedidos).activos : 0;

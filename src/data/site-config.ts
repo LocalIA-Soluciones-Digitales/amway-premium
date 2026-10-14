@@ -22,6 +22,8 @@ export const SITE = {
   whatsapp: "34614036583",
   // Enlace para dejar una reseña en el Perfil de Empresa de Google.
   googleResenas: "https://g.page/r/Cfs8A_sKI9cYEBM/review",
+  // La ficha en Google Maps (para leer todas las reseñas).
+  googleMaps: "https://www.google.com/maps?cid=1789937906971000059",
   // Sale en el aviso legal y en Nosotros. Se puede cambiar con
   // NEXT_PUBLIC_CONTACT_EMAIL sin tocar código.
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "marvinkendry1@gmail.com",

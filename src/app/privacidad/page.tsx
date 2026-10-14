@@ -71,12 +71,6 @@ export default function PrivacidadPage() {
               <td>12 meses desde que se atiende</td>
             </tr>
             <tr>
-              <td>Publicar tu opinión</td>
-              <td>Nombre que escribas, valoración y comentario</td>
-              <td>Consentimiento al enviarla (art. 6.1.a RGPD)</td>
-              <td>Mientras esté publicada; puedes pedir que la retiremos</td>
-            </tr>
-            <tr>
               <td>Atender un desistimiento o una reclamación</td>
               <td>Nº de pedido, nombre, teléfono, email, motivo</td>
               <td>Obligación legal (normativa de consumo)</td>
