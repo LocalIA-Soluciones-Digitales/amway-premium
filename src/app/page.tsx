@@ -25,6 +25,8 @@ export default function Home() {
       "Distribuidora independiente de productos originales Amway: Nutrilite, Artistry, XS Energy, eSpring, Atmosphere e iCook.",
     address: {
       "@type": "PostalAddress",
+      streetAddress: SITE.street,
+      postalCode: SITE.postalCode,
       addressLocality: SITE.city,
       addressRegion: SITE.region,
       addressCountry: "ES",

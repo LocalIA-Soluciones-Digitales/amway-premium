@@ -11,11 +11,17 @@ export const SITE = {
   // el de Vercel al nuevo).
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://amway-premium.vercel.app").replace(/\/$/, ""),
   locale: "es-ES",
+  // Local de recogida: la misma dirección que el Perfil de Empresa de Google
+  // (Google compara ficha y web para saber que son el mismo negocio).
+  street: "Cruces Plaza, 13-A",
+  postalCode: "48903",
   city: "Barakaldo",
   region: "Bizkaia",
   country: "España",
   // Línea definitiva del negocio (WhatsApp y teléfono).
   whatsapp: "34614036583",
+  // Enlace para dejar una reseña en el Perfil de Empresa de Google.
+  googleResenas: "https://g.page/r/Cfs8A_sKI9cYEBM/review",
   // Sale en el aviso legal y en Nosotros. Se puede cambiar con
   // NEXT_PUBLIC_CONTACT_EMAIL sin tocar código.
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "marvinkendry1@gmail.com",
@@ -40,11 +46,11 @@ export const SITE = {
 export const LEGAL = {
   titular: null as string | null, // nombre y apellidos o razón social
   nif: null as string | null,
-  domicilio: null as string | null, // dirección del local (también es la de recogida)
+  domicilio: `${SITE.street}, ${SITE.postalCode} ${SITE.city} (${SITE.region})` as string | null, // dirección del local (también es la de recogida)
   registro: null as string | null, // solo si es sociedad: Registro Mercantil, tomo, folio…
   email: SITE.email,
   emailPrivacidad: SITE.email,
-  telefono: null as string | null, // teléfono de atención (puede ser el de WhatsApp)
+  telefono: "614 036 583" as string | null, // teléfono de atención (el de WhatsApp)
   actualizado: "7 de octubre de 2026",
 } as const;
 

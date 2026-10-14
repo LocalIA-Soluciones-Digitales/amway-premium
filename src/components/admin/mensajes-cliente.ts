@@ -64,7 +64,7 @@ export function mensajesCliente(p: Pedido): MensajeCliente[] {
     {
       id: "resena",
       label: "Pedir una reseña",
-      texto: `Hola ${nombre}, ¿qué tal con tu pedido #${p.numero}? Si te apetece, me ayudaría muchísimo que dejaras tu opinión aquí: ${SITE.url}/opiniones ¡Gracias! 💚`,
+      texto: `Hola ${nombre}, ¿qué tal con tu pedido #${p.numero}? Si te apetece, me ayudaría muchísimo que dejaras tu opinión en Google, es un momento: ${SITE.googleResenas} ¡Gracias! 💚`,
     },
   ];
 }

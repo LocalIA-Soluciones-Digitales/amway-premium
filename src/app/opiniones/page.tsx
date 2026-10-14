@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { ArrowDown, MessageSquareReply, PenLine, ShieldCheck } from "lucide-react";
+import { ArrowDown, MessageSquareReply, PenLine, ShieldCheck, Star } from "lucide-react";
 import { ResenasSection } from "@/components/catalog/ResenasSection";
 import { PageHero, heroPrimaryClass, heroSecondaryClass } from "@/components/layout/PageHero";
 import { conRuta } from "@/lib/seo";
+import { SITE } from "@/data/site-config";
 
 export const metadata: Metadata = conRuta("/opiniones", {
   title: "Opiniones de clientes",
@@ -46,6 +47,10 @@ export default function OpinionesPage() {
             <a href="#opinar" className={heroPrimaryClass}>
               <PenLine size={16} />
               Dejar mi opinión
+            </a>
+            <a href={SITE.googleResenas} target="_blank" rel="noopener noreferrer" className={heroSecondaryClass}>
+              <Star size={16} />
+              Valorar en Google
             </a>
             <a href="#opiniones" className={heroSecondaryClass}>
               Leer opiniones
