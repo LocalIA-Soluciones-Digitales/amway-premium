@@ -6,7 +6,6 @@ import Link from "next/link";
 import { AnimatePresence, m as motion } from "framer-motion";
 import {
   ArrowRight,
-  Bell,
   CalendarClock,
   Check,
   ChevronDown,
@@ -56,12 +55,10 @@ function splitLead(text: string): [string, string] {
 function ProductStage({
   product,
   imageSrc,
-  agotado,
   accent,
 }: {
   product: Product;
   imageSrc: string | null;
-  agotado: boolean;
   accent: ProductAccent;
 }) {
   const imgRef = useRef<HTMLDivElement>(null);
@@ -103,11 +100,6 @@ function ProductStage({
           {product.badge}
         </span>
       )}
-      {agotado && (
-        <span className="absolute right-5 top-5 z-10 rounded-full bg-xs-red px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-cream">
-          Agotado
-        </span>
-      )}
 
       {imageSrc ? (
         <div
@@ -120,10 +112,7 @@ function ProductStage({
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className={cn(
-              "object-contain p-12 drop-shadow-[0_24px_30px_rgba(28,26,22,0.14)] sm:p-20",
-              agotado && "opacity-60 grayscale-[35%]"
-            )}
+            className="object-contain p-12 drop-shadow-[0_24px_30px_rgba(28,26,22,0.14)] sm:p-20"
           />
         </div>
       ) : (
@@ -348,13 +337,12 @@ export function ProductDetail({
   const catalog = useCatalogState();
   const variant = product.variants[variantIndex];
   const price = catalog.precio(product, variantIndex);
-  const agotado = catalog.agotado(product.id);
   const rating = catalog.valoracion(product.id);
   const imageSrc = productImageSrc(product);
   const hasOptions = product.variants.length > 1;
   const kind = variantKind(product);
   const skus = Array.from(new Set(product.variants.map((v) => v.sku).filter(Boolean)));
-  const canBuy = price != null && !agotado;
+  const canBuy = price != null;
   const [lead, body] = splitLead(product.description);
   const hidden = catalog.oculto(product.id);
 
@@ -410,9 +398,9 @@ export function ProductDetail({
           className
         )}
       >
-        {agotado ? <Bell size={16} /> : <ClipboardList size={16} />}
-        {agotado ? "Avísame" : "Solicitar"}
-        <span className="hidden sm:inline">{agotado ? " cuando vuelva" : " este producto"}</span>
+        <ClipboardList size={16} />
+        Solicitar
+        <span className="hidden sm:inline"> este producto</span>
       </button>
     );
 
@@ -530,7 +518,7 @@ export function ProductDetail({
 
         <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-14">
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <ProductStage product={product} imageSrc={imageSrc} agotado={agotado} accent={accent} />
+            <ProductStage product={product} imageSrc={imageSrc} accent={accent} />
           </div>
 
           <div className="min-w-0">
@@ -594,19 +582,12 @@ export function ProductDetail({
                   </p>
                   {price != null && <p className="mt-2 text-xs text-stone">IVA incluido · recogida en tienda</p>}
                 </div>
-                <p
-                  className={cn(
-                    "flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium",
-                    agotado ? "bg-xs-red/10 text-xs-red" : "bg-forest/[0.08] text-forest"
-                  )}
-                >
+                <p className="flex items-center gap-2 rounded-full bg-forest/[0.08] px-3 py-1.5 text-xs font-medium text-forest">
                   <span className="relative flex h-2 w-2">
-                    {!agotado && (
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-forest/50" />
-                    )}
-                    <span className={cn("relative h-2 w-2 rounded-full", agotado ? "bg-xs-red" : "bg-forest")} />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-forest/50" />
+                    <span className="relative h-2 w-2 rounded-full bg-forest" />
                   </span>
-                  {agotado ? "Agotado temporalmente" : `Disponible en ${SITE.city}`}
+                  {`Disponible en ${SITE.city}`}
                 </p>
               </div>
 
@@ -731,7 +712,7 @@ export function ProductDetail({
       <SolicitudModal
         open={solicitud}
         onClose={() => setSolicitud(false)}
-        tipo={agotado ? "agotado" : "encargo"}
+        tipo="encargo"
         product={product}
         variantIndex={variantIndex}
       />

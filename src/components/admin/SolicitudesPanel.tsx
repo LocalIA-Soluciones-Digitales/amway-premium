@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Badge, Empty, PanelHeader, Segmented, btnGhost, fecha, waHref, type Solicitud } from "./shared";
 
 const TIPO: Record<Solicitud["tipo"], { label: string; tone: "red" | "blue" | "violet" }> = {
-  agotado: { label: "Avisar cuando vuelva", tone: "red" },
+  agotado: { label: "Encargo", tone: "blue" }, // solicitudes antiguas
   encargo: { label: "Encargo", tone: "blue" },
   otro: { label: "Producto fuera de catálogo", tone: "violet" },
   desistimiento: { label: "Desistimiento · 14 días", tone: "red" },
@@ -49,7 +49,7 @@ export function SolicitudesPanel({ onChange }: { onChange: () => void }) {
     return c;
   }, [items]);
 
-  // Productos más pedidos estando agotados: pista de qué reponer primero.
+  // Productos más pedidos: pista de qué conviene traer o añadir al catálogo.
   const masPedidos = useMemo(() => {
     const m = new Map<string, number>();
     for (const s of items ?? []) {
@@ -66,7 +66,7 @@ export function SolicitudesPanel({ onChange }: { onChange: () => void }) {
     <div>
       <PanelHeader
         title="Solicitudes"
-        description="Avisos de productos agotados, encargos y productos que no están en el catálogo."
+        description="Productos que piden los clientes (encargos y fuera de catálogo) y desistimientos."
         actions={
           <Segmented
             value={filtro}
@@ -120,9 +120,7 @@ export function SolicitudesPanel({ onChange }: { onChange: () => void }) {
                   <a
                     href={waHref(
                       s.telefono,
-                      s.tipo === "agotado"
-                        ? `Hola ${s.nombre}, ya tenemos disponible ${s.producto_nombre}. ¿Te lo reservamos?`
-                        : s.tipo === "desistimiento"
+                      s.tipo === "desistimiento"
                           ? `Hola ${s.nombre}, hemos recibido tu desistimiento del pedido nº ${s.pedido_numero ?? ""}. Te explicamos cómo hacer la devolución y el reembolso.`
                           : `Hola ${s.nombre}, te escribimos por tu solicitud de ${s.producto_nombre}.`
                     )}

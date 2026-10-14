@@ -51,7 +51,6 @@ export interface ProductoAjusteRow {
   product_id: string;
   precios_eur: Record<string, number>;
   costes_eur: Record<string, number>;
-  agotado: boolean;
   oculto: boolean;
   // Días que dura una unidad (aviso de reposición). Ausente si la columna
   // aún no existe en la base de datos.
@@ -82,6 +81,7 @@ export interface Gasto {
 
 export interface Solicitud {
   id: string;
+  // «agotado» solo en solicitudes antiguas: la tienda ya no lo crea.
   tipo: "agotado" | "encargo" | "otro" | "desistimiento";
   pedido_numero?: number | null;
   product_id: string | null;
@@ -419,7 +419,7 @@ export function Segmented<T extends string>({
   );
 }
 
-// Pide a la tienda que regenere ya precios/agotados/valoraciones.
+// Pide a la tienda que regenere ya precios/ocultos/valoraciones.
 export async function revalidarTienda(accessToken: string): Promise<void> {
   await fetch("/api/admin/revalidar", {
     method: "POST",

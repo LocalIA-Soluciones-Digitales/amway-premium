@@ -1,6 +1,6 @@
 import type { Product, ProductVariant } from "@/data/types";
 import { getProductById } from "@/data/products";
-import { estaAgotado, estaOculto, fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
+import { estaOculto, fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
 import { recogidaValida, type Recogida } from "@/lib/recogida";
 
 const MAX_LINES = 50;
@@ -77,8 +77,8 @@ export async function validarPedidoWeb(body: unknown): Promise<ResultadoPedido> 
         status: 422,
       };
     }
-    if (estaAgotado(catalog, product.id) || estaOculto(catalog, product.id)) {
-      return { ok: false, error: `"${product.name}" se ha agotado. Quítalo de la cesta para continuar.`, status: 409 };
+    if (estaOculto(catalog, product.id)) {
+      return { ok: false, error: `"${product.name}" ya no está en la tienda. Quítalo de la cesta para continuar.`, status: 409 };
     }
     // Optional flavour chosen on a per-flavour card (e.g. the XS™ grid), kept
     // short so it can't be used to stuff arbitrary text into the order.

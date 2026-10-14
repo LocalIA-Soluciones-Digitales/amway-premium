@@ -93,8 +93,7 @@ export const WA_PRESETS = {
     "Hola, me gustaría realizar un pedido. ¿Podríais indicarme los pasos a seguir, las formas de pago " +
     "disponibles y el plazo de entrega en mi zona? Gracias.",
   availability:
-    "Hola, quería consultar la disponibilidad actual de un producto y el plazo aproximado de entrega. " +
-    "¿Me podéis confirmar si lo tenéis en stock? Gracias.",
+    "Hola, quería consultar por un producto. ¿Me podéis ayudar? Gracias.",
 } as const;
 
 export function waProductLink(productName: string): string {

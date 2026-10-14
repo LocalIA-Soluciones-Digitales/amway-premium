@@ -84,7 +84,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  // Precios/agotados del panel de gestión: se sirven con la página y se
+  // Precios/ocultos del panel de gestión: se sirven con la página y se
   // regeneran como mucho cada minuto (el cliente además los refresca).
   const catalogo = await fetchCatalogoPublico({ next: { revalidate: 60, tags: ["amway-catalogo"] } });
 

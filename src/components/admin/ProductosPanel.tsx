@@ -26,10 +26,10 @@ import { Dialog } from "@/components/ui/Dialog";
 import { CATEGORIA_LABEL, categoriaTienda } from "./report-data";
 import { Badge, Empty, Loading, btnGhost, btnPrimary, eur, inputClass, revalidarTienda, type ProductoAjusteRow } from "./shared";
 
-type Filtro = "todos" | "en-web" | "agotados" | "ocultos" | "sin-coste";
+type Filtro = "todos" | "en-web" | "ocultos" | "sin-coste";
 
 function emptyRow(productId: string): ProductoAjusteRow {
-  return { product_id: productId, precios_eur: {}, costes_eur: {}, agotado: false, oculto: false };
+  return { product_id: productId, precios_eur: {}, costes_eur: {}, oculto: false };
 }
 
 // Importe con coma decimal, como lo escribe y lee la vendedora.
@@ -93,7 +93,7 @@ const GAMAS: { nombre: string; total: number }[] = (() => {
 
 const CATEGORIAS = Array.from(new Set(PRODUCTS.map((p) => categoriaTienda(p.category))));
 
-type AccionBloque = "agotar" | "reponer" | "ocultar" | "mostrar";
+type AccionBloque = "ocultar" | "mostrar";
 
 function leerPlegados(): Set<string> {
   try {
@@ -182,7 +182,6 @@ export function ProductosPanel({ session }: { session: Session }) {
             product_id: r.product_id,
             precios_eur: r.precios_eur,
             costes_eur: r.costes_eur,
-            agotado: r.agotado,
             oculto: r.oculto,
             ...(r.dias_duracion !== undefined && { dias_duracion: r.dias_duracion }),
           }))
@@ -214,8 +213,7 @@ export function ProductosPanel({ session }: { session: Session }) {
     const cuenta = (f: (p: Product, r: ProductoAjusteRow) => boolean) => PRODUCTS.filter((p) => f(p, rowOf(p.id))).length;
     return {
       total: PRODUCTS.length,
-      enWeb: cuenta((_, r) => !r.oculto && !r.agotado),
-      agotados: cuenta((_, r) => r.agotado),
+      enWeb: cuenta((_, r) => !r.oculto),
       ocultos: cuenta((_, r) => r.oculto),
       sinCoste: cuenta(sinCoste),
       margenMedio: margenes.length ? margenes.reduce((a, b) => a + b, 0) / margenes.length : null,
@@ -225,8 +223,7 @@ export function ProductosPanel({ session }: { session: Session }) {
   const pasaFiltro = useCallback(
     (p: Product) => {
       const r = rowOf(p.id);
-      if (filtro === "en-web") return !r.oculto && !r.agotado;
-      if (filtro === "agotados") return r.agotado;
+      if (filtro === "en-web") return !r.oculto;
       if (filtro === "ocultos") return r.oculto;
       if (filtro === "sin-coste") return sinCoste(p, r);
       return true;
@@ -300,8 +297,7 @@ export function ProductosPanel({ session }: { session: Session }) {
   }
 
   function enBloque(accion: AccionBloque) {
-    const patch: Partial<ProductoAjusteRow> =
-      accion === "agotar" ? { agotado: true } : accion === "reponer" ? { agotado: false } : accion === "ocultar" ? { oculto: true } : { oculto: false };
+    const patch: Partial<ProductoAjusteRow> = { oculto: accion === "ocultar" };
     void aplicar(seleccionados.map((p) => ({ ...rowOf(p.id), ...patch })));
   }
 
@@ -340,7 +336,6 @@ export function ProductosPanel({ session }: { session: Session }) {
 
   const kpis: { f: Filtro; label: string; value: ReactNode; tone?: string }[] = [
     { f: "en-web", label: "A la venta en la web", value: resumen.enWeb },
-    { f: "agotados", label: "Agotados", value: resumen.agotados, tone: resumen.agotados ? "text-red-600" : undefined },
     { f: "ocultos", label: "Ocultos en la web", value: resumen.ocultos },
     { f: "sin-coste", label: "Sin coste", value: resumen.sinCoste, tone: resumen.sinCoste ? "text-amber-700" : undefined },
   ];
@@ -383,7 +378,7 @@ export function ProductosPanel({ session }: { session: Session }) {
 
       {/* Cifras: cada una filtra la lista */}
       {rows && (
-        <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {kpis.map((k, i) => {
             const activo = filtro === k.f;
             return (
@@ -518,13 +513,12 @@ export function ProductosPanel({ session }: { session: Session }) {
       ) : (
         <div className="flex flex-col gap-3">
           {vista === "lista" && (
-            <div className="hidden grid-cols-[2.25rem_minmax(0,1fr)_7.5rem_7.5rem_5rem_5.5rem_5.5rem_2.5rem] items-center gap-2 px-4 text-[10px] font-semibold uppercase tracking-[0.12em] text-stone lg:grid">
+            <div className="hidden grid-cols-[2.25rem_minmax(0,1fr)_7.5rem_7.5rem_5rem_5.5rem_2.5rem] items-center gap-2 px-4 text-[10px] font-semibold uppercase tracking-[0.12em] text-stone lg:grid">
               <span />
               <span>Producto</span>
               <span className="text-right">Precio venta</span>
               <span className="text-right">Coste</span>
               <span className="text-right">Margen</span>
-              <span className="text-center">Disponible</span>
               <span className="text-center">En la web</span>
               <span />
             </div>
@@ -534,7 +528,6 @@ export function ProductosPanel({ session }: { session: Session }) {
             const ids = g.productos.map((p) => p.id);
             const marcados = ids.filter((id) => seleccion.has(id)).length;
             const ocultosG = g.productos.filter((p) => rowOf(p.id).oculto).length;
-            const agotadosG = g.productos.filter((p) => rowOf(p.id).agotado).length;
             const ms = g.productos.map((p) => minMargen(p, rowOf(p.id))).filter((x): x is number => x != null);
             const mMedio = ms.length ? ms.reduce((a, b) => a + b, 0) / ms.length : null;
             return (
@@ -559,7 +552,6 @@ export function ProductosPanel({ session }: { session: Session }) {
                       <span className="font-display text-lg leading-tight text-carbon">{g.nombre}</span>
                       <span className="text-xs tabular-nums text-stone">{g.productos.length}</span>
                       <span className="hidden flex-wrap gap-1.5 sm:flex">
-                        {agotadosG > 0 && <Badge tone="red">{agotadosG} agotado{agotadosG === 1 ? "" : "s"}</Badge>}
                         {ocultosG > 0 && <Badge>{ocultosG} oculto{ocultosG === 1 ? "" : "s"}</Badge>}
                       </span>
                       <span className="ml-auto flex items-center gap-3">
@@ -735,12 +727,6 @@ function BarraBloque({
         </form>
       ) : (
         <>
-          <button type="button" onClick={() => onAccion("reponer")} className={btn}>
-            Disponible
-          </button>
-          <button type="button" onClick={() => onAccion("agotar")} className={btn}>
-            Agotado
-          </button>
           <button type="button" onClick={() => onAccion("mostrar")} className={btn}>
             Mostrar en web
           </button>
@@ -770,7 +756,6 @@ function EstadoPunto({ row }: { row: ProductoAjusteRow }) {
         <EyeOff size={11} /> Oculto
       </span>
     );
-  if (row.agotado) return <span className="inline-flex items-center gap-1 text-[11px] font-medium text-red-600">● Agotado</span>;
   return null;
 }
 
@@ -805,7 +790,7 @@ function FilaProducto({
   return (
     <div
       className={cn(
-        "grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-2 px-4 py-2 transition hover:bg-cream/40 lg:grid-cols-[2.25rem_minmax(0,1fr)_7.5rem_7.5rem_5rem_5.5rem_5.5rem_2.5rem]",
+        "grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-2 px-4 py-2 transition hover:bg-cream/40 lg:grid-cols-[2.25rem_minmax(0,1fr)_7.5rem_7.5rem_5rem_5.5rem_2.5rem]",
         selected && "bg-cream/70",
         row.oculto && "bg-carbon/[0.015]"
       )}
@@ -883,14 +868,8 @@ function FilaProducto({
       </div>
 
       {/* Interruptores: en el móvil, en una segunda línea */}
-      <div className="col-span-3 flex items-center justify-end gap-4 pl-[3.25rem] lg:col-span-1 lg:justify-center lg:pl-0">
-        <span className="lg:hidden">
-          <Switch label="Disponible" checked={!row.agotado} onChange={(v) => onPatch({ agotado: !v })} />
-        </span>
-        <span className="hidden lg:inline-flex">
-          <Switch label="" checked={!row.agotado} onChange={(v) => onPatch({ agotado: !v })} />
-        </span>
-        <span className="lg:hidden">
+      <div className="col-span-3 flex items-center justify-end gap-4 pl-[3.25rem] lg:hidden">
+        <span>
           <Switch label="En la web" checked={!row.oculto} onChange={(v) => onPatch({ oculto: !v })} />
         </span>
         <button
@@ -996,7 +975,7 @@ function ProductoCard({
     <div
       className={cn(
         "group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-[0_1px_3px_rgba(28,26,22,0.04)] transition hover:shadow-[0_8px_24px_rgba(28,26,22,0.08)]",
-        selected ? "border-carbon/40 ring-2 ring-carbon/10" : row.agotado ? "border-red-200" : "border-carbon/[0.07]"
+        selected ? "border-carbon/40 ring-2 ring-carbon/10" : "border-carbon/[0.07]"
       )}
     >
       <div className={cn("relative aspect-[4/3] bg-linen/70", row.oculto && "opacity-50")}>
@@ -1009,7 +988,6 @@ function ProductoCard({
           className={cn("absolute left-3 top-3 h-4 w-4 accent-carbon transition", !selected && "opacity-0 group-hover:opacity-100 focus:opacity-100")}
         />
         <div className="absolute right-3 top-3 flex flex-wrap justify-end gap-1">
-          {row.agotado && <Badge tone="red">Agotado</Badge>}
           {row.oculto && <Badge>Oculto</Badge>}
         </div>
       </div>
@@ -1036,7 +1014,6 @@ function ProductoCard({
 
         <div className="mt-auto flex items-center justify-between gap-2 border-t border-carbon/[0.06] pt-3">
           <div className="flex flex-col gap-2">
-            <Switch label="Disponible" checked={!row.agotado} onChange={(v) => onPatch({ agotado: !v })} />
             <Switch label="En la web" checked={!row.oculto} onChange={(v) => onPatch({ oculto: !v })} />
           </div>
           <button type="button" onClick={onEdit} className={cn(btnGhost, "h-9 px-3 text-xs")}>

@@ -3,7 +3,7 @@ import { revalidateTag } from "next/cache";
 import { createClient } from "@supabase/supabase-js";
 import { AMWAY_DB_KEY, AMWAY_DB_URL } from "@/lib/amway-db";
 
-// El panel lo llama tras cambiar precios/agotados para que la tienda los
+// El panel lo llama tras cambiar precios/ocultos para que la tienda los
 // muestre al momento en vez de esperar al refresco de cada minuto. Solo
 // acepta la sesión de un admin de Amway (amway_es_admin()).
 export async function POST(request: NextRequest) {

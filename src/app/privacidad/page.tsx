@@ -65,7 +65,7 @@ export default function PrivacidadPage() {
               <td>Hasta que lo retires (desde tu perfil o escribiéndonos)</td>
             </tr>
             <tr>
-              <td>Responder a solicitudes de producto («avísame», encargos)</td>
+              <td>Responder a solicitudes de producto (encargos y productos fuera de catálogo)</td>
               <td>Nombre, teléfono o email, mensaje</td>
               <td>Medidas precontractuales que pides (art. 6.1.b RGPD)</td>
               <td>12 meses desde que se atiende</td>

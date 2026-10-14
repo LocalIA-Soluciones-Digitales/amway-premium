@@ -162,7 +162,7 @@ export function EstadoPanel({ session }: { session: Session }) {
     if (ok.catalogoError)
       problemas.push({
         nivel: "error",
-        texto: `La tienda no puede leer el catálogo del panel: no se aplican precios, agotados, ocultos ni cierres (${ok.catalogoError}).`,
+        texto: `La tienda no puede leer el catálogo del panel: no se aplican precios, ocultos ni cierres (${ok.catalogoError}).`,
       });
     if (!ok.stripe) problemas.push({ nivel: "error", texto: "Falta STRIPE_SECRET_KEY: el pago con tarjeta no funciona." });
     if (si?.error) problemas.push({ nivel: "error", texto: `Stripe responde con error: ${si.error}` });

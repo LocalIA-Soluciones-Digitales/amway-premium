@@ -189,11 +189,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const producto = (id: string) => productos?.getProductById(id);
     for (const i of items) {
       totalUnits += i.quantity;
-      // Sin catálogo aún no se sabe el precio: ni suma ni se marca agotada.
+      // Sin catálogo aún no se sabe el precio: ni suma ni se marca no disponible.
       if (!productos) continue;
       const product = producto(i.productId);
       const price = product ? catalog.precio(product, i.variantIndex) : null;
-      if (price == null || catalog.agotado(i.productId) || catalog.oculto(i.productId)) {
+      if (price == null || catalog.oculto(i.productId)) {
         unavailableKeys.add(cestaItemKey(i));
       } else {
         subtotal += price * i.quantity;

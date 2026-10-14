@@ -4,7 +4,6 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import type { Product } from "@/data/types";
 import {
   CATALOGO_VACIO,
-  estaAgotado,
   estaOculto,
   fetchCatalogoPublico,
   indexCatalogo,
@@ -15,7 +14,6 @@ import {
 
 interface CatalogStateValue {
   precio: (product: Product, variantIndex: number) => number | null;
-  agotado: (productId: string) => boolean;
   oculto: (productId: string) => boolean;
   valoracion: (productId: string) => Valoracion | undefined;
   // Días de cierre del panel para el calendario de recogida.
@@ -46,7 +44,6 @@ export function CatalogStateProvider({ initial, children }: { initial: CatalogoP
     const index = indexCatalogo(data);
     return {
       precio: (product, variantIndex) => precioVenta(index, product, variantIndex),
-      agotado: (id) => estaAgotado(index, id),
       oculto: (id) => estaOculto(index, id),
       valoracion: (id) => index.valoracion(id),
       cierres: data.cierres,

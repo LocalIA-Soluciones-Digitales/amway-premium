@@ -69,7 +69,6 @@ const VACIA: Conversacion = { mensajes: [], contexto: { tipo: "inicio" } };
 const INTENCIONES_DE_PRODUCTO = new Set([
   "disponibilidad",
   "precios",
-  "agotado",
   "encargo",
   "pedido",
   "asesoramiento",
@@ -718,7 +717,7 @@ function FormularioPedido({ onConsultar }: { onConsultar: (numero: number, telef
 }
 
 // Producto con su precio y estado reales (los del panel de gestión) y la
-// acción que corresponde: añadir, elegir formato, pedir precio o avisar.
+// acción que corresponde: añadir, elegir formato o pedir precio.
 function TarjetaProducto({ productId, onWhatsApp }: { productId: string; onWhatsApp: (origen: string) => void }) {
   const catalog = useCatalogState();
   const { addItem, items } = useCesta();
@@ -727,7 +726,6 @@ function TarjetaProducto({ productId, onWhatsApp }: { productId: string; onWhats
 
   const variante = cheapestVariantIndex(product);
   const precio = catalog.precio(product, variante);
-  const agotado = catalog.agotado(productId);
   const variasOpciones = product.variants.length > 1;
   const enCesta = items.some((i) => i.productId === productId);
   const img = productImageSrc(product);
@@ -736,19 +734,7 @@ function TarjetaProducto({ productId, onWhatsApp }: { productId: string; onWhats
     "inline-flex h-8 shrink-0 items-center justify-center gap-1 rounded-full px-3 text-xs font-medium transition";
 
   let accion: ReactNode;
-  if (agotado) {
-    accion = (
-      <a
-        href={waLink(`Hola, me interesa «${product.name}», que aparece agotado. ¿Cuándo lo volveréis a tener?`)}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => onWhatsApp(`agotado:${productId}`)}
-        className={`${accionBase} bg-[#25D366] text-carbon hover:bg-[#1fbe5b]`}
-      >
-        Avisarme
-      </a>
-    );
-  } else if (precio == null) {
+  if (precio == null) {
     accion = (
       <a
         href={waLink(`Hola, ¿qué precio tiene «${product.name}»? Gracias.`)}
@@ -801,7 +787,7 @@ function TarjetaProducto({ productId, onWhatsApp }: { productId: string; onWhats
         <p className="mt-0.5 text-xs text-stone">
           {precio != null ? `${variasOpciones ? "Desde " : ""}${formatEUR(precio)}` : "Precio a consultar"}
           {" · "}
-          <span className={agotado ? "text-[#b4532a]" : "text-forest"}>{agotado ? "Agotado" : "Disponible"}</span>
+          <span className="text-forest">Disponible</span>
         </p>
       </div>
       {accion}

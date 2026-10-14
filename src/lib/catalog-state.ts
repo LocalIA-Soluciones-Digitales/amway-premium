@@ -6,7 +6,6 @@ import { variantPriceEur, type Product } from "@/data/types";
 export interface ProductoAjuste {
   id: string;
   precios: Record<string, number>;
-  agotado: boolean;
   oculto: boolean;
 }
 
@@ -41,7 +40,7 @@ async function avisarFallo(e: unknown): Promise<void> {
   // las páginas estáticas que se generan mientras el catálogo falla.
   const detalle = e instanceof Error ? e.message : String(e);
   await amwayRpc("amway_registrar_error", {
-    p_mensaje: "[servidor] La tienda no puede leer el catálogo del panel (precios, agotados, ocultos)",
+    p_mensaje: "[servidor] La tienda no puede leer el catálogo del panel (precios, ocultos)",
     p_detalle: detalle.slice(0, 4000),
     p_path: "catalogo",
     p_user_agent: "servidor",
@@ -92,10 +91,6 @@ export function precioVenta(index: CatalogIndex, product: Product, variantIndex:
   const override = index.ajuste(product.id)?.precios?.[String(variantIndex)];
   const precio = typeof override === "number" && override >= 0 ? override : variantPriceEur(product, variantIndex);
   return precio == null ? null : Math.round(precio * 100) / 100;
-}
-
-export function estaAgotado(index: CatalogIndex, productId: string): boolean {
-  return index.ajuste(productId)?.agotado === true;
 }
 
 export function estaOculto(index: CatalogIndex, productId: string): boolean {

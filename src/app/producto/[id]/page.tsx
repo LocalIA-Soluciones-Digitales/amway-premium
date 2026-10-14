@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CATEGORY_META, PRODUCTS, getProductById } from "@/data/products";
 import { productHref, productImageSrc, type Product } from "@/data/types";
-import { estaAgotado, fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
+import { fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
 import { SITE } from "@/data/site-config";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductDetail, type ProductAccent } from "@/components/product/ProductDetail";
 import { ProductCard } from "@/components/product/ProductCard";
 
-// Una ficha por producto, generada al compilar. Precio, agotado y oculto
+// Una ficha por producto, generada al compilar. Precio y oculto
 // llegan del panel a través de CatalogStateProvider, así que no hace falta
 // regenerar la página cuando cambian.
 export function generateStaticParams() {
@@ -83,9 +83,7 @@ export default async function ProductPage({ params }: PageProps<"/producto/[id]"
             "@type": "Offer",
             priceCurrency: "EUR",
             price: price.toFixed(2),
-            availability: estaAgotado(catalogo, product.id)
-              ? "https://schema.org/OutOfStock"
-              : "https://schema.org/InStock",
+            availability: "https://schema.org/InStock",
             // Solo recogida en el local de Barakaldo.
             availableDeliveryMethod: "https://schema.org/OnSitePickup",
             url,

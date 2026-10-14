@@ -23,8 +23,8 @@ const FAQS = [
     a: "Todos los precios que ves en la web están en euros, con IVA incluido, según la lista de precios oficial de Amway España. No hay gastos de envío: los pedidos se recogen en nuestro local.",
   },
   {
-    q: "¿Qué pasa si un producto no está disponible?",
-    a: "Te avisamos por WhatsApp y te proponemos alternativas o el plazo estimado de reposición.",
+    q: "¿Y si busco un producto que no está en la web?",
+    a: "Pídenoslo desde «Solicitar» o por WhatsApp: te confirmamos si podemos conseguirlo, su precio y el plazo.",
   },
   {
     q: "¿Ofrecéis asesoramiento personalizado?",

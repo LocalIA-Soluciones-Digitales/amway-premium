@@ -11,11 +11,8 @@ import {
   HandCoins,
   Megaphone,
   MessageSquareQuote,
-  PackageCheck,
-  PackageX,
   Truck,
 } from "lucide-react";
-import { getProductById } from "@/data/products";
 import { amwayDb } from "@/lib/amway-db";
 import { hoyMadrid, sumarDias } from "@/lib/recogida";
 import { cn } from "@/lib/utils";
@@ -27,7 +24,7 @@ import { anuncioVigente, cargarEstadisticas, type EstadisticaAnuncio } from "./A
 import { imagenAnuncio, type Anuncio } from "@/lib/anuncios";
 import { PedidoDrawer } from "./PedidoDrawer";
 import { pedidosValidos, variacion } from "./report-data";
-import { Badge, Card, CardTitle, ESTADO_PEDIDO, Kpi, Loading, eur, fecha, type Gasto, type Pedido, type ProductoAjusteRow, traerTodo } from "./shared";
+import { Badge, Card, CardTitle, ESTADO_PEDIDO, Kpi, Loading, eur, fecha, type Gasto, type Pedido, traerTodo } from "./shared";
 import { CierresCard } from "./CierresCard";
 
 export type GestionTab = "hoy" | "pedidos" | "clientes" | "productos" | "solicitudes" | "contabilidad" | "resenas" | "anuncios";
@@ -67,7 +64,6 @@ export function HoyPanel({
   const [pedidos, setPedidos] = useState<Pedido[] | null>(null);
   const [recogidas, setRecogidas] = useState<Pedido[] | null>(null);
   const [gastosMes, setGastosMes] = useState<Gasto[]>([]);
-  const [productos, setProductos] = useState<ProductoAjusteRow[]>([]);
   const [abierto, setAbierto] = useState<string | null>(null);
   const [anuncio, setAnuncio] = useState<{ a: Anuncio | null; stats?: EstadisticaAnuncio; cola: number } | null>(null);
 
@@ -99,12 +95,9 @@ export function HoyPanel({
         db.from("amway_pedidos").select("*").gte("created_at", desde.toISOString()).order("created_at", { ascending: false }).order("id").range(a, b)
       ),
       db.from("amway_gastos").select("*").gte("fecha", new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10)),
-      db.from("amway_productos").select("*").eq("agotado", true),
-    ]).then(([p, g, pr]) => {
+    ]).then(([p, g]) => {
       setPedidos(p);
       setGastosMes((g.data as Gasto[] | null) ?? []);
-      // Solo productos que siguen en el catálogo.
-      setProductos(((pr.data as ProductoAjusteRow[] | null) ?? []).filter((r) => getProductById(r.product_id)));
     });
   }, []);
 
@@ -190,7 +183,6 @@ export function HoyPanel({
   }, [pedidos, gastosMes]);
 
   const nombreMes = new Date().toLocaleDateString("es-ES", { month: "long" });
-  const agotados = productos.filter((p) => p.agotado);
 
   const tareas = [
     { tab: "pedidos" as const, n: pendientes.pedidos, label: "Pedidos por preparar, entregar o cobrar", icon: Truck },
@@ -311,7 +303,7 @@ export function HoyPanel({
               )}
             </Card>
 
-            {/* Pendiente y disponibilidad */}
+            {/* Pendiente */}
             <div className="flex flex-col gap-4">
               <Card className="p-2">
                 <p className="px-3 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">Pendiente</p>
@@ -338,38 +330,6 @@ export function HoyPanel({
                     </li>
                   ))}
                 </ul>
-              </Card>
-
-              <Card>
-                <CardTitle
-                  action={
-                    <button type="button" onClick={() => onNavigate("productos")} className="text-xs text-forest hover:underline">
-                      Gestionar
-                    </button>
-                  }
-                >
-                  Disponibilidad
-                </CardTitle>
-                {agotados.length === 0 ? (
-                  <div className="flex items-center gap-3 text-sm text-stone">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-forest/10 text-forest">
-                      <PackageCheck size={16} />
-                    </span>
-                    Todo disponible.
-                  </div>
-                ) : (
-                  <ul className="flex flex-col divide-y divide-carbon/[0.06] text-sm">
-                    {agotados.slice(0, 6).map((p) => (
-                      <li key={p.product_id} className="flex items-center justify-between gap-3 py-2">
-                        <span className="flex min-w-0 items-center gap-2 text-carbon">
-                          <PackageX size={14} className="shrink-0 text-stone" />
-                          <span className="truncate">{getProductById(p.product_id)?.name ?? p.product_id}</span>
-                        </span>
-                        <Badge tone="red">Agotado</Badge>
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </Card>
 
               {anuncio && <AnuncioEnWeb {...anuncio} onAbrir={() => onNavigate("anuncios")} />}

@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
   if (!ping.ok || ping.valor !== true) return NextResponse.json({ error: "No autorizado." }, { status: 403 });
 
   // Lo que lee la tienda (como visitante): si falla, la web no se rompe
-  // pero ignora precios, agotados, ocultos y cierres del panel.
+  // pero ignora precios, ocultos y cierres del panel.
   const publico = await Promise.all(
     ["amway_catalogo_publico", "amway_cierres_publicos"].map((fn) =>
       amwayRpc(fn, undefined, { cache: "no-store" }).then(

@@ -359,7 +359,6 @@ function PedidoTarjeta({
       if (
         !product ||
         !product.variants[i.variant_index] ||
-        catalog.agotado(product.id) ||
         catalog.oculto(product.id) ||
         catalog.precio(product, i.variant_index) == null
       ) {
@@ -653,7 +652,7 @@ function Reposiciones({ pedidos }: { pedidos: MiPedido[] }) {
           const product = r.product!;
           const src = productImageSrc(product);
           const key = `${r.product_id}|${r.variant_index}|${r.sabor ?? ""}`;
-          const disponible = !catalog.agotado(product.id) && catalog.precio(product, r.variant_index) != null;
+          const disponible = catalog.precio(product, r.variant_index) != null;
           const vencido = r.dias_restantes <= 0;
           return (
             <li key={key} className="flex items-center gap-3">
@@ -676,7 +675,7 @@ function Reposiciones({ pedidos }: { pedidos: MiPedido[] }) {
                   setTimeout(() => setAnadido((k) => (k === key ? null : k)), 1500);
                 }}
                 aria-label={`Añadir ${product.name} a la cesta`}
-                title={disponible ? "Añadir a la cesta" : "Agotado"}
+                title={disponible ? "Añadir a la cesta" : "No disponible"}
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-carbon text-cream transition hover:bg-carbon-soft disabled:opacity-30"
               >
                 {anadido === key ? <CheckCircle2 size={15} /> : <Plus size={15} />}
@@ -729,8 +728,7 @@ function Habituales({ pedidos }: { pedidos: MiPedido[] }) {
         {top.map((h) => {
           const product = h.product!;
           const src = productImageSrc(product);
-          const disponible =
-            !catalog.agotado(product.id) && !catalog.oculto(product.id) && catalog.precio(product, h.variantIndex) != null;
+          const disponible = !catalog.oculto(product.id) && catalog.precio(product, h.variantIndex) != null;
           return (
             <li key={h.key} className="flex items-center gap-3">
               <div className="relative h-12 w-10 shrink-0 overflow-hidden rounded-md bg-linen">
@@ -751,7 +749,7 @@ function Habituales({ pedidos }: { pedidos: MiPedido[] }) {
                   setTimeout(() => setAnadido((k) => (k === h.key ? null : k)), 1500);
                 }}
                 aria-label={`Añadir ${product.name} a la cesta`}
-                title={disponible ? "Añadir a la cesta" : "Agotado"}
+                title={disponible ? "Añadir a la cesta" : "No disponible"}
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-carbon/15 text-carbon transition hover:bg-carbon/5 disabled:opacity-30"
               >
                 {anadido === h.key ? <CheckCircle2 size={15} className="text-forest" /> : <Plus size={15} />}

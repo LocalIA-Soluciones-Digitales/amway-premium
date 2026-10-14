@@ -8,14 +8,9 @@ import { track } from "@/lib/analytics";
 import { Dialog, fieldClass } from "@/components/ui/Dialog";
 import { AvisoPrivacidad } from "@/components/legal/AvisoPrivacidad";
 
-export type SolicitudTipo = "agotado" | "encargo" | "otro";
+export type SolicitudTipo = "encargo" | "otro";
 
 const COPY: Record<SolicitudTipo, { eyebrow: string; title: string; intro: string }> = {
-  agotado: {
-    eyebrow: "Producto agotado",
-    title: "Avísame cuando vuelva",
-    intro: "Déjanos tu contacto y te escribimos en cuanto vuelva a estar disponible.",
-  },
   encargo: {
     eyebrow: "Encargo",
     title: "Solicitar este producto",
@@ -190,7 +185,7 @@ export function SolicitudModal({
 
           {error && <p role="alert" className="text-sm text-xs-red">{error}</p>}
 
-          <AvisoPrivacidad finalidad="responder a tu solicitud y avisarte cuando tengamos el producto" extra="Los guardamos 12 meses." />
+          <AvisoPrivacidad finalidad="responder a tu solicitud" extra="Los guardamos 12 meses." />
 
           <button
             type="submit"

@@ -384,7 +384,7 @@ export function CartDrawer() {
                               </p>
                               {unavailable && (
                                 <p className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-xs-red">
-                                  Agotado · quítalo para continuar
+                                  No disponible · quítalo para continuar
                                 </p>
                               )}
                             </div>

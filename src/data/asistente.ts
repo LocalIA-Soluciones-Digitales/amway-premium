@@ -119,28 +119,13 @@ export const INTENTOS: Record<string, Intento> = {
   disponibilidad: {
     pregunta: "¿Tenéis stock?",
     respuesta: [
-      "Sí: todo lo que se puede añadir a la cesta lo tenemos en tienda, listo para recoger.",
+      "Sí: todo el catálogo de la web está disponible en tienda, listo para recoger.",
+      "Y si buscas algo que no ves en la web, dinos cuál y lo conseguimos.",
     ],
-    claves: ["stock", "disponib", "hay", "quedan", "existenc", "tenei"],
+    claves: ["stock", "disponib", "hay", "quedan", "existenc", "tenei", "agotad", "repon"],
     acciones: [
-      { tipo: "tema", id: "agotado" },
       { tipo: "tema", id: "encargo" },
       { tipo: "whatsapp", mensaje: WA_PRESETS.availability, label: "Consultar un producto" },
-    ],
-  },
-  agotado: {
-    pregunta: "¿Cuándo repondréis un agotado?",
-    respuesta: [
-      "El plazo depende de cuándo lo repone Amway.",
-      "Dinos qué producto es y te damos el plazo estimado o te proponemos una alternativa equivalente.",
-    ],
-    claves: ["agotad", "repon", "reposicion", "sin stock", "no hay", "vuelve", "volvera"],
-    acciones: [
-      {
-        tipo: "whatsapp",
-        mensaje: "Hola, me interesa un producto que aparece agotado: ",
-        label: "Preguntar por un agotado",
-      },
     ],
   },
   encargo: {

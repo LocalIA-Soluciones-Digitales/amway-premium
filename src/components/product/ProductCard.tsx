@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { m as motion } from "framer-motion";
-import { ArrowUpRight, Bell, ChevronDown, ClipboardList, MessageCircle, Star } from "lucide-react";
+import { ArrowUpRight, ChevronDown, ClipboardList, MessageCircle, Star } from "lucide-react";
 import type { Product } from "@/data/types";
 import { cheapestVariantIndex, productHref, productImageSrc, variantKind } from "@/data/types";
 import { waProductLink } from "@/data/site-config";
@@ -36,7 +36,6 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
   const catalog = useCatalogState();
   const variant = product.variants[variantIndex];
   const price = catalog.precio(product, variantIndex);
-  const agotado = catalog.agotado(product.id);
   const rating = catalog.valoracion(product.id);
   const imageSrc = productImageSrc(product);
   const hasOptions = product.variants.length > 1;
@@ -66,21 +65,13 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             {product.badge}
           </span>
         )}
-        {agotado && (
-          <span className="absolute right-0 top-0 z-10 bg-xs-red px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-cream">
-            Agotado
-          </span>
-        )}
         {imageSrc ? (
           <Image
             src={imageSrc}
             alt={product.name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            className={cn(
-              "object-contain p-5 transition-transform duration-700 ease-out group-hover:scale-[1.06] sm:p-8",
-              agotado && "opacity-60 grayscale-[35%]"
-            )}
+            className="object-contain p-5 transition-transform duration-700 ease-out group-hover:scale-[1.06] sm:p-8"
           />
         ) : (
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-sm font-display text-stone ring-1 ring-carbon/8">
@@ -160,7 +151,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
           )}
 
           <div className="mt-3 flex items-center gap-1.5">
-            {price != null && !agotado ? (
+            {price != null ? (
               <AddToCartButton
                 productId={product.id}
                 variantIndex={variantIndex}
@@ -173,8 +164,8 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
                 onClick={openSolicitud}
                 className="flex h-9 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full bg-forest px-3 text-xs font-medium text-cream transition hover:bg-forest-dim"
               >
-                {agotado ? <Bell size={14} /> : <ClipboardList size={14} />}
-                {agotado ? "Avisarme" : "Solicitar"}
+                <ClipboardList size={14} />
+                Solicitar
               </button>
             )}
             <a
@@ -197,7 +188,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
         <SolicitudModal
           open={solicitud.open}
           onClose={() => setSolicitud({ mounted: true, open: false })}
-          tipo={agotado ? "agotado" : "encargo"}
+          tipo="encargo"
           product={product}
           variantIndex={variantIndex}
         />

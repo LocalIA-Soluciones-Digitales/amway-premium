@@ -17,7 +17,6 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
   const ref = useRef<HTMLDivElement>(null);
   const product = getProductById(flavor.productId);
   const catalog = useCatalogState();
-  const agotado = catalog.agotado(flavor.productId);
   const price = product && product.variants.length === 1 ? catalog.precio(product, 0) : null;
   const flavorLabel = `${flavor.name} · ${flavor.flavorEs}`;
   const px = useMotionValue(0.5);
@@ -95,12 +94,7 @@ function FlavorCard({ flavor, index }: { flavor: EnergyFlavor; index: number }) 
             {product && <p className="text-[10px] text-cream/50">{product.variants[0].size}</p>}
           </div>
           <div className="pointer-events-auto flex items-center gap-1.5">
-            {agotado && (
-              <span className="rounded-full bg-xs-red px-3 py-2 text-[10px] font-bold uppercase tracking-wide text-cream">
-                Agotado
-              </span>
-            )}
-            {price != null && !agotado && (
+            {price != null && (
               <AddToCartButton
                 productId={flavor.productId}
                 flavor={flavorLabel}
