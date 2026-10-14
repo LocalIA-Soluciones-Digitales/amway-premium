@@ -9,6 +9,7 @@ import {
   CalendarClock,
   Check,
   ChevronDown,
+  ChevronLeft,
   ChevronRight,
   ClipboardList,
   CreditCard,
@@ -52,16 +53,28 @@ function splitLead(text: string): [string, string] {
   return match ? [match[1], match[2]] : [text, ""];
 }
 
+export type Slide = { src: string; recorte: boolean };
+
+// La foto principal es el producto recortado sobre el escenario; el resto son
+// las fotos de la galería de amway.es (ambiente, texturas, tonos), a sangre.
 function ProductStage({
   product,
-  imageSrc,
+  slides,
+  slide,
+  onSlide,
   accent,
 }: {
   product: Product;
-  imageSrc: string | null;
+  slides: Slide[];
+  slide: number;
+  onSlide: (i: number) => void;
   accent: ProductAccent;
 }) {
   const imgRef = useRef<HTMLDivElement>(null);
+  const touchX = useRef<number | null>(null);
+  const actual = slides[slide] ?? slides[0];
+  const total = slides.length;
+  const go = (delta: number) => onSlide((slide + delta + total) % total);
 
   // Zoom que sigue al cursor; se escribe en el estilo para no re-renderizar.
   function onMove(e: MouseEvent<HTMLDivElement>) {
@@ -72,57 +85,119 @@ function ProductStage({
   }
 
   return (
-    <div
-      onMouseMove={onMove}
-      className="group relative isolate flex aspect-square items-center justify-center overflow-hidden rounded-[2rem] bg-linen ring-1 ring-carbon/5"
-    >
+    <div>
       <div
-        aria-hidden
-        className="absolute inset-0 -z-10"
-        style={{
-          background: `radial-gradient(42% 38% at 50% 46%, rgba(255,255,255,0.85) 0%, transparent 100%), radial-gradient(70% 65% at 50% 50%, ${GLOW[accent]} 0%, transparent 72%)`,
+        onMouseMove={onMove}
+        onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+        onTouchEnd={(e) => {
+          const start = touchX.current;
+          touchX.current = null;
+          if (start == null || total < 2) return;
+          const dx = e.changedTouches[0].clientX - start;
+          if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
         }}
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 opacity-60 [background-image:radial-gradient(rgba(28,26,22,0.10)_1px,transparent_1px)] [background-size:20px_20px] [mask-image:radial-gradient(ellipse_at_center,transparent_35%,black_90%)]"
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-3 -z-10 flex select-none justify-center whitespace-nowrap font-display text-[clamp(4rem,16vw,8.5rem)] leading-none text-carbon/[0.045]"
+        className="group relative isolate flex aspect-square items-center justify-center overflow-hidden rounded-[2rem] bg-linen ring-1 ring-carbon/5"
       >
-        {product.brand}
-      </span>
-      <div aria-hidden className="absolute bottom-[13%] left-1/2 -z-10 h-8 w-2/5 -translate-x-1/2 rounded-[50%] bg-carbon/20 blur-2xl" />
-
-      {product.badge && (
-        <span className="absolute left-5 top-5 z-10 rounded-full bg-carbon px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-cream">
-          {product.badge}
-        </span>
-      )}
-
-      {imageSrc ? (
         <div
-          ref={imgRef}
-          className="absolute inset-0 transition-transform duration-500 ease-[var(--ease-premium)] [@media(pointer:fine)]:group-hover:scale-[1.35]"
+          aria-hidden
+          className="absolute inset-0 -z-10"
+          style={{
+            background: `radial-gradient(42% 38% at 50% 46%, rgba(255,255,255,0.85) 0%, transparent 100%), radial-gradient(70% 65% at 50% 50%, ${GLOW[accent]} 0%, transparent 72%)`,
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 opacity-60 [background-image:radial-gradient(rgba(28,26,22,0.10)_1px,transparent_1px)] [background-size:20px_20px] [mask-image:radial-gradient(ellipse_at_center,transparent_35%,black_90%)]"
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-3 -z-10 flex select-none justify-center whitespace-nowrap font-display text-[clamp(4rem,16vw,8.5rem)] leading-none text-carbon/[0.045]"
         >
-          <Image
-            src={imageSrc}
-            alt={product.name}
-            fill
-            priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-contain p-12 drop-shadow-[0_24px_30px_rgba(28,26,22,0.14)] sm:p-20"
-          />
-        </div>
-      ) : (
-        <p className="font-display text-4xl text-stone">{product.brand}</p>
-      )}
+          {product.brand}
+        </span>
+        <div aria-hidden className="absolute bottom-[13%] left-1/2 -z-10 h-8 w-2/5 -translate-x-1/2 rounded-[50%] bg-carbon/20 blur-2xl" />
 
-      <span className="absolute bottom-5 left-5 z-10 flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1.5 text-[11px] font-medium text-carbon/80 ring-1 ring-carbon/5 backdrop-blur-md">
-        <ShieldCheck size={13} className="text-forest" />
-        Original Amway
-      </span>
+        {product.badge && (
+          <span className="absolute left-5 top-5 z-10 rounded-full bg-carbon px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-cream">
+            {product.badge}
+          </span>
+        )}
+
+        {actual ? (
+          <div
+            ref={imgRef}
+            className={cn(
+              "absolute inset-0 transition-transform duration-500 ease-[var(--ease-premium)] [@media(pointer:fine)]:group-hover:scale-[1.35]",
+              !actual.recorte && "bg-white"
+            )}
+          >
+            <Image
+              key={actual.src}
+              src={actual.src}
+              alt={total > 1 ? `${product.name} — foto ${slide + 1} de ${total}` : product.name}
+              fill
+              priority={slide === 0}
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className={
+                actual.recorte
+                  ? "object-contain p-12 drop-shadow-[0_24px_30px_rgba(28,26,22,0.14)] sm:p-20"
+                  : "object-contain"
+              }
+            />
+          </div>
+        ) : (
+          <p className="font-display text-4xl text-stone">{product.brand}</p>
+        )}
+
+        {total > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              aria-label="Foto anterior"
+              className="absolute left-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-carbon shadow-sm ring-1 ring-carbon/5 backdrop-blur-md transition hover:bg-white"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              aria-label="Foto siguiente"
+              className="absolute right-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-carbon shadow-sm ring-1 ring-carbon/5 backdrop-blur-md transition hover:bg-white"
+            >
+              <ChevronRight size={18} />
+            </button>
+            <span className="absolute right-5 top-5 z-10 rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-medium tabular-nums text-carbon/80 ring-1 ring-carbon/5 backdrop-blur-md">
+              {slide + 1} / {total}
+            </span>
+          </>
+        )}
+
+        <span className="absolute bottom-5 left-5 z-10 flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1.5 text-[11px] font-medium text-carbon/80 ring-1 ring-carbon/5 backdrop-blur-md">
+          <ShieldCheck size={13} className="text-forest" />
+          Original Amway
+        </span>
+      </div>
+
+      {total > 1 && (
+        <div data-lenis-prevent className="mt-3 flex gap-2 overflow-x-auto overscroll-x-contain pb-1">
+          {slides.map((s, i) => (
+            <button
+              key={s.src}
+              type="button"
+              onClick={() => onSlide(i)}
+              aria-label={`Ver foto ${i + 1}`}
+              aria-current={i === slide}
+              className={cn(
+                "relative size-16 shrink-0 overflow-hidden rounded-xl bg-white ring-1 transition sm:size-[72px]",
+                i === slide ? "ring-2 ring-carbon" : "ring-carbon/10 opacity-70 hover:opacity-100"
+              )}
+            >
+              <Image src={s.src} alt="" fill sizes="72px" className={cn("object-contain", s.recorte && "p-1.5")} />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -324,13 +399,17 @@ export function ProductDetail({
   categoryLabel,
   categoryHref,
   accent = "forest",
+  galerias = [],
 }: {
   product: Product;
   categoryLabel: string;
   categoryHref: string;
   accent?: ProductAccent;
+  // Fotos extra de cada variante (mismo orden que product.variants).
+  galerias?: string[][];
 }) {
   const [variantIndex, setVariantIndex] = useState(() => cheapestVariantIndex(product));
+  const [slide, setSlide] = useState(0);
   const [solicitud, setSolicitud] = useState(false);
   const [showBar, setShowBar] = useState(false);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -339,6 +418,29 @@ export function ProductDetail({
   const price = catalog.precio(product, variantIndex);
   const rating = catalog.valoracion(product.id);
   const imageSrc = productImageSrc(product, variantIndex);
+  const slidesDe = (i: number): Slide[] => {
+    const main = productImageSrc(product, i);
+    return [
+      ...(main ? [{ src: main, recorte: true }] : []),
+      ...(galerias[i] ?? []).map((src) => ({ src, recorte: false })),
+    ];
+  };
+  const slides = slidesDe(variantIndex);
+
+  // Al cambiar de tono se sigue en la misma foto; si esa foto es igual en los
+  // dos tonos (p. ej. el envase), se salta a la primera que sí cambia, para
+  // que se vea el tono elegido.
+  function elegirVariante(i: number) {
+    const nuevas = slidesDe(i);
+    const actual = slides[slide]?.src;
+    let destino = Math.min(slide, Math.max(nuevas.length - 1, 0));
+    if (nuevas[destino]?.src === actual) {
+      const distinta = nuevas.findIndex((s, k) => s.src !== slides[k]?.src);
+      if (distinta >= 0) destino = distinta;
+    }
+    setVariantIndex(i);
+    setSlide(destino);
+  }
   const hasOptions = product.variants.length > 1;
   const kind = variantKind(product);
   const skus = Array.from(new Set(product.variants.map((v) => v.sku).filter(Boolean)));
@@ -518,7 +620,7 @@ export function ProductDetail({
 
         <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-14">
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <ProductStage product={product} imageSrc={imageSrc} accent={accent} />
+            <ProductStage product={product} slides={slides} slide={slide} onSlide={setSlide} accent={accent} />
           </div>
 
           <div className="min-w-0">
@@ -609,7 +711,7 @@ export function ProductDetail({
                     kind={kind}
                     kindPlural={kindPlural}
                     value={variantIndex}
-                    onChange={setVariantIndex}
+                    onChange={elegirVariante}
                   />
                 ) : (
                   <FormatoDestacado size={variant.size} precio={price} />

@@ -4,6 +4,7 @@ import { CATEGORY_META, PRODUCTS, getProductById } from "@/data/products";
 import { productHref, productImageSrc, type Product } from "@/data/types";
 import { fetchCatalogoPublico, indexCatalogo, precioVenta } from "@/lib/catalog-state";
 import { SITE } from "@/data/site-config";
+import { GALERIA, galeriaSrc } from "@/data/galeria";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductDetail, type ProductAccent } from "@/components/product/ProductDetail";
@@ -101,6 +102,8 @@ export default async function ProductPage({ params }: PageProps<"/producto/[id]"
     ],
   };
   const relatedProducts = related(product);
+  // Fotos extra de cada variante; la galería entera no viaja al navegador.
+  const galerias = product.variants.map((v) => (v.sku ? (GALERIA[v.sku] ?? []).map(galeriaSrc) : []));
 
   return (
     <div className="pt-28 sm:pt-32">
@@ -112,6 +115,7 @@ export default async function ProductPage({ params }: PageProps<"/producto/[id]"
         categoryLabel={category.label}
         categoryHref={category.href}
         accent={category.accent as ProductAccent}
+        galerias={galerias}
       />
 
       {relatedProducts.length > 0 && (
