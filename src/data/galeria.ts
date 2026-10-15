@@ -1,6 +1,6 @@
 // Fotos extra de cada referencia, en el orden de la galería de amway.es
 // (sin la primera, que es la foto principal del producto o del tono).
-// Cada id es un archivo de public/images/galeria/<id>.webp.
+// Cada id es un archivo de public/images/galeria/<id>-hd.webp.
 // Generado a partir de las fichas de amway.es; no editar a mano.
 export const GALERIA: Record<string, string[]> = {
   "3963": ["57d9ed596e0f"],
@@ -228,5 +228,5 @@ export const GALERIA: Record<string, string[]> = {
 };
 
 export function galeriaSrc(id: string): string {
-  return `/images/galeria/${id}.webp`;
+  return `/images/galeria/${id}-hd.webp`;
 }
