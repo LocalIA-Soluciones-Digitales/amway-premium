@@ -57,7 +57,7 @@ export const hogarProducts: Product[] = [
     description:
       "Sartén de alta calidad hecha de una combinación de aluminio y acero inoxidable, diseñada en Italia con la última tecnología de revestimiento antiadherente.",
     variants: [{ sku: "124695", size: "1 unidad", price: 251.29 }],
-    image: "espana/icook-sarten-antiadherente-28-cm.webp",
+    image: "espana/icook-sarten-antiadherente-28-cm-hd.webp",
   },
   {
     id: "loc-multiusos",
@@ -68,7 +68,7 @@ export const hogarProducts: Product[] = [
     description:
       "Un producto de limpieza muy eficaz, concentrado, seguro, delicado y versátil creado con ingredientes de origen natural.",
     variants: [{ sku: "0001", size: "1 l", price: 12.54 }],
-    image: "espana/loc-multiusos.webp",
+    image: "espana/loc-multiusos-hd.webp",
   },
   {
     id: "sa8-polvo",
@@ -79,7 +79,7 @@ export const hogarProducts: Product[] = [
     description:
       "Detergente en Polvo Concentrado Premium SA8™. Detergente sostenible que ofrece una potente eliminación de manchas y una fórmula biodegradable.",
     variants: [{ sku: "109849", size: "3 kg", price: 57.46 }],
-    image: "espana/sa8-polvo.webp",
+    image: "espana/sa8-polvo-hd.webp",
   },
   {
     id: "blanqueador",
@@ -90,7 +90,7 @@ export const hogarProducts: Product[] = [
     description:
       "Se estima que el producto estará disponible en la semana del 25 al 29 de enero.",
     variants: [{ sku: "124485", size: "1 kg", price: 21.31 }],
-    image: "espana/blanqueador.webp",
+    image: "espana/blanqueador-hd.webp",
   },
   {
     id: "rociador-prelavado",
@@ -112,7 +112,7 @@ export const hogarProducts: Product[] = [
     description:
       "Líquido concentrado para vajilla.",
     variants: [{ sku: "110488", size: "1 l", price: 12.05 }],
-    image: "espana/dish-drops-liquido.webp",
+    image: "espana/dish-drops-liquido-hd.webp",
   },
   {
     id: "sa8-liquido",
@@ -123,7 +123,7 @@ export const hogarProducts: Product[] = [
     description:
       "Detergente de disolución rápida que deja la ropa más blanca y brillante, sin residuos irritantes.",
     variants: [{ sku: "110478", size: "4 l", price: 96.98 }],
-    image: "espana/sa8-liquido.webp",
+    image: "espana/sa8-liquido-hd.webp",
   },
   {
     id: "suavizante",
@@ -134,7 +134,7 @@ export const hogarProducts: Product[] = [
     description:
       "Restituye naturalmente la sensación suave y esponjosa de prendas y ropa de cama.",
     variants: [{ sku: "110480", size: "1 l", price: 14.52 }],
-    image: "espana/suavizante.webp",
+    image: "espana/suavizante-hd.webp",
   },
   {
     id: "tabletas-lavavajillas",
@@ -145,7 +145,7 @@ export const hogarProducts: Product[] = [
     description:
       "Nuevas pastillas para el lavavajillas todo en uno para una limpieza profunda y un brillo perfecto. Elaboradas con más del 90 % de sus ingredientes procedentes de plantas y minerales.",
     variants: [{ sku: "109867", size: "60 comprimidos", price: 27.58 }],
-    image: "espana/tabletas-lavavajillas.webp",
+    image: "espana/tabletas-lavavajillas-hd.webp",
   },
   {
     id: "scrub-buds",
@@ -167,7 +167,7 @@ export const hogarProducts: Product[] = [
     description:
       "Detergente líquido concentrado SA8™ para prendas delicadas.",
     variants: [{ sku: "110479", size: "1 l", price: 18.28 }],
-    image: "espana/sa8-delicate.webp",
+    image: "espana/sa8-delicate-hd.webp",
   },
   {
     id: "sa8-liquido-1l",
@@ -178,7 +178,7 @@ export const hogarProducts: Product[] = [
     description:
       "El AMWAY HOME™ SAB™ Baby es un detergente líquido para la colada con un poderoso efecto antimanchas que deja la ropa limpia y suave.",
     variants: [{ sku: "120536", size: "1 l", price: 30.50 }],
-    image: "espana/sa8-liquido-1l.webp",
+    image: "espana/sa8-liquido-1l-hd.webp",
   },
   {
     id: "detergente-ropa-color",
@@ -189,7 +189,7 @@ export const hogarProducts: Product[] = [
     description:
       "El Detergente Líquido para Ropa Oscura y de Color SA8™ limpia y protege el color de tus prendas para ayudar a que parezcan nuevas durante mucho tiempo.",
     variants: [{ sku: "124456", size: "1 l", price: 29.82 }],
-    image: "espana/detergente-ropa-color.webp",
+    image: "espana/detergente-ropa-color-hd.webp",
   },
   {
     id: "limpiador-vidrios",
@@ -200,7 +200,7 @@ export const hogarProducts: Product[] = [
     description:
       "Reemplazo de líquido concentrado para vidrios.",
     variants: [{ sku: "117080", size: "500 ml", price: 6.50 }],
-    image: "espana/limpiador-vidrios.webp",
+    image: "espana/limpiador-vidrios-hd.webp",
   },
   {
     id: "limpiador-bano",
@@ -211,7 +211,7 @@ export const hogarProducts: Product[] = [
     description:
       "Reemplazo de líquido concentrado para el baño.",
     variants: [{ sku: "117078", size: "500 ml", price: 9.11 }],
-    image: "espana/limpiador-bano.webp",
+    image: "espana/limpiador-bano-hd.webp",
   },
   {
     id: "limpiador-cocina",
@@ -222,7 +222,7 @@ export const hogarProducts: Product[] = [
     description:
       "Reemplazo de líquido concentrado para la cocina.",
     variants: [{ sku: "117079", size: "500 ml", price: 9.11 }],
-    image: "espana/limpiador-cocina.webp",
+    image: "espana/limpiador-cocina-hd.webp",
   },
   {
     id: "icook-cuchillos",
@@ -266,7 +266,7 @@ export const hogarProducts: Product[] = [
     description:
       "Controla la calidad del aire que tú y tu familia respirais día tras día con el nuevo Purificador de Aire Atmosphere Sky.",
     variants: [{ sku: "120539", size: "1 unidad", price: 2007.19 }],
-    image: "espana/atmosphere-sky.webp",
+    image: "espana/atmosphere-sky-hd.webp",
     flagship: "atmosphere",
   },
   {
@@ -278,7 +278,7 @@ export const hogarProducts: Product[] = [
     description:
       "El cartucho de recambio original del Sistema de Tratamiento de Agua eSpring con carbón activado y tecnología UV. Compatible con el antiguo eSpring.",
     variants: [{ sku: "100186", size: "1 unidad", price: 289.45 }],
-    image: "espana/espring-filtro-uv.webp",
+    image: "espana/espring-filtro-uv-hd.webp",
   },
   {
     id: "icook-olla-4l",
@@ -311,7 +311,7 @@ export const hogarProducts: Product[] = [
     description:
       "Batería de cocina diseñada de forma inteligente para un estilo de vida más nutritivo. Una cacerola pequeña de 1 litro perfecta para cocinar o recalentar pequeñas cantidades de comida.",
     variants: [{ sku: "101088", size: "1 conjunto", price: 154.20 }],
-    image: "espana/icook-cacerola-1l.webp",
+    image: "espana/icook-cacerola-1l-hd.webp",
   },
   {
     id: "espring-botella",
@@ -355,7 +355,7 @@ export const hogarProducts: Product[] = [
     description:
       "Prefiltro Atmosphere Sky™.",
     variants: [{ sku: "120542", size: "1 unidad", price: 21.91 }],
-    image: "espana/prefiltro-atmosphere-sky.webp",
+    image: "espana/prefiltro-atmosphere-sky-hd.webp",
   },
   {
     id: "espring-adaptador-alimentacion",
@@ -366,7 +366,7 @@ export const hogarProducts: Product[] = [
     description:
       "Adaptador de alimentación de 110-240 V para el Sistema de Tratamiento de Agua eSpring. Se necesita una toma de corriente. Compatible con el nuevo eSpring.",
     variants: [{ sku: "1109", size: "1 unidad", price: 53.38 }],
-    image: "espana/espring-adaptador-alimentacion.webp",
+    image: "espana/espring-adaptador-alimentacion-hd.webp",
   },
   {
     id: "anillo-retencion-filtro-espring",
@@ -377,7 +377,7 @@ export const hogarProducts: Product[] = [
     description:
       "Compatible con el antiguo eSpring.",
     variants: [{ sku: "0423", size: "1 unidad", price: 29.11 }],
-    image: "espana/anillo-retencion-filtro-espring.webp",
+    image: "espana/anillo-retencion-filtro-espring-hd.webp",
   },
   {
     id: "anillo-soporte-filtro-espring",
@@ -388,7 +388,7 @@ export const hogarProducts: Product[] = [
     description:
       "El Anillo de Soporte de Filtro eSpring™ es una pieza esencial que conecta el soporte al filtro y lo sella herméticamente. No obstante, puede adquirir porosidad, lo que puede provocar fugas. En el caso de que la pieza original se rompa o resulte dañada, puedes mantener la funcionalidad y comodidad sustituyéndola por otro Anillo de Soporte de Filtro eSpring original para los sistemas eSpring. Puede sustituirse cómodamente sin necesidad de contar con conocimientos o habilidades profesionales. Además, la sustitución del Anillo de Soporte de Filtro eSpring no requiere ninguna herramienta. Simplemente desinstala la unidad, desmonta el soporte para separarlo del filtro y sustituye el anillo. Compatible con el antiguo eSpring.",
     variants: [{ sku: "WTI0426", size: "1 unidad", price: 8.10 }],
-    image: "espana/anillo-soporte-filtro-espring.webp",
+    image: "espana/anillo-soporte-filtro-espring-hd.webp",
   },
   {
     id: "icook-asa-lateral-2-l",
@@ -410,7 +410,7 @@ export const hogarProducts: Product[] = [
     description:
       "El asa lateral para el Wok iCook como pieza de recambio.",
     variants: [{ sku: "400520", size: "1 unidad", price: 8.51 }],
-    image: "espana/asa-lateral-wok-icook.webp",
+    image: "espana/asa-lateral-wok-icook-hd.webp",
   },
   {
     id: "bolsas-papel-amway",
@@ -421,7 +421,7 @@ export const hogarProducts: Product[] = [
     description:
       "Bolsas de Papel Amway.",
     variants: [{ sku: "218920", size: "Conjunto de 30 bolsas pequeñas y 10 grandes", price: 14.06 }],
-    image: "espana/bolsas-papel-amway.webp",
+    image: "espana/bolsas-papel-amway-hd.webp",
   },
   {
     id: "botella-plastico",
@@ -443,7 +443,7 @@ export const hogarProducts: Product[] = [
     description:
       "Cable de Alimentación Desmontable Atmosphere Sky™.",
     variants: [{ sku: "120545", size: "1 unidad", price: 26.54 }],
-    image: "espana/cable-alimentacion-desmontable-atmosphere-sky.webp",
+    image: "espana/cable-alimentacion-desmontable-atmosphere-sky-hd.webp",
   },
   {
     id: "espring-tubos-recambio",
@@ -465,7 +465,7 @@ export const hogarProducts: Product[] = [
     description:
       "La Cubierta Superior eSpring™ es la pieza que cubre tu Sistema de Tratamiento de Agua eSpring. Esta cubierta incluye la pantalla, que te permite controlar el funcionamiento de todo el sistema de tratamiento de agua. En el caso de que la pieza original se rompa o resulte dañada, sustitúyela por una Cubierta Superior eSpring de repuesto para mantener su funcionalidad y comodidad. Puede sustituirse cómodamente sin necesidad de contar con conocimientos o habilidades profesionales. Además, la sustitución de la Cubierta Superior eSpring no requiere ninguna herramienta. Para sustituirla correctamente, solo tienes que quitar la cubierta superior dañada y cambiarla por la nueva. Compatible con el antiguo eSpring",
     variants: [{ sku: "WTI0421Z", size: "1 unidad", price: 62.83 }],
-    image: "espana/cubierta-superior-espring.webp",
+    image: "espana/cubierta-superior-espring-hd.webp",
   },
   {
     id: "home-bomba-dispensadora",
@@ -476,7 +476,7 @@ export const hogarProducts: Product[] = [
     description:
       "Bomba dosificadora para los envases de 1 L de los limpiadores concentrados Amway Home™.",
     variants: [{ sku: "103972", size: "1 unidad", price: 2.86 }],
-    image: "espana/home-bomba-dispensadora.webp",
+    image: "espana/home-bomba-dispensadora-hd.webp",
   },
   {
     id: "dosificador-detergente-180-ml",
@@ -509,7 +509,7 @@ export const hogarProducts: Product[] = [
     description:
       "Compatible con el antiguo eSpring.",
     variants: [{ sku: "0420", size: "1 unidad", price: 64.03 }],
-    image: "espana/fuente-alimentacion-sistema-tratamiento-agua-espring.webp",
+    image: "espana/fuente-alimentacion-sistema-tratamiento-agua-espring-hd.webp",
   },
   {
     id: "espring-kit-grifo-auxiliar",
@@ -520,7 +520,7 @@ export const hogarProducts: Product[] = [
     description:
       "Utiliza este completo kit para convertir el Sistema de Tratamiento de Agua eSpring en una unidad bajo la encimera. Compatible con el nuevo y el antiguo eSpring.",
     variants: [{ sku: "125627", size: "1 unidad", price: 186.80 }],
-    image: "espana/espring-kit-grifo-auxiliar.webp",
+    image: "espana/espring-kit-grifo-auxiliar-hd.webp",
   },
   {
     id: "espring-kit-pared-modelo-anterior",
@@ -531,7 +531,7 @@ export const hogarProducts: Product[] = [
     description:
       "Ahorra espacio en tu cocina con el Kit para Instalación en Pared original para el Sistema de Tratamiento de Agua eSpring. Compatible con el antiguo eSpring",
     variants: [{ sku: "102996", size: "1 unidad", price: 28.09 }],
-    image: "espana/espring-kit-pared-modelo-anterior.webp",
+    image: "espana/espring-kit-pared-modelo-anterior-hd.webp",
   },
   {
     id: "espring-kit-pared",
@@ -553,7 +553,7 @@ export const hogarProducts: Product[] = [
     description:
       "Limpiador de hornos Amway™.",
     variants: [{ sku: "0014", size: "500 ml", price: 10.81 }],
-    image: "espana/limpiador-hornos.webp",
+    image: "espana/limpiador-hornos-hd.webp",
   },
   {
     id: "icook-mangos-repuesto",
@@ -586,7 +586,7 @@ export const hogarProducts: Product[] = [
     description:
       "Elegante, compacto y fácil de montar, el Minimodelo del Sistema de Tratamiento de Agua eSpring es perfecto para demostraciones.",
     variants: [{ sku: "128115", size: "8,15 cm (L) x 7,65 cm (An) x 13,35 cm (Al)", price: 61.54 }],
-    image: "espana/minimodelo-demostraciones-espring.webp",
+    image: "espana/minimodelo-demostraciones-espring-hd.webp",
   },
   {
     id: "modulo-electronico-220v-espring",
@@ -608,7 +608,7 @@ export const hogarProducts: Product[] = [
     description:
       "Tapa para Sartén Antiadherente iCook™ de 24 cm, de la lista oficial de Amway España.",
     variants: [{ sku: "401962", size: "1 unidad", price: 38.05 }],
-    image: "espana/tapa-sarten-antiadherente-24.webp",
+    image: "espana/tapa-sarten-antiadherente-24-hd.webp",
   },
   {
     id: "tapa-sarten-antiadherente-28",
@@ -619,7 +619,7 @@ export const hogarProducts: Product[] = [
     description:
       "Tapa para Sartén Antiadherente iCook™ de 28 cm, de la lista oficial de Amway España.",
     variants: [{ sku: "401956", size: "1 unidad", price: 43.24 }],
-    image: "espana/tapa-sarten-antiadherente-28.webp",
+    image: "espana/tapa-sarten-antiadherente-28-hd.webp",
   },
   {
     id: "icook-mango-largo-tornillo",
@@ -630,7 +630,7 @@ export const hogarProducts: Product[] = [
     description:
       "Mango Largo con Tornillo para Sartén Antiadherente iCook™ de 28 y 24 cm, de la lista oficial de Amway España.",
     variants: [{ sku: "401954", size: "1 unidad", price: 13.84 }],
-    image: "espana/icook-mango-largo-tornillo.webp",
+    image: "espana/icook-mango-largo-tornillo-hd.webp",
   },
   {
     id: "mango-lateral-tornillo-sarten",
@@ -641,7 +641,7 @@ export const hogarProducts: Product[] = [
     description:
       "Mango Lateral con Tornillo para Sartén Antiadherente iCook™ de 28 cm, de la lista oficial de Amway España.",
     variants: [{ sku: "401955", size: "1 unidad", price: 13.74 }],
-    image: "espana/mango-lateral-tornillo-sarten.webp",
+    image: "espana/mango-lateral-tornillo-sarten-hd.webp",
   },
   {
     id: "espring-kit-grifo-existente",
@@ -674,7 +674,7 @@ export const hogarProducts: Product[] = [
     description:
       "Piezas de repuesto originales para tus ollas, sartenes y tapas iCook™.",
     variants: [{ sku: "400141", size: "1 pieza", price: 13.01 }],
-    image: "espana/icook-pomo-tapas-sartenes-antiadherentes.webp",
+    image: "espana/icook-pomo-tapas-sartenes-antiadherentes-hd.webp",
   },
   {
     id: "pre-filtro-modelo-anterior",
@@ -685,7 +685,7 @@ export const hogarProducts: Product[] = [
     description:
       "Pre-filtro eSpring™ (para modelo anterior eSpring), de la lista oficial de Amway España.",
     variants: [{ sku: "100187", size: "1 unidad", price: 27.06 }],
-    image: "espana/pre-filtro-modelo-anterior.webp",
+    image: "espana/pre-filtro-modelo-anterior-hd.webp",
   },
   {
     id: "espring-prefiltro",
@@ -696,7 +696,7 @@ export const hogarProducts: Product[] = [
     description:
       "Mantén toda la vida útil del cartucho eSpring sustituyendo el prefiltro de la unidad. Compatible con el nuevo eSpring.",
     variants: [{ sku: "127063", size: "1 unidad", price: 24.01 }],
-    image: "espana/espring-prefiltro.webp",
+    image: "espana/espring-prefiltro-hd.webp",
   },
   {
     id: "pulverizador-pistola",
@@ -718,7 +718,7 @@ export const hogarProducts: Product[] = [
     description:
       "Ruedas Atmosphere Sky™.",
     variants: [{ sku: "122344", size: "1 unidad", price: 15.13 }],
-    image: "espana/ruedas-atmosphere-sky.webp",
+    image: "espana/ruedas-atmosphere-sky-hd.webp",
   },
   {
     id: "soporte-filtro-espring",
@@ -729,7 +729,7 @@ export const hogarProducts: Product[] = [
     description:
       "Compatible con el antiguo eSpring.",
     variants: [{ sku: "0706", size: "1 unidad", price: 56.56 }],
-    image: "espana/soporte-filtro-espring.webp",
+    image: "espana/soporte-filtro-espring-hd.webp",
   },
   {
     id: "tapas-recipientes-3-tamanos",
@@ -751,6 +751,6 @@ export const hogarProducts: Product[] = [
     description:
       "Tope Atmosphere Sky™.",
     variants: [{ sku: "122961", size: "1 unidad", price: 2.54 }],
-    image: "espana/tope-atmosphere-sky.webp",
+    image: "espana/tope-atmosphere-sky-hd.webp",
   },
 ];

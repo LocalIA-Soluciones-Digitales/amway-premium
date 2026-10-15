@@ -68,7 +68,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Fórmula «similar al oro líquido» que contribuye a mejorar el aspecto de las finas líneas, así como la textura y la luminosidad de la piel.",
     variants: [{ sku: "127600", size: "125 ml", price: 131.65 }],
-    image: "espana/longxevity-esencia.webp",
+    image: "espana/longxevity-esencia-hd.webp",
   },
   {
     id: "art-protector-uv",
@@ -101,7 +101,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Protección solar diaria dentro de la línea renovadora.",
     variants: [{ sku: "123787", size: "50 g", price: 79.96 }],
-    image: "espana/art-crema-hidratante-regeneradora-fps.webp",
+    image: "espana/art-crema-hidratante-regeneradora-fps-hd.webp",
   },
   {
     id: "art-crema-reactivacion",
@@ -123,7 +123,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Reduce los signos visibles de la edad en la zona del contorno de ojos, reactivando la habilidad natural de la piel para tener una apariencia más juvenil y saludable en la zona de los ojos.",
     variants: [{ sku: "123784", size: "15 g", price: 52.26 }],
-    image: "espana/art-crema-regeneradora-contorno-ojos.webp",
+    image: "espana/art-crema-regeneradora-contorno-ojos-hd.webp",
   },
   {
     id: "art-tonico-renovador",
@@ -222,7 +222,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Ligero y superhidratante, el Gel Crema Hidratante para el Contorno de Ojos Artistry Skin Nutrition ilumina la zona de tus ojos.",
     variants: [{ sku: "123796", size: "15 g", price: 38.53 }],
-    image: "espana/art-gel-crema-hidratante-contorno.webp",
+    image: "espana/art-gel-crema-hidratante-contorno-hd.webp",
   },
   {
     id: "art-removedor-micelar",
@@ -244,7 +244,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Crema Desmaquillante Artistry Skin Nutrition elimina de forma rápida y eficaz el maquillaje al tiempo que calma la piel sensible para ayudar a evitar la irritación.",
     variants: [{ sku: "123779", size: "118 ml", price: 28.21 }],
-    image: "espana/art-crema-desmaquillante.webp",
+    image: "espana/art-crema-desmaquillante-hd.webp",
   },
   {
     id: "gel-revitalizante-derma-architect",
@@ -255,7 +255,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Gel acuoso que facilita la transmisión de energía del dispositivo Derma-Architect a la piel y contribuye a aliviarla del calor provocado durante el uso del dispositivo, distribuyendo la energía de manera homogénea del cabezal Skin Fitness de Derma-Architect a la piel.",
     variants: [{ sku: "127784", size: "120 g", price: 27.36 }],
-    image: "espana/gel-revitalizante-derma-architect.webp",
+    image: "espana/gel-revitalizante-derma-architect-hd.webp",
   },
   {
     id: "art-derma-architect",
@@ -266,7 +266,7 @@ export const bellezaProducts: Product[] = [
     description:
       "El dispositivo que te permite lograr un cuidado de la piel superior en tu propio hogar.",
     variants: [{ sku: "127720", size: "1 unidad", price: 747.36 }],
-    image: "espana/art-derma-architect.webp",
+    image: "espana/art-derma-architect-hd.webp",
   },
   {
     id: "crema-nutritiva-repuesto-artistry-longxevity",
@@ -277,7 +277,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Repuesto inteligente y sostenible para la Crema nutritiva Artistry LongXevity™, diseñado para reducir los residuos de plástico.",
     variants: [{ sku: "127575", size: "50 g", price: 349.52 }],
-    image: "espana/crema-nutritiva-repuesto-artistry-longxevity.webp",
+    image: "espana/crema-nutritiva-repuesto-artistry-longxevity-hd.webp",
   },
   {
     id: "crema-contorno-ojos-repuesto-artistry-longxevity",
@@ -288,7 +288,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Repuesto inteligente para la Crema para contorno de ojos Artistry LongXevity™, diseñado para reducir los residuos de plástico.",
     variants: [{ sku: "127577", size: "15 g", price: 171.80 }],
-    image: "espana/crema-contorno-ojos-repuesto-artistry-longxevity.webp",
+    image: "espana/crema-contorno-ojos-repuesto-artistry-longxevity-hd.webp",
   },
   {
     id: "art-labs-sistema-retexturizador",
@@ -310,7 +310,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Elimina las células muertas de la superficie de la piel y favorece el aspecto general de la epidermis con el Peeling retexturizador y el Sérum retexturizador Artistry Labs.",
     variants: [{ sku: "125547", size: "15/30 ml", price: 262.49 }],
-    image: "espana/sistema-retexturizador-artistry-labs-repuesto.webp",
+    image: "espana/sistema-retexturizador-artistry-labs-repuesto-hd.webp",
   },
   {
     id: "art-studio-toque-hidratacion",
@@ -365,7 +365,7 @@ export const bellezaProducts: Product[] = [
     description:
       "¡Dile hola a unos ojos luminosos! Estas mascarillas nocturnas impregnadas de sérum alivian la hinchazón. Como una noche entera de sueño reparador concentrada en unos minutos, estos parches de gel te ayudan a recargar la energía y refrescar la zona del contorno de ojos.",
     variants: [{ sku: "124818", size: "60 unidades", price: 34.66 }],
-    image: "espana/art-studio-parches-ojos.webp",
+    image: "espana/art-studio-parches-ojos-hd.webp",
   },
   {
     id: "art-studio-suero-iluminador",
@@ -376,7 +376,7 @@ export const bellezaProducts: Product[] = [
     description:
       "¡Obtén hidratación para mostrarte radiante! Una potente infusión de fruto de espino amarillo y extracto de kumquat que ayuda a calmar la piel estresada y aporta un aumento inmediato de energía radiante.",
     variants: [{ sku: "303185", size: "20 ml", price: 29.66 }],
-    image: "espana/art-studio-suero-iluminador.webp",
+    image: "espana/art-studio-suero-iluminador-hd.webp",
   },
   {
     id: "art-studio-radiante-start",
@@ -398,7 +398,7 @@ export const bellezaProducts: Product[] = [
     description:
       "¿Tus ojos necesitan un rescate rápido? Elige un sérum que ilumina al instante el contorno de los ojos y lo refresca nada más entrar en contacto con él.",
     variants: [{ sku: "125964", size: "15 ml", price: 26.57 }],
-    image: "espana/art-studio-serum-ojos.webp",
+    image: "espana/art-studio-serum-ojos-hd.webp",
   },
   {
     id: "art-studio-bruma",
@@ -409,7 +409,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Vaporiza y rocía para seducir todo el día. Consigue ese look saludable y luminoso – ¡rocía tu piel con esta bruma 24/7 que aporta hidratación calmante y estimulante! Protege tu rostro de los factores estresantes del entorno, además de usarla como spray fijador de maquillaje.",
     variants: [{ sku: "125325", size: "100 ml", price: 26.62 }],
-    image: "espana/art-studio-bruma.webp",
+    image: "espana/art-studio-bruma-hd.webp",
   },
   {
     id: "art-ss-mascarillas",
@@ -431,7 +431,7 @@ export const bellezaProducts: Product[] = [
     description:
       "La Mascarilla Exfoliante Artistry Signature Select™ pule suavemente la piel para revelar una superficie lisa y suave con un resplandor de aspecto saludable.",
     variants: [{ sku: "122339", size: "100 g", price: 37.40 }],
-    image: "espana/art-mascarilla-exfoliante.webp",
+    image: "espana/art-mascarilla-exfoliante-hd.webp",
   },
   {
     id: "art-mascarilla-purificante",
@@ -442,7 +442,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Esta mascarilla de arcilla espesa limpia profundamente la piel y los poros, eliminando impurezas y contaminantes ambientales.",
     variants: [{ sku: "122342", size: "100 g", price: 44.32 }],
-    image: "espana/art-mascarilla-purificante.webp",
+    image: "espana/art-mascarilla-purificante-hd.webp",
   },
   {
     id: "art-mascarilla-reafirmante",
@@ -453,7 +453,7 @@ export const bellezaProducts: Product[] = [
     description:
       "La Mascarilla Reafirmante Artistry Signature Select™ es súper nutritiva y deja la piel con una sensación más firme y tersa.",
     variants: [{ sku: "122341", size: "125 g", price: 47.08 }],
-    image: "espana/art-mascarilla-reafirmante.webp",
+    image: "espana/art-mascarilla-reafirmante-hd.webp",
   },
   {
     id: "art-mascarilla-iluminadora",
@@ -464,7 +464,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Aumenta la luminosidad de tu piel con el efecto energizante de la Mascarilla Iluminadora Artistry Signature Select™.",
     variants: [{ sku: "122340", size: "100 g", price: 47.08 }],
-    image: "espana/art-mascarilla-iluminadora.webp",
+    image: "espana/art-mascarilla-iluminadora-hd.webp",
   },
   {
     id: "art-gv-rimel-volumen",
@@ -486,16 +486,16 @@ export const bellezaProducts: Product[] = [
     description:
       "Barra de Labios Artistry Go Vibrant - nutrientes perfectos para los labios e hidratación duradera en un solo trazo de color intenso. Una paleta universal de tonos crema enriquecidos con ingredientes de origen vegetal, como el aceite de semilla de chía blanca, el aceite de ginseng y la manteca de karité.",
     variants: [
-      { sku: "124144", size: "101 Saturday Peach", price: 25.38, image: "espana/tonos/124144.webp" },
-      { sku: "124145", size: "102 Weekend Rose", price: 25.38, image: "espana/tonos/124145.webp" },
-      { sku: "124147", size: "104 Berry Special Evening", price: 25.38, image: "espana/tonos/124147.webp" },
-      { sku: "124150", size: "107 Take Charge Red", price: 25.38, image: "espana/tonos/124150.webp" },
-      { sku: "124151", size: "108 Text Me Terracotta", price: 25.38, image: "espana/tonos/124151.webp" },
-      { sku: "124152", size: "109 Spice Meets Nice", price: 25.38, image: "espana/tonos/124152.webp" },
-      { sku: "124146", size: "103 Mauvelous Morning", price: 25.38, image: "espana/tonos/124146.webp" },
-      { sku: "124149", size: "106 Secret Crush Scarlet", price: 25.38, image: "espana/tonos/124149.webp" },
-      { sku: "124153", size: "110 Crush on Coral", price: 25.38, image: "espana/tonos/124153.webp" },
-      { sku: "124154", size: "111 Go-Go Cocoa", price: 25.38, image: "espana/tonos/124154.webp" },
+      { sku: "124144", size: "101 Saturday Peach", price: 25.38, image: "espana/tonos/124144-hd.webp" },
+      { sku: "124145", size: "102 Weekend Rose", price: 25.38, image: "espana/tonos/124145-hd.webp" },
+      { sku: "124147", size: "104 Berry Special Evening", price: 25.38, image: "espana/tonos/124147-hd.webp" },
+      { sku: "124150", size: "107 Take Charge Red", price: 25.38, image: "espana/tonos/124150-hd.webp" },
+      { sku: "124151", size: "108 Text Me Terracotta", price: 25.38, image: "espana/tonos/124151-hd.webp" },
+      { sku: "124152", size: "109 Spice Meets Nice", price: 25.38, image: "espana/tonos/124152-hd.webp" },
+      { sku: "124146", size: "103 Mauvelous Morning", price: 25.38, image: "espana/tonos/124146-hd.webp" },
+      { sku: "124149", size: "106 Secret Crush Scarlet", price: 25.38, image: "espana/tonos/124149-hd.webp" },
+      { sku: "124153", size: "110 Crush on Coral", price: 25.38, image: "espana/tonos/124153-hd.webp" },
+      { sku: "124154", size: "111 Go-Go Cocoa", price: 25.38, image: "espana/tonos/124154-hd.webp" },
     ],
     image: "art-color-labial.webp",
   },
@@ -508,14 +508,14 @@ export const bellezaProducts: Product[] = [
     description:
       "Barra de Labios Artistry Go Vibrant - nutrientes perfectos para los labios e hidratación duradera en un solo trazo de color intenso. Una paleta universal de tonos mate, enriquecidos con ingredientes de origen vegetal como el aceite de semilla de chía blanca, el aceite de ginseng y la manteca de karité.",
     variants: [
-      { sku: "124155", size: "201 Lunch Date Pink", price: 25.38, image: "espana/tonos/124155.webp" },
-      { sku: "124157", size: "203 Recharge Rose", price: 25.38, image: "espana/tonos/124157.webp" },
-      { sku: "124159", size: "205 Firecracker Red", price: 25.38, image: "espana/tonos/124159.webp" },
-      { sku: "124161", size: "207 Blush Crush", price: 25.38, image: "espana/tonos/124161.webp" },
-      { sku: "124163", size: "209 Love Note Nude", price: 25.38, image: "espana/tonos/124163.webp" },
-      { sku: "124156", size: "202 Photobomb Fuchsia", price: 25.38, image: "espana/tonos/124156.webp" },
-      { sku: "124158", size: "204 Road Trip Red", price: 25.38, image: "espana/tonos/124158.webp" },
-      { sku: "124162", size: "208 Lazy Day Latte", price: 25.38, image: "espana/tonos/124162.webp" },
+      { sku: "124155", size: "201 Lunch Date Pink", price: 25.38, image: "espana/tonos/124155-hd.webp" },
+      { sku: "124157", size: "203 Recharge Rose", price: 25.38, image: "espana/tonos/124157-hd.webp" },
+      { sku: "124159", size: "205 Firecracker Red", price: 25.38, image: "espana/tonos/124159-hd.webp" },
+      { sku: "124161", size: "207 Blush Crush", price: 25.38, image: "espana/tonos/124161-hd.webp" },
+      { sku: "124163", size: "209 Love Note Nude", price: 25.38, image: "espana/tonos/124163-hd.webp" },
+      { sku: "124156", size: "202 Photobomb Fuchsia", price: 25.38, image: "espana/tonos/124156-hd.webp" },
+      { sku: "124158", size: "204 Road Trip Red", price: 25.38, image: "espana/tonos/124158-hd.webp" },
+      { sku: "124162", size: "208 Lazy Day Latte", price: 25.38, image: "espana/tonos/124162-hd.webp" },
     ],
     image: "espana/art-color-labial-mate.webp",
   },
@@ -528,21 +528,21 @@ export const bellezaProducts: Product[] = [
     description:
       "Consigue un look impecable, radiante y juvenil con la Base de Maquillaje en Sérum Artistry Future Glow, repleta de ingredientes perfectos para la piel y desarrollada con la tecnología avanzada de Artistry.",
     variants: [
-      { sku: "126718", size: "101 Shell", price: 59.18, image: "espana/tonos/126718.webp" },
-      { sku: "126719", size: "102 Cashmere", price: 59.18, image: "espana/tonos/126719.webp" },
-      { sku: "126720", size: "103 Ivory", price: 59.18, image: "espana/tonos/126720.webp" },
-      { sku: "126721", size: "104 Fawn", price: 59.18, image: "espana/tonos/126721.webp" },
-      { sku: "126722", size: "201 Beige", price: 59.18, image: "espana/tonos/126722.webp" },
-      { sku: "126723", size: "202 Bamboo", price: 59.18, image: "espana/tonos/126723.webp" },
-      { sku: "126724", size: "203 Honey", price: 59.18, image: "espana/tonos/126724.webp" },
-      { sku: "126725", size: "204 Oat", price: 59.18, image: "espana/tonos/126725.webp" },
-      { sku: "126726", size: "301 Biscotti", price: 59.18, image: "espana/tonos/126726.webp" },
-      { sku: "126727", size: "302 Almond", price: 59.18, image: "espana/tonos/126727.webp" },
-      { sku: "126728", size: "303 Chestnut", price: 59.18, image: "espana/tonos/126728.webp" },
-      { sku: "126729", size: "304 Amber", price: 59.18, image: "espana/tonos/126729.webp" },
-      { sku: "126731", size: "401 Mocha", price: 59.18, image: "espana/tonos/126731.webp" },
-      { sku: "126732", size: "402 Nutmeg", price: 59.18, image: "espana/tonos/126732.webp" },
-      { sku: "126734", size: "404 Espresso", price: 59.18, image: "espana/tonos/126734.webp" },
+      { sku: "126718", size: "101 Shell", price: 59.18, image: "espana/tonos/126718-hd.webp" },
+      { sku: "126719", size: "102 Cashmere", price: 59.18, image: "espana/tonos/126719-hd.webp" },
+      { sku: "126720", size: "103 Ivory", price: 59.18, image: "espana/tonos/126720-hd.webp" },
+      { sku: "126721", size: "104 Fawn", price: 59.18, image: "espana/tonos/126721-hd.webp" },
+      { sku: "126722", size: "201 Beige", price: 59.18, image: "espana/tonos/126722-hd.webp" },
+      { sku: "126723", size: "202 Bamboo", price: 59.18, image: "espana/tonos/126723-hd.webp" },
+      { sku: "126724", size: "203 Honey", price: 59.18, image: "espana/tonos/126724-hd.webp" },
+      { sku: "126725", size: "204 Oat", price: 59.18, image: "espana/tonos/126725-hd.webp" },
+      { sku: "126726", size: "301 Biscotti", price: 59.18, image: "espana/tonos/126726-hd.webp" },
+      { sku: "126727", size: "302 Almond", price: 59.18, image: "espana/tonos/126727-hd.webp" },
+      { sku: "126728", size: "303 Chestnut", price: 59.18, image: "espana/tonos/126728-hd.webp" },
+      { sku: "126729", size: "304 Amber", price: 59.18, image: "espana/tonos/126729-hd.webp" },
+      { sku: "126731", size: "401 Mocha", price: 59.18, image: "espana/tonos/126731-hd.webp" },
+      { sku: "126732", size: "402 Nutmeg", price: 59.18, image: "espana/tonos/126732-hd.webp" },
+      { sku: "126734", size: "404 Espresso", price: 59.18, image: "espana/tonos/126734-hd.webp" },
     ],
     image: "art-fg-base-serum.webp",
   },
@@ -566,7 +566,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Una caja con 20 sobres de muestra para probar el producto de forma fácil y cómoda.",
     variants: [{ sku: "341052", size: "20 × 0,75 g", price: 27.89 }],
-    image: "espana/caja-tarjetas-muestra-crema-reafirmante-ultra.webp",
+    image: "espana/caja-tarjetas-muestra-crema-reafirmante-ultra-hd.webp",
   },
   {
     id: "caja-tarjetas-muestra-crema-regeneradora-artistry",
@@ -577,7 +577,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Una caja con 20 sobres de muestra para probar el producto de forma fácil y cómoda.",
     variants: [{ sku: "341051", size: "20 × 0,75 g", price: 26.50 }],
-    image: "espana/caja-tarjetas-muestra-crema-regeneradora-artistry.webp",
+    image: "espana/caja-tarjetas-muestra-crema-regeneradora-artistry-hd.webp",
   },
   {
     id: "caja-tarjetas-muestra-mascarilla-nocturna-artistry",
@@ -588,7 +588,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Una caja con 20 sobres de muestra para probar el producto de forma fácil y cómoda.",
     variants: [{ sku: "341049", size: "20 × 1,45 ml", price: 29.32 }],
-    image: "espana/caja-tarjetas-muestra-mascarilla-nocturna-artistry.webp",
+    image: "espana/caja-tarjetas-muestra-mascarilla-nocturna-artistry-hd.webp",
   },
   {
     id: "caja-tarjetas-muestra-gel-crema-hidratante",
@@ -599,7 +599,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Una caja con 20 sobres de muestra para probar el producto de forma fácil y cómoda.",
     variants: [{ sku: "341050", size: "20 × 0,75 g", price: 22.31 }],
-    image: "espana/caja-tarjetas-muestra-gel-crema-hidratante.webp",
+    image: "espana/caja-tarjetas-muestra-gel-crema-hidratante-hd.webp",
   },
   {
     id: "caja-tarjetas-muestra-suero-diario-vitamina",
@@ -610,7 +610,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Una caja con 10 sobres de muestra para probar el producto de forma fácil y cómoda.",
     variants: [{ sku: "341053", size: "10 × 1,5 ml +", price: 34.85 }],
-    image: "espana/caja-tarjetas-muestra-suero-diario-vitamina.webp",
+    image: "espana/caja-tarjetas-muestra-suero-diario-vitamina-hd.webp",
   },
   {
     id: "caja-tarjetas-muestra-serum-antiedad-artistry",
@@ -621,7 +621,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Una caja con 20 sobres de muestra para probar el producto de forma fácil y cómoda.",
     variants: [{ sku: "341054", size: "20 × 0,75 g", price: 27.89 }],
-    image: "espana/caja-tarjetas-muestra-serum-antiedad-artistry.webp",
+    image: "espana/caja-tarjetas-muestra-serum-antiedad-artistry-hd.webp",
   },
   {
     id: "caja-tarjetas-muestra-serum-corrector-artistry",
@@ -632,7 +632,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Una caja con 20 sobres de muestra para probar el producto de forma fácil y cómoda.",
     variants: [{ sku: "341055", size: "20 × 0,75 g", price: 29.30 }],
-    image: "espana/caja-tarjetas-muestra-serum-corrector-artistry.webp",
+    image: "espana/caja-tarjetas-muestra-serum-corrector-artistry-hd.webp",
   },
   {
     id: "art-studio-empieza-manana",
@@ -643,7 +643,7 @@ export const bellezaProducts: Product[] = [
     description:
       "¡Prepárate para una jornada ajetreada con productos de belleza diseñados para despertar tu piel y empezar la mañana con plenitud.",
     variants: [{ sku: "316099", size: "1 conjunto", price: 73.26 }],
-    image: "espana/art-studio-empieza-manana.webp",
+    image: "espana/art-studio-empieza-manana-hd.webp",
   },
   {
     id: "hidratante-moisturisation-power",
@@ -654,7 +654,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Un conjunto de cuidado de la piel hidratante que actúa las 24 horas, proporcionando altos niveles de hidratación.",
     variants: [{ sku: "319401", size: "1 conjunto", price: 115.79 }],
-    image: "espana/hidratante-moisturisation-power.webp",
+    image: "espana/hidratante-moisturisation-power-hd.webp",
   },
   {
     id: "art-studio-lista-irte-a-cama",
@@ -676,7 +676,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341135", size: "conjunto", price: 63.70 }],
-    image: "espana/conjunto-maquillaje-artistry-ever-perfect-103.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-103-hd.webp",
   },
   {
     id: "art-ep-conjunto-maquillaje",
@@ -687,7 +687,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341133", size: "conjunto", price: 63.70 }],
-    image: "espana/art-ep-conjunto-maquillaje.webp",
+    image: "espana/art-ep-conjunto-maquillaje-hd.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-102",
@@ -698,7 +698,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341134", size: "conjunto", price: 63.70 }],
-    image: "espana/conjunto-maquillaje-artistry-ever-perfect-102.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-102-hd.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-201",
@@ -709,7 +709,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341136", size: "conjunto", price: 63.70 }],
-    image: "espana/conjunto-maquillaje-artistry-ever-perfect-201.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-201-hd.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-202",
@@ -720,7 +720,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341137", size: "conjunto", price: 63.70 }],
-    image: "espana/conjunto-maquillaje-artistry-ever-perfect-202.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-202-hd.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-203",
@@ -731,7 +731,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341138", size: "conjunto", price: 63.70 }],
-    image: "espana/conjunto-maquillaje-artistry-ever-perfect-203.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-203-hd.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-301",
@@ -742,7 +742,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341139", size: "conjunto", price: 63.70 }],
-    image: "espana/conjunto-maquillaje-artistry-ever-perfect-301.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-301-hd.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-302",
@@ -753,7 +753,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341140", size: "conjunto", price: 63.70 }],
-    image: "espana/conjunto-maquillaje-artistry-ever-perfect-302.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-302-hd.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-401",
@@ -764,7 +764,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341141", size: "conjunto", price: 63.70 }],
-    image: "espana/conjunto-maquillaje-artistry-ever-perfect-401.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-401-hd.webp",
   },
   {
     id: "conjunto-maquillaje-artistry-ever-perfect-402",
@@ -775,7 +775,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Este conjunto incluye un repuesto y un estuche reutilizable diseñado para reducir los residuos de plástico y ahorrar dinero",
     variants: [{ sku: "341142", size: "conjunto", price: 63.70 }],
-    image: "espana/conjunto-maquillaje-artistry-ever-perfect-402.webp",
+    image: "espana/conjunto-maquillaje-artistry-ever-perfect-402-hd.webp",
   },
   {
     id: "reafirmante-moisturisation-power",
@@ -786,7 +786,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Un conjunto de cuidado de la piel reafirmarnte e hidratante que combate los signos del envejecimiento avanzado.",
     variants: [{ sku: "319402", size: "1 conjunto", price: 209.17 }],
-    image: "espana/reafirmante-moisturisation-power.webp",
+    image: "espana/reafirmante-moisturisation-power-hd.webp",
   },
   {
     id: "regenerador-moisturisation-power",
@@ -797,7 +797,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Un conjunto de cuidado de la piel regenerador e hidratante que actúa las 24 horas, reactivando la capacidad natural de la piel para parecer más joven y saludable.",
     variants: [{ sku: "319400", size: "1 conjunto", price: 201.56 }],
-    image: "espana/regenerador-moisturisation-power.webp",
+    image: "espana/regenerador-moisturisation-power-hd.webp",
   },
   {
     id: "rutina-belleza-saludable-hidratante",
@@ -808,7 +808,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Rutina de Belleza Saludable Hidratante Artistry Skin Nutrition permite mantener una piel juvenil, radiante, suave y fresca.",
     variants: [{ sku: "319392", size: "1 conjunto", price: 147.18 }],
-    image: "espana/rutina-belleza-saludable-hidratante.webp",
+    image: "espana/rutina-belleza-saludable-hidratante-hd.webp",
   },
   {
     id: "rutina-belleza-saludable-reafirmante",
@@ -819,7 +819,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Rutina de Belleza Saludable Reafirmante Artistry Skin Nutrition trata los signos avanzados del envejecimiento, incluidas arrugas profundas.",
     variants: [{ sku: "319398", size: "1 conjunto", price: 207.79 }],
-    image: "espana/rutina-belleza-saludable-reafirmante.webp",
+    image: "espana/rutina-belleza-saludable-reafirmante-hd.webp",
   },
   {
     id: "rutina-belleza-saludable-regeneradora",
@@ -830,7 +830,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Rutina de Belleza Saludable Regeneradora Artistry Skin Nutrition, que contribuye a reducir los primeros signos del envejecimiento y favorece que la piel tenga un aspecto juvenil.",
     variants: [{ sku: "319385", size: "1 conjunto", price: 200.17 }],
-    image: "espana/rutina-belleza-saludable-regeneradora.webp",
+    image: "espana/rutina-belleza-saludable-regeneradora-hd.webp",
   },
   {
     id: "longxevity-crema-ligera",
@@ -852,7 +852,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Repuesto inteligente y sostenible para la Crema suave Artistry LongXevity™, diseñado para reducir los residuos de plástico.",
     variants: [{ sku: "127576", size: "50 g", price: 349.52 }],
-    image: "espana/crema-suave-artistry-longxevity-repuesto.webp",
+    image: "espana/crema-suave-artistry-longxevity-repuesto-hd.webp",
   },
   {
     id: "art-gv-rubor",
@@ -863,8 +863,8 @@ export const bellezaProducts: Product[] = [
     description:
       "Un dúo de coloretes ligeros y duraderos que permite conseguir infinitos looks de múltiples acabados.",
     variants: [
-      { sku: "127473", size: "Pink Spring Fling", price: 43.70, image: "espana/tonos/127473.webp" },
-      { sku: "127474", size: "Mauvy Night", price: 43.70, image: "espana/tonos/127474.webp" },
+      { sku: "127473", size: "Pink Spring Fling", price: 43.70, image: "espana/tonos/127473-hd.webp" },
+      { sku: "127474", size: "Mauvy Night", price: 43.70, image: "espana/tonos/127474-hd.webp" },
     ],
     image: "art-gv-rubor.webp",
   },
@@ -877,7 +877,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Un aceite facial ligero de origen vegetal en un 99 %, repleto de ácidos grasos omega esenciales para tu piel.",
     variants: [{ sku: "128047", size: "20 ml", price: 57.55 }],
-    image: "espana/art-gotas-omega.webp",
+    image: "espana/art-gotas-omega-hd.webp",
   },
   {
     id: "kit-viaje-hidratante",
@@ -888,7 +888,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Suministro para dos semanas de 3 productos para mantener tu piel hidratada, tersa y húmeda, al tiempo que te ayuda a resistir ante los signos prematuros de la edad, y ¡perfecto para viajar!",
     variants: [{ sku: "123804", size: "1 conjunto", price: 61.36 }],
-    image: "espana/kit-viaje-hidratante.webp",
+    image: "espana/kit-viaje-hidratante-hd.webp",
   },
   {
     id: "kit-viaje-reafirmante",
@@ -899,7 +899,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Suministro de 3 productos para reafirmar, suavizar y luchar contra el aspecto de los signos avanzados de la edad, como las arrugas profundas y la flacidez, y ¡perfecto para viajar!",
     variants: [{ sku: "123789", size: "1 conjunto", price: 61.36 }],
-    image: "espana/kit-viaje-reafirmante.webp",
+    image: "espana/kit-viaje-reafirmante-hd.webp",
   },
   {
     id: "kit-viaje-regenerador",
@@ -910,7 +910,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Suministro para dos semanas de 3 productos para mantener tu piel bien nutrida y reparar el aspecto de los signos de tempranos a moderados de la edad, como las finas líneas y las arrugas, y ¡perfecto para viajar!",
     variants: [{ sku: "123790", size: "1 conjunto", price: 61.36 }],
-    image: "espana/kit-viaje-regenerador.webp",
+    image: "espana/kit-viaje-regenerador-hd.webp",
   },
   {
     id: "art-gv-lapiz-delineador",
@@ -921,8 +921,8 @@ export const bellezaProducts: Product[] = [
     description:
       "Disfruta de color duradero de alta intensidad y alto impacto, y mima tus ojos con vitaminas, aceites botánicos e ingredientes de origen natural.",
     variants: [
-      { sku: "126741", size: "Natural Brown", price: 25.43, image: "espana/tonos/126741.webp" },
-      { sku: "126744", size: "Natural Black", price: 25.43, image: "espana/tonos/126744.webp" },
+      { sku: "126741", size: "Natural Brown", price: 25.43, image: "espana/tonos/126741-hd.webp" },
+      { sku: "126744", size: "Natural Black", price: 25.43, image: "espana/tonos/126744-hd.webp" },
     ],
     image: "art-gv-lapiz-delineador.webp",
   },
@@ -977,7 +977,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Una mascarilla refrescante que vigoriza la piel de aspecto apagado y revela una luminosidad visible tras una sola aplicación.",
     variants: [{ sku: "128276", size: "5 unidades", price: 47.62 }],
-    image: "espana/art-mascarilla-vitamin-c.webp",
+    image: "espana/art-mascarilla-vitamin-c-hd.webp",
   },
   {
     id: "mascarilla-lamina-hidratante-omega-plus-artistry",
@@ -988,7 +988,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Una mascarilla ultrasuave que proporciona un aumento instantáneo de la hidratación y comodidad duradera en la piel.",
     variants: [{ sku: "128275", size: "5 mascarillas (22 ml cada una)", price: 32.70 }],
-    image: "espana/mascarilla-lamina-hidratante-omega-plus-artistry.webp",
+    image: "espana/mascarilla-lamina-hidratante-omega-plus-artistry-hd.webp",
   },
   {
     id: "art-gv-rimel-longitud",
@@ -1010,9 +1010,9 @@ export const bellezaProducts: Product[] = [
     description:
       "Sombra de ojos cuádruple con tonos de pigmentos intensos y fórmulas idóneas para los párpados que permiten conseguir looks versátiles.",
     variants: [
-      { sku: "126736", size: "Golden Harvest", price: 61.04, image: "espana/tonos/126736.webp" },
-      { sku: "126737", size: "Peach Basket", price: 61.04, image: "espana/tonos/126737.webp" },
-      { sku: "126738", size: "Berry Garden", price: 61.04, image: "espana/tonos/126738.webp" },
+      { sku: "126736", size: "Golden Harvest", price: 61.04, image: "espana/tonos/126736-hd.webp" },
+      { sku: "126737", size: "Peach Basket", price: 61.04, image: "espana/tonos/126737-hd.webp" },
+      { sku: "126738", size: "Berry Garden", price: 61.04, image: "espana/tonos/126738-hd.webp" },
     ],
     image: "art-gv-sombras.webp",
   },
@@ -1051,7 +1051,7 @@ export const bellezaProducts: Product[] = [
       { sku: "127467", size: "Light to Medium", price: 48.96 },
       { sku: "127468", size: "Medium To Deep", price: 48.96 },
     ],
-    image: "espana/art-ep-polvo-fijador.webp",
+    image: "espana/art-ep-polvo-fijador-hd.webp",
   },
   {
     id: "pro-retinol-artistry-labs",
@@ -1073,16 +1073,16 @@ export const bellezaProducts: Product[] = [
     description:
       "Polvo ligero como el aire que no reseca (el estuche se vende por separado). Controla la grasa todo el día y proporciona un acabado difuminado mate.",
     variants: [
-      { sku: "127832", size: "101 Shell", price: 35.35, image: "espana/tonos/127832.webp" },
-      { sku: "127833", size: "102 Cashmere", price: 35.35, image: "espana/tonos/127833.webp" },
-      { sku: "127834", size: "103 Ivory", price: 35.35, image: "espana/tonos/127834.webp" },
-      { sku: "127835", size: "201 Beige", price: 35.35, image: "espana/tonos/127835.webp" },
-      { sku: "127836", size: "202 Bamboo", price: 35.35, image: "espana/tonos/127836.webp" },
-      { sku: "127837", size: "203 Honey", price: 35.35, image: "espana/tonos/127837.webp" },
-      { sku: "127838", size: "301 Biscotti", price: 35.35, image: "espana/tonos/127838.webp" },
-      { sku: "127839", size: "302 Almond", price: 35.35, image: "espana/tonos/127839.webp" },
-      { sku: "127841", size: "401 Mocha", price: 35.35, image: "espana/tonos/127841.webp" },
-      { sku: "127842", size: "402 Nutmeg", price: 35.35, image: "espana/tonos/127842.webp" },
+      { sku: "127832", size: "101 Shell", price: 35.35, image: "espana/tonos/127832-hd.webp" },
+      { sku: "127833", size: "102 Cashmere", price: 35.35, image: "espana/tonos/127833-hd.webp" },
+      { sku: "127834", size: "103 Ivory", price: 35.35, image: "espana/tonos/127834-hd.webp" },
+      { sku: "127835", size: "201 Beige", price: 35.35, image: "espana/tonos/127835-hd.webp" },
+      { sku: "127836", size: "202 Bamboo", price: 35.35, image: "espana/tonos/127836-hd.webp" },
+      { sku: "127837", size: "203 Honey", price: 35.35, image: "espana/tonos/127837-hd.webp" },
+      { sku: "127838", size: "301 Biscotti", price: 35.35, image: "espana/tonos/127838-hd.webp" },
+      { sku: "127839", size: "302 Almond", price: 35.35, image: "espana/tonos/127839-hd.webp" },
+      { sku: "127841", size: "401 Mocha", price: 35.35, image: "espana/tonos/127841-hd.webp" },
+      { sku: "127842", size: "402 Nutmeg", price: 35.35, image: "espana/tonos/127842-hd.webp" },
     ],
     image: "art-ep-base-polvo.webp",
   },
@@ -1106,7 +1106,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Favorece la regeneración de tu piel por la noche con productos seleccionados para el cuidado de la piel y cuidado del cuerpo.",
     variants: [{ sku: "321906", size: "1 conjunto", price: 167.18 }],
-    image: "espana/art-beauty-sleep.webp",
+    image: "espana/art-beauty-sleep-hd.webp",
   },
   {
     id: "art-fg-corrector",
@@ -1135,7 +1135,7 @@ export const bellezaProducts: Product[] = [
     description:
       "Un sérum ligero que unifica el tono de piel y ayuda a reducir las manchas oscuras.",
     variants: [{ sku: "126220", size: "30 ml", price: 113.06 }],
-    image: "espana/serum-iluminador-artistry-labs.webp",
+    image: "espana/serum-iluminador-artistry-labs-hd.webp",
   },
   {
     id: "art-labs-suero-retexturizador",

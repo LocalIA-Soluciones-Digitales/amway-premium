@@ -22,7 +22,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Cómodos gránulos de magnesio que se disuelven en la boca sin necesidad de agua.",
     variants: [{ sku: "121062", size: "30 sobres", price: 14.62 }],
-    image: "espana/xs-magnesio.webp",
+    image: "espana/xs-magnesio-hd.webp",
   },
   {
     id: "xs-enfoque-energia",
@@ -33,7 +33,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Descubre Rhodiola Plus XS™, un complemento alimenticio en comprimidos muy efectivos que contiene 4 concentrados vegetales naturales más vitamina C.",
     variants: [{ sku: "101593", size: "60 comprimidos", price: 37.87 }],
-    image: "espana/xs-enfoque-energia.webp",
+    image: "espana/xs-enfoque-energia-hd.webp",
   },
   {
     id: "xs-power-drink-naranja",
@@ -44,7 +44,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "El refrescante nuevo sabor sin azúcares y bajo en calorías de XS™ Power Drink Orange Kumquat Blast",
     variants: [{ sku: "122109", size: "12 latas de 250 ml", price: 32.35 }],
-    image: "espana/xs-power-drink-naranja.webp",
+    image: "espana/xs-power-drink-naranja-hd.webp",
   },
   {
     id: "xs-power-drink-pomelo",
@@ -55,7 +55,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Bebida Power Drink Pink Grapefruit Blast – Sabor Pomelo XS™.",
     variants: [{ sku: "119802", size: "12 latas de 250 ml", price: 32.35 }],
-    image: "espana/xs-power-drink-pomelo.webp",
+    image: "espana/xs-power-drink-pomelo-hd.webp",
   },
   {
     id: "xs-high-protein-shake",
@@ -66,7 +66,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Batido todo en uno rico en nutrientes con sabor a chocolate negro, con fórmula equilibrada 40-30-30, diseñado en exclusiva para el Nutrilite™ Energy Program.",
     variants: [{ sku: "321579", size: "14 × 67,1 g", price: 67.31 }],
-    image: "espana/xs-high-protein-shake.webp",
+    image: "espana/xs-high-protein-shake-hd.webp",
   },
   {
     id: "xs-power-drink-baya-silvestre",
@@ -77,7 +77,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Prepárate para cargar las pilas con el nuevo XS™ Power Drink Wild Berry Blast - Sabor Baya Silvestre",
     variants: [{ sku: "118766", size: "12 latas de 250 ml", price: 32.35 }],
-    image: "espana/xs-power-drink-baya-silvestre.webp",
+    image: "espana/xs-power-drink-baya-silvestre-hd.webp",
   },
   {
     id: "xs-bebida-rehidratante",
@@ -88,7 +88,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Mantén la forma a un nivel óptimo. Experimenta un nuevo nivel de rehidratación con una bebida deportiva avanzada que mejora el rendimiento. Perfecta para reponer los electrolitos durante el entrenamiento.",
     variants: [{ sku: "121604", size: "15 sobres", price: 26.44 }],
-    image: "espana/xs-bebida-rehidratante.webp",
+    image: "espana/xs-bebida-rehidratante-hd.webp",
   },
   {
     id: "xs-proteina-hidrolizada",
@@ -99,7 +99,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Recupérate rápidamente, ayuda a tus músculos y prepárate para tu próxima aventura.",
     variants: [{ sku: "121606", size: "700 g", price: 77.32 }],
-    image: "espana/xs-proteina-hidrolizada.webp",
+    image: "espana/xs-proteina-hidrolizada-hd.webp",
   },
   {
     id: "barrita-high-protein-energy-bar-cafe",
@@ -110,7 +110,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Barrita de sabor a café con alto contenido de proteínas y colágeno para ayudarte durante el día como parte del Nutrilite™ Energy Program.",
     variants: [{ sku: "341520", size: "14 barritas x 50 g cada una / 700 g", price: 53.27 }],
-    image: "espana/barrita-high-protein-energy-bar-cafe.webp",
+    image: "espana/barrita-high-protein-energy-bar-cafe-hd.webp",
   },
   {
     id: "barritas-xs-high-protein-energy-bar",
@@ -121,7 +121,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Barrita con alto contenido de proteínas y sabor a coco, con colágeno hidrolizado y sirope de agave.",
     variants: [{ sku: "127731", size: "14 barritas", price: 53.27 }],
-    image: "espana/barritas-xs-high-protein-energy-bar.webp",
+    image: "espana/barritas-xs-high-protein-energy-bar-hd.webp",
   },
   {
     id: "xs-barrita-proteinas",
@@ -132,7 +132,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "La combinación definitiva de una potente dosis de proteínas para un mejor crecimiento y desarrollo del músculo magro.",
     variants: [{ sku: "121608", size: "12 barritas", price: 47.09 }],
-    image: "espana/xs-barrita-proteinas.webp",
+    image: "espana/xs-barrita-proteinas-hd.webp",
   },
   {
     id: "xs-high-protein-bar",
@@ -143,7 +143,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Barrita con alto contenido de proteínas, con colágeno hidrolizado y sirope de agave.",
     variants: [{ sku: "127730", size: "14 barritas", price: 53.27 }],
-    image: "espana/xs-high-protein-bar.webp",
+    image: "espana/xs-high-protein-bar-hd.webp",
   },
   {
     id: "batido-high-protein-energy-shake-cappuccino",
@@ -154,7 +154,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Batido de sabor a cappuccino, rico en proteínas y con vitaminas del grupo B, que favorece la energía como parte del Nutrilite™ Energy Program.",
     variants: [{ sku: "342052", size: "sobre (68,2 g); 14 sobres/caja", price: 73.79 }],
-    image: "espana/batido-high-protein-energy-shake-cappuccino.webp",
+    image: "espana/batido-high-protein-energy-shake-cappuccino-hd.webp",
   },
   {
     id: "bebida-focus-power-drink-melocoton-guayaba",
@@ -165,7 +165,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Una bebida power drink funcional sin azúcar, con sabor a melocotón y guayaba y con cafeína natural procedente de granos de café verde, combinada con ginseng, vitaminas del grupo B y magnesio.",
     variants: [{ sku: "342214", size: "12 latas de 250 ml", price: 40.37 }],
-    image: "espana/bebida-focus-power-drink-melocoton-guayaba.webp",
+    image: "espana/bebida-focus-power-drink-melocoton-guayaba-hd.webp",
   },
   {
     id: "xs-power-drink-ginger",
@@ -187,7 +187,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Fórmula sin sabor que favorece tu cuerpo¹⁻² y tu mente³ todos los días y en cada etapa de la vida.",
     variants: [{ sku: "128619", size: "264 g de polvo, 60 raciones, 4,4 g por ración", price: 55.99 }],
-    image: "espana/creatine-plus-xs.webp",
+    image: "espana/creatine-plus-xs-hd.webp",
   },
   {
     id: "xs-power-water",
@@ -209,7 +209,7 @@ export const xsEnergyProducts: Product[] = [
     description:
       "La combinación definitiva de una potente dosis de proteínas para un mejor crecimiento y desarrollo del músculo magro.",
     variants: [{ sku: "121609", size: "12 barritas", price: 47.09 }],
-    image: "espana/barrita-proteinas-xs-caramelo-vainilla.webp",
+    image: "espana/barrita-proteinas-xs-caramelo-vainilla-hd.webp",
   },
   {
     id: "xs-bebida-pre-entrenamiento",
@@ -220,6 +220,6 @@ export const xsEnergyProducts: Product[] = [
     description:
       "Aporta una fuente esencial de energía antes del ejercicio con su especial Triple Combinación Energética.",
     variants: [{ sku: "121602", size: "15 sobres", price: 43.38 }],
-    image: "espana/xs-bebida-pre-entrenamiento.webp",
+    image: "espana/xs-bebida-pre-entrenamiento-hd.webp",
   },
 ];

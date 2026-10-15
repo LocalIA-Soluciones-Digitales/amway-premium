@@ -11,7 +11,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Favorece la función normal de la visión¹, el corazón² y cerebro³ con Nutrilite™ Omega-3 Triple Strength, formulado con tecnología AquaCelle®⁴ para lograr una mejor absorción. ¹El ácido docosahexaenoico contribuye al mantenimiento de una visión normal. Este efecto beneficioso se obtiene con la ingesta diaria de 250 mg de ácido docosahexaenoico. ²El ácido eicosapentaenoico y el ácido docosahexaenoico contribuyen al funcionamiento normal del corazón. Este efecto beneficioso se obtiene con la ingesta diaria de 250 mg de ácido eicosapentaenoico y ácido docosahexaenoico. ³El ácido docosahexaenoico contribuye a mantener el funcionamiento normal del cerebro. Este efecto beneficioso se obtiene con la ingesta diaria de 250 mg de ácido docosahexaenoico. 4 AquaCelle® es una marca registrada de Pharmako Biotechnologies Pty Ltd.",
     variants: [{ sku: "126132", size: "30 cápsulas", price: 27.98 }],
-    image: "espana/omega-nutrilite.webp",
+    image: "espana/omega-nutrilite-hd.webp",
   },
   {
     id: "repuesto-nutrilite-double-x",
@@ -22,7 +22,7 @@ export const nutricionProducts: Product[] = [
     description:
       "DOUBLE X NUTRILITE es un potente complemento multivitamínico y multimineral con fitonutrientes enriquecido con PhytoBlend™, una mezcla especial de 22 plantas y fitonutrientes procedentes de los 5 grupos de colores que aporta a tu cuerpo un apoyo demostrado científicamente.",
     variants: [{ sku: "292409", size: "372 comprimidos", price: 159.32 }],
-    image: "espana/repuesto-nutrilite-double-x.webp",
+    image: "espana/repuesto-nutrilite-double-x-hd.webp",
   },
   {
     id: "vitamina-c-plus-tamano-familiar-nutrilite",
@@ -33,7 +33,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento de vitamina C sumamente eficaz, diseñado para liberar vitamina C de forma lenta y continua.",
     variants: [{ sku: "109743", size: "180 comprimidos", price: 59.04 }],
-    image: "espana/vitamina-c-plus-tamano-familiar-nutrilite.webp",
+    image: "espana/vitamina-c-plus-tamano-familiar-nutrilite-hd.webp",
   },
   {
     id: "balance-within",
@@ -44,7 +44,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Un complemento alimenticio fácil de usar que puede proporcionarle una ayuda invisible a tu sistema inmunitario gracias a dos tipos de vitamina B**. **La vitamina B6 y el ácido fólico (vitamina B9) contribuyen al funcionamiento normal del sistema inmunitario.",
     variants: [{ sku: "120571", size: "30 sobres", price: 49.72 }],
-    image: "espana/balance-within.webp",
+    image: "espana/balance-within-hd.webp",
   },
   {
     id: "proteina-vegetal",
@@ -55,7 +55,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Preparado alimenticio que proporciona proteína 100 % natural.",
     variants: [{ sku: "110415", size: "450 g", price: 45.83 }],
-    image: "espana/proteina-vegetal.webp",
+    image: "espana/proteina-vegetal-hd.webp",
   },
   {
     id: "cal-mag-d",
@@ -66,7 +66,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio que contiene 3 nutrientes extraídos de fuentes naturales: calcio, magnesio y vitamina D.",
     variants: [{ sku: "110606", size: "180 comprimidos", price: 29.71 }],
-    image: "espana/cal-mag-d.webp",
+    image: "espana/cal-mag-d-hd.webp",
   },
   {
     id: "cotidiano",
@@ -77,7 +77,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio multivitamínico de consumo diario con 20 vitaminas y minerales esenciales y 4 extractos botánicos para favorecer múltiples objetivos de bienestar.",
     variants: [{ sku: "125167", size: "90 comprimidos", price: 42.14 }],
-    image: "espana/cotidiano.webp",
+    image: "espana/cotidiano-hd.webp",
   },
   {
     id: "vitamina-b-plus",
@@ -88,7 +88,7 @@ export const nutricionProducts: Product[] = [
     description:
       "El complemento alimenticio Vitamina B Plus NUTRILITE™ es un comprimido de acción dual, que combina una liberación instantánea con 8 horas de liberación prolongada, y contiene espirulina y 8 vitaminas esenciales del grupo B.",
     variants: [{ sku: "110178", size: "60 comprimidos", price: 22.06 }],
-    image: "espana/vitamina-b-plus.webp",
+    image: "espana/vitamina-b-plus-hd.webp",
   },
   {
     id: "cardo-mariano",
@@ -99,7 +99,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Cardo Mariano Nutrilite favorece el funcionamiento y la salud del hígado.",
     variants: [{ sku: "101831", size: "60 comprimidos", price: 49.52 }],
-    image: "espana/cardo-mariano.webp",
+    image: "espana/cardo-mariano-hd.webp",
   },
   {
     id: "vitamina-d",
@@ -110,7 +110,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Este complemento alimenticio con vitamina D procedente de fuentes naturales, contribuye al mantenimiento normal de huesos y dientes, a la función de los músculos y a las funciones normales del sistema inmunológico.",
     variants: [{ sku: "119797", size: "90 comprimidos", price: 22.97 }],
-    image: "espana/vitamina-d.webp",
+    image: "espana/vitamina-d-hd.webp",
   },
   {
     id: "fibra-polvo",
@@ -121,7 +121,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio en forma de polvo, que contiene una mezcla de tres fibras solubles.",
     variants: [{ sku: "102736", size: "30 sobres", price: 43.74 }],
-    image: "espana/fibra-polvo.webp",
+    image: "espana/fibra-polvo-hd.webp",
   },
   {
     id: "vision-plus",
@@ -132,7 +132,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento para la salud ocular cuyos nutrientes esenciales (cinc y vitamina A) favorecen el mantenimiento de la visión en condiciones normales*. Con 4 carotenoides de fuentes naturales y cinc. *La vitamina A (beta-caroteno) y el cinc contribuyen al mantenimiento de la visión en condiciones normales.",
     variants: [{ sku: "124321", size: "60 cápsulas", price: 42.37 }],
-    image: "espana/vision-plus.webp",
+    image: "espana/vision-plus-hd.webp",
   },
   {
     id: "zinc-selenio",
@@ -143,7 +143,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Un aporte instantáneo de zinc y selenio que favorece tu sistema inmunitario*, cabello** y piel*** en un formato cómodo para consumo sobre la marcha. *El zinc y el selenio contribuyen al funcionamiento normal del sistema inmunitario. **El zinc y el selenio contribuyen al mantenimiento del cabello en condiciones normales. ***El zinc contribuye a mantener la piel en condiciones normales.",
     variants: [{ sku: "126811", size: "30 sobres", price: 23.50 }],
-    image: "espana/zinc-selenio.webp",
+    image: "espana/zinc-selenio-hd.webp",
   },
   {
     id: "double-x",
@@ -154,7 +154,7 @@ export const nutricionProducts: Product[] = [
     description:
       "DOUBLE X NUTRILITE es un potente complemento multivitamínico y multimineral con fitonutrientes enriquecido con PhytoBlend™, una mezcla especial de 22 plantas y fitonutrientes procedentes de los 5 grupos de colores que aporta a tu cuerpo un apoyo demostrado científicamente.",
     variants: [{ sku: "121576", size: "186 comprimidos", price: 86.87 }],
-    image: "espana/double-x.webp",
+    image: "espana/double-x-hd.webp",
     flagship: "nutrilite",
   },
   {
@@ -166,7 +166,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Se estima que el producto estará disponible en la semana del 22 al 26 de febrero. Complemento alimenticio que contiene biotina y vitamina C que ayudan a mantener un cabello y piel normal.",
     variants: [{ sku: "100305", size: "90 comprimidos", price: 24.04 }],
-    image: "espana/biotina-c-plus.webp",
+    image: "espana/biotina-c-plus-hd.webp",
   },
   {
     id: "multivitaminico-ninos",
@@ -177,7 +177,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento masticable y con sabor a naranja que proporciona vitaminas, minerales y betacaroteno.",
     variants: [{ sku: "100930", size: "120 comprimidos", price: 33.18 }],
-    image: "espana/multivitaminico-ninos.webp",
+    image: "espana/multivitaminico-ninos-hd.webp",
   },
   {
     id: "concentrado-frutas-verduras",
@@ -188,7 +188,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio que proporciona fitonutrientes extraídos de frutas y verduras.",
     variants: [{ sku: "100296", size: "60 comprimidos", price: 38.71 }],
-    image: "espana/concentrado-frutas-verduras.webp",
+    image: "espana/concentrado-frutas-verduras-hd.webp",
   },
   {
     id: "aceite-oliva",
@@ -199,7 +199,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Aceite de oliva de categoría superior obtenido directamente de la primera prensada de aceitunas realizada por medios mecánicos.",
     variants: [{ sku: "3963", size: "2 × 750 ml", price: 43.68 }],
-    image: "espana/aceite-oliva.webp",
+    image: "espana/aceite-oliva-hd.webp",
   },
   {
     id: "apoyo-inmunitario-ninos-conjunto",
@@ -210,7 +210,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complementa la dieta diaria de tus hijos con vitaminas esenciales, cinc y ácidos grasos omega-3 con sabores deliciosos que les encantarán.",
     variants: [{ sku: "308133", size: "1 conjunto", price: 72.01 }],
-    image: "espana/apoyo-inmunitario-ninos-conjunto.webp",
+    image: "espana/apoyo-inmunitario-ninos-conjunto-hd.webp",
   },
   {
     id: "inmunidad-ninos-polvo",
@@ -221,7 +221,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Apoya el sistema inmunitario de tus hijos con vitamina D*, en un práctico producto 4 en 1 que encanta a los niños y a las madres. * La vitamina D contribuye al funcionamiento normal del sistema inmunitario en los niños.",
     variants: [{ sku: "123046", size: "30 sobres", price: 47.47 }],
-    image: "espana/inmunidad-ninos-polvo.webp",
+    image: "espana/inmunidad-ninos-polvo-hd.webp",
   },
   {
     id: "appetite-controller",
@@ -232,7 +232,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio con glucomanano que te ayuda a controlar tu peso y a combatir los impulsos de comer en exceso.",
     variants: [{ sku: "119792", size: "30 sobres", price: 46.86 }],
-    image: "espana/appetite-controller.webp",
+    image: "espana/appetite-controller-hd.webp",
   },
   {
     id: "bodykey-barrita",
@@ -265,7 +265,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Batido de chocolate bodykey",
     variants: [{ sku: "116660", size: "14 × 26,5 g", price: 54.52 }],
-    image: "espana/bodykey-batido.webp",
+    image: "espana/bodykey-batido-hd.webp",
   },
   {
     id: "batido-cremoso-equilibrado-bodykey-by-nutrilite",
@@ -276,7 +276,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Batido de vainilla bodykey",
     variants: [{ sku: "116661", size: "14 × 23,5 g", price: 54.52 }],
-    image: "espana/batido-cremoso-equilibrado-bodykey-by-nutrilite.webp",
+    image: "espana/batido-cremoso-equilibrado-bodykey-by-nutrilite-hd.webp",
   },
   {
     id: "be-focused",
@@ -287,7 +287,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Las gominolas Nutrilite™ Be Focused son un delicioso complemento alimenticio con sabor a frutas tropicales y naranja que contiene vitaminas B6 y B12, que apoyan el sistema nervioso y una función psicológica normal. También contiene guaraná procedente de una granja ecológica de Brasil",
     variants: [{ sku: "126150", size: "60 gominolas", price: 29.70 }],
-    image: "espana/be-focused.webp",
+    image: "espana/be-focused-hd.webp",
   },
   {
     id: "nutrilite-beauty-powder-drink",
@@ -298,7 +298,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Apoya tu piel y la producción de colágeno con NutriliteTM Beauty Powder Drink, un nutricosmético que contiene vitamina C y zinc.",
     variants: [{ sku: "128148", size: "30 sobres", price: 46.36 }],
-    image: "espana/nutrilite-beauty-powder-drink.webp",
+    image: "espana/nutrilite-beauty-powder-drink-hd.webp",
   },
   {
     id: "nutrilite-beauty-supplement",
@@ -309,7 +309,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Apoya tu piel y la producción de colágeno con Nutrilite™ Beauty Supplement, un nutricosmético que contiene vitamina A, C y zinc.",
     variants: [{ sku: "128149", size: "60 comprimidos", price: 83.70 }],
-    image: "espana/nutrilite-beauty-supplement.webp",
+    image: "espana/nutrilite-beauty-supplement-hd.webp",
   },
   {
     id: "beauty-you-glow",
@@ -320,7 +320,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Nutrilite™ Beauty You Glow. Un complemento en formato de gominola con delicioso sabor a mezcla de bayas diseñado para que lo integres en tu rutina de belleza, gracias a su contenido de vitaminas A, C y E, biotina y selenio. Apoyo 3 en 1 para la piel, el cabello y las uñas. También contiene ácido hialurónico, colágeno y granada.",
     variants: [{ sku: "308613", size: "60 comprimidos", price: 33.37 }],
-    image: "espana/beauty-you-glow.webp",
+    image: "espana/beauty-you-glow-hd.webp",
   },
   {
     id: "begin-blend-nutrilite",
@@ -331,7 +331,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Nutrilite™ Begin Blend prepara tu intestino para todo el día¹",
     variants: [{ sku: "128195", size: "177 g / Suministro para 30 días", price: 70.21 }],
-    image: "espana/begin-blend-nutrilite.webp",
+    image: "espana/begin-blend-nutrilite-hd.webp",
   },
   {
     id: "cafe-filtro",
@@ -342,7 +342,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Café de filtro preparado con granos de café Arábica 100 %.",
     variants: [{ sku: "100180", size: "4 × 250 g", price: 37.44 }],
-    image: "espana/cafe-filtro.webp",
+    image: "espana/cafe-filtro-hd.webp",
   },
   {
     id: "cafe-grano",
@@ -353,7 +353,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Café en grano 100% arábica de primera calidad procedente de los países productores de café más prestigiosos del mundo.",
     variants: [{ sku: "100181", size: "4 × 250 g", price: 42.68 }],
-    image: "espana/cafe-grano.webp",
+    image: "espana/cafe-grano-hd.webp",
   },
   {
     id: "cafe-molido-expres",
@@ -364,7 +364,7 @@ export const nutricionProducts: Product[] = [
     description:
       "El molido fino de este café para espresso proporciona un tiempo de elaboración muy rápido con una buena consistencia.",
     variants: [{ sku: "100209", size: "4 × 250 g", price: 38.65 }],
-    image: "espana/cafe-molido-expres.webp",
+    image: "espana/cafe-molido-expres-hd.webp",
   },
   {
     id: "cafe-amway",
@@ -375,7 +375,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Café instantáneo desecado por congelación, preparado con granos de café Arábica 100 %.",
     variants: [{ sku: "100257", size: "4 × 100 g", price: 42.59 }],
-    image: "espana/cafe-amway.webp",
+    image: "espana/cafe-amway-hd.webp",
   },
   {
     id: "calcio-magnesio-masticable",
@@ -386,7 +386,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio con sabor afrutado que contiene calcio y magnesio, para niños y adultos.",
     variants: [{ sku: "5847", size: "80 comprimidos", price: 16.91 }],
-    image: "espana/calcio-magnesio-masticable.webp",
+    image: "espana/calcio-magnesio-masticable-hd.webp",
   },
   {
     id: "cant-stop-wont-stop",
@@ -397,7 +397,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Nutrilite™ Can’t Stop, Won’t Stop™. Un complemento alimenticio con delicioso sabor a melocotón en formato de sobre que contiene vitaminas B1, B6, B12 y C y magnesio para aportarte energía.",
     variants: [{ sku: "308612", size: "15 sobres", price: 16.84 }],
-    image: "espana/cant-stop-wont-stop.webp",
+    image: "espana/cant-stop-wont-stop-hd.webp",
   },
   {
     id: "masa-magra",
@@ -408,7 +408,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio que contiene ácido linoleico conjugado (CLA), derivado del aceite de cártamo.",
     variants: [{ sku: "100280", size: "180 cápsulas", price: 80.56 }],
-    image: "espana/masa-magra.webp",
+    image: "espana/masa-magra-hd.webp",
   },
   {
     id: "coq10",
@@ -419,7 +419,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio con coenzima Q10.",
     variants: [{ sku: "0191", size: "60 cápsulas", price: 53.94 }],
-    image: "espana/coq10.webp",
+    image: "espana/coq10-hd.webp",
   },
   {
     id: "nutrilite-oxibeauty",
@@ -430,7 +430,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Protege las células de tu piel del daño oxidativo con el Conjunto Nutrilite™ OxiBeauty™, que incluye OxiBeauty Supplement y OxiBeauty Powder Drink.",
     variants: [{ sku: "114448", size: "1 conjunto", price: 134.66 }],
-    image: "espana/nutrilite-oxibeauty.webp",
+    image: "espana/nutrilite-oxibeauty-hd.webp",
   },
   {
     id: "conjunto-actividad-fisica",
@@ -441,7 +441,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Conjunto Actividad Física.",
     variants: [{ sku: "304955", size: "1 conjunto", price: 68.24 }],
-    image: "espana/conjunto-actividad-fisica.webp",
+    image: "espana/conjunto-actividad-fisica-hd.webp",
   },
   {
     id: "conjunto-apoyo-inmunitario-estacional",
@@ -452,7 +452,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Conjunto de complementos Nutrilite™ para los cambios de estación.",
     variants: [{ sku: "314051", size: "1 conjunto", price: 89.24 }],
-    image: "espana/conjunto-apoyo-inmunitario-estacional.webp",
+    image: "espana/conjunto-apoyo-inmunitario-estacional-hd.webp",
   },
   {
     id: "nutrilite-beauty",
@@ -463,7 +463,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Apoya tu piel y la producción de colágeno con el Conjunto Nutrilite™ Beauty, que incluye Beauty Supplement y Beauty Powder Drink.",
     variants: [{ sku: "114447", size: "1 conjunto", price: 130.06 }],
-    image: "espana/nutrilite-beauty.webp",
+    image: "espana/nutrilite-beauty-hd.webp",
   },
   {
     id: "conjunto-best-age",
@@ -474,7 +474,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Mantente ágil y disfruta cada día al máximo con el nuevo Conjunto Best Age de la marca Nutrilite.",
     variants: [{ sku: "326037", size: "1 conjunto", price: 121.36 }],
-    image: "espana/conjunto-best-age.webp",
+    image: "espana/conjunto-best-age-hd.webp",
   },
   {
     id: "conjunto-bienestar-nutrilite",
@@ -485,7 +485,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Conjunto Bienestar Nutrilite™.",
     variants: [{ sku: "327161", size: "1 conjunto", price: 50.04 }],
-    image: "espana/conjunto-bienestar-nutrilite.webp",
+    image: "espana/conjunto-bienestar-nutrilite-hd.webp",
   },
   {
     id: "body-cleansing-program",
@@ -496,7 +496,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Un componente esencial del Programa de Depuración del Organismo Nutrilite* es este conjunto que contiene productos especialmente seleccionados* de Nutrilite, la marca n.º 1 del mundo en ventas de vitaminas y complementos alimenticios**.",
     variants: [{ sku: "127059", size: "1 conjunto", price: 188.81 }],
-    image: "espana/body-cleansing-program.webp",
+    image: "espana/body-cleansing-program-hd.webp",
   },
   {
     id: "body-cleansing-refill-repuesto",
@@ -507,7 +507,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Un componente esencial del Programa de Depuración del Organismo Nutrilite* es este conjunto que contiene productos especialmente seleccionados* de Nutrilite, la marca n.º 1 del mundo en ventas de vitaminas y complementos alimenticios**. * Con el complemento Cardo Mariano Nutrilite. El Programa de depuración del organismo Nutrilite es un programa holístico de estilo de vida saludable de 21 días que ofrece orientación nutricional, recomendaciones de actividad física, consejos de hidratación y herramientas para una mentalidad positiva. ** Fuente: Euromonitor International Ltd. Vitaminas y Complementos Alimenticios, Word GBN, valor al por menor (precio de venta al por menor), análisis en %, 2022. Datos basados en una investigación adaptada realizada entre abril y agosto de 2022.",
     variants: [{ sku: "317514", size: "1 conjunto", price: 169.93 }],
-    image: "espana/body-cleansing-refill-repuesto.webp",
+    image: "espana/body-cleansing-refill-repuesto-hd.webp",
   },
   {
     id: "conjunto-cotidiano",
@@ -518,7 +518,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio multivitamínico de consumo diario con 20 vitaminas y minerales esenciales y 4 extractos botánicos para favorecer múltiples objetivos de bienestar. 125167 x 2",
     variants: [{ sku: "126624", size: "2 × 90 comprimidos", price: 84.30 }],
-    image: "espana/conjunto-cotidiano.webp",
+    image: "espana/conjunto-cotidiano-hd.webp",
   },
   {
     id: "conjunto-recarga-nutrilite-energy-program-coco",
@@ -529,7 +529,7 @@ export const nutricionProducts: Product[] = [
     description:
       "El Nutrilite™ Energy Program ayuda a mantener la energía durante todo el día con hábitos cotidianos saludables.",
     variants: [{ sku: "343022", size: "1 conjunto", price: 205.31 }],
-    image: "espana/conjunto-recarga-nutrilite-energy-program-coco.webp",
+    image: "espana/conjunto-recarga-nutrilite-energy-program-coco-hd.webp",
   },
   {
     id: "conjunto-recarga-nutrilite-energy-program-cafe",
@@ -540,7 +540,7 @@ export const nutricionProducts: Product[] = [
     description:
       "El Nutrilite™ Energy Program es una solución holística para favorecer la energía durante todo el día",
     variants: [{ sku: "343020", size: "1 conjunto", price: 211.80 }],
-    image: "espana/conjunto-recarga-nutrilite-energy-program-cafe.webp",
+    image: "espana/conjunto-recarga-nutrilite-energy-program-cafe-hd.webp",
   },
   {
     id: "conjunto-recarga-nutrilite-energy-program-chocolate",
@@ -551,7 +551,7 @@ export const nutricionProducts: Product[] = [
     description:
       "El Nutrilite™ Energy Program favorece la energía durante todo el día con actividades y hábitos cotidianos.",
     variants: [{ sku: "343021", size: "1 conjunto", price: 205.31 }],
-    image: "espana/conjunto-recarga-nutrilite-energy-program-chocolate.webp",
+    image: "espana/conjunto-recarga-nutrilite-energy-program-chocolate-hd.webp",
   },
   {
     id: "conjunto-energy-program-nutrilite",
@@ -573,7 +573,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Nutrientes que te apoyan y te ayudan a cuidarte a ti y a tu bebé durante todo el embarazo.",
     variants: [{ sku: "294852", size: "1 conjunto", price: 72.16 }],
-    image: "espana/conjunto-futura-mama.webp",
+    image: "espana/conjunto-futura-mama-hd.webp",
   },
   {
     id: "conjunto-plus-nutrilite",
@@ -584,7 +584,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Conjunto Plus Nutrilite™.",
     variants: [{ sku: "304956", size: "1 conjunto", price: 66.98 }],
-    image: "espana/conjunto-plus-nutrilite.webp",
+    image: "espana/conjunto-plus-nutrilite-hd.webp",
   },
   {
     id: "trio-fundamental",
@@ -595,7 +595,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Trío Fundamental con Cotidiano Nutrilite™, de la lista oficial de Amway España.",
     variants: [{ sku: "326043", size: "1 conjunto", price: 110.16 }],
-    image: "espana/trio-fundamental.webp",
+    image: "espana/trio-fundamental-hd.webp",
   },
   {
     id: "trio-fundamental-double-x",
@@ -606,7 +606,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Trío Fundamental con Nutrilite™ Double X™, de la lista oficial de Amway España.",
     variants: [{ sku: "326041", size: "1 conjunto", price: 152.64 }],
-    image: "espana/trio-fundamental-double-x.webp",
+    image: "espana/trio-fundamental-double-x-hd.webp",
   },
   {
     id: "conjunto-vitalidad",
@@ -617,7 +617,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Ideal para los jóvenes profesionales y los apasionados de la aventura, este exclusivo Conjunto Vitalidad Nutrilite incluye los productos Vitamina C Plus, Omega-3 Triple Strength y Vitamina B Plus Nutrilite.",
     variants: [{ sku: "326042", size: "1 conjunto", price: 70.32 }],
-    image: "espana/conjunto-vitalidad.webp",
+    image: "espana/conjunto-vitalidad-hd.webp",
   },
   {
     id: "conjunto-vitaminas-inmunidad",
@@ -628,7 +628,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Apoya tu sistema inmunitario todas las estaciones del año con las vitaminas1 de este conjunto Nutrilite. 1 Las vitaminas C, B6 y el ácido fólico (B9) contribuyen al funcionamiento normal del sistema inmunitario.",
     variants: [{ sku: "315562", size: "1 conjunto", price: 152.32 }],
-    image: "espana/conjunto-vitaminas-inmunidad.webp",
+    image: "espana/conjunto-vitaminas-inmunidad-hd.webp",
   },
   {
     id: "cotidiano-nutrilite",
@@ -639,7 +639,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio multivitamínico de consumo diario con 20 vitaminas y minerales esenciales y 4 extractos botánicos para favorecer múltiples objetivos de bienestar.",
     variants: [{ sku: "125166", size: "45 comprimidos", price: 22.18 }],
-    image: "espana/cotidiano-nutrilite.webp",
+    image: "espana/cotidiano-nutrilite-hd.webp",
   },
   {
     id: "salud-articulaciones",
@@ -650,7 +650,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio con glucosamina y boswellia (una hierba tradicional de la India).",
     variants: [{ sku: "100108", size: "150 comprimidos", price: 29.40 }],
-    image: "espana/salud-articulaciones.webp",
+    image: "espana/salud-articulaciones-hd.webp",
   },
   {
     id: "hierro-folico",
@@ -661,7 +661,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio que contiene hierro de dos fuentes distintas junto con ácido fólico.",
     variants: [{ sku: "100295", size: "120 comprimidos", price: 16.54 }],
-    image: "espana/hierro-folico.webp",
+    image: "espana/hierro-folico-hd.webp",
   },
   {
     id: "immuno",
@@ -672,7 +672,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Nutrilite™ Immuno son jugosas gominolas con sabor a frambuesa con vitamina C y cinc, que contribuyen al funcionamiento normal de tu sistema inmunitario, y extracto de baya de saúco.",
     variants: [{ sku: "126149", size: "60 comprimidos", price: 26.53 }],
-    image: "espana/immuno.webp",
+    image: "espana/immuno-hd.webp",
   },
   {
     id: "kids-omega-3",
@@ -683,7 +683,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio en comprimidos masticables Kids Omega-3 de NUTRILITE™. Aceite de pescado de alta calidad en un formato delicioso y divertido.",
     variants: [{ sku: "122447", size: "30 comprimidos", price: 28.33 }],
-    image: "espana/kids-omega-3.webp",
+    image: "espana/kids-omega-3-hd.webp",
   },
   {
     id: "lecitina-e",
@@ -694,7 +694,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio con una combinación de vitamina E (de fuentes naturales) y lecitina.",
     variants: [{ sku: "4042", size: "110 comprimidos", price: 21.16 }],
-    image: "espana/lecitina-e.webp",
+    image: "espana/lecitina-e-hd.webp",
   },
   {
     id: "less-stress-more-yes",
@@ -705,7 +705,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Less Stress, More Yes Nutrilite™, complemento alimenticio con vitamina B2, yodo y magnesio, que contribuyen al funcionamiento normal del sistema nervioso.",
     variants: [{ sku: "126148", size: "30 sobres", price: 29.70 }],
-    image: "espana/less-stress-more-yes.webp",
+    image: "espana/less-stress-more-yes-hd.webp",
   },
   {
     id: "pre-postbiotico",
@@ -716,7 +716,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Nutrilite Metabolism* plus aporta dos vitaminas del grupo B que favorecen un metabolismo saludable* * La vitamina B2 (riboflavina) y el ácido pantoténico (vitamina B5) contribuyen al metabolismo energético normal.",
     variants: [{ sku: "127620", size: "60 cápsulas", price: 41.62 }],
-    image: "espana/pre-postbiotico.webp",
+    image: "espana/pre-postbiotico-hd.webp",
   },
   {
     id: "mezclador-bodykey",
@@ -727,7 +727,7 @@ export const nutricionProducts: Product[] = [
     description:
       "bodykey by NUTRILITE™ Shaker",
     variants: [{ sku: "301617", size: "1 unidad", price: 13.61 }],
-    image: "espana/mezclador-bodykey.webp",
+    image: "espana/mezclador-bodykey-hd.webp",
   },
   {
     id: "morning-nutrition",
@@ -738,7 +738,7 @@ export const nutricionProducts: Product[] = [
     description:
       "¡Disfruta de cada mañana con los nutrientes esenciales para fomentar tu bienestar!",
     variants: [{ sku: "326812", size: "1 conjunto", price: 176.42 }],
-    image: "espana/morning-nutrition.webp",
+    image: "espana/morning-nutrition-hd.webp",
   },
   {
     id: "morning-nutrition-repuesto-nutrilite",
@@ -749,7 +749,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Eleva tu rutina mañanera con nutrientes esenciales en un formato de repuesto más sostenible.",
     variants: [{ sku: "128617", size: "1 conjunto", price: 169.24 }],
-    image: "espana/morning-nutrition-repuesto-nutrilite.webp",
+    image: "espana/morning-nutrition-repuesto-nutrilite-hd.webp",
   },
   {
     id: "multicaroteno",
@@ -760,7 +760,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio con betacaroteno, alfacaroteno y luteína.",
     variants: [{ sku: "109538", size: "90 comprimidos", price: 36.59 }],
-    image: "espana/multicaroteno.webp",
+    image: "espana/multicaroteno-hd.webp",
   },
   {
     id: "organizador-vitaminas",
@@ -771,7 +771,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Pastillero Nutrilite™ para organizar los complementos de la semana.",
     variants: [{ sku: "111661", size: "1 unidad", price: 7.42 }],
-    image: "espana/organizador-vitaminas.webp",
+    image: "espana/organizador-vitaminas-hd.webp",
   },
   {
     id: "nutrilite-oxibeauty-powder-drink",
@@ -782,7 +782,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Protege las células de tu piel frente al daño oxidativo1 con Nutrilite™ OxiBeauty™ Powder Drink, un nutricosmético que contiene vitamina E.",
     variants: [{ sku: "128152", size: "30 sobres", price: 47.99 }],
-    image: "espana/nutrilite-oxibeauty-powder-drink.webp",
+    image: "espana/nutrilite-oxibeauty-powder-drink-hd.webp",
   },
   {
     id: "nutrilite-oxibeauty-supplement",
@@ -793,7 +793,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Protege las células de tu piel contra el daño oxidativo¹ con el nutricosmético Nutrilite™ OxiBeauty™ Supplement, cuya fórmula especial ayuda a mantener la resiliencia de la piel.",
     variants: [{ sku: "128151", size: "60 comprimidos", price: 86.68 }],
-    image: "espana/nutrilite-oxibeauty-supplement.webp",
+    image: "espana/nutrilite-oxibeauty-supplement-hd.webp",
   },
   {
     id: "salud-prostata",
@@ -804,7 +804,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento alimenticio con una mezcla de extractos de palma enana y raíz de ortiga.",
     variants: [{ sku: "8004", size: "100 cápsulas", price: 67.14 }],
-    image: "espana/salud-prostata.webp",
+    image: "espana/salud-prostata-hd.webp",
   },
   {
     id: "sleep-easy",
@@ -815,7 +815,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Las gominolas con sabor a cereza Nutrilite™ Sleep Easy contienen melatonina para ayudarte a dormir, además de vitamina B6, manzanilla y lúpulo.",
     variants: [{ sku: "308614", size: "30 comprimidos", price: 21.23 }],
-    image: "espana/sleep-easy.webp",
+    image: "espana/sleep-easy-hd.webp",
   },
   {
     id: "bodykey-te-hierbas",
@@ -826,7 +826,7 @@ export const nutricionProducts: Product[] = [
     description:
       "bodykey herbal tea",
     variants: [{ sku: "116670", size: "25 × 1,8 g", price: 10.39 }],
-    image: "espana/bodykey-te-hierbas.webp",
+    image: "espana/bodykey-te-hierbas-hd.webp",
   },
   {
     id: "vinagre-modena",
@@ -837,7 +837,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Vinagre especial obtenido del mosto de uvas Lambrusco y Trebbiano de la región de Módena en Italia.",
     variants: [{ sku: "200662", size: "500 ml", price: 22.60 }],
-    image: "espana/vinagre-modena.webp",
+    image: "espana/vinagre-modena-hd.webp",
   },
   {
     id: "vitamina-c",
@@ -848,7 +848,7 @@ export const nutricionProducts: Product[] = [
     description:
       "Complemento de vitamina C sumamente eficaz, diseñado para liberar vitamina C de forma lenta y continua.",
     variants: [{ sku: "109741", size: "60 comprimidos", price: 23.98 }],
-    image: "espana/vitamina-c.webp",
+    image: "espana/vitamina-c-hd.webp",
   },
   {
     id: "womens-40-support",
@@ -859,6 +859,6 @@ export const nutricionProducts: Product[] = [
     description:
       "Un complemento alimenticio botánico seguro y eficaz, fabricado con extractos de soja, salvia y azafrán - perfecto como apoyo sobre la marcha. Solo uno al día te ayuda a sentirte de forma óptima durante la perimenopausia y posteriormente. ¹ La salvia favorece el bienestar de las mujeres. La salvia contribuye a disminuir la sudoración nocturna y a moderar la sudoración en general. El azafrán favorece el equilibrio emocional, la relajación y el mantenimiento de un estado de ánimo positivo.",
     variants: [{ sku: "128057", size: "30 comprimidos", price: 52.15 }],
-    image: "espana/womens-40-support.webp",
+    image: "espana/womens-40-support-hd.webp",
   },
 ];

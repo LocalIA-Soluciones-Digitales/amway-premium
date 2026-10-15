@@ -45,7 +45,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Al utilizarla regularmente, la Pasta Dentífrica Multiacción Glister, con agente limpiador de origen natural seguro para el esmalte, blanquea los dientes sin dañarlos, elimina la placa, limpia eficazmente y elimina las manchas suavemente.",
     variants: [{ sku: "124107", size: "50 g", price: 3.44 }],
-    image: "espana/pasta-dentifrica-multiaccion-glister-tamano-viaje.webp",
+    image: "espana/pasta-dentifrica-multiaccion-glister-tamano-viaje-hd.webp",
   },
   {
     id: "glister-spray",
@@ -67,7 +67,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Gel de ducha denso y cremoso que limpia la piel de forma profunda y suave y la nutre con agua de complejo de bambú, ceramida de aceite de oliva y aceite de chía blanca, dejándola suave, tersa y acondicionada.",
     variants: [{ sku: "125890", size: "400 ml", price: 13.16 }],
-    image: "espana/gel-ducha-g-h-nourish.webp",
+    image: "espana/gel-ducha-g-h-nourish-hd.webp",
   },
   {
     id: "gh-jabon-nourish",
@@ -89,7 +89,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Loción corporal densa y suave con ingredientes de origen vegetal que nutren la piel en profundidad y favorecen su barrera de hidratación.",
     variants: [{ sku: "125891", size: "400 ml", price: 19.90 }],
-    image: "espana/gh-locion-nourish.webp",
+    image: "espana/gh-locion-nourish-hd.webp",
   },
   {
     id: "gh-desodorante-spray",
@@ -100,7 +100,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Spray antitranspirante de secado rápido que proporciona protección contra el mal olor y la humedad en las axilas, dejándolas secas y con una sensación de frescor.",
     variants: [{ sku: "125898", size: "200 ml", price: 13.75 }],
-    image: "espana/gh-desodorante-spray.webp",
+    image: "espana/gh-desodorante-spray-hd.webp",
   },
   {
     id: "gh-desodorante-rollon",
@@ -122,7 +122,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Experimenta un tónico anticaída para cuero cabelludo suave pero eficaz, con una fórmula de ingredientes de origen vegetal y tecnología de liposomas patentada diseñada para fortalecer el cabello y equilibrar la hidratación del cuero cabelludo. Consigue un cabello más saludable y de aspecto más abundante con cada uso.",
     variants: [{ sku: "126466", size: "120 ml", price: 64.80 }],
-    image: "espana/sat-tonico-anticaida.webp",
+    image: "espana/sat-tonico-anticaida-hd.webp",
   },
   {
     id: "sat-anticaida",
@@ -166,7 +166,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un champú anticaspa científicamente probado para el cuero cabelludo y el cabello, con potentes ingredientes de origen vegetal que contribuyen a prevenir la aparición de caspa y reduce la descamación del cuero cabelludo.",
     variants: [{ sku: "126464", size: "750 ml", price: 41.82 }],
-    image: "espana/champu-anticaspa-cabello-cuero-cabelludo-satinique.webp",
+    image: "espana/champu-anticaspa-cabello-cuero-cabelludo-satinique-hd.webp",
   },
   {
     id: "gh-jabon-manos-protect",
@@ -188,7 +188,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Jabón en pastilla suave que contribuye a combatir el olor corporal y elimina con eficacia la suciedad y las impurezas para dejar la piel acondicionada y con una sensación de suavidad.",
     variants: [{ sku: "125897", size: "6 × 150 g", price: 27.61 }],
-    image: "espana/gh-barra-jabon-protect.webp",
+    image: "espana/gh-barra-jabon-protect-hd.webp",
   },
   {
     id: "sat-reparacion-intensiva",
@@ -221,7 +221,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un suero-aceite intensivo con potentes ingredientes de origen vegetal que repara y fortalece el cabello mediante la reducción de su rotura y la consolidación de cada hebra capilar. Transforma el cabello seco y dañado en cabello sedoso y de aspecto saludable, al tiempo que repara las puntas abiertas y revitaliza las cutículas para aportar un brillo atractivo.",
     variants: [{ sku: "126467", size: "100 ml", price: 27.16 }],
-    image: "espana/sat-suero-aceite-reparador-intensivo.webp",
+    image: "espana/sat-suero-aceite-reparador-intensivo-hd.webp",
   },
   {
     id: "sat-tratamiento-capilar-reparacion-intensiva",
@@ -232,7 +232,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un tratamiento intensivo del cabello con aclarado cuyos potentes ingredientes de origen vegetal transforman el cabello seco, dañado y debilitado en cabello sedoso, suave y fuerte. * Cuando se usa conjuntamente con el Acondicionador Reparador Intensivo.",
     variants: [{ sku: "126465", size: "250 ml", price: 34.28 }],
-    image: "espana/sat-tratamiento-capilar-reparacion-intensiva.webp",
+    image: "espana/sat-tratamiento-capilar-reparacion-intensiva-hd.webp",
   },
   {
     id: "gel-ducha-exfoliante-g-h-refresh",
@@ -243,7 +243,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Gel de ducha exfoliante para uso diario con agua de complejo de bambú, ceramida obtenida de aceite de oliva, acerola verde y exfoliantes naturales que eliminan con suavidad las impurezas y las células muertas de la piel, dejándola con una sensación de frescor e hidratación.",
     variants: [{ sku: "125892", size: "400 ml", price: 13.16 }],
-    image: "espana/gel-ducha-exfoliante-g-h-refresh.webp",
+    image: "espana/gel-ducha-exfoliante-g-h-refresh-hd.webp",
   },
   {
     id: "gh-bano-refresh",
@@ -265,7 +265,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Loción corporal ligera con agua de complejo de bambú, ceramida de aceite de oliva y acerola verde que brinda un aumento inmediato de hidratación y contribuye a proteger y reparar la barrera de hidratación de la piel.",
     variants: [{ sku: "125893", size: "400 ml", price: 19.90 }],
-    image: "espana/gh-locion-refresh.webp",
+    image: "espana/gh-locion-refresh-hd.webp",
   },
   {
     id: "gh-jabon-corporal-nourish",
@@ -276,7 +276,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Jabón en pastilla exclusivo fácil de compartir con ceramida de aceite de oliva y aceite de chía blanca, que limpian la piel de forma profunda pero suave y mejoran su aspecto.",
     variants: [{ sku: "125913", size: "250 g", price: 14.52 }],
-    image: "espana/gh-jabon-corporal-nourish.webp",
+    image: "espana/gh-jabon-corporal-nourish-hd.webp",
   },
   {
     id: "gh-crema-manos",
@@ -298,7 +298,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Crema para pies densa pero no grasa, repleta de lo mejor de la naturaleza, que nutre y suaviza al instante los pies extremadamente secos, además de favorecer la barrera de hidratación de la piel.",
     variants: [{ sku: "125899", size: "100 ml", price: 14.94 }],
-    image: "espana/gh-crema-pies.webp",
+    image: "espana/gh-crema-pies-hd.webp",
   },
   {
     id: "gh-balsamo-labial",
@@ -309,7 +309,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Bálsamo labial sin fragancia de aplicación sencilla, con ceramida de aceite de oliva y aceite de chía blanca, que nutre los labios secos y les proporciona una capa protectora de humedad.",
     variants: [{ sku: "125900", size: "4 g", price: 12.80 }],
-    image: "espana/gh-balsamo-labial.webp",
+    image: "espana/gh-balsamo-labial-hd.webp",
   },
   {
     id: "sat-humectante",
@@ -331,7 +331,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un acondicionador hidratante con potentes ingredientes de origen vegetal que restaura el brillo y la hidratación del cabello seco y rebelde. Su fórmula enriquecida con proteínas protege, nutre y hace más manejable el cabello con cada lavado.",
     variants: [{ sku: "126451", size: "280 ml", price: 17.86 }],
-    image: "espana/sat-acondicionador-suave-e-hidratante.webp",
+    image: "espana/sat-acondicionador-suave-e-hidratante-hd.webp",
   },
   {
     id: "sat-2en1",
@@ -463,7 +463,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un acondicionador hidratante con potentes ingredientes de origen vegetal que restaura el brillo y la hidratación del cabello seco y rebelde. Su fórmula enriquecida con proteínas protege, nutre y hace más manejable el cabello con cada lavado.",
     variants: [{ sku: "126634", size: "750 ml", price: 40.45 }],
-    image: "espana/acondicionador-suave-e-hidratante-satinique.webp",
+    image: "espana/acondicionador-suave-e-hidratante-satinique-hd.webp",
   },
   {
     id: "champu-purificador-cabello-cuero-cabelludo-satinique",
@@ -474,7 +474,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un champú purificador impregnado de ingredientes de origen vegetal que limpia profundamente la contaminación, el polvo fino y el exceso de grasa del cuero cabelludo y el cabello.",
     variants: [{ sku: "126461", size: "750 ml", price: 41.82 }],
-    image: "espana/champu-purificador-cabello-cuero-cabelludo-satinique.webp",
+    image: "espana/champu-purificador-cabello-cuero-cabelludo-satinique-hd.webp",
   },
   {
     id: "glister-cabezales",
@@ -507,7 +507,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Gracias a su exclusivo diseño, el Cepillo Dental Multiacción Glister facilita la eliminación eficaz de la placa de todas las superficies de los dientes y entre los dientes cuando se utiliza con Pasta Dentífrica Multiacción Glister. También limpia la superficie de la lengua, los carrillos y el surco gingival.",
     variants: [{ sku: "124110", size: "4 unidades", price: 14.78 }],
-    image: "espana/glister-cepillo-dental-medio.webp",
+    image: "espana/glister-cepillo-dental-medio-hd.webp",
   },
   {
     id: "glister-cepillo-dental-suave",
@@ -518,7 +518,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Gracias a su exclusivo diseño, el Cepillo Dental Multiacción Glister facilita la eliminación eficaz de la placa de todas las superficies de los dientes y entre los dientes cuando se utiliza con Pasta Dentífrica Multiacción Glister. También limpia la superficie de la lengua, los carrillos y el surco gingival.",
     variants: [{ sku: "124109", size: "4 unidades", price: 14.78 }],
-    image: "espana/glister-cepillo-dental-suave.webp",
+    image: "espana/glister-cepillo-dental-suave-hd.webp",
   },
   {
     id: "champu-suave-e-hidratante-satinique",
@@ -540,7 +540,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "¡Comienza hoy mismo tu rutina de cuidado bucal en 3 pasos con Glister! Cepíllate los dientes, utiliza hilo dental y enjuágate la boca dos veces al día para prevenir caries y mantener sanos tus dientes y encías",
     variants: [{ sku: "317878", size: "1 conjunto", price: 54.17 }],
-    image: "espana/glister-conjunto-familiar.webp",
+    image: "espana/glister-conjunto-familiar-hd.webp",
   },
   {
     id: "glister-enjuague-aloe",
@@ -551,7 +551,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Enjuague Bucal Multiacción Glister contribuye a reducir significativamente la placa en comparación con el cepillado por sí solo, al tiempo que ayuda a eliminar bacterias que provocan mal aliento y gingivitis. Incluye aloe, que contribuye a aliviar y calmar, además de dejar la boca con una sensación de frescor.",
     variants: [{ sku: "124113", size: "500 ml", price: 14.04 }],
-    image: "espana/glister-enjuague-aloe.webp",
+    image: "espana/glister-enjuague-aloe-hd.webp",
   },
   {
     id: "glister-hilo-dental",
@@ -573,7 +573,7 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "Un tratamiento intensivo del cabello sin aclarado cuyos potentes ingredientes de origen vegetal transforman el cabello seco y dañado en cabello sedoso, suave y fuerte.",
     variants: [{ sku: "126468", size: "100 ml", price: 23.30 }],
-    image: "espana/sat-locion-capilar-reparacion-intensiva.webp",
+    image: "espana/sat-locion-capilar-reparacion-intensiva-hd.webp",
   },
   {
     id: "glister-pasta-infantil",
@@ -584,6 +584,6 @@ export const cuidadoPersonalProducts: Product[] = [
     description:
       "La Pasta Dentífrica Infantil Glister™ KIDS con fluoruro sódico sabor fresa ayuda a reforzar y proteger los dientes en desarrollo.",
     variants: [{ sku: "120519", size: "65 ml", price: 5.30 }],
-    image: "espana/glister-pasta-infantil.webp",
+    image: "espana/glister-pasta-infantil-hd.webp",
   },
 ];
