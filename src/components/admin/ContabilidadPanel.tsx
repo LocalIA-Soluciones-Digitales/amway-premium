@@ -5,9 +5,11 @@ import {
   ArrowDownRight,
   ArrowUpRight,
   CalendarRange,
+  CreditCard,
   Check,
   ChevronLeft,
   ChevronRight,
+  CircleAlert,
   Download,
   HandCoins,
   Lightbulb,
@@ -16,11 +18,14 @@ import {
   Plus,
   Receipt,
   Repeat,
+  ShoppingBag,
   Sparkles,
   Tag,
   Trash2,
   TrendingUp,
+  Wallet,
 } from "lucide-react";
+import { SITE } from "@/data/site-config";
 import { amwayDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
 import { BarList, ColumnChart, Donut, ForecastChart, type ForecastPoint } from "./charts";
@@ -47,14 +52,23 @@ import {
 const MESES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 const DIAS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
-// Ella pide el producto directamente a Amway: el único coste es ese pedido,
-// que se apunta como gasto «Compra de mercancía». No hay coste por línea de
-// venta ni comisiones de cobro que restar.
+// Comisiones de Stripe por los cobros con tarjeta en la web (tarjetas
+// europeas estándar: 1,5 % + 0,25 € por cobro). Es una estimación; la cifra
+// exacta está en el panel de Stripe.
+// OJO: van ligadas al pago con tarjeta (SITE.pagoOnline). Si algún día se
+// quita el pago con tarjeta de la web, hay que borrar también todo lo de
+// comisiones de este panel (cálculo, fila de la cuenta, columna y consejo).
+const STRIPE_PCT = 0.015;
+const STRIPE_FIJO = 0.25;
+
+// Ella pide el producto directamente a Amway: su coste es ese pedido, que se
+// apunta como gasto «Compra de mercancía». No hay coste por línea de venta.
 export interface Resultado {
   pedidos: number;
   ventas: number;
   envios: number;
   producto: number;
+  comisiones: number;
   otrosGastos: number;
   gastos: number;
   beneficioNeto: number;
@@ -65,12 +79,14 @@ const cuenta = (p: Pedido) => p.estado !== "cancelado" && p.estado !== "pendient
 export function calcular(pedidos: Pedido[], gastos: Gasto[]): Resultado {
   let ventas = 0;
   let envios = 0;
+  let comisiones = 0;
   let n = 0;
   for (const p of pedidos) {
     if (!cuenta(p)) continue;
     n++;
     ventas += Number(p.total_eur);
     envios += Number(p.envio_eur);
+    if (p.metodo_pago === "tarjeta" && p.origen === "web") comisiones += Number(p.total_eur) * STRIPE_PCT + STRIPE_FIJO;
   }
   const totalGastos = gastos.reduce((s, g) => s + Number(g.importe_eur), 0);
   const producto = gastos.filter((g) => g.categoria === "mercancia").reduce((s, g) => s + Number(g.importe_eur), 0);
@@ -79,9 +95,10 @@ export function calcular(pedidos: Pedido[], gastos: Gasto[]): Resultado {
     ventas,
     envios,
     producto,
+    comisiones,
     otrosGastos: totalGastos - producto,
     gastos: totalGastos,
-    beneficioNeto: ventas - totalGastos,
+    beneficioNeto: ventas - totalGastos - comisiones,
   };
 }
 
@@ -495,6 +512,14 @@ export function ContabilidadPanel() {
         tono: "forest",
       });
     }
+    if (r.comisiones > 0) {
+      o.push({
+        icon: <Wallet size={16} />,
+        titulo: `${eur(r.comisiones)} en comisiones de tarjeta`,
+        texto: `Un ${dec((r.comisiones / Math.max(r.ventas, 1)) * 100, 1)} % de lo vendido. En pedidos grandes que recogen en mano, el efectivo o Bizum te lo ahorran.`,
+        tono: "tech",
+      });
+    }
     if (r.ventas > 0 && r.producto === 0) {
       o.push({
         icon: <Package size={16} />,
@@ -549,7 +574,8 @@ export function ContabilidadPanel() {
 
   const reparto = r
     ? [
-        { label: "Producto (pedido a Amway)", value: r.producto, color: "#b7ae9b" },
+        { label: "Producto (pedido a Amway)", value: r.producto, color: "#b8905a" },
+        ...(r.comisiones > 0 ? [{ label: "Comisiones de tarjeta", value: r.comisiones, color: "#e4cba3" }] : []),
         ...(r.otrosGastos > 0 ? [{ label: "Otros gastos", value: r.otrosGastos, color: "#3f6b7d" }] : []),
         ...(r.beneficioNeto >= 0 ? [{ label: "Beneficio", value: r.beneficioNeto, color: "#1f4438" }] : []),
       ]
@@ -656,8 +682,12 @@ export function ContabilidadPanel() {
             />
             <Kpi
               label="Gastado"
-              value={eur(r.gastos)}
-              hint={r.otrosGastos > 0 ? `producto ${eurCorto(r.producto)} · otros ${eurCorto(r.otrosGastos)}` : "producto pedido a Amway"}
+              value={eur(r.gastos + r.comisiones)}
+              hint={
+                r.otrosGastos + r.comisiones > 0
+                  ? `producto ${eurCorto(r.producto)} · otros ${eurCorto(r.otrosGastos + r.comisiones)}`
+                  : "producto pedido a Amway"
+              }
             />
             <Kpi
               label="Ticket medio"
@@ -960,7 +990,7 @@ export function ContabilidadPanel() {
                         <td className="py-1.5 text-right text-stone">{m.pedidos || "—"}</td>
                         <td className="py-1.5 text-right">{m.ventas ? eur(m.ventas) : "—"}</td>
                         <td className="py-1.5 text-right text-stone">{m.producto ? eur(m.producto) : "—"}</td>
-                        <td className="py-1.5 text-right text-stone">{m.otrosGastos ? eur(m.otrosGastos) : "—"}</td>
+                        <td className="py-1.5 text-right text-stone">{m.otrosGastos + m.comisiones ? eur(m.otrosGastos + m.comisiones) : "—"}</td>
                         <td className={cn("py-1.5 text-right", m.beneficioNeto > 0 ? "text-forest" : m.beneficioNeto < 0 ? "text-xs-red" : "text-stone")}>
                           {m.ventas || m.gastos ? eur(m.beneficioNeto) : "—"}
                         </td>
@@ -1137,125 +1167,210 @@ function NuevoGasto({ onChange }: { onChange: () => void }) {
   );
 }
 
-// Cuenta de resultados en cascada: de lo vendido se resta el producto pedido a
-// Amway (y otros gastos, si los hay) hasta lo que queda limpio. Barras a escala.
+// Cuenta de resultados: de lo vendido se resta el producto pedido a Amway, las
+// comisiones de tarjeta (mientras haya pago con tarjeta) y otros gastos, si
+// los hay. Arriba, una barra con el reparto de cada euro vendido; abajo, el
+// detalle partida a partida; al lado, lo que queda limpio.
 function CuentaResultados({ r, prev, etiqueta, comparaCon }: { r: Resultado; prev: Resultado | null; etiqueta: string; comparaCon: string }) {
-  const escala = Math.max(1, r.ventas, r.gastos);
-  const w = (v: number) => `${(Math.max(0, v) / escala) * 100}%`;
-  let tope = r.ventas;
-  const filas = [
-    { label: "Producto", hint: "pedido a Amway", v: r.producto, antes: prev?.producto, color: "#b7ae9b" },
-    ...(r.otrosGastos > 0 || (prev?.otrosGastos ?? 0) > 0
-      ? [{ label: "Otros gastos", hint: undefined, v: r.otrosGastos, antes: prev?.otrosGastos, color: "#3f6b7d" }]
+  const hayComparacion = !!prev && !!comparaCon;
+  const partidas = [
+    { label: "Producto", detalle: "Lo que pagas a Amway", v: r.producto, antes: prev?.producto, color: "#b8905a", icon: <Package size={15} /> },
+    ...(SITE.pagoOnline || r.comisiones > 0 || (prev?.comisiones ?? 0) > 0
+      ? [{ label: "Comisiones de tarjeta", detalle: "Stripe · estimadas", v: r.comisiones, antes: prev?.comisiones, color: "#e4cba3", icon: <CreditCard size={15} /> }]
       : []),
-  ].map((f) => {
-    // Cada resta ocupa el tramo que se "come" de lo que queda; si ya no queda
-    // nada (pérdida), se dibuja desde cero.
-    const desde = Math.max(0, tope - f.v);
-    const fila = { ...f, left: w(desde), width: w(Math.max(0, tope) > 0 ? Math.min(f.v, tope) : f.v) };
-    tope -= f.v;
-    return fila;
-  });
+    ...(r.otrosGastos > 0 || (prev?.otrosGastos ?? 0) > 0
+      ? [{ label: "Otros gastos", detalle: "Envíos, publicidad, material…", v: r.otrosGastos, antes: prev?.otrosGastos, color: "#3f6b7d", icon: <Receipt size={15} /> }]
+      : []),
+  ];
+  const salidas = partidas.reduce((s, x) => s + x.v, 0);
   const positivo = r.beneficioNeto >= 0;
   const margen = r.ventas > 0 ? (r.beneficioNeto / r.ventas) * 100 : null;
-  const hayComparacion = !!prev && !!comparaCon;
+  const vacio = r.ventas === 0 && salidas === 0;
+  // La barra va a escala de lo mayor entre lo vendido y lo gastado: con
+  // pérdidas, la marca de «Ventas» queda dentro y se ve cuánto se pasa.
+  const escala = Math.max(r.ventas, salidas, 1);
+  const tramos = [...partidas, ...(positivo ? [{ label: "Te queda", v: r.beneficioNeto, color: "#1f4438" }] : [])].filter((x) => x.v > 0);
+  const deVentas = (v: number) => (r.ventas > 0 ? pct((v / r.ventas) * 100) : "—");
 
   return (
-    <Card>
-      <CardTitle>Cuenta de resultados · {etiqueta}</CardTitle>
-      <div className="flex flex-col gap-4">
-        <FilaCuenta
-          label="Ventas"
-          hint="con envío"
-          valor={eur(r.ventas)}
-          cambio={hayComparacion ? <Cambio a={r.ventas} b={prev!.ventas} /> : null}
-          bar={<span className="absolute inset-y-0 left-0 rounded-md bg-forest" style={{ width: w(r.ventas) }} />}
-        />
-        {filas.map((f) => (
-          <FilaCuenta
-            key={f.label}
-            label={`− ${f.label}`}
-            hint={f.hint}
-            valor={eur(-f.v)}
-            pct={r.ventas > 0 && f.v > 0 ? pct((f.v / r.ventas) * 100) : null}
-            cambio={hayComparacion && f.antes != null ? <Cambio a={f.v} b={f.antes} invertir /> : null}
-            tenue
-            bar={<span className="absolute inset-y-0 rounded-md" style={{ left: f.left, width: f.width, background: f.color }} />}
-          />
-        ))}
+    <Card className="p-0 sm:p-0">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-carbon/[0.06] px-4 py-3.5 sm:px-5">
+        <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">Cuenta de resultados · {etiqueta}</h3>
+        {hayComparacion && !vacio && (
+          <span className="rounded-full bg-cream px-2.5 py-1 text-[11px] text-stone">Flechas {comparaCon}</span>
+        )}
       </div>
 
-      <div className={cn("mt-5 flex flex-wrap items-end justify-between gap-3 rounded-2xl px-4 py-3.5", positivo ? "bg-forest/[0.07]" : "bg-red-50")}>
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-stone">{positivo ? "Te queda limpio" : "Pérdida"}</p>
-          <p className={cn("mt-1 font-display text-[2rem] leading-none tabular-nums", positivo ? "text-forest" : "text-xs-red")}>{eur(r.beneficioNeto)}</p>
+      {vacio ? (
+        <div className="flex flex-col items-center px-6 py-10 text-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-forest/10 text-forest">
+            <Wallet size={20} />
+          </span>
+          <p className="mt-4 font-display text-xl text-carbon">Aún no hay movimientos en este periodo</p>
+          <p className="mt-1.5 max-w-md text-sm text-stone">Cuando haya ventas y apuntes lo que pagas a Amway, aquí verás de un vistazo cuánto te queda limpio.</p>
+          <ol className="mt-5 flex flex-col gap-2 text-left text-sm text-carbon sm:flex-row sm:gap-6">
+            <li className="flex items-center gap-2">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-carbon text-[11px] font-semibold text-cream">1</span>
+              Las ventas salen solas de Pedidos
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-carbon text-[11px] font-semibold text-cream">2</span>
+              Apunta el pedido a Amway como gasto
+            </li>
+          </ol>
         </div>
-        <div className="text-right text-xs text-stone">
-          {margen != null && (
-            <p>
-              <span className="font-medium text-carbon">{pct(margen)}</span> de lo vendido
-            </p>
-          )}
-          {hayComparacion && (
-            <p className="mt-0.5">
-              Antes {eur(prev!.beneficioNeto)} <Cambio a={r.beneficioNeto} b={prev!.beneficioNeto} />
-            </p>
-          )}
+      ) : (
+        <div className="grid lg:grid-cols-[minmax(0,1fr)_19rem]">
+          <div className="px-4 py-5 sm:px-5">
+            {/* Reparto de cada euro vendido */}
+            <p className="mb-2 text-xs text-stone">Reparto de lo vendido</p>
+            <div className="relative">
+              <div className="flex h-5 overflow-hidden rounded-full bg-carbon/[0.05]">
+                {tramos.map((x) => (
+                  <span
+                    key={x.label}
+                    title={`${x.label}: ${eur(x.v)}`}
+                    className="h-full border-r-2 border-white last:border-r-0"
+                    style={{ width: `${(x.v / escala) * 100}%`, background: x.color }}
+                  />
+                ))}
+              </div>
+              {!positivo && r.ventas > 0 && (
+                <span className="absolute -top-1 bottom-[-4px] w-0.5 rounded-full bg-carbon" style={{ left: `${(r.ventas / escala) * 100}%` }} title="Ventas" />
+              )}
+            </div>
+            <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-stone">
+              {tramos.map((x) => (
+                <span key={x.label} className="inline-flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full" style={{ background: x.color }} />
+                  {x.label} <span className="tabular-nums text-carbon">{deVentas(x.v)}</span>
+                </span>
+              ))}
+              {!positivo && r.ventas > 0 && <span className="text-xs-red">La línea negra marca lo vendido: los gastos la superan</span>}
+            </div>
+
+            {/* Detalle */}
+            <div className="mt-6 divide-y divide-carbon/[0.06] border-y border-carbon/[0.06]">
+              <Partida
+                icon={<ShoppingBag size={15} />}
+                color="#1f4438"
+                label="Ventas"
+                detalle={`${r.pedidos} pedido${r.pedidos === 1 ? "" : "s"} · envío incluido`}
+                valor={eur(r.ventas)}
+                pct="100 %"
+                cambio={hayComparacion ? <Cambio a={r.ventas} b={prev!.ventas} /> : null}
+                fuerte
+              />
+              {partidas.map((x) => (
+                <Partida
+                  key={x.label}
+                  icon={x.icon}
+                  color={x.color}
+                  label={x.label}
+                  detalle={x.detalle}
+                  valor={eur(-x.v)}
+                  pct={x.v > 0 ? deVentas(x.v) : "—"}
+                  cambio={hayComparacion && x.antes != null ? <Cambio a={x.v} b={x.antes} invertir /> : null}
+                />
+              ))}
+            </div>
+
+            {r.ventas > 0 && r.producto === 0 && (
+              <p className="mt-4 flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-xs text-amber-800 ring-1 ring-inset ring-amber-200/70">
+                <CircleAlert size={14} className="mt-px shrink-0" />
+                No hay ningún pedido a Amway apuntado en este periodo, así que todo lo vendido parece beneficio. Apúntalo arriba como «Compra de mercancía».
+              </p>
+            )}
+          </div>
+
+          {/* Resultado */}
+          <div
+            className={cn(
+              "flex flex-col justify-between gap-5 rounded-b-2xl px-5 py-6 lg:rounded-none lg:rounded-r-2xl",
+              positivo ? "bg-forest text-cream" : "bg-red-50 text-xs-red"
+            )}
+          >
+            <div>
+              <p className={cn("text-[11px] font-semibold uppercase tracking-[0.14em]", positivo ? "text-cream/60" : "text-xs-red/70")}>
+                {positivo ? "Te queda limpio" : "Pérdida del periodo"}
+              </p>
+              <p className="mt-2 font-display text-[2.6rem] leading-none tabular-nums">{eur(r.beneficioNeto)}</p>
+              {margen != null && (
+                <p className={cn("mt-3 inline-flex rounded-full px-2.5 py-1 text-xs", positivo ? "bg-cream/10 text-cream/85" : "bg-white/70")}>
+                  {pct(margen)} de lo vendido
+                </p>
+              )}
+            </div>
+            <div className={cn("flex flex-col gap-2 text-xs", positivo ? "text-cream/75" : "text-xs-red/80")}>
+              {r.ventas > 0 && positivo && (
+                <p>
+                  De cada <span className={cn("font-medium", positivo && "text-cream")}>100 €</span> que vendes, te quedan{" "}
+                  <span className="font-semibold text-gold-soft">{eur((r.beneficioNeto / r.ventas) * 100)}</span>.
+                </p>
+              )}
+              {hayComparacion && (
+                <p className={cn("flex items-center justify-between gap-2 border-t pt-2", positivo ? "border-cream/15" : "border-xs-red/15")}>
+                  <span>Periodo anterior {eur(prev!.beneficioNeto)}</span>
+                  <Cambio a={r.beneficioNeto} b={prev!.beneficioNeto} claro={positivo} />
+                </p>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-      {r.ventas > 0 && r.producto === 0 && (
-        <p className="mt-3 text-[11px] text-stone">
-          Aún no hay ningún pedido a Amway apuntado en este periodo: apúntalo como gasto «Compra de mercancía» para que el resultado sea real.
-        </p>
       )}
-      {hayComparacion && <p className="mt-2 text-[11px] text-stone">Las flechas comparan con el periodo anterior ({comparaCon.replace("vs. ", "")}).</p>}
     </Card>
   );
 }
 
-function Cambio({ a, b, invertir }: { a: number; b: number; invertir?: boolean }) {
-  const d = variacion(a, b);
-  if (d == null || !Number.isFinite(d) || Math.round(d) === 0) return <span className="text-[11px] text-stone/70">=</span>;
-  const bueno = invertir ? d < 0 : d > 0;
-  return (
-    <span className={cn("text-[11px] font-medium tabular-nums", bueno ? "text-emerald-700" : "text-red-600")}>
-      {d > 0 ? "▲" : "▼"} {Math.abs(d).toFixed(0)} %
-    </span>
-  );
-}
-
-function FilaCuenta({
+function Partida({
+  icon,
+  color,
   label,
-  hint,
+  detalle,
   valor,
   pct: porcentaje,
   cambio,
-  tenue,
-  bar,
+  fuerte,
 }: {
+  icon: ReactNode;
+  color: string;
   label: string;
-  hint?: string;
+  detalle: string;
   valor: string;
-  pct?: string | null;
+  pct: string;
   cambio?: ReactNode;
-  tenue?: boolean;
-  bar: ReactNode;
+  fuerte?: boolean;
 }) {
   return (
-    <div>
-      <div className="flex items-baseline justify-between gap-3 text-sm">
-        <span className={cn("min-w-0", tenue ? "text-stone" : "font-medium text-carbon")}>
-          {label}
-          {hint && <span className="ml-1 text-[11px] text-stone/70">({hint})</span>}
-        </span>
-        <span className="flex shrink-0 items-baseline gap-2 tabular-nums">
-          {cambio}
-          {porcentaje && <span className="text-[11px] text-stone">{porcentaje}</span>}
-          <span className={cn("text-carbon", !tenue && "font-medium")}>{valor}</span>
-        </span>
-      </div>
-      <div className="relative mt-1.5 h-3 overflow-hidden rounded-md bg-carbon/[0.04]">{bar}</div>
+    <div className="flex items-center gap-3 py-3">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full" style={{ background: `${color}1f`, color }}>
+        {icon}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className={cn("block text-sm", fuerte ? "font-medium text-carbon" : "text-carbon")}>{label}</span>
+        <span className="block truncate text-[11px] text-stone">{detalle}</span>
+      </span>
+      <span className="hidden w-14 text-right sm:block">{cambio}</span>
+      <span className="w-11 text-right text-[11px] tabular-nums text-stone">{porcentaje}</span>
+      <span className={cn("w-24 text-right tabular-nums", fuerte ? "font-medium text-carbon" : "text-carbon")}>{valor}</span>
     </div>
+  );
+}
+
+function Cambio({ a, b, invertir, claro }: { a: number; b: number; invertir?: boolean; claro?: boolean }) {
+  const d = variacion(a, b);
+  if (d == null || !Number.isFinite(d) || Math.round(d) === 0)
+    return <span className={cn("text-[11px]", claro ? "text-cream/60" : "text-stone/70")}>= igual</span>;
+  const bueno = invertir ? d < 0 : d > 0;
+  return (
+    <span
+      className={cn(
+        "text-[11px] font-medium tabular-nums",
+        claro ? (bueno ? "text-emerald-200" : "text-red-200") : bueno ? "text-emerald-700" : "text-red-600"
+      )}
+    >
+      {d > 0 ? "▲" : "▼"} {Math.abs(d).toFixed(0)} %
+    </span>
   );
 }
 

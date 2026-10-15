@@ -363,7 +363,7 @@ export function HoyPanel({
               label={`Beneficio ${nombreMes}`}
               value={eur(d.mes.beneficioNeto)}
               tone={d.mes.beneficioNeto >= 0 ? "good" : "bad"}
-              hint="tras el pedido a Amway y gastos"
+              hint="tras el pedido a Amway, comisiones y gastos"
               onClick={() => onNavigate("contabilidad")}
             />
           </div>

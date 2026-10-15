@@ -339,7 +339,7 @@ export function VentasInformePanel() {
               label="Margen"
               value={pctTxt(r.margen)}
               icon={<Percent size={15} />}
-              hint={r.margenPrevio != null ? `antes ${pctTxt(r.margenPrevio)}` : "Ventas − pedido a Amway − gastos"}
+              hint={r.margenPrevio != null ? `antes ${pctTxt(r.margenPrevio)}` : "Ventas − pedido a Amway − comisiones − gastos"}
               tone={r.margen != null && r.margen < 0.15 ? "bad" : undefined}
             />
             <Stat label="Clientes" value={r.clientesPeriodo} icon={<UsersRound size={15} />} hint={`${r.nuevos} nuevos`} />
@@ -445,6 +445,7 @@ export function VentasInformePanel() {
               {[
                 ["Ingresos", r.actual.ventas],
                 ["Producto (pedido a Amway)", -r.actual.producto],
+                ...(r.actual.comisiones > 0 ? [["Comisiones tarjeta (estim.)", -r.actual.comisiones]] : []),
                 ["Otros gastos", -r.actual.otrosGastos],
               ].map(([l, v]) => (
                 <div key={l as string} className="flex justify-between">
