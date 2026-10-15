@@ -53,7 +53,8 @@ export function VentasInformePanel() {
       // Todo el histórico: hace falta para clientes, recurrencia y previsión.
       traerTodo<Pedido>((a, b) => db.from("amway_pedidos").select("*").order("created_at").order("id").range(a, b)),
       traerTodo<Gasto>((a, b) =>
-        db.from("amway_gastos").select("*").gte("fecha", desde.toISOString().slice(0, 10)).order("fecha").order("id").range(a, b)
+        // Desde el periodo anterior, para comparar el resultado.
+        db.from("amway_gastos").select("*").gte("fecha", new Date(desde.getTime() - dias * DIA_MS).toISOString().slice(0, 10)).order("fecha").order("id").range(a, b)
       ),
       traerTodo<{ session_id: string }>((a, b) =>
         db.from("amway_visitas").select("session_id").eq("event_type", "pageview").gte("created_at", desde.toISOString()).order("id").range(a, b)
@@ -73,8 +74,9 @@ export function VentasInformePanel() {
     const desdePrevio = new Date(desde.getTime() - dias * DIA_MS);
     const pedidos = datos.todos.filter((x) => new Date(x.created_at) >= desde);
     const previos = datos.todos.filter((x) => new Date(x.created_at) >= desdePrevio && new Date(x.created_at) < desde);
-    const actual = calcular(pedidos, datos.gastos);
-    const previo = calcular(previos, []);
+    const corte = desde.toISOString().slice(0, 10);
+    const actual = calcular(pedidos, datos.gastos.filter((g) => g.fecha >= corte));
+    const previo = calcular(previos, datos.gastos.filter((g) => g.fecha < corte));
     const validos = pedidosValidos(pedidos);
     const validosPrevios = pedidosValidos(previos);
     const todosValidos = pedidosValidos(datos.todos);
@@ -201,8 +203,8 @@ export function VentasInformePanel() {
     ];
     const pendienteCobro = datos.todos.filter((p) => p.estado === "pendiente");
     const calor = mapaCalor(validos, (p) => p.created_at, (p) => p.id);
-    const margen = actual.ventas ? (actual.ventas - actual.coste - actual.envios) / actual.ventas : null;
-    const margenPrevio = previo.ventas ? (previo.ventas - previo.coste - previo.envios) / previo.ventas : null;
+    const margen = actual.ventas ? actual.beneficioNeto / actual.ventas : null;
+    const margenPrevio = previo.ventas ? previo.beneficioNeto / previo.ventas : null;
     const ticket = actual.pedidos ? actual.ventas / actual.pedidos : 0;
     const ticketPrevio = previo.pedidos ? previo.ventas / previo.pedidos : 0;
 
@@ -246,8 +248,8 @@ export function VentasInformePanel() {
       });
     const pico = picoMapa(calor);
     if (pico && validos.length >= 5) h.push({ tono: "info", titulo: `Se pide sobre todo los ${DIAS_LARGOS[pico.dia]} hacia las ${pico.hora}:00`, detalle: "Programa las publicaciones y ofertas un poco antes." });
-    if (actual.lineasSinCoste > 0)
-      h.push({ tono: "aviso", titulo: `${actual.lineasSinCoste} líneas vendidas sin coste`, detalle: "El margen y el resultado salen inflados. Configura el coste en Productos." });
+    if (actual.ventas > 0 && actual.producto === 0)
+      h.push({ tono: "aviso", titulo: "Sin pedidos a Amway apuntados", detalle: "El margen y el resultado salen inflados. Apunta el pedido a Amway como gasto «Compra de mercancía»." });
 
     return {
       actual,
@@ -334,10 +336,10 @@ export function VentasInformePanel() {
             <Stat label="Pedidos" value={r.actual.pedidos} icon={<ShoppingBag size={15} />} delta={variacion(r.actual.pedidos, r.previo.pedidos)} />
             <Stat label="Ticket medio" value={eurCorto(r.ticket)} icon={<Receipt size={15} />} delta={variacion(r.ticket, r.ticketPrevio)} />
             <Stat
-              label="Margen bruto"
+              label="Margen"
               value={pctTxt(r.margen)}
               icon={<Percent size={15} />}
-              hint={r.margenPrevio != null ? `antes ${pctTxt(r.margenPrevio)}` : "Ventas − coste − envíos"}
+              hint={r.margenPrevio != null ? `antes ${pctTxt(r.margenPrevio)}` : "Ventas − pedido a Amway − gastos"}
               tone={r.margen != null && r.margen < 0.15 ? "bad" : undefined}
             />
             <Stat label="Clientes" value={r.clientesPeriodo} icon={<UsersRound size={15} />} hint={`${r.nuevos} nuevos`} />
@@ -442,9 +444,8 @@ export function VentasInformePanel() {
             <dl className="grid gap-x-10 gap-y-2 text-sm sm:grid-cols-2">
               {[
                 ["Ingresos", r.actual.ventas],
-                ["Coste mercancía", -r.actual.coste],
-                ["Comisiones (estim.)", -r.actual.comisiones],
-                ["Gastos", -r.actual.gastos],
+                ["Producto (pedido a Amway)", -r.actual.producto],
+                ["Otros gastos", -r.actual.otrosGastos],
               ].map(([l, v]) => (
                 <div key={l as string} className="flex justify-between">
                   <dt className="text-stone">{l}</dt>
@@ -459,8 +460,8 @@ export function VentasInformePanel() {
                 </dd>
               </div>
             </dl>
-            {r.actual.lineasSinCoste > 0 && (
-              <p className="mt-3 text-xs text-stone">{r.actual.lineasSinCoste} líneas vendidas sin coste configurado: el resultado real es menor.</p>
+            {r.actual.ventas > 0 && r.actual.producto === 0 && (
+              <p className="mt-3 text-xs text-stone">No hay pedidos a Amway apuntados en el periodo: el resultado real es menor.</p>
             )}
           </Card>
         </div>

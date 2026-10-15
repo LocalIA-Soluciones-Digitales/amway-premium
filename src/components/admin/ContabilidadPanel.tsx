@@ -20,7 +20,6 @@ import {
   Tag,
   Trash2,
   TrendingUp,
-  Wallet,
 } from "lucide-react";
 import { amwayDb } from "@/lib/amway-db";
 import { cn } from "@/lib/utils";
@@ -45,23 +44,19 @@ import {
   type Gasto,
   type Pedido, traerTodo } from "./shared";
 
-// Stripe (tarjetas europeas estándar): 1,5 % + 0,25 € por cobro. Es una
-// estimación para el cálculo; la cifra exacta está en el panel de Stripe.
-const STRIPE_PCT = 0.015;
-const STRIPE_FIJO = 0.25;
-
 const MESES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 const DIAS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
+// Ella pide el producto directamente a Amway: el único coste es ese pedido,
+// que se apunta como gasto «Compra de mercancía». No hay coste por línea de
+// venta ni comisiones de cobro que restar.
 export interface Resultado {
   pedidos: number;
   ventas: number;
   envios: number;
-  coste: number;
-  lineasSinCoste: number;
-  comisiones: number;
+  producto: number;
+  otrosGastos: number;
   gastos: number;
-  beneficioBruto: number;
   beneficioNeto: number;
 }
 
@@ -70,33 +65,23 @@ const cuenta = (p: Pedido) => p.estado !== "cancelado" && p.estado !== "pendient
 export function calcular(pedidos: Pedido[], gastos: Gasto[]): Resultado {
   let ventas = 0;
   let envios = 0;
-  let coste = 0;
-  let lineasSinCoste = 0;
-  let comisiones = 0;
   let n = 0;
   for (const p of pedidos) {
     if (!cuenta(p)) continue;
     n++;
     ventas += Number(p.total_eur);
     envios += Number(p.envio_eur);
-    if (p.metodo_pago === "tarjeta" && p.origen === "web") comisiones += Number(p.total_eur) * STRIPE_PCT + STRIPE_FIJO;
-    for (const i of p.items) {
-      if (i.coste_eur == null) lineasSinCoste++;
-      else coste += Number(i.coste_eur) * i.cantidad;
-    }
   }
   const totalGastos = gastos.reduce((s, g) => s + Number(g.importe_eur), 0);
-  const beneficioBruto = ventas - envios - coste;
+  const producto = gastos.filter((g) => g.categoria === "mercancia").reduce((s, g) => s + Number(g.importe_eur), 0);
   return {
     pedidos: n,
     ventas,
     envios,
-    coste,
-    lineasSinCoste,
-    comisiones,
+    producto,
+    otrosGastos: totalGastos - producto,
     gastos: totalGastos,
-    beneficioBruto,
-    beneficioNeto: ventas - coste - comisiones - totalGastos,
+    beneficioNeto: ventas - totalGastos,
   };
 }
 
@@ -510,27 +495,19 @@ export function ContabilidadPanel() {
         tono: "forest",
       });
     }
-    if (r.comisiones > 0) {
-      o.push({
-        icon: <Wallet size={16} />,
-        titulo: `${eur(r.comisiones)} en comisiones de tarjeta`,
-        texto: `Un ${dec((r.comisiones / Math.max(r.ventas, 1)) * 100, 1)} % de lo vendido. En pedidos grandes que recogen en mano, el efectivo o Bizum te lo ahorran.`,
-        tono: "tech",
-      });
-    }
-    if (r.lineasSinCoste > 0) {
+    if (r.ventas > 0 && r.producto === 0) {
       o.push({
         icon: <Package size={16} />,
-        titulo: `${r.lineasSinCoste} línea${r.lineasSinCoste === 1 ? "" : "s"} vendida${r.lineasSinCoste === 1 ? "" : "s"} sin coste`,
-        texto: "Sin el coste no se puede saber cuánto has ganado con ellas: añádelo en Productos para que el beneficio sea real.",
+        titulo: "Apunta lo que pagas a Amway",
+        texto: "Sin el pedido a Amway apuntado como gasto, todo lo vendido parece beneficio. Añádelo en «Apuntar un gasto» → Compra de mercancía.",
         tono: "amber",
       });
     }
-    if (r.ventas > 0 && r.gastos > r.ventas * 0.2) {
+    if (r.ventas > 0 && r.otrosGastos > r.ventas * 0.2) {
       o.push({
         icon: <ArrowDownRight size={16} />,
         titulo: "Los gastos se comen buena parte de las ventas",
-        texto: `Los gastos son un ${pct((r.gastos / r.ventas) * 100)} de lo vendido en el periodo. Revisa qué partidas puedes recortar.`,
+        texto: `Los gastos aparte del producto son un ${pct((r.otrosGastos / r.ventas) * 100)} de lo vendido en el periodo. Revisa qué partidas puedes recortar.`,
         tono: "amber",
       });
     }
@@ -572,9 +549,8 @@ export function ContabilidadPanel() {
 
   const reparto = r
     ? [
-        { label: "Coste de la mercancía", value: r.coste, color: "#b7ae9b" },
-        { label: "Comisiones de pago", value: r.comisiones, color: "#e4cba3" },
-        { label: "Otros gastos", value: r.gastos, color: "#3f6b7d" },
+        { label: "Producto (pedido a Amway)", value: r.producto, color: "#b7ae9b" },
+        ...(r.otrosGastos > 0 ? [{ label: "Otros gastos", value: r.otrosGastos, color: "#3f6b7d" }] : []),
         ...(r.beneficioNeto >= 0 ? [{ label: "Beneficio", value: r.beneficioNeto, color: "#1f4438" }] : []),
       ]
     : [];
@@ -680,8 +656,8 @@ export function ContabilidadPanel() {
             />
             <Kpi
               label="Gastado"
-              value={eur(r.coste + r.comisiones + r.gastos)}
-              hint={`mercancía ${eurCorto(r.coste)} · gastos ${eurCorto(r.gastos + r.comisiones)}`}
+              value={eur(r.gastos)}
+              hint={r.otrosGastos > 0 ? `producto ${eurCorto(r.producto)} · otros ${eurCorto(r.otrosGastos)}` : "producto pedido a Amway"}
             />
             <Kpi
               label="Ticket medio"
@@ -972,8 +948,8 @@ export function ContabilidadPanel() {
                       <th className="pb-2 font-normal">Mes</th>
                       <th className="pb-2 text-right font-normal">Pedidos</th>
                       <th className="pb-2 text-right font-normal">Ventas</th>
-                      <th className="pb-2 text-right font-normal">Coste</th>
-                      <th className="pb-2 text-right font-normal">Gastos</th>
+                      <th className="pb-2 text-right font-normal">Producto</th>
+                      <th className="pb-2 text-right font-normal">Otros gastos</th>
                       <th className="pb-2 text-right font-normal">Resultado</th>
                     </tr>
                   </thead>
@@ -983,8 +959,8 @@ export function ContabilidadPanel() {
                         <td className="py-1.5 text-carbon">{m.label}</td>
                         <td className="py-1.5 text-right text-stone">{m.pedidos || "—"}</td>
                         <td className="py-1.5 text-right">{m.ventas ? eur(m.ventas) : "—"}</td>
-                        <td className="py-1.5 text-right text-stone">{m.coste ? eur(m.coste) : "—"}</td>
-                        <td className="py-1.5 text-right text-stone">{m.gastos + m.comisiones ? eur(m.gastos + m.comisiones) : "—"}</td>
+                        <td className="py-1.5 text-right text-stone">{m.producto ? eur(m.producto) : "—"}</td>
+                        <td className="py-1.5 text-right text-stone">{m.otrosGastos ? eur(m.otrosGastos) : "—"}</td>
                         <td className={cn("py-1.5 text-right", m.beneficioNeto > 0 ? "text-forest" : m.beneficioNeto < 0 ? "text-xs-red" : "text-stone")}>
                           {m.ventas || m.gastos ? eur(m.beneficioNeto) : "—"}
                         </td>
@@ -1161,16 +1137,17 @@ function NuevoGasto({ onChange }: { onChange: () => void }) {
   );
 }
 
-// Cuenta de resultados en cascada: de lo vendido se van restando coste,
-// comisiones y gastos hasta lo que queda limpio. Todas las barras a escala.
+// Cuenta de resultados en cascada: de lo vendido se resta el producto pedido a
+// Amway (y otros gastos, si los hay) hasta lo que queda limpio. Barras a escala.
 function CuentaResultados({ r, prev, etiqueta, comparaCon }: { r: Resultado; prev: Resultado | null; etiqueta: string; comparaCon: string }) {
-  const escala = Math.max(1, r.ventas, r.coste + r.comisiones + r.gastos);
+  const escala = Math.max(1, r.ventas, r.gastos);
   const w = (v: number) => `${(Math.max(0, v) / escala) * 100}%`;
   let tope = r.ventas;
   const filas = [
-    { label: "Coste de la mercancía", hint: undefined, v: r.coste, antes: prev?.coste, color: "#b7ae9b" },
-    { label: "Comisiones de pago", hint: "estimadas", v: r.comisiones, antes: prev?.comisiones, color: "#e4cba3" },
-    { label: "Otros gastos", hint: undefined, v: r.gastos, antes: prev?.gastos, color: "#3f6b7d" },
+    { label: "Producto", hint: "pedido a Amway", v: r.producto, antes: prev?.producto, color: "#b7ae9b" },
+    ...(r.otrosGastos > 0 || (prev?.otrosGastos ?? 0) > 0
+      ? [{ label: "Otros gastos", hint: undefined, v: r.otrosGastos, antes: prev?.otrosGastos, color: "#3f6b7d" }]
+      : []),
   ].map((f) => {
     // Cada resta ocupa el tramo que se "come" de lo que queda; si ya no queda
     // nada (pérdida), se dibuja desde cero.
@@ -1226,10 +1203,9 @@ function CuentaResultados({ r, prev, etiqueta, comparaCon }: { r: Resultado; pre
           )}
         </div>
       </div>
-      {r.lineasSinCoste > 0 && (
+      {r.ventas > 0 && r.producto === 0 && (
         <p className="mt-3 text-[11px] text-stone">
-          {r.lineasSinCoste} línea{r.lineasSinCoste === 1 ? "" : "s"} vendida{r.lineasSinCoste === 1 ? "" : "s"} sin coste apuntado: el beneficio real
-          será algo menor. Apúntalo en Productos.
+          Aún no hay ningún pedido a Amway apuntado en este periodo: apúntalo como gasto «Compra de mercancía» para que el resultado sea real.
         </p>
       )}
       {hayComparacion && <p className="mt-2 text-[11px] text-stone">Las flechas comparan con el periodo anterior ({comparaCon.replace("vs. ", "")}).</p>}
