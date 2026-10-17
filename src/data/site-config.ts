@@ -46,14 +46,14 @@ export const SITE = {
 // Los campos a null se muestran como «pendiente» en las páginas legales:
 // hay que rellenarlos con los datos reales antes de abrir al público.
 export const LEGAL = {
-  titular: null as string | null, // nombre y apellidos o razón social
-  nif: null as string | null,
+  titular: "Yuliana Parra" as string | null, // nombre y apellidos o razón social
+  nif: "Z0977641P" as string | null, // NIE
   domicilio: `${SITE.street}, ${SITE.postalCode} ${SITE.city} (${SITE.region})` as string | null, // dirección del local (también es la de recogida)
   registro: null as string | null, // solo si es sociedad: Registro Mercantil, tomo, folio…
   email: SITE.email,
   emailPrivacidad: SITE.email,
   telefono: "614 036 583" as string | null, // teléfono de atención (el de WhatsApp)
-  actualizado: "7 de octubre de 2026",
+  actualizado: "17 de octubre de 2026",
 } as const;
 
 export const PENDIENTE = "[pendiente de completar]";
