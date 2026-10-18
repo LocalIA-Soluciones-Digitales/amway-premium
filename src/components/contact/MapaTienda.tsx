@@ -8,7 +8,9 @@ import { SITE } from "@/data/site-config";
 // mapa incrustado pone cookies de Google y la web no usa cookies de terceros
 // sin permiso. «Cómo llegar» abre la ficha en Google Maps.
 const DIRECCION = `${SITE.street}, ${SITE.postalCode} ${SITE.city}`;
-const EMBED = `https://www.google.com/maps?q=${encodeURIComponent(`${SITE.name}, ${DIRECCION}`)}&z=17&output=embed`;
+// Por el identificador de la ficha (cid): buscar por nombre o dirección
+// marcaba la peluquería del mismo local u otro sitio.
+const EMBED = `https://maps.google.com/maps?cid=${new URL(SITE.googleMaps).searchParams.get("cid")}&hl=es&z=17&output=embed`;
 
 export function MapaTienda() {
   const [cargado, setCargado] = useState(false);

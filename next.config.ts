@@ -22,7 +22,7 @@ const CSP_INFORME = [
   "font-src 'self'",
   "worker-src 'self' blob:",
   // Mapa del local en Sobre nosotros (solo se carga si el visitante lo pide).
-  "frame-src https://www.google.com",
+  "frame-src https://maps.google.com https://www.google.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "object-src 'none'",
