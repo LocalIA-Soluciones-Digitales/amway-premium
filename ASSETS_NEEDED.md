@@ -31,4 +31,4 @@ Esto sustituye por completo a las 8 latas de baja resolución de `public/images/
 
 ## 4. Número de WhatsApp de producción
 
-✅ Resuelto: `SITE.whatsapp` en `src/data/site-config.ts` ya es la línea definitiva del negocio (+34 614 036 583).
+✅ Resuelto: `SITE.whatsapp` en `src/data/site-config.ts` es la línea propia de Nutri Yuly (+34 624 233 622), distinta de la de la peluquería.

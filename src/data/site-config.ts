@@ -18,8 +18,9 @@ export const SITE = {
   city: "Barakaldo",
   region: "Bizkaia",
   country: "España",
-  // Línea definitiva del negocio (WhatsApp y teléfono).
-  whatsapp: "34614036583",
+  // Línea propia de Nutri Yuly (WhatsApp y teléfono), distinta de la de la
+  // peluquería: tiene que coincidir con la del Perfil de Empresa de Google.
+  whatsapp: "34624233622",
   // Enlace para dejar una reseña en el Perfil de Empresa de Google.
   googleResenas: "https://g.page/r/Cfs8A_sKI9cYEBM/review",
   // La ficha en Google Maps (para leer todas las reseñas).
@@ -52,7 +53,7 @@ export const LEGAL = {
   registro: null as string | null, // solo si es sociedad: Registro Mercantil, tomo, folio…
   email: SITE.email,
   emailPrivacidad: SITE.email,
-  telefono: "614 036 583" as string | null, // teléfono de atención (el de WhatsApp)
+  telefono: "624 233 622" as string | null, // teléfono de atención (el de WhatsApp)
   actualizado: "17 de octubre de 2026",
 } as const;
 
