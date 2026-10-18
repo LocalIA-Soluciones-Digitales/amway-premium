@@ -21,6 +21,8 @@ const CSP_INFORME = [
   `connect-src 'self' ${SUPABASE} wss://ukhfaphloxlszomccgde.supabase.co`,
   "font-src 'self'",
   "worker-src 'self' blob:",
+  // Mapa del local en Sobre nosotros (solo se carga si el visitante lo pide).
+  "frame-src https://www.google.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "object-src 'none'",

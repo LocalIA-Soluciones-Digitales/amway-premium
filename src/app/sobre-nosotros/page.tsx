@@ -7,7 +7,6 @@ import {
   Clock,
   HandHeart,
   Mail,
-  MapPin,
   MessageCircle,
   PackageCheck,
   ShieldCheck,
@@ -15,6 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { MapaTienda } from "@/components/contact/MapaTienda";
 import { waLink, WA_PRESETS, SITE } from "@/data/site-config";
 import { conRuta } from "@/lib/seo";
 
@@ -399,27 +399,10 @@ export default function SobreNosotrosPage() {
                 />
               </a>
 
-              <div className="flex items-center gap-4 rounded-2xl border border-carbon/10 p-5">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gold/15 text-gold">
-                  <MapPin size={22} />
-                </span>
-                <div>
-                  <p className="font-display text-lg text-carbon">Ubicación</p>
-                  <p className="text-sm text-stone">
-                    {SITE.city}, {SITE.region} · Recogida en el local, {SITE.horario.texto}
-                  </p>
-                </div>
-              </div>
             </div>
 
-            <div className="relative mt-8 hidden aspect-[16/9] overflow-hidden rounded-2xl lg:block">
-              <Image
-                src="/images/espring/woman-window.webp"
-                alt="Mujer bebiendo un vaso de agua junto a la ventana"
-                fill
-                sizes="40vw"
-                className="object-cover object-[30%_40%]"
-              />
+            <div className="mt-8">
+              <MapaTienda />
             </div>
           </div>
 

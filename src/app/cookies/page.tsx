@@ -58,7 +58,8 @@ export default function CookiesPage() {
         <p>
           No usamos cookies de publicidad ni de terceros (ni Google Analytics ni píxeles de redes sociales). Solo
           guardamos en tu navegador lo necesario para que la tienda funcione y, si lo aceptas, unas estadísticas
-          propias de uso.
+          propias de uso. El mapa de Google de la página de contacto solo se carga si pulsas «Ver mapa»; en ese
+          momento Google puede guardar sus propias cookies.
         </p>
       }
     >
