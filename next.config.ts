@@ -41,12 +41,10 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
-    // AVIF pesa bastante menos que WebP a igual calidad; los navegadores que
-    // no lo soportan siguen recibiendo WebP.
-    formats: ["image/avif", "image/webp"],
-    // Las imágenes de public/ no cambian: que Vercel no las vuelva a
-    // transformar cada minuto (valor por defecto de Next 15).
-    minimumCacheTTL: 2678400,
+    // Se sirven tal cual (ya son WebP de ~80 KB): la optimización de Vercel
+    // tiene un cupo mensual de transformaciones y, al agotarse, todas las
+    // fotos de producto daban 402 (OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED).
+    unoptimized: true,
   },
   async headers() {
     return [
