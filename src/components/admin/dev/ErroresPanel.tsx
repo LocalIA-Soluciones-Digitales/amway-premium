@@ -90,14 +90,29 @@ function pista(mensaje: string): string | null {
     return "No cargó un trozo de la web, normalmente porque se publicó una versión nueva mientras navegaba. Se arregla recargando.";
   if (/Failed to fetch|NetworkError|network error|Load failed/i.test(mensaje)) return "Fallo de conexión del visitante.";
   if (/ResizeObserver/i.test(mensaje)) return "Aviso inofensivo del navegador; se puede ignorar.";
+  if (/Java object is gone/i.test(mensaje))
+    return "Lo lanza el navegador interno de Facebook/Instagram al salir de la página (iabjs://). No es de la tienda.";
+  if (ERROR_HIDRATACION.test(mensaje))
+    return "El HTML del servidor no coincidió con el del navegador. Si solo sale en navegadores que modifican la página (HeyTap, UC, Opera Mini, traductores), es ruido; si sale en Chrome o Safari normales, hay algo que se pinta distinto en servidor y cliente.";
   return null;
 }
 
+// React #418/#423/#425: fallo de hidratación.
+const ERROR_HIDRATACION = /Minified React error #(?:418|423|425)\b|Hydration failed/i;
+// Navegadores que reescriben el DOM antes de que React lo hidrate (lectura,
+// bloqueo de anuncios, traducción integrada): sus #418 no son de la tienda.
+const NAVEGADOR_QUE_REESCRIBE = /HeyTapBrowser|UCBrowser|Opera Mini|OPiOS|MiuiBrowser|QQBrowser|Quark/i;
+
 // Fallos que no dependen del código de la tienda: se ocultan por defecto.
-function esRuido(mensaje: string): boolean {
-  return /^Script error\.?$|ResizeObserver|Failed to fetch|NetworkError|network error|Load failed|ChunkLoadError|Loading chunk|dynamically imported module|extension:\/\//i.test(
-    mensaje
-  );
+function esRuido(r: ErrorRow): boolean {
+  if (
+    /^Script error\.?$|ResizeObserver|Failed to fetch|NetworkError|network error|Load failed|ChunkLoadError|Loading chunk|dynamically imported module|extension:\/\/|Java object is gone/i.test(
+      r.mensaje
+    )
+  )
+    return true;
+  if (r.detalle && /iabjs:\/\//.test(r.detalle) && !/nutriyuly\.com/.test(r.detalle)) return true;
+  return ERROR_HIDRATACION.test(r.mensaje) && NAVEGADOR_QUE_REESCRIBE.test(r.user_agent ?? "");
 }
 
 // Primer marco del stack que apunta a código propio: "chunks/app.js:12:34".
@@ -173,7 +188,8 @@ export function ErroresPanel() {
         list,
         ultimo: list[0],
         primero,
-        ruido: esRuido(mensaje),
+        // Ruido solo si lo es cada aparición: un #418 en Chrome normal cuenta.
+        ruido: list.every(esRuido),
         nuevo: ahora - new Date(primero.created_at).getTime() < DIA,
         alAlza: list.length >= 3 && ultimos3 > 0 && ultimos3 > antes * 1.5,
         serie,
@@ -196,7 +212,7 @@ export function ErroresPanel() {
 
   const resumen = useMemo(() => {
     const ahora = Date.now();
-    const reales = (rows ?? []).filter((r) => !esRuido(r.mensaje));
+    const reales = (rows ?? []).filter((r) => !esRuido(r));
     const semana = reales.filter((r) => ahora - new Date(r.created_at).getTime() < 7 * DIA);
     const contar = (f: (r: ErrorRow) => string) => {
       const m = new Map<string, number>();

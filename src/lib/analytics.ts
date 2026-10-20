@@ -185,8 +185,17 @@ export function atenderErroresTempranos() {
     return 0;
   };
 }
+// Fallos de scripts que mete el propio navegador (el de Facebook/Instagram
+// con iabjs://, extensiones): si ningún marco del stack es de la web, no son
+// de la tienda y solo ensucian el registro.
+function esDeScriptInyectado(detalle?: string): boolean {
+  if (!detalle || !/iabjs:\/\/|(?:chrome|moz|safari(?:-web)?)-extension:\/\//.test(detalle)) return false;
+  return !detalle.includes(window.location.origin);
+}
+
 export function reportError(mensaje: string, detalle?: string) {
   if (typeof window === "undefined" || reportedThisPage >= 5) return;
+  if (esDeScriptInyectado(detalle)) return;
   // En `next dev` los fallos son del desarrollo, no de los visitantes.
   if (process.env.NODE_ENV !== "production") return;
   if (window.location.pathname.startsWith("/admin")) return;
