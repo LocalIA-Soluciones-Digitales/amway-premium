@@ -157,8 +157,10 @@ export function EnergyHero({ waMessage }: { waMessage: string }) {
           <h1
             ref={titleRef}
             className="mt-3 select-none font-display text-[17vw] italic leading-[0.85] text-cream sm:mt-4 sm:text-[9vw] lg:text-[4.8vw] xl:text-[4.2rem]"
-            aria-label="Pura energía"
+            aria-label="XS™ Power Drinks: pura energía"
           >
+            {/* La marca, visible justo encima, también en el H1 para el buscador. */}
+            <span className="sr-only">XS™ Power Drinks: </span>
             <span className="block overflow-hidden">
               <span className="word-inner inline-block">Pura</span>
             </span>

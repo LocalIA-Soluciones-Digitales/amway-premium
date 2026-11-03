@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
+import { ProductIndex } from "@/components/product/ProductIndex";
 import { PRODUCTS, getBrands } from "@/data/products";
 import { conRuta } from "@/lib/seo";
 import { paraExplorador } from "@/lib/explorador";
@@ -54,6 +55,8 @@ export default function CatalogoPage() {
           showCategories
         />
       </section>
+
+      <ProductIndex products={PRODUCTS} title="Índice completo del catálogo" />
     </div>
   );
 }

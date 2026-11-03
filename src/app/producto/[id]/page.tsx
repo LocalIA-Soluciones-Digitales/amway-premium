@@ -29,17 +29,44 @@ function findProduct(rawId: string): Product | undefined {
   return getProductById(id);
 }
 
+// Corta en el último espacio antes del límite (antes cortaba a media palabra).
+function recortar(texto: string, max: number): string {
+  if (texto.length <= max) return texto;
+  const corte = texto.slice(0, max - 1);
+  return corte.slice(0, corte.lastIndexOf(" ")).replace(/[\s,.;:—-]+$/, "") + "…";
+}
+
+// Precio más bajo entre las variantes, el del panel (el que ve el cliente).
+// Misma petición y caché que el layout, así que no añade otra consulta.
+async function precioDesde(product: Product): Promise<number | null> {
+  const catalogo = indexCatalogo(await fetchCatalogoPublico({ next: { revalidate: 60, tags: ["amway-catalogo"] } }));
+  const precios = product.variants
+    .map((_, i) => precioVenta(catalogo, product, i))
+    .filter((x): x is number => x != null);
+  return precios.length > 0 ? Math.min(...precios) : null;
+}
+
+const sinMarca = (s: string) => s.replace(/[™®]/g, "").toLowerCase();
+
 export async function generateMetadata({ params }: PageProps<"/producto/[id]">): Promise<Metadata> {
   const product = findProduct((await params).id);
   if (!product) return {};
   const image = productImageSrc(product);
+  const price = await precioDesde(product);
+  // Casi todos los nombres ya llevan la marca («Nutrilite™ Sleep Easy — Nutrilite»).
+  const title = sinMarca(product.name).includes(sinMarca(product.brand))
+    ? product.name
+    : `${product.name} — ${product.brand}`;
+  // Precio y recogida en el resultado de Google: es lo que decide el clic.
+  const cola = `${price != null ? ` Precio: ${price.toFixed(2).replace(".", ",")} €.` : ""} Recogida en Barakaldo.`;
+  const description = recortar(product.description, 158 - cola.length) + cola;
   return {
-    title: `${product.name} — ${product.brand}`,
-    description: product.description.slice(0, 160),
+    title,
+    description,
     alternates: { canonical: productHref(product) },
     openGraph: {
       title: product.name,
-      description: product.description,
+      description,
       url: productHref(product),
       images: image ? [{ url: image, alt: product.name }] : undefined,
     },
@@ -60,14 +87,9 @@ export default async function ProductPage({ params }: PageProps<"/producto/[id]"
 
   const category = CATEGORY_META[product.category];
   const image = productImageSrc(product);
-  // Precio y disponibilidad del panel (los mismos que ve el cliente), no los
-  // de catálogo: Google compara el precio del marcado con el de la página.
-  // Misma petición y caché que el layout, así que no añade otra consulta.
-  const catalogo = indexCatalogo(await fetchCatalogoPublico({ next: { revalidate: 60, tags: ["amway-catalogo"] } }));
-  const precios = product.variants
-    .map((_, i) => precioVenta(catalogo, product, i))
-    .filter((x): x is number => x != null);
-  const price = precios.length > 0 ? Math.min(...precios) : null;
+  // Precio del panel (el mismo que ve el cliente), no el de catálogo:
+  // Google compara el precio del marcado con el de la página.
+  const price = await precioDesde(product);
   const url = `${SITE.url}${productHref(product)}`;
   const jsonLd = {
     "@context": "https://schema.org",

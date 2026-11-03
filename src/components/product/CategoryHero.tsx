@@ -45,17 +45,21 @@ export function CategoryHero({
 
       <div className="relative w-full px-6 pb-16 pt-40 sm:px-8 sm:pb-20">
         <div className="mx-auto max-w-7xl">
-          <p
-            style={entrada(0, 0.6)}
-            className={cn(
-              "text-sm font-medium uppercase tracking-[0.25em]",
-              ACCENT_TEXT[accent]
-            )}
-          >
-            {eyebrow}
-          </p>
-          <h1 style={entrada(0.1)} className="mt-4 max-w-3xl font-display text-5xl leading-[0.98] text-cream sm:text-7xl lg:text-8xl">
-            {title}
+          {/* La marca (eyebrow) va dentro del H1: es lo que busca la gente
+              («artistry», «nutrilite») y el lema solo no la nombraba. */}
+          <h1>
+            <span
+              style={entrada(0, 0.6)}
+              className={cn(
+                "block text-sm font-medium uppercase tracking-[0.25em]",
+                ACCENT_TEXT[accent]
+              )}
+            >
+              {eyebrow}
+            </span>
+            <span style={entrada(0.1)} className="mt-4 block max-w-3xl font-display text-5xl leading-[0.98] text-cream sm:text-7xl lg:text-8xl">
+              {title}
+            </span>
           </h1>
           <p style={entrada(0.2)} className="mt-6 max-w-xl text-base leading-relaxed text-cream/75 sm:text-lg">
             {description}

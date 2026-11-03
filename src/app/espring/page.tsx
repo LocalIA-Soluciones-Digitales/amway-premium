@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
+import { ProductIndex } from "@/components/product/ProductIndex";
 import { paraExplorador } from "@/lib/explorador";
 import { SpringHero } from "@/components/espring/SpringHero";
 import { SpringFacts } from "@/components/espring/SpringFacts";
@@ -53,6 +54,8 @@ export default function EspringPage() {
         </p>
         <ProductExplorer products={paraExplorador(products)} subcategories={subcategories} brands={brands} />
       </section>
+
+      <ProductIndex products={products} title="Todos los productos eSpring™" />
     </>
   );
 }

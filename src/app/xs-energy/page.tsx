@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
+import { ProductIndex } from "@/components/product/ProductIndex";
 import { paraExplorador } from "@/lib/explorador";
 import { EnergyHero } from "@/components/xs-energy/EnergyHero";
 import { EnergyFacts } from "@/components/xs-energy/EnergyFacts";
@@ -10,9 +11,9 @@ import { getBrands, getProductsByCategory, getSubcategories } from "@/data/produ
 import { conRuta } from "@/lib/seo";
 
 export const metadata: Metadata = conRuta("/xs-energy", {
-  title: "XS Energy™ — Power Drinks, fuerza y recuperación",
+  title: "XS™ Energy Drink — Power Drink, creatina y proteínas",
   description:
-    "XS™ Power Drink y Power Water+ en seis sabores reales, más pre-entrenamiento, creatina, proteínas y recuperación deportiva. Nutrición deportiva Amway.",
+    "Bebidas energéticas XS™ Power Drink y Power Water+ en seis sabores, más pre-entrenamiento, creatina y proteínas. Originales Amway con recogida en Barakaldo.",
 });
 
 export default function XsEnergyPage() {
@@ -42,6 +43,8 @@ export default function XsEnergyPage() {
         </p>
         <ProductExplorer products={paraExplorador(products)} subcategories={subcategories} brands={brands} />
       </section>
+
+      <ProductIndex products={products} title="Todos los productos XS™" />
     </>
   );
 }

@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { CategoryHero } from "@/components/product/CategoryHero";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
+import { ProductIndex } from "@/components/product/ProductIndex";
 import { paraExplorador } from "@/lib/explorador";
 import { CategoryHighlights } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
 import { conRuta } from "@/lib/seo";
 
 export const metadata: Metadata = conRuta("/belleza", {
-  title: "Artistry™ Belleza — Skincare, LongXevity y maquillaje",
+  title: "Artistry™ en España — productos y precios de skincare y maquillaje",
   description:
-    "Artistry Skin Nutrition™, Artistry LongXevity™, Artistry Studio™, Artistry Labs™ y maquillaje Artistry™. Ciencia de la piel con atención personal en Barakaldo.",
+    "Compra productos Artistry™ originales con precio: Artistry Skin Nutrition™, LongXevity™, Studio™, Labs™ y maquillaje. Atención personal y recogida en Barakaldo.",
 });
 
 const HIGHLIGHT_IDS = [
@@ -53,6 +54,8 @@ export default function BellezaPage() {
         </h2>
         <ProductExplorer products={paraExplorador(products)} subcategories={subcategories} brands={brands} />
       </section>
+
+      <ProductIndex products={products} title="Todos los productos Artistry™ y de belleza" />
     </>
   );
 }

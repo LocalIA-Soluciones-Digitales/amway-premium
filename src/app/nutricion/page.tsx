@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { CategoryHero } from "@/components/product/CategoryHero";
 import { ProductExplorer } from "@/components/product/ProductExplorer";
+import { ProductIndex } from "@/components/product/ProductIndex";
 import { paraExplorador } from "@/lib/explorador";
 import { CategoryHighlights } from "@/components/product/CategoryHighlights";
 import { getBrands, getProductsByCategory, getSubcategories, getProductById } from "@/data/products";
 import { conRuta } from "@/lib/seo";
 
 export const metadata: Metadata = conRuta("/nutricion", {
-  title: "Nutrición Nutrilite™ — Vitaminas, minerales y proteínas",
+  title: "Nutrilite™ en España — vitaminas, proteínas y complementos",
   description:
-    "Nutrilite™: vitaminas, minerales, proteínas, sustitutivos de comida y complementos para hombres, mujeres y niños. Productos originales Amway.",
+    "Dónde comprar Nutrilite™: vitaminas, minerales, proteínas, probióticos y complementos originales Amway con precio, para toda la familia. Recogida en Barakaldo.",
 });
 
 const XS_LINK = { href: "/xs-energy", label: "Descubre XS™ →" };
@@ -56,6 +57,8 @@ export default function NutricionPage() {
         </h2>
         <ProductExplorer products={paraExplorador(products)} subcategories={subcategories} brands={brands} />
       </section>
+
+      <ProductIndex products={products} title="Todos los productos Nutrilite™ y de nutrición" />
     </>
   );
 }
