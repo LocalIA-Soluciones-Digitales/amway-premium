@@ -107,9 +107,25 @@ export default async function ProductPage({ params }: PageProps<"/producto/[id]"
             priceCurrency: "EUR",
             price: price.toFixed(2),
             availability: "https://schema.org/InStock",
+            itemCondition: "https://schema.org/NewCondition",
             // Solo recogida en el local de Barakaldo.
             availableDeliveryMethod: "https://schema.org/OnSitePickup",
             url,
+            // No hay envíos, todo se recoge en el local (ver SITE.horario).
+            shippingDetails: {
+              "@type": "OfferShippingDetails",
+              doesNotShip: true,
+              shippingDestination: { "@type": "DefinedRegion", addressCountry: "ES" },
+            },
+            // Mismo plazo que /desistimiento: 14 días naturales desde la recogida.
+            hasMerchantReturnPolicy: {
+              "@type": "MerchantReturnPolicy",
+              applicableCountry: "ES",
+              returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+              merchantReturnDays: 14,
+              returnMethod: "https://schema.org/ReturnInStore",
+              returnFees: "https://schema.org/FreeReturn",
+            },
           }
         : undefined,
   };
